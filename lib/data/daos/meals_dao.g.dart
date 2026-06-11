@@ -6,6 +6,7 @@ part of 'meals_dao.dart';
 mixin _$MealsDaoMixin on DatabaseAccessor<AppDatabase> {
   $MealsTable get meals => attachedDatabase.meals;
   $MealTagsTable get mealTags => attachedDatabase.mealTags;
+  $TagsTable get tags => attachedDatabase.tags;
   MealsDaoManager get managers => MealsDaoManager(this);
 }
 
@@ -16,4 +17,6 @@ class MealsDaoManager {
       $$MealsTableTableManager(_db.attachedDatabase, _db.meals);
   $$MealTagsTableTableManager get mealTags =>
       $$MealTagsTableTableManager(_db.attachedDatabase, _db.mealTags);
+  $$TagsTableTableManager get tags =>
+      $$TagsTableTableManager(_db.attachedDatabase, _db.tags);
 }

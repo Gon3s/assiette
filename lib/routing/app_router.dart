@@ -1,4 +1,4 @@
-import 'package:assiette/features/home/presentation/home_screen.dart';
+import 'package:assiette/features/day_timeline/presentation/day_timeline_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ GoRouter goRouter(Ref ref) {
         path: '/',
         name: AppRouter.home.name,
         pageBuilder: (context, state) =>
-            const NoTransitionPage(child: HomeScreen()),
+            const NoTransitionPage(child: DayTimelineScreen()),
       ),
     ],
     errorPageBuilder: (context, state) =>
