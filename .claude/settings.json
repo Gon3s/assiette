@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '📋 US terminée ? → Mettre à jour Notion (status + hash commit court)'"
+          }
+        ]
+      }
+    ]
+  }
+}

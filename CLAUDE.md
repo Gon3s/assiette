@@ -43,8 +43,16 @@ dart run build_runner build --delete-conflicting-outputs   # code gen
 flutter run -t lib/main_dev.dart                   # run (development)
 flutter run -t lib/main.dart                       # run (production)
 flutter test                                       # run tests
-flutter analyze                                    # lint
+flutter analyze --no-pub                           # lint (ignorer public_member_api_docs)
 ```
+
+## Drift (SQLite local)
+
+- Tables → `lib/data/db/` (schéma dans `*_database.dart`, `schemaVersion`)
+- DAOs → `lib/data/db/daos/`
+- Migrations : incrémenter `schemaVersion` + `MigrationStrategy` avec `recreateAllViews`
+- Seed système → `lib/data/db/seed/` (tags système — ne pas modifier sans US dédiée)
+- `.g.dart` : jamais à la main — `build_runner` uniquement
 
 ## Architecture & conventions
 
@@ -107,9 +115,28 @@ lib/
   `ProviderContainer` with overridden providers.
 - Mirror the `lib/` structure under `test/`.
 
+## Convention commits
+
+Format : `type(scope): message` — anglais, impératif, ≤72 car.
+Scopes : `db`, `feature/<name>`, `routing`, `ui`, `i18n`, `deps`, `config`
+Utiliser `/caveman-commit` pour générer le message.
+
 ## Before you commit
 
-- [ ] `dart run build_runner build --delete-conflicting-outputs` (if you touched annotated files)
-- [ ] `flutter analyze` is clean
-- [ ] `flutter test` passes
-- [ ] No hardcoded user-facing strings
+Gate obligatoire (dans cet ordre) :
+```bash
+dart run build_runner build --delete-conflicting-outputs  # si fichiers annotés modifiés
+flutter analyze --no-pub   # zéro erreur/warning hors public_member_api_docs
+flutter test               # doit passer
+```
+- [ ] Aucune string UI hardcodée
+- [ ] Page Notion de l'US mise à jour (status + hash commit)
+
+## Notion — suivi des US
+
+Après chaque US livrée :
+1. MCP Notion → page US → `status = Done`
+2. Ajouter hash commit court dans les notes de la page
+3. Noter blocages éventuels
+
+MCP `notion-update-page` et `notion-fetch` disponibles en session.
