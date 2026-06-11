@@ -1,4 +1,4 @@
-# assiette — Project Guide for Claude
+# assiette - Project Guide for Claude
 
 > This project was generated from the **flutter_starter_kit** Mason brick.
 > This file gives Claude (and any contributor) the conventions and commands to
@@ -30,10 +30,10 @@ Food · symptoms · environment. Connect the dots.
 3. **No hardcoded user-facing strings.** Add them to `AppStrings` and the
    `AppStringsFr` / `AppStringsEn` implementations, then use
    `AppStrings.of(context).yourKey`.
-4. **Keep the analyzer clean.** Run `flutter analyze` — this project uses
+4. **Keep the analyzer clean.** Run `flutter analyze` - this project uses
    `very_good_analysis` (strict lints). Fix warnings/errors before committing.
 5. **Respect the feature-first layering.** UI never talks to Firebase/storage
-   directly — it goes through a repository in `domain` implemented in `data`.
+   directly - it goes through a repository in `domain` implemented in `data`.
 
 ## Common commands
 
@@ -51,8 +51,8 @@ flutter analyze --no-pub                           # lint (ignorer public_member
 - Tables → `lib/data/db/` (schéma dans `*_database.dart`, `schemaVersion`)
 - DAOs → `lib/data/db/daos/`
 - Migrations : incrémenter `schemaVersion` + `MigrationStrategy` avec `recreateAllViews`
-- Seed système → `lib/data/db/seed/` (tags système — ne pas modifier sans US dédiée)
-- `.g.dart` : jamais à la main — `build_runner` uniquement
+- Seed système → `lib/data/db/seed/` (tags système - ne pas modifier sans US dédiée)
+- `.g.dart` : jamais à la main - `build_runner` uniquement
 
 ## Architecture & conventions
 
@@ -86,9 +86,9 @@ lib/
 
 ### Riverpod 3.x notes (important)
 
-- Functional providers take a plain `Ref` parameter — the old generated
+- Functional providers take a plain `Ref` parameter - the old generated
   `*Ref` aliases (e.g. `MyProviderRef`) **no longer exist**.
-- `isLoading` / `requireValue` are native on `AsyncValue` — don't redefine them.
+- `isLoading` / `requireValue` are native on `AsyncValue` - don't redefine them.
 - For async controllers, use `AsyncValue.guard` so the state transitions
   `AsyncLoading → AsyncData/AsyncError` cleanly:
   ```dart
@@ -117,7 +117,7 @@ lib/
 
 ## Convention commits
 
-Format : `type(scope): message` — anglais, impératif, ≤72 car.
+Format : `type(scope): message` - anglais, impératif, ≤72 car.
 Scopes : `db`, `feature/<name>`, `routing`, `ui`, `i18n`, `deps`, `config`
 Utiliser `/caveman-commit` pour générer le message.
 
@@ -132,7 +132,7 @@ flutter test               # doit passer
 - [ ] Aucune string UI hardcodée
 - [ ] Page Notion de l'US mise à jour (status + hash commit)
 
-## Notion — suivi des US
+## Notion - suivi des US
 
 Après chaque US livrée :
 1. MCP Notion → page US → `status = Done`
