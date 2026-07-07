@@ -1,0 +1,27 @@
+import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/localization/app_strings.dart';
+import 'package:flutter/material.dart';
+
+/// Localized label for a [MealType].
+String mealTypeLabel(AppStrings s, MealType type) => switch (type) {
+      MealType.breakfast => s.mealTypeBreakfast,
+      MealType.lunch => s.mealTypeLunch,
+      MealType.dinner => s.mealTypeDinner,
+      MealType.snack => s.mealTypeSnack,
+    };
+
+/// Localized label for a [SymptomType].
+String symptomTypeLabel(AppStrings s, SymptomType type) => switch (type) {
+      SymptomType.migraine => s.symptomTypeMigraine,
+      SymptomType.digestive => s.symptomTypeDigestive,
+      SymptomType.mood => s.symptomTypeMood,
+    };
+
+/// Accent color for a [SymptomType] (migraine=red, digestive=amber,
+/// mood=blue).
+Color symptomTypeColor(SymptomType type) => switch (type) {
+      SymptomType.migraine => Colors.red,
+      SymptomType.digestive => Colors.amber,
+      SymptomType.mood => Colors.blue,
+    };
