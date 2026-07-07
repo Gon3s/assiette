@@ -27,8 +27,45 @@ class AppStringsFr implements AppStrings {
 
   @override
   String get homeTitle => 'Accueil';
+
   @override
-  String get counterLabel => 'Vous avez appuyé sur le bouton :';
+  String get today => "Aujourd'hui";
+  @override
+  String get emptyDayMessage => 'Rien pour ce jour.';
+  @override
+  String get logMealAction => 'Photo repas';
+  @override
+  String get logSymptomAction => 'Symptôme';
+  @override
+  String get comingSoon => 'Bientôt disponible';
+  @override
+  String get sleepCardTitle => 'Sommeil';
+  @override
+  String get sleepNotLogged => 'Nuit non renseignée';
+  @override
+  String get sleepQualityBad => 'Mauvais';
+  @override
+  String get sleepQualityMedium => 'Moyen';
+  @override
+  String get sleepQualityGood => 'Bon';
+  @override
+  String get weatherUnavailable => 'Météo indisponible';
+  @override
+  String get pressureUnit => 'hPa';
+  @override
+  String get mealTypeBreakfast => 'Petit-déjeuner';
+  @override
+  String get mealTypeLunch => 'Déjeuner';
+  @override
+  String get mealTypeDinner => 'Dîner';
+  @override
+  String get mealTypeSnack => 'Snack';
+  @override
+  String get symptomTypeMigraine => 'Migraine';
+  @override
+  String get symptomTypeDigestive => 'Digestif';
+  @override
+  String get symptomTypeMood => 'Humeur';
 
   @override
   String get accountTitle => 'Mon compte';

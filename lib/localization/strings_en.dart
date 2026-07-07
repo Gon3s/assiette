@@ -27,8 +27,45 @@ class AppStringsEn implements AppStrings {
 
   @override
   String get homeTitle => 'Home';
+
   @override
-  String get counterLabel => 'You have pushed the button this many times:';
+  String get today => 'Today';
+  @override
+  String get emptyDayMessage => 'Nothing logged this day.';
+  @override
+  String get logMealAction => 'Meal photo';
+  @override
+  String get logSymptomAction => 'Symptom';
+  @override
+  String get comingSoon => 'Coming soon';
+  @override
+  String get sleepCardTitle => 'Sleep';
+  @override
+  String get sleepNotLogged => 'Night not logged';
+  @override
+  String get sleepQualityBad => 'Bad';
+  @override
+  String get sleepQualityMedium => 'Okay';
+  @override
+  String get sleepQualityGood => 'Good';
+  @override
+  String get weatherUnavailable => 'Weather unavailable';
+  @override
+  String get pressureUnit => 'hPa';
+  @override
+  String get mealTypeBreakfast => 'Breakfast';
+  @override
+  String get mealTypeLunch => 'Lunch';
+  @override
+  String get mealTypeDinner => 'Dinner';
+  @override
+  String get mealTypeSnack => 'Snack';
+  @override
+  String get symptomTypeMigraine => 'Migraine';
+  @override
+  String get symptomTypeDigestive => 'Digestive';
+  @override
+  String get symptomTypeMood => 'Mood';
 
   @override
   String get accountTitle => 'My account';

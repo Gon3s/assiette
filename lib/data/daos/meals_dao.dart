@@ -3,11 +3,24 @@
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meals_table.dart';
+import 'package:assiette/data/db/tables/tags_table.dart';
 import 'package:drift/drift.dart';
 
 part 'meals_dao.g.dart';
 
-@DriftAccessor(tables: [Meals, MealTags])
+/// A meal joined with the (non-deleted) tags attached to it.
+class MealWithTags {
+  /// Creates a [MealWithTags].
+  MealWithTags({required this.meal, required this.tags});
+
+  /// The meal itself.
+  final Meal meal;
+
+  /// The tags attached to this meal.
+  final List<Tag> tags;
+}
+
+@DriftAccessor(tables: [Meals, MealTags, Tags])
 class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
   MealsDao(super.attachedDatabase);
 
@@ -23,6 +36,40 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
           )
           ..orderBy([(t) => OrderingTerm.asc(t.timestamp)]))
         .watch();
+  }
+
+  /// Same as [watchByDay], with each meal's tags eagerly loaded.
+  Stream<List<MealWithTags>> watchByDayWithTags(DateTime day) {
+    final start = DateTime(day.year, day.month, day.day).toUtc();
+    final end = start.add(const Duration(days: 1));
+    final query = select(meals).join([
+      leftOuterJoin(mealTags, mealTags.mealId.equalsExp(meals.id)),
+      leftOuterJoin(
+        tags,
+        tags.id.equalsExp(mealTags.tagId) & tags.deletedAt.isNull(),
+      ),
+    ])
+      ..where(
+        meals.deletedAt.isNull() &
+            meals.timestamp.isBiggerOrEqualValue(start) &
+            meals.timestamp.isSmallerThanValue(end),
+      )
+      ..orderBy([OrderingTerm.asc(meals.timestamp)]);
+
+    return query.watch().map((rows) {
+      final order = <String>[];
+      final grouped = <String, MealWithTags>{};
+      for (final row in rows) {
+        final meal = row.readTable(meals);
+        final tag = row.readTableOrNull(tags);
+        final entry = grouped.putIfAbsent(meal.id, () {
+          order.add(meal.id);
+          return MealWithTags(meal: meal, tags: []);
+        });
+        if (tag != null) entry.tags.add(tag);
+      }
+      return [for (final id in order) grouped[id]!];
+    });
   }
 
   Future<void> insertMeal(MealsCompanion entry) =>

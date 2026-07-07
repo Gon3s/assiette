@@ -31,7 +31,27 @@ abstract class AppStrings {
 
   // Home
   String get homeTitle;
-  String get counterLabel;
+
+  // Day view
+  String get today;
+  String get emptyDayMessage;
+  String get logMealAction;
+  String get logSymptomAction;
+  String get comingSoon;
+  String get sleepCardTitle;
+  String get sleepNotLogged;
+  String get sleepQualityBad;
+  String get sleepQualityMedium;
+  String get sleepQualityGood;
+  String get weatherUnavailable;
+  String get pressureUnit;
+  String get mealTypeBreakfast;
+  String get mealTypeLunch;
+  String get mealTypeDinner;
+  String get mealTypeSnack;
+  String get symptomTypeMigraine;
+  String get symptomTypeDigestive;
+  String get symptomTypeMood;
 
   // Account
   String get accountTitle;
