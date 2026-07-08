@@ -5,6 +5,7 @@ import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/daos/tags_dao.dart';
+import 'package:assiette/data/daos/templates_dao.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/data/db/tables/environment_snapshots_table.dart';
@@ -35,6 +36,7 @@ part 'app_database.g.dart';
   daos: [
     TagsDao,
     MealsDao,
+    TemplatesDao,
     SymptomsDao,
     SleepEntriesDao,
     EnvironmentDao,
@@ -42,18 +44,18 @@ part 'app_database.g.dart';
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
-      : super(executor ?? driftDatabase(name: 'assiette'));
+    : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
   int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) async {
-          await m.createAll();
-          await _seedSystemTags();
-        },
-      );
+    onCreate: (m) async {
+      await m.createAll();
+      await _seedSystemTags();
+    },
+  );
 
   Future<void> _seedSystemTags() async {
     const uuid = Uuid();

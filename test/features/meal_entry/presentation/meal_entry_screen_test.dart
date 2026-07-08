@@ -2,6 +2,7 @@
 library;
 
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
@@ -16,9 +17,12 @@ class MockMealEntryRepository extends Mock implements MealEntryRepository {}
 
 class MockMealPhotoService extends Mock implements MealPhotoService {}
 
+class MockFavoritesRepository extends Mock implements FavoritesRepository {}
+
 void main() {
   late MockMealEntryRepository repository;
   late MockMealPhotoService photoService;
+  late MockFavoritesRepository favoritesRepository;
 
   const seededTags = [
     TagOption(id: 'tag-1', label: 'café', isSystem: true),
@@ -33,8 +37,8 @@ void main() {
   setUp(() {
     repository = MockMealEntryRepository();
     photoService = MockMealPhotoService();
-    when(repository.watchTags)
-        .thenAnswer((_) => Stream.value(seededTags));
+    favoritesRepository = MockFavoritesRepository();
+    when(repository.watchTags).thenAnswer((_) => Stream.value(seededTags));
     when(
       () => repository.saveMeal(
         timestamp: any(named: 'timestamp'),
@@ -42,6 +46,14 @@ void main() {
         tagIds: any(named: 'tagIds'),
         photoPath: any(named: 'photoPath'),
         note: any(named: 'note'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      () => favoritesRepository.createFavorite(
+        name: any(named: 'name'),
+        tagIds: any(named: 'tagIds'),
+        defaultMealType: any(named: 'defaultMealType'),
+        defaultPhotoPath: any(named: 'defaultPhotoPath'),
       ),
     ).thenAnswer((_) async {});
   });
@@ -62,6 +74,7 @@ void main() {
         overrides: [
           mealEntryRepositoryProvider.overrideWithValue(repository),
           mealPhotoServiceProvider.overrideWithValue(photoService),
+          favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
@@ -72,8 +85,9 @@ void main() {
     return router;
   }
 
-  testWidgets('shows the form with a photo button and meal types',
-      (tester) async {
+  testWidgets('shows the form with a photo button and meal types', (
+    tester,
+  ) async {
     await pumpScreen(tester);
 
     // English fallback since no localization ancestor.
@@ -87,8 +101,9 @@ void main() {
     expect(find.text('Save as favorite'), findsOneWidget);
   });
 
-  testWidgets('searching a tag suggests it and selects it on tap',
-      (tester) async {
+  testWidgets('searching a tag suggests it and selects it on tap', (
+    tester,
+  ) async {
     await pumpScreen(tester);
 
     await tester.enterText(
@@ -152,6 +167,67 @@ void main() {
     expect(
       router.routerDelegate.currentConfiguration.uri.toString(),
       '/',
+    );
+  });
+
+  testWidgets('saving as favorite prompts for a name then calls the '
+      'favorites repository', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.text('Dinner'));
+    await tester.pump();
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Search or create a tag'),
+      'caf',
+    );
+    await tester.pump();
+    await tester.tap(find.text('café'));
+    await tester.pump();
+
+    // Selecting a tag pushes the button below the sliver's cache extent, so
+    // it isn't built yet: drag until it is, instead of ensureVisible.
+    await tester.dragUntilVisible(
+      find.text('Save as favorite'),
+      find.byType(ListView),
+      const Offset(0, -100),
+    );
+    await tester.tap(find.text('Save as favorite'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Favorite name'), findsOneWidget);
+
+    await tester.enterText(
+      find.widgetWithText(TextField, 'E.g. Caesar salad'),
+      'Pizza du vendredi',
+    );
+    await tester.tap(find.text('Confirm'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => favoritesRepository.createFavorite(
+        name: 'Pizza du vendredi',
+        tagIds: ['tag-1'],
+        defaultMealType: MealType.dinner,
+      ),
+    ).called(1);
+    expect(find.text('Favorite saved'), findsOneWidget);
+  });
+
+  testWidgets('canceling the favorite dialog does not save', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.ensureVisible(find.text('Save as favorite'));
+    await tester.tap(find.text('Save as favorite'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+
+    verifyNever(
+      () => favoritesRepository.createFavorite(
+        name: any(named: 'name'),
+        tagIds: any(named: 'tagIds'),
+      ),
     );
   });
 }

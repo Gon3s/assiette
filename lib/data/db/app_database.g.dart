@@ -3683,6 +3683,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final TagsDao tagsDao = TagsDao(this as AppDatabase);
   late final MealsDao mealsDao = MealsDao(this as AppDatabase);
+  late final TemplatesDao templatesDao = TemplatesDao(this as AppDatabase);
   late final SymptomsDao symptomsDao = SymptomsDao(this as AppDatabase);
   late final SleepEntriesDao sleepEntriesDao = SleepEntriesDao(
     this as AppDatabase,

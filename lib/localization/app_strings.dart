@@ -66,6 +66,9 @@ abstract class AppStrings {
   String createTagLabel(String label);
   String get noteHint;
   String get saveAsFavorite;
+  String get favoriteNameTitle;
+  String get favoriteNameHint;
+  String get favoriteSaved;
   String get mealSaved;
   String get errorGeneric;
 

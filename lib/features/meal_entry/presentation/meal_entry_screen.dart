@@ -27,7 +27,9 @@ class MealEntryScreen extends ConsumerWidget {
       lastDate: DateTime.now().add(const Duration(days: 1)),
     );
     if (picked == null) return;
-    ref.read(mealEntryControllerProvider.notifier).setTimestamp(
+    ref
+        .read(mealEntryControllerProvider.notifier)
+        .setTimestamp(
           DateTime(
             picked.year,
             picked.month,
@@ -48,7 +50,9 @@ class MealEntryScreen extends ConsumerWidget {
       initialTime: TimeOfDay.fromDateTime(current),
     );
     if (picked == null) return;
-    ref.read(mealEntryControllerProvider.notifier).setTimestamp(
+    ref
+        .read(mealEntryControllerProvider.notifier)
+        .setTimestamp(
           DateTime(
             current.year,
             current.month,
@@ -64,13 +68,63 @@ class MealEntryScreen extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final router = GoRouter.of(context);
     try {
-      final saved =
-          await ref.read(mealEntryControllerProvider.notifier).save();
+      final saved = await ref.read(mealEntryControllerProvider.notifier).save();
       if (!saved) return;
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text(s.mealSaved)));
       router.pop();
+    } on Exception {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    }
+  }
+
+  Future<String?> _promptFavoriteName(BuildContext context, AppStrings s) {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(s.favoriteNameTitle),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: InputDecoration(hintText: s.favoriteNameHint),
+          onSubmitted: (value) => Navigator.of(dialogContext).pop(
+            value.trim().isEmpty ? null : value.trim(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(s.cancel),
+          ),
+          FilledButton(
+            onPressed: () {
+              final trimmed = controller.text.trim();
+              Navigator.of(dialogContext).pop(trimmed.isEmpty ? null : trimmed);
+            },
+            child: Text(s.confirm),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _saveAsFavorite(BuildContext context, WidgetRef ref) async {
+    final s = AppStrings.of(context);
+    final name = await _promptFavoriteName(context, s);
+    if (name == null || !context.mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final saved = await ref
+          .read(mealEntryControllerProvider.notifier)
+          .saveAsFavorite(name);
+      if (!saved) return;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.favoriteSaved)));
     } on Exception {
       messenger
         ..hideCurrentSnackBar()
@@ -93,8 +147,7 @@ class MealEntryScreen extends ConsumerWidget {
         children: [
           const PhotoSection(),
           gapH16,
-          Text(s.mealTypeLabel,
-              style: Theme.of(context).textTheme.labelLarge),
+          Text(s.mealTypeLabel, style: Theme.of(context).textTheme.labelLarge),
           gapH8,
           SegmentedButton<MealType>(
             segments: [
@@ -144,8 +197,7 @@ class MealEntryScreen extends ConsumerWidget {
               border: const OutlineInputBorder(),
             ),
             maxLines: 2,
-            onChanged:
-                ref.read(mealEntryControllerProvider.notifier).setNote,
+            onChanged: ref.read(mealEntryControllerProvider.notifier).setNote,
           ),
           gapH24,
           FilledButton(
@@ -160,10 +212,9 @@ class MealEntryScreen extends ConsumerWidget {
           ),
           gapH8,
           OutlinedButton(
-            // Creates a MealTemplate — arrives with US-5.
-            onPressed: () => ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(s.comingSoon))),
+            onPressed: state.isSaving
+                ? null
+                : () => _saveAsFavorite(context, ref),
             child: Text(s.saveAsFavorite),
           ),
         ],

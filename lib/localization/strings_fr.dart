@@ -92,6 +92,12 @@ class AppStringsFr implements AppStrings {
   @override
   String get saveAsFavorite => 'Enregistrer comme favori';
   @override
+  String get favoriteNameTitle => 'Nom du favori';
+  @override
+  String get favoriteNameHint => 'Ex. Salade César';
+  @override
+  String get favoriteSaved => 'Favori enregistré';
+  @override
   String get mealSaved => 'Repas enregistré';
   @override
   String get errorGeneric => 'Une erreur est survenue';

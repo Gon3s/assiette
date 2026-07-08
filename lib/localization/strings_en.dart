@@ -92,6 +92,12 @@ class AppStringsEn implements AppStrings {
   @override
   String get saveAsFavorite => 'Save as favorite';
   @override
+  String get favoriteNameTitle => 'Favorite name';
+  @override
+  String get favoriteNameHint => 'E.g. Caesar salad';
+  @override
+  String get favoriteSaved => 'Favorite saved';
+  @override
   String get mealSaved => 'Meal saved';
   @override
   String get errorGeneric => 'Something went wrong';
