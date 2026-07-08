@@ -1,4 +1,5 @@
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
@@ -52,23 +53,20 @@ class MealEntryController extends _$MealEntryController {
 
   /// Removes [tag] from the selection.
   void removeTag(TagOption tag) => state = state.copyWith(
-        selectedTags:
-            state.selectedTags.where((t) => t.id != tag.id).toList(),
-      );
+    selectedTags: state.selectedTags.where((t) => t.id != tag.id).toList(),
+  );
 
   /// Creates a user tag with [label] and adds it to the selection.
   Future<void> createAndAddTag(String label) async {
     final trimmed = label.trim();
     if (trimmed.isEmpty) return;
-    final tag =
-        await ref.read(mealEntryRepositoryProvider).createTag(trimmed);
+    final tag = await ref.read(mealEntryRepositoryProvider).createTag(trimmed);
     addTag(tag);
   }
 
   /// Opens the camera and stores the shot; no-op if the user cancels.
   Future<void> takePhoto() async {
-    final path =
-        await ref.read(mealPhotoServiceProvider).captureFromCamera();
+    final path = await ref.read(mealPhotoServiceProvider).captureFromCamera();
     if (path != null) {
       state = state.copyWith(photoPath: path);
     }
@@ -82,12 +80,35 @@ class MealEntryController extends _$MealEntryController {
     if (state.isSaving) return false;
     state = state.copyWith(isSaving: true);
     try {
-      await ref.read(mealEntryRepositoryProvider).saveMeal(
+      await ref
+          .read(mealEntryRepositoryProvider)
+          .saveMeal(
             timestamp: state.timestamp,
             mealType: state.mealType,
             tagIds: [for (final tag in state.selectedTags) tag.id],
             photoPath: state.photoPath,
             note: state.note,
+          );
+      return true;
+    } finally {
+      state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Saves the current form as a reusable favorite (MealTemplate) named
+  /// [name]. Returns true on success; false for a blank name.
+  Future<bool> saveAsFavorite(String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty || state.isSaving) return false;
+    state = state.copyWith(isSaving: true);
+    try {
+      await ref
+          .read(favoritesRepositoryProvider)
+          .createFavorite(
+            name: trimmed,
+            tagIds: [for (final tag in state.selectedTags) tag.id],
+            defaultMealType: state.mealType,
+            defaultPhotoPath: state.photoPath,
           );
       return true;
     } finally {

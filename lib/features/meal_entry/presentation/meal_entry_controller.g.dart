@@ -89,7 +89,7 @@ final class MealEntryControllerProvider
 }
 
 String _$mealEntryControllerHash() =>
-    r'27f4cafbeab0c37739131c2ed1438a9c8338517c';
+    r'3f61d765c294bcf1eaddad2d575def366ac08720';
 
 /// Holds and mutates the meal entry form, and performs the final save.
 
