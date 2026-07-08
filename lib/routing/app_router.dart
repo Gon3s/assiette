@@ -1,4 +1,5 @@
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
+import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ enum AppRouter {
 
   /// The home screen.
   home,
+
+  /// The meal entry screen.
+  mealEntry,
 }
 
 /// The application router provider.
@@ -47,6 +51,13 @@ GoRouter goRouter(Ref ref) {
         name: AppRouter.home.name,
         pageBuilder: (context, state) =>
             const NoTransitionPage(child: DayViewScreen()),
+        routes: [
+          GoRoute(
+            path: 'meal-entry',
+            name: AppRouter.mealEntry.name,
+            builder: (context, state) => const MealEntryScreen(),
+          ),
+        ],
       ),
     ],
     errorPageBuilder: (context, state) =>

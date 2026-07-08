@@ -5,8 +5,10 @@ import 'package:assiette/features/day_view/presentation/widgets/day_header.dart'
 import 'package:assiette/features/day_view/presentation/widgets/sleep_card.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_tile.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 /// Home screen: everything logged for the selected day, as a timeline.
@@ -65,7 +67,7 @@ class _ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Both actions open their entry screens once US-4 / US-6 land.
+    // The symptom action opens its entry screen once US-6 lands.
     void notifyComingSoon() {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -79,7 +81,8 @@ class _ActionBar extends StatelessWidget {
           children: [
             Expanded(
               child: FilledButton.icon(
-                onPressed: notifyComingSoon,
+                onPressed: () =>
+                    context.pushNamed(AppRouter.mealEntry.name),
                 icon: const Icon(Icons.photo_camera),
                 label: Text(s.logMealAction),
               ),

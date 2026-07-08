@@ -68,6 +68,35 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeMood => 'Humeur';
 
   @override
+  String get mealEntryTitle => 'Nouveau repas';
+  @override
+  String get takePhoto => 'Prendre une photo';
+  @override
+  String get retakePhoto => 'Reprendre';
+  @override
+  String get removePhoto => 'Supprimer la photo';
+  @override
+  String get mealTypeLabel => 'Type de repas';
+  @override
+  String get dateLabel => 'Date';
+  @override
+  String get timeLabel => 'Heure';
+  @override
+  String get tagsLabel => 'Tags';
+  @override
+  String get tagSearchHint => 'Rechercher ou créer un tag';
+  @override
+  String createTagLabel(String label) => 'Créer « $label »';
+  @override
+  String get noteHint => 'Note (optionnel)';
+  @override
+  String get saveAsFavorite => 'Enregistrer comme favori';
+  @override
+  String get mealSaved => 'Repas enregistré';
+  @override
+  String get errorGeneric => 'Une erreur est survenue';
+
+  @override
   String get accountTitle => 'Mon compte';
   @override
   String get userInfo => 'Informations';
