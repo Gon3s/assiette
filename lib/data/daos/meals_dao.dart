@@ -75,6 +75,22 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
   Future<void> insertMeal(MealsCompanion entry) =>
       into(meals).insert(entry);
 
+  /// Inserts the meal and its tag links atomically.
+  Future<void> insertMealWithTags(
+    MealsCompanion entry,
+    List<String> tagIds,
+  ) =>
+      transaction(() async {
+        await into(meals).insert(entry);
+        final mealId = entry.id.value;
+        for (final tagId in tagIds) {
+          await into(mealTags).insert(
+            MealTagsCompanion.insert(mealId: mealId, tagId: tagId),
+            mode: InsertMode.insertOrIgnore,
+          );
+        }
+      });
+
   Future<void> softDeleteMeal(String id) =>
       (update(meals)..where((t) => t.id.equals(id))).write(
         MealsCompanion(deletedAt: Value(DateTime.now().toUtc())),

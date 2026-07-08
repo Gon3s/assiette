@@ -68,6 +68,35 @@ class AppStringsEn implements AppStrings {
   String get symptomTypeMood => 'Mood';
 
   @override
+  String get mealEntryTitle => 'New meal';
+  @override
+  String get takePhoto => 'Take a photo';
+  @override
+  String get retakePhoto => 'Retake';
+  @override
+  String get removePhoto => 'Remove photo';
+  @override
+  String get mealTypeLabel => 'Meal type';
+  @override
+  String get dateLabel => 'Date';
+  @override
+  String get timeLabel => 'Time';
+  @override
+  String get tagsLabel => 'Tags';
+  @override
+  String get tagSearchHint => 'Search or create a tag';
+  @override
+  String createTagLabel(String label) => 'Create "$label"';
+  @override
+  String get noteHint => 'Note (optional)';
+  @override
+  String get saveAsFavorite => 'Save as favorite';
+  @override
+  String get mealSaved => 'Meal saved';
+  @override
+  String get errorGeneric => 'Something went wrong';
+
+  @override
   String get accountTitle => 'My account';
   @override
   String get userInfo => 'Information';

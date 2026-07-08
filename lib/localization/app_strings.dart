@@ -53,6 +53,22 @@ abstract class AppStrings {
   String get symptomTypeDigestive;
   String get symptomTypeMood;
 
+  // Meal entry
+  String get mealEntryTitle;
+  String get takePhoto;
+  String get retakePhoto;
+  String get removePhoto;
+  String get mealTypeLabel;
+  String get dateLabel;
+  String get timeLabel;
+  String get tagsLabel;
+  String get tagSearchHint;
+  String createTagLabel(String label);
+  String get noteHint;
+  String get saveAsFavorite;
+  String get mealSaved;
+  String get errorGeneric;
+
   // Account
   String get accountTitle;
   String get userInfo;

@@ -26,6 +26,7 @@ dependencies:
   # Formatage dates (version épinglée par flutter_localizations)
   intl: any
   json_annotation: ^4.12.0
+  path: ^1.9.0
   path_provider: ^2.1.5
   # Export PDF (Phase 2 — déclaré, non implémenté)
   pdf: ^3.12.0

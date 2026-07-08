@@ -4,6 +4,7 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_labels.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/localization/enum_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
