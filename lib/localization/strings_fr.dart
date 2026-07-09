@@ -37,8 +37,6 @@ class AppStringsFr implements AppStrings {
   @override
   String get logSymptomAction => 'Symptôme';
   @override
-  String get comingSoon => 'Bientôt disponible';
-  @override
   String get sleepCardTitle => 'Sommeil';
   @override
   String get sleepNotLogged => 'Nuit non renseignée';
@@ -101,6 +99,33 @@ class AppStringsFr implements AppStrings {
   String get mealSaved => 'Repas enregistré';
   @override
   String get errorGeneric => 'Une erreur est survenue';
+
+  @override
+  String get symptomEntryTitle => 'Nouveau symptôme';
+  @override
+  String get symptomEntryTypeLabel => 'Type de symptôme';
+  @override
+  String get intensityLabel => 'Intensité';
+  @override
+  String get detailLabel => 'Détail (optionnel)';
+  @override
+  String get endTimeLabel => 'Ajouter une heure de fin';
+  @override
+  String get removeEndTime => "Supprimer l'heure de fin";
+  @override
+  String get symptomSaved => 'Symptôme enregistré';
+  @override
+  String get symptomDetailBloating => 'Ballonnement';
+  @override
+  String get symptomDetailPain => 'Douleur';
+  @override
+  String get symptomDetailNausea => 'Nausée';
+  @override
+  String get symptomDetailIrritable => 'Irritable';
+  @override
+  String get symptomDetailAnxious => 'Anxieux';
+  @override
+  String get symptomDetailLow => 'Abattu';
 
   @override
   String get accountTitle => 'Mon compte';

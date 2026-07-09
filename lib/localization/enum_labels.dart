@@ -16,3 +16,19 @@ String symptomTypeLabel(AppStrings s, SymptomType type) => switch (type) {
       SymptomType.digestive => s.symptomTypeDigestive,
       SymptomType.mood => s.symptomTypeMood,
     };
+
+/// Suggested detail chips for a [SymptomType]; empty when none apply.
+List<String> symptomDetailSuggestions(AppStrings s, SymptomType type) =>
+    switch (type) {
+      SymptomType.digestive => [
+          s.symptomDetailBloating,
+          s.symptomDetailPain,
+          s.symptomDetailNausea,
+        ],
+      SymptomType.mood => [
+          s.symptomDetailIrritable,
+          s.symptomDetailAnxious,
+          s.symptomDetailLow,
+        ],
+      SymptomType.migraine => const [],
+    };

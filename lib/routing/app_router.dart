@@ -1,5 +1,6 @@
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ enum AppRouter {
 
   /// The meal entry screen.
   mealEntry,
+
+  /// The symptom entry screen.
+  symptomEntry,
 }
 
 /// The application router provider.
@@ -56,6 +60,11 @@ GoRouter goRouter(Ref ref) {
             path: 'meal-entry',
             name: AppRouter.mealEntry.name,
             builder: (context, state) => const MealEntryScreen(),
+          ),
+          GoRoute(
+            path: 'symptom-entry',
+            name: AppRouter.symptomEntry.name,
+            builder: (context, state) => const SymptomEntryScreen(),
           ),
         ],
       ),

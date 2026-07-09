@@ -67,13 +67,6 @@ class _ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The symptom action opens its entry screen once US-6 lands.
-    void notifyComingSoon() {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(s.comingSoon)));
-    }
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.p16),
@@ -90,7 +83,8 @@ class _ActionBar extends StatelessWidget {
             gapW16,
             Expanded(
               child: FilledButton.tonalIcon(
-                onPressed: notifyComingSoon,
+                onPressed: () =>
+                    context.pushNamed(AppRouter.symptomEntry.name),
                 icon: const Icon(Icons.healing),
                 label: Text(s.logSymptomAction),
               ),
