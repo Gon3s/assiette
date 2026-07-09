@@ -37,7 +37,6 @@ abstract class AppStrings {
   String get emptyDayMessage;
   String get logMealAction;
   String get logSymptomAction;
-  String get comingSoon;
   String get sleepCardTitle;
   String get sleepNotLogged;
   String get sleepQualityBad;
@@ -71,6 +70,21 @@ abstract class AppStrings {
   String get favoriteSaved;
   String get mealSaved;
   String get errorGeneric;
+
+  // Symptom entry
+  String get symptomEntryTitle;
+  String get symptomEntryTypeLabel;
+  String get intensityLabel;
+  String get detailLabel;
+  String get endTimeLabel;
+  String get removeEndTime;
+  String get symptomSaved;
+  String get symptomDetailBloating;
+  String get symptomDetailPain;
+  String get symptomDetailNausea;
+  String get symptomDetailIrritable;
+  String get symptomDetailAnxious;
+  String get symptomDetailLow;
 
   // Account
   String get accountTitle;

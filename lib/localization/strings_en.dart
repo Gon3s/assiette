@@ -37,8 +37,6 @@ class AppStringsEn implements AppStrings {
   @override
   String get logSymptomAction => 'Symptom';
   @override
-  String get comingSoon => 'Coming soon';
-  @override
   String get sleepCardTitle => 'Sleep';
   @override
   String get sleepNotLogged => 'Night not logged';
@@ -101,6 +99,33 @@ class AppStringsEn implements AppStrings {
   String get mealSaved => 'Meal saved';
   @override
   String get errorGeneric => 'Something went wrong';
+
+  @override
+  String get symptomEntryTitle => 'New symptom';
+  @override
+  String get symptomEntryTypeLabel => 'Symptom type';
+  @override
+  String get intensityLabel => 'Intensity';
+  @override
+  String get detailLabel => 'Detail (optional)';
+  @override
+  String get endTimeLabel => 'Add an end time';
+  @override
+  String get removeEndTime => 'Remove end time';
+  @override
+  String get symptomSaved => 'Symptom saved';
+  @override
+  String get symptomDetailBloating => 'Bloating';
+  @override
+  String get symptomDetailPain => 'Pain';
+  @override
+  String get symptomDetailNausea => 'Nausea';
+  @override
+  String get symptomDetailIrritable => 'Irritable';
+  @override
+  String get symptomDetailAnxious => 'Anxious';
+  @override
+  String get symptomDetailLow => 'Low';
 
   @override
   String get accountTitle => 'My account';
