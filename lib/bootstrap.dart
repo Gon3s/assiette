@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:assiette/app.dart';
 import 'package:assiette/app_env.dart';
 import 'package:assiette/features/environment_capture/background/environment_background_task.dart';
+import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/localization/string_hardcoded.dart';
 import 'package:assiette/utils/colored_debug_printer.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,13 @@ Future<void> _registerBackgroundTasks() async {
   if (!Platform.isAndroid) return;
   try {
     await registerEnvironmentCaptureTask();
+
+    // Requested here, in the foreground, because the periodic task above
+    // runs headless and can't show the system permission dialog.
+    final hasPermission = await GeolocatorLocationReader().ensurePermission();
+    if (hasPermission) {
+      await registerImmediateEnvironmentCaptureTask();
+    }
   } on Exception catch (e) {
     Print.red('DLOG', 'Failed to register background tasks: $e');
   }

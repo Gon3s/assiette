@@ -54,3 +54,17 @@ Future<void> registerEnvironmentCaptureTask() async {
     existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
   );
 }
+
+/// Runs a one-off capture right away instead of waiting for the next
+/// periodic tick (up to [environmentCaptureFrequency] away).
+///
+/// Call once location permission has just been granted, so the user sees a
+/// weather reading without waiting up to an hour for the first one.
+Future<void> registerImmediateEnvironmentCaptureTask() async {
+  await Workmanager().registerOneOffTask(
+    '$environmentCaptureUniqueName-immediate',
+    environmentCaptureTaskName,
+    constraints: Constraints(networkType: NetworkType.connected),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+  );
+}

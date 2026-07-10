@@ -16,6 +16,9 @@ class _FakeLocationReader implements LocationReader {
   final Position? _position;
 
   @override
+  Future<bool> ensurePermission() async => _position != null;
+
+  @override
   Future<Position?> readPosition() async => _position;
 }
 
