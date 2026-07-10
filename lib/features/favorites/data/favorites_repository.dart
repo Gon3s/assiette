@@ -61,6 +61,29 @@ class DriftFavoritesRepository implements FavoritesRepository {
     );
   }
 
+  @override
+  Future<String> logFavorite(MealTemplateOption template) async {
+    final id = _uuid.v4();
+    final now = DateTime.now().toUtc();
+    await _db.mealsDao.insertMealWithTags(
+      MealsCompanion.insert(
+        id: id,
+        timestamp: now,
+        mealType: template.defaultMealType ?? defaultMealTypeFor(now.toLocal()),
+        photoPath: Value(template.defaultPhotoPath),
+        templateId: Value(template.id),
+        createdAt: Value(now),
+        updatedAt: Value(now),
+      ),
+      [for (final tag in template.tags) tag.id],
+    );
+    return id;
+  }
+
+  @override
+  Future<void> undoLogFavorite(String mealId) =>
+      _db.mealsDao.softDeleteMeal(mealId);
+
   MealType? _mealTypeFromName(String? name) {
     if (name == null) return null;
     for (final type in MealType.values) {

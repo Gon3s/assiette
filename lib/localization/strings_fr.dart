@@ -103,6 +103,11 @@ class AppStringsFr implements AppStrings {
   String get errorGeneric => 'Une erreur est survenue';
 
   @override
+  String get favoriteMealAdded => 'Repas ajouté';
+  @override
+  String get undoAction => 'Annuler';
+
+  @override
   String get symptomEntryTitle => 'Nouveau symptôme';
   @override
   String get symptomEntryTypeLabel => 'Type de symptôme';

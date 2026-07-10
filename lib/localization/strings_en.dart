@@ -103,6 +103,11 @@ class AppStringsEn implements AppStrings {
   String get errorGeneric => 'Something went wrong';
 
   @override
+  String get favoriteMealAdded => 'Meal added';
+  @override
+  String get undoAction => 'Undo';
+
+  @override
   String get symptomEntryTitle => 'New symptom';
   @override
   String get symptomEntryTypeLabel => 'Symptom type';

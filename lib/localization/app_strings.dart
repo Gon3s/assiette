@@ -72,6 +72,10 @@ abstract class AppStrings {
   String get mealSaved;
   String get errorGeneric;
 
+  // Favorites
+  String get favoriteMealAdded;
+  String get undoAction;
+
   // Symptom entry
   String get symptomEntryTitle;
   String get symptomEntryTypeLabel;
