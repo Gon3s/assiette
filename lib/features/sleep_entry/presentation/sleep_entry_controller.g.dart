@@ -51,7 +51,7 @@ final class SleepEntryControllerProvider
 }
 
 String _$sleepEntryControllerHash() =>
-    r'e1633fbfdb669df29852ea6621ae21c8e8c33fef';
+    r'b5201108a7c9a977adc9795f65966c0d7c8655a8';
 
 /// Holds and mutates the sleep entry detail form (quality, bed/wake time),
 /// seeded from the sleep already logged for the selected day, and performs

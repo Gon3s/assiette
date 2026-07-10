@@ -171,6 +171,14 @@ class AppStringsEn implements AppStrings {
   String get confirm => 'Confirm';
 
   @override
+  String get settingsTitle => 'About';
+  @override
+  String get aboutSectionTitle => 'Data sources';
+  @override
+  String get openMeteoAttribution =>
+      'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
+
+  @override
   String get emailEmpty => 'Email cannot be empty';
   @override
   String get emailInvalid => 'Email is not valid';

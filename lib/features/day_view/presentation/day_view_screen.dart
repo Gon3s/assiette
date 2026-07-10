@@ -30,7 +30,15 @@ class DayViewScreen extends ConsumerWidget {
         isToday ? s.today : DateFormat.MMMMEEEEd(locale).format(date);
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () => context.pushNamed(AppRouter.settings.name),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const DayHeader(),

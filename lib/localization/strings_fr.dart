@@ -171,6 +171,14 @@ class AppStringsFr implements AppStrings {
   String get confirm => 'Confirmer';
 
   @override
+  String get settingsTitle => 'À propos';
+  @override
+  String get aboutSectionTitle => 'Sources de données';
+  @override
+  String get openMeteoAttribution =>
+      'Météo et pression fournies par Open-Meteo.com (CC BY 4.0).';
+
+  @override
   String get emailEmpty => "L'email ne peut pas être vide";
   @override
   String get emailInvalid => "L'email n'est pas valide";

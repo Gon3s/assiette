@@ -26,4 +26,11 @@ class EnvironmentDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> insertSnapshot(EnvironmentSnapshotsCompanion entry) =>
       into(environmentSnapshots).insert(entry);
+
+  Future<EnvironmentSnapshot?> getLatest() {
+    return (select(environmentSnapshots)
+          ..orderBy([(t) => OrderingTerm.desc(t.timestamp)])
+          ..limit(1))
+        .getSingleOrNull();
+  }
 }
