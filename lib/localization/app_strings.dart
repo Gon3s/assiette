@@ -42,6 +42,7 @@ abstract class AppStrings {
   String get sleepQualityBad;
   String get sleepQualityMedium;
   String get sleepQualityGood;
+  String get sleepQuestion;
   String get weatherUnavailable;
   String get pressureUnit;
   String get mealTypeBreakfast;
@@ -85,6 +86,14 @@ abstract class AppStrings {
   String get symptomDetailIrritable;
   String get symptomDetailAnxious;
   String get symptomDetailLow;
+
+  // Sleep entry
+  String get sleepQualityLabel;
+  String get bedTimeLabel;
+  String get wakeTimeLabel;
+  String get removeBedTime;
+  String get removeWakeTime;
+  String get sleepSaved;
 
   // Account
   String get accountTitle;

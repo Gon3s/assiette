@@ -47,6 +47,8 @@ class AppStringsFr implements AppStrings {
   @override
   String get sleepQualityGood => 'Bon';
   @override
+  String get sleepQuestion => 'Comment as-tu dormi ?';
+  @override
   String get weatherUnavailable => 'Météo indisponible';
   @override
   String get pressureUnit => 'hPa';
@@ -126,6 +128,19 @@ class AppStringsFr implements AppStrings {
   String get symptomDetailAnxious => 'Anxieux';
   @override
   String get symptomDetailLow => 'Abattu';
+
+  @override
+  String get sleepQualityLabel => 'Qualité';
+  @override
+  String get bedTimeLabel => 'Heure du coucher';
+  @override
+  String get wakeTimeLabel => 'Heure du réveil';
+  @override
+  String get removeBedTime => "Supprimer l'heure de coucher";
+  @override
+  String get removeWakeTime => "Supprimer l'heure de réveil";
+  @override
+  String get sleepSaved => 'Sommeil enregistré';
 
   @override
   String get accountTitle => 'Mon compte';

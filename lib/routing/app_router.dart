@@ -1,5 +1,6 @@
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
@@ -24,6 +25,9 @@ enum AppRouter {
 
   /// The symptom entry screen.
   symptomEntry,
+
+  /// The sleep entry detail screen.
+  sleepEntry,
 }
 
 /// The application router provider.
@@ -65,6 +69,11 @@ GoRouter goRouter(Ref ref) {
             path: 'symptom-entry',
             name: AppRouter.symptomEntry.name,
             builder: (context, state) => const SymptomEntryScreen(),
+          ),
+          GoRoute(
+            path: 'sleep-entry',
+            name: AppRouter.sleepEntry.name,
+            builder: (context, state) => const SleepEntryScreen(),
           ),
         ],
       ),
