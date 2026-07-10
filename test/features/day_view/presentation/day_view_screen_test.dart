@@ -8,9 +8,11 @@ import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockDayViewRepository extends Mock implements DayViewRepository {}
@@ -28,16 +30,28 @@ void main() {
         .thenAnswer((_) => Stream.value(null));
   });
 
-  Future<void> pumpScreen(WidgetTester tester) async {
+  Future<GoRouter> pumpScreen(WidgetTester tester) async {
+    final router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(path: '/', builder: (_, _) => const DayViewScreen()),
+        GoRoute(
+          path: '/sleep-entry',
+          name: 'sleepEntry',
+          builder: (_, _) => const SleepEntryScreen(),
+        ),
+      ],
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           dayViewRepositoryProvider.overrideWithValue(repository),
         ],
-        child: const MaterialApp(home: DayViewScreen()),
+        child: MaterialApp.router(routerConfig: router),
       ),
     );
     await tester.pump();
+    return router;
   }
 
   testWidgets('shows the empty state when nothing is logged', (tester) async {
@@ -45,9 +59,37 @@ void main() {
 
     // English fallback since no localization ancestor.
     expect(find.text('Nothing logged this day.'), findsOneWidget);
-    expect(find.text('Night not logged'), findsOneWidget);
+    expect(find.text('How did you sleep?'), findsOneWidget);
     expect(find.text('Weather unavailable'), findsOneWidget);
     expect(find.text('Today'), findsOneWidget);
+  });
+
+  testWidgets('logs sleep quality with a single tap', (tester) async {
+    when(
+      () => repository.logSleepQuality(any(), any()),
+    ).thenAnswer((_) async {});
+
+    await pumpScreen(tester);
+    await tester.tap(find.text('Good'));
+    await tester.pump();
+
+    verify(() => repository.logSleepQuality(any(), 3)).called(1);
+  });
+
+  testWidgets('tapping the logged sleep card opens the edit screen', (
+    tester,
+  ) async {
+    when(() => repository.watchSleepForNight(any())).thenAnswer(
+      (_) => Stream.value(const SleepSummary(quality: 3)),
+    );
+
+    await pumpScreen(tester);
+    await tester.pump();
+    expect(find.text('Sleep'), findsOneWidget);
+    await tester.tap(find.text('Sleep'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SleepEntryScreen), findsOneWidget);
   });
 
   testWidgets('shows both action buttons', (tester) async {
