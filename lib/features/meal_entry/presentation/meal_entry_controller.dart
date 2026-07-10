@@ -8,15 +8,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'meal_entry_controller.g.dart';
 
-/// Pre-selects the meal type most likely at [time] (local).
-MealType defaultMealTypeFor(DateTime time) {
-  final hour = time.hour;
-  if (hour < 11) return MealType.breakfast;
-  if (hour < 14) return MealType.lunch;
-  if (hour < 18) return MealType.snack;
-  return MealType.dinner;
-}
-
 /// All tags available for selection, sorted by label.
 @riverpod
 Stream<List<TagOption>> availableTags(Ref ref) =>

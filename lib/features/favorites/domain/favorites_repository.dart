@@ -18,6 +18,14 @@ abstract class FavoritesRepository {
     MealType? defaultMealType,
     String? defaultPhotoPath,
   });
+
+  /// Instantiates [template] into a new meal timestamped now, copying its
+  /// tags into meal_tags (transaction). Returns the created meal's id, so
+  /// it can be undone with [undoLogFavorite].
+  Future<String> logFavorite(MealTemplateOption template);
+
+  /// Soft-deletes the meal created by a previous [logFavorite] call.
+  Future<void> undoLogFavorite(String mealId);
 }
 
 /// Provides the [FavoritesRepository] implementation.

@@ -4,6 +4,8 @@ library;
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/data/favorites_repository.dart';
+import 'package:assiette/features/favorites/domain/meal_template_option.dart';
+import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -53,6 +55,69 @@ void main() {
       expect(favorite.defaultMealType, isNull);
       expect(favorite.defaultPhotoPath, isNull);
       expect(favorite.tags, isEmpty);
+    });
+  });
+
+  group('logFavorite', () {
+    test(
+      'creates a meal copying the template tags and returns its id',
+      () async {
+        final tags = await db.tagsDao.watchAll().first;
+        final tag = tags.first;
+        final template = MealTemplateOption(
+          id: 'template-1',
+          name: 'Salade César',
+          defaultMealType: MealType.lunch,
+          tags: [
+            TagOption(id: tag.id, label: tag.label, isSystem: tag.isSystem),
+          ],
+        );
+
+        final mealId = await repository.logFavorite(template);
+
+        final meals = await db.mealsDao
+            .watchByDayWithTags(DateTime.now())
+            .first;
+        final meal = meals.singleWhere((m) => m.meal.id == mealId);
+        expect(meal.meal.mealType, MealType.lunch);
+        expect(meal.meal.templateId, 'template-1');
+        expect(meal.tags.single.id, tag.id);
+      },
+    );
+
+    test(
+      'falls back to a time-of-day meal type when the template has none',
+      () async {
+        const template = MealTemplateOption(
+          id: 'template-2',
+          name: 'Snack',
+          tags: [],
+        );
+
+        final mealId = await repository.logFavorite(template);
+
+        final meals = await db.mealsDao
+            .watchByDayWithTags(DateTime.now())
+            .first;
+        final meal = meals.singleWhere((m) => m.meal.id == mealId);
+        expect(meal.meal.mealType, defaultMealTypeFor(DateTime.now()));
+      },
+    );
+  });
+
+  group('undoLogFavorite', () {
+    test('soft-deletes the logged meal', () async {
+      const template = MealTemplateOption(
+        id: 'template-3',
+        name: 'Café',
+        tags: [],
+      );
+      final mealId = await repository.logFavorite(template);
+
+      await repository.undoLogFavorite(mealId);
+
+      final meals = await db.mealsDao.watchByDayWithTags(DateTime.now()).first;
+      expect(meals.where((m) => m.meal.id == mealId), isEmpty);
     });
   });
 }

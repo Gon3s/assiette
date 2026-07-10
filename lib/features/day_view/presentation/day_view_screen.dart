@@ -4,6 +4,7 @@ import 'package:assiette/features/day_view/presentation/selected_date_provider.d
 import 'package:assiette/features/day_view/presentation/widgets/day_header.dart';
 import 'package:assiette/features/day_view/presentation/widgets/sleep_card.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_tile.dart';
+import 'package:assiette/features/favorites/presentation/widgets/favorites_row.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +27,7 @@ class DayViewScreen extends ConsumerWidget {
     final isToday =
         date.year == now.year && date.month == now.month && date.day == now.day;
     final locale = Localizations.maybeLocaleOf(context)?.toString();
-    final title =
-        isToday ? s.today : DateFormat.MMMMEEEEd(locale).format(date);
+    final title = isToday ? s.today : DateFormat.MMMMEEEEd(locale).format(date);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,19 +44,21 @@ class DayViewScreen extends ConsumerWidget {
           const DayHeader(),
           const SleepCard(),
           gapH8,
+          const FavoritesRow(),
+          gapH8,
           Expanded(
             child: switch (timeline) {
               AsyncData(:final value) when value.isEmpty => Center(
-                  child: Text(
-                    s.emptyDayMessage,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                child: Text(
+                  s.emptyDayMessage,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
+              ),
               AsyncData(:final value) => ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) =>
-                      TimelineTile(item: value[index]),
-                ),
+                itemCount: value.length,
+                itemBuilder: (context, index) =>
+                    TimelineTile(item: value[index]),
+              ),
               AsyncError() => Center(child: Text(s.emptyDayMessage)),
               _ => const Center(child: CircularProgressIndicator()),
             },
@@ -82,8 +84,7 @@ class _ActionBar extends StatelessWidget {
           children: [
             Expanded(
               child: FilledButton.icon(
-                onPressed: () =>
-                    context.pushNamed(AppRouter.mealEntry.name),
+                onPressed: () => context.pushNamed(AppRouter.mealEntry.name),
                 icon: const Icon(Icons.photo_camera),
                 label: Text(s.logMealAction),
               ),
@@ -91,8 +92,7 @@ class _ActionBar extends StatelessWidget {
             gapW16,
             Expanded(
               child: FilledButton.tonalIcon(
-                onPressed: () =>
-                    context.pushNamed(AppRouter.symptomEntry.name),
+                onPressed: () => context.pushNamed(AppRouter.symptomEntry.name),
                 icon: const Icon(Icons.healing),
                 label: Text(s.logSymptomAction),
               ),
