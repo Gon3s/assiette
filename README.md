@@ -108,9 +108,13 @@ flutter build apk --debug -t lib/main_dev.dart             # APK debug
 
 Chaque push sur `main` déclenche le workflow
 [Android debug APK](https://github.com/Gon3s/assiette/actions/workflows/android-debug-apk.yml)
-(tests + build). L'APK (flavor dev) est disponible en **artifact** du run
-pendant 14 jours — pratique pour tester sur téléphone sans environnement
-Flutter local. Le workflow est aussi lançable à la main (*Run workflow*).
+(tests + build). L'APK (flavor dev) est publié sur une **release roulante**
+mise à jour à chaque push — pratique pour tester sur téléphone sans
+environnement Flutter local, pas de connexion GitHub requise :
+
+**[⬇️ Télécharger le dernier APK](https://github.com/Gon3s/assiette/releases/download/dev-latest/app-debug.apk)**
+
+Le workflow est aussi lançable à la main (*Run workflow*).
 
 ## 🤝 Contribuer
 
