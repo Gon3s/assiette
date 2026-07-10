@@ -110,6 +110,11 @@ abstract class AppStrings {
   String get cancel;
   String get confirm;
 
+  // Settings
+  String get settingsTitle;
+  String get aboutSectionTitle;
+  String get openMeteoAttribution;
+
   // Errors
   String get emailEmpty;
   String get emailInvalid;

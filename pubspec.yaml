@@ -21,6 +21,8 @@ dependencies:
   # Localisation & météo (Open-Meteo)
   geolocator: ^14.0.2
   go_router: ^17.3.0
+  # Appel API Open-Meteo
+  http: ^1.6.0
   # Photo
   image_picker: ^1.2.2
   # Formatage dates (version épinglée par flutter_localizations)
