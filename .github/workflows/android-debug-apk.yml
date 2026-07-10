@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build debug APK (dev flavor)
@@ -47,10 +50,14 @@ jobs:
       - name: Build debug APK
         run: flutter build apk --debug -t lib/main_dev.dart
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Publish debug APK to rolling release
+        uses: softprops/action-gh-release@v2
         with:
-          name: assiette-debug-apk-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/app-debug.apk
-          retention-days: 14
-          if-no-files-found: error
+          tag_name: dev-latest
+          name: "Dev build (latest)"
+          prerelease: true
+          body: >-
+            APK de debug (flavor dev) généré automatiquement depuis le
+            commit ${{ github.sha }} sur `main`. Cette release est mise à
+            jour à chaque push.
+          files: build/app/outputs/flutter-apk/app-debug.apk
