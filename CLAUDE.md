@@ -104,8 +104,23 @@ lib/
   abstract class MyModel with _$MyModel { ... }
   ```
 
+### Background tasks (workmanager)
 
-
+- Live under `lib/features/<feature>/background/`.
+- The callback dispatcher is a **top-level** function tagged
+  `@pragma('vm:entry-point')`. It runs in its own isolate with no shared
+  memory: reopen `AppDatabase()` directly there, never reuse the instance
+  from `appDatabaseProvider`.
+- The `@pragma('vm:entry-point')` marker makes `very_good_analysis`'s
+  `unreachable_from_main` lint treat that file as its own entry point, so it
+  can't see callers in `bootstrap.dart`. Add
+  `// ignore_for_file: unreachable_from_main` with a one-line justification
+  comment at the top of the file rather than fighting the false positive.
+- Register the task from `bootstrap.dart` inside a `try/catch`, gated on
+  `Platform.isAndroid` (or the platforms you actually support) so an
+  unsupported platform or a plugin failure never blocks app startup.
+- See `lib/features/environment_capture/` (US-8) for the reference
+  implementation.
 
 
 ## Testing conventions
@@ -114,6 +129,20 @@ lib/
 - Test controllers by listening to their `AsyncValue` state through a
   `ProviderContainer` with overridden providers.
 - Mirror the `lib/` structure under `test/`.
+- **Sandbox sessions only**: `flutter test` needs a native `libsqlite3` and
+  the sandbox has no network access to the GitHub host serving the
+  prebuilt binary (`Bad state: Hash of downloaded file libsqlite3...`). Fix
+  locally, **do not commit**, by pointing the `sqlite3` package hook at the
+  OS-provided library (already present via `libsqlite3-dev`):
+  ```yaml
+  # pubspec.yaml — temporary, revert before committing
+  hooks:
+    user_defines:
+      sqlite3:
+        source: system
+  ```
+  Run `flutter pub get` after adding it, run the tests, then remove the
+  block again before committing.
 
 ## Convention commits
 

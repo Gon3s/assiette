@@ -14,7 +14,7 @@ identifier vos déclencheurs probables.
 - **Aucun compte, aucun backend, aucun tracking.** Toutes les données restent
   dans une base SQLite sur votre appareil.
 - Les photos de repas sont stockées dans le répertoire interne de l'app.
-- La seule requête réseau prévue est l'appel météo à
+- La seule requête réseau effectuée est l'appel météo en tâche de fond à
   [Open-Meteo](https://open-meteo.com/) (sans clé API, données CC BY 4.0).
 
 ## ✨ Fonctionnalités
@@ -25,13 +25,18 @@ identifier vos déclencheurs probables.
   météo/pression, carte sommeil, mise à jour réactive en temps réel.
 - **Saisie de repas en quelques secondes** : photo (optionnelle), type
   pré-sélectionné selon l'heure, tags (25 déclencheurs classiques pré-remplis +
-  création à la volée), note, horodatage éditable.
+  création à la volée), note, horodatage éditable, enregistrement en favori.
+- **Saisie de symptômes** (migraine, digestif, humeur) en deux taps :
+  intensité 0-10, détail contextuel, heure de fin optionnelle.
+- **Sommeil 1-tap** : qualité (mauvais / moyen / bon), heures de coucher/réveil
+  éditables.
+- **Capture automatique météo/pression en tâche de fond** : position
+  approximative, appel [Open-Meteo](https://open-meteo.com/) toutes les
+  heures, delta de pression calculé, dégradation silencieuse sans réseau ni
+  permission localisation.
 
 ### En cours de développement
 
-- Saisie de symptômes (type + intensité 0-10) en deux taps
-- Sommeil 1-tap (mauvais / moyen / bon)
-- Capture automatique météo/pression en tâche de fond
 - Repas favoris re-loggables en un tap
 - Navigation entre les jours, édition/suppression des entrées
 - Rappels par notifications actionnables, alertes pression
