@@ -42,3 +42,8 @@ coverage
 
 # Mason (local cache)
 .mason/
+
+# Android release signing (generated locally or by CI from secrets, never committed)
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
