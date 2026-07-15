@@ -10,19 +10,22 @@ part of 'selected_date_provider.dart';
 // ignore_for_file: type=lint, type=warning
 /// The day currently shown by the day view screen. Defaults to today.
 ///
-/// Day navigation (US-11) will call [select] / [goToToday] to change it.
+/// Day navigation (swipe, date picker, "today" shortcut) calls [select] /
+/// [goToToday] to change it.
 
 @ProviderFor(SelectedDate)
 final selectedDateProvider = SelectedDateProvider._();
 
 /// The day currently shown by the day view screen. Defaults to today.
 ///
-/// Day navigation (US-11) will call [select] / [goToToday] to change it.
+/// Day navigation (swipe, date picker, "today" shortcut) calls [select] /
+/// [goToToday] to change it.
 final class SelectedDateProvider
     extends $NotifierProvider<SelectedDate, DateTime> {
   /// The day currently shown by the day view screen. Defaults to today.
   ///
-  /// Day navigation (US-11) will call [select] / [goToToday] to change it.
+  /// Day navigation (swipe, date picker, "today" shortcut) calls [select] /
+  /// [goToToday] to change it.
   SelectedDateProvider._()
     : super(
         from: null,
@@ -54,7 +57,8 @@ String _$selectedDateHash() => r'e6b39a2c59be83e0b19ebb8dcbd68049a05ca27d';
 
 /// The day currently shown by the day view screen. Defaults to today.
 ///
-/// Day navigation (US-11) will call [select] / [goToToday] to change it.
+/// Day navigation (swipe, date picker, "today" shortcut) calls [select] /
+/// [goToToday] to change it.
 
 abstract class _$SelectedDate extends $Notifier<DateTime> {
   DateTime build();

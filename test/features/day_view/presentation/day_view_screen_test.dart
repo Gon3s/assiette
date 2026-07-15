@@ -113,6 +113,43 @@ void main() {
     expect(find.text('Symptom'), findsOneWidget);
   });
 
+  testWidgets('swiping left moves to the next day', (tester) async {
+    await pumpScreen(tester);
+
+    expect(find.byIcon(Icons.today), findsNothing);
+
+    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.today), findsOneWidget);
+    expect(find.text('Today'), findsNothing);
+  });
+
+  testWidgets('tapping the today shortcut returns to today', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.today), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.today));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.today), findsNothing);
+    expect(find.text('Today'), findsOneWidget);
+  });
+
+  testWidgets('tapping the calendar icon opens a date picker', (
+    tester,
+  ) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.byIcon(Icons.calendar_month));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+  });
+
   testWidgets('renders meals and symptoms on the timeline', (tester) async {
     when(() => repository.watchTimeline(any())).thenAnswer(
       (_) => Stream.value([

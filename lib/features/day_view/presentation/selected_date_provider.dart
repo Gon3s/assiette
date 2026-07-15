@@ -4,7 +4,8 @@ part 'selected_date_provider.g.dart';
 
 /// The day currently shown by the day view screen. Defaults to today.
 ///
-/// Day navigation (US-11) will call [select] / [goToToday] to change it.
+/// Day navigation (swipe, date picker, "today" shortcut) calls [select] /
+/// [goToToday] to change it.
 @riverpod
 class SelectedDate extends _$SelectedDate {
   @override
