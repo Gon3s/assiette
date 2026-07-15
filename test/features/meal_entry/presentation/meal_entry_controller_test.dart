@@ -3,6 +3,7 @@ library;
 
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
@@ -233,6 +234,104 @@ void main() {
           tagIds: any(named: 'tagIds'),
         ),
       );
+    });
+
+    test('loadForEdit seeds the form from an existing meal', () {
+      final container = makeContainer();
+      container.read(mealEntryControllerProvider.notifier).loadForEdit(
+        MealDraft(
+          id: 'meal-1',
+          timestamp: DateTime(2026, 7, 7, 12),
+          mealType: MealType.lunch,
+          tags: const [tag],
+          note: 'miam',
+          photoPath: '/photos/a.jpg',
+        ),
+      );
+
+      final state = container.read(mealEntryControllerProvider);
+      expect(state.id, 'meal-1');
+      expect(state.mealType, MealType.lunch);
+      expect(state.selectedTags, [tag]);
+      expect(state.note, 'miam');
+      expect(state.photoPath, '/photos/a.jpg');
+    });
+
+    test('save calls updateMeal when editing an existing meal', () async {
+      when(
+        () => repository.updateMeal(
+          id: any(named: 'id'),
+          timestamp: any(named: 'timestamp'),
+          mealType: any(named: 'mealType'),
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final container = makeContainer();
+      final controller = container.read(mealEntryControllerProvider.notifier)
+        ..loadForEdit(
+          MealDraft(
+            id: 'meal-1',
+            timestamp: DateTime(2026, 7, 7, 12),
+            mealType: MealType.lunch,
+            tags: const [],
+          ),
+        )
+        ..setMealType(MealType.dinner);
+
+      final saved = await controller.save();
+
+      expect(saved, isTrue);
+      verify(
+        () => repository.updateMeal(
+          id: 'meal-1',
+          timestamp: any(named: 'timestamp'),
+          mealType: MealType.dinner,
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: any(named: 'note'),
+        ),
+      ).called(1);
+      verifyNever(
+        () => repository.saveMeal(
+          timestamp: any(named: 'timestamp'),
+          mealType: any(named: 'mealType'),
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: any(named: 'note'),
+        ),
+      );
+    });
+
+    test('delete soft-deletes the meal being edited', () async {
+      when(() => repository.deleteMeal('meal-1')).thenAnswer((_) async {});
+
+      final container = makeContainer();
+      final controller = container.read(mealEntryControllerProvider.notifier)
+        ..loadForEdit(
+          MealDraft(
+            id: 'meal-1',
+            timestamp: DateTime(2026, 7, 7, 12),
+            mealType: MealType.lunch,
+            tags: const [],
+          ),
+        );
+
+      final deleted = await controller.delete();
+
+      expect(deleted, isTrue);
+      verify(() => repository.deleteMeal('meal-1')).called(1);
+    });
+
+    test('delete is a no-op when creating a new meal (no id)', () async {
+      final container = makeContainer();
+      final deleted =
+          await container.read(mealEntryControllerProvider.notifier).delete();
+
+      expect(deleted, isFalse);
+      verifyNever(() => repository.deleteMeal(any()));
     });
   });
 }

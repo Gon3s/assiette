@@ -20,6 +20,12 @@ abstract class DayViewRepository {
 
   /// Logs (or updates) the sleep quality for the night of [day].
   Future<void> logSleepQuality(DateTime day, int quality);
+
+  /// Soft-deletes the sleep entry.
+  Future<void> deleteSleepEntry(String id);
+
+  /// Undoes [deleteSleepEntry].
+  Future<void> undoDeleteSleepEntry(String id);
 }
 
 /// Provides the [DayViewRepository] implementation.

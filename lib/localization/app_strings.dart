@@ -55,6 +55,7 @@ abstract class AppStrings {
 
   // Meal entry
   String get mealEntryTitle;
+  String get editMealTitle;
   String get takePhoto;
   String get retakePhoto;
   String get removePhoto;
@@ -71,6 +72,7 @@ abstract class AppStrings {
   String get favoriteSaved;
   String get mealSaved;
   String get errorGeneric;
+  String get entryDeleted;
 
   // Favorites
   String get favoriteMealAdded;
@@ -88,6 +90,7 @@ abstract class AppStrings {
 
   // Symptom entry
   String get symptomEntryTitle;
+  String get editSymptomTitle;
   String get symptomEntryTypeLabel;
   String get intensityLabel;
   String get detailLabel;

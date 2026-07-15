@@ -3,6 +3,7 @@ library;
 
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
@@ -58,14 +59,15 @@ void main() {
     ).thenAnswer((_) async {});
   });
 
-  Future<GoRouter> pumpScreen(WidgetTester tester) async {
+  Future<GoRouter> pumpScreen(WidgetTester tester, {MealDraft? draft}) async {
     final router = GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(path: '/', builder: (_, _) => const Scaffold()),
         GoRoute(
           path: '/meal-entry',
-          builder: (_, _) => const MealEntryScreen(),
+          builder: (_, state) =>
+              MealEntryScreen(draft: state.extra as MealDraft?),
         ),
       ],
     );
@@ -80,7 +82,7 @@ void main() {
       ),
     );
     // Push the entry screen like the day view does, so pop() can return.
-    router.push('/meal-entry');
+    router.push('/meal-entry', extra: draft);
     await tester.pumpAndSettle();
     return router;
   }
@@ -229,5 +231,88 @@ void main() {
         tagIds: any(named: 'tagIds'),
       ),
     );
+  });
+
+  group('editing an existing meal', () {
+    final draft = MealDraft(
+      id: 'meal-1',
+      timestamp: DateTime(2026, 7, 7, 12),
+      mealType: MealType.lunch,
+      tags: const [],
+      note: 'miam',
+    );
+
+    testWidgets('shows the edit title and a delete action', (tester) async {
+      await pumpScreen(tester, draft: draft);
+
+      expect(find.text('Edit meal'), findsOneWidget);
+      expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+    });
+
+    testWidgets('saving calls updateMeal, not saveMeal', (tester) async {
+      when(
+        () => repository.updateMeal(
+          id: any(named: 'id'),
+          timestamp: any(named: 'timestamp'),
+          mealType: any(named: 'mealType'),
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async {});
+
+      await pumpScreen(tester, draft: draft);
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => repository.updateMeal(
+          id: 'meal-1',
+          timestamp: any(named: 'timestamp'),
+          mealType: MealType.lunch,
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: 'miam',
+        ),
+      ).called(1);
+      verifyNever(
+        () => repository.saveMeal(
+          timestamp: any(named: 'timestamp'),
+          mealType: any(named: 'mealType'),
+          tagIds: any(named: 'tagIds'),
+          photoPath: any(named: 'photoPath'),
+          note: any(named: 'note'),
+        ),
+      );
+    });
+
+    testWidgets('deleting pops back and shows an undo snackbar', (
+      tester,
+    ) async {
+      when(() => repository.deleteMeal('meal-1')).thenAnswer((_) async {});
+      when(
+        () => repository.undoDeleteMeal('meal-1'),
+      ).thenAnswer((_) async {});
+
+      final router = await pumpScreen(tester, draft: draft);
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pumpAndSettle();
+
+      verify(() => repository.deleteMeal('meal-1')).called(1);
+      expect(
+        router.routerDelegate.currentConfiguration.uri.toString(),
+        '/',
+      );
+      expect(find.text('Entry deleted'), findsOneWidget);
+
+      // The SnackBar sits at the viewport edge in the test surface, so
+      // invoke the action's callback directly rather than a hit-test tap.
+      final action = tester.widget<SnackBarAction>(
+        find.byType(SnackBarAction),
+      );
+      action.onPressed();
+      verify(() => repository.undoDeleteMeal('meal-1')).called(1);
+    });
   });
 }

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
@@ -10,9 +14,38 @@ import 'package:intl/intl.dart';
 
 /// Symptom entry form: type, intensity, optional detail/note, editable
 /// timestamp. The default path (type + save) takes two taps.
-class SymptomEntryScreen extends ConsumerWidget {
+///
+/// When [draft] is provided, the form is seeded from that existing symptom
+/// (edit path of US-12) and a delete action is offered.
+class SymptomEntryScreen extends ConsumerStatefulWidget {
   /// Creates a [SymptomEntryScreen].
-  const SymptomEntryScreen({super.key});
+  const SymptomEntryScreen({this.draft, super.key});
+
+  /// The symptom being edited, or `null` when creating a new one.
+  final SymptomDraft? draft;
+
+  @override
+  ConsumerState<SymptomEntryScreen> createState() =>
+      _SymptomEntryScreenState();
+}
+
+class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final draft = widget.draft;
+    if (draft != null) {
+      // Riverpod forbids mutating a provider from initState; defer to the
+      // next microtask, before the first frame is presented.
+      unawaited(
+        Future.microtask(
+          () => ref
+              .read(symptomEntryControllerProvider.notifier)
+              .loadForEdit(draft),
+        ),
+      );
+    }
+  }
 
   Future<void> _pickDate(
     BuildContext context,
@@ -104,8 +137,41 @@ class SymptomEntryScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final s = AppStrings.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    final id = ref.read(symptomEntryControllerProvider).id;
+    if (id == null) return;
+    // The screen pops after deleting, so capture the repository now rather
+    // than reading `ref` again from the Undo action (the widget will
+    // already be unmounted by then).
+    final repository = ref.read(symptomEntryRepositoryProvider);
+    try {
+      final deleted =
+          await ref.read(symptomEntryControllerProvider.notifier).delete();
+      if (!deleted) return;
+      router.pop();
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(s.entryDeleted),
+            action: SnackBarAction(
+              label: s.undoAction,
+              onPressed: () => repository.undoDeleteSymptom(id),
+            ),
+          ),
+        );
+    } on Exception {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final s = AppStrings.of(context);
     final state = ref.watch(symptomEntryControllerProvider);
     final notifier = ref.read(symptomEntryControllerProvider.notifier);
@@ -113,9 +179,20 @@ class SymptomEntryScreen extends ConsumerWidget {
     final dateLabel = DateFormat.yMMMd(locale).format(state.timestamp);
     final timeLabel = DateFormat.Hm(locale).format(state.timestamp);
     final detailSuggestions = symptomDetailSuggestions(s, state.type);
+    final isEditing = state.id != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.symptomEntryTitle)),
+      appBar: AppBar(
+        title: Text(isEditing ? s.editSymptomTitle : s.symptomEntryTitle),
+        actions: [
+          if (isEditing)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: s.deleteAction,
+              onPressed: () => _delete(context, ref),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [

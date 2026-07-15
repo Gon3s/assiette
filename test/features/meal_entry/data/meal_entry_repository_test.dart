@@ -80,4 +80,87 @@ void main() {
       expect(saved.tags, isEmpty);
     });
   });
+
+  group('loadMeal', () {
+    test('returns the meal with its tags', () async {
+      final tag = await repository.createTag('pizza');
+      await repository.saveMeal(
+        timestamp: DateTime(2026, 7, 7, 12, 30),
+        mealType: MealType.lunch,
+        tagIds: [tag.id],
+        note: 'très bon',
+      );
+      final saved =
+          (await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first)
+              .single;
+
+      final draft = await repository.loadMeal(saved.meal.id);
+
+      expect(draft, isNotNull);
+      expect(draft!.mealType, MealType.lunch);
+      expect(draft.note, 'très bon');
+      expect(draft.tags.single.label, 'pizza');
+    });
+
+    test('returns null for an unknown id', () async {
+      expect(await repository.loadMeal('missing'), isNull);
+    });
+  });
+
+  group('updateMeal', () {
+    test('replaces the fields and tag links', () async {
+      final tagA = await repository.createTag('pizza');
+      final tagB = await repository.createTag('salade');
+      await repository.saveMeal(
+        timestamp: DateTime(2026, 7, 7, 12),
+        mealType: MealType.lunch,
+        tagIds: [tagA.id],
+      );
+      final id =
+          (await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first)
+              .single
+              .meal
+              .id;
+
+      await repository.updateMeal(
+        id: id,
+        timestamp: DateTime(2026, 7, 7, 19),
+        mealType: MealType.dinner,
+        tagIds: [tagB.id],
+        note: 'modifié',
+      );
+
+      final draft = await repository.loadMeal(id);
+      expect(draft!.mealType, MealType.dinner);
+      expect(draft.note, 'modifié');
+      expect(draft.tags.single.label, 'salade');
+    });
+  });
+
+  group('deleteMeal / undoDeleteMeal', () {
+    test('soft-deletes then restores the meal', () async {
+      await repository.saveMeal(
+        timestamp: DateTime(2026, 7, 7, 12),
+        mealType: MealType.lunch,
+        tagIds: [],
+      );
+      final id =
+          (await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first)
+              .single
+              .meal
+              .id;
+
+      await repository.deleteMeal(id);
+      expect(
+        await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first,
+        isEmpty,
+      );
+
+      await repository.undoDeleteMeal(id);
+      expect(
+        await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first,
+        hasLength(1),
+      );
+    });
+  });
 }

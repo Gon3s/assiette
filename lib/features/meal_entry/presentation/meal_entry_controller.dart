@@ -1,5 +1,6 @@
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
@@ -66,20 +67,57 @@ class MealEntryController extends _$MealEntryController {
   /// Discards the current photo.
   void removePhoto() => state = state.copyWith(photoPath: null);
 
-  /// Persists the meal. Returns true on success.
+  /// Seeds the form from a previously logged meal for editing.
+  void loadForEdit(MealDraft draft) {
+    state = MealEntryState(
+      id: draft.id,
+      mealType: draft.mealType,
+      timestamp: draft.timestamp,
+      selectedTags: draft.tags,
+      note: draft.note ?? '',
+      photoPath: draft.photoPath,
+    );
+  }
+
+  /// Persists the meal (create or update). Returns true on success.
   Future<bool> save() async {
     if (state.isSaving) return false;
     state = state.copyWith(isSaving: true);
     try {
-      await ref
-          .read(mealEntryRepositoryProvider)
-          .saveMeal(
-            timestamp: state.timestamp,
-            mealType: state.mealType,
-            tagIds: [for (final tag in state.selectedTags) tag.id],
-            photoPath: state.photoPath,
-            note: state.note,
-          );
+      final repository = ref.read(mealEntryRepositoryProvider);
+      final id = state.id;
+      if (id == null) {
+        await repository.saveMeal(
+          timestamp: state.timestamp,
+          mealType: state.mealType,
+          tagIds: [for (final tag in state.selectedTags) tag.id],
+          photoPath: state.photoPath,
+          note: state.note,
+        );
+      } else {
+        await repository.updateMeal(
+          id: id,
+          timestamp: state.timestamp,
+          mealType: state.mealType,
+          tagIds: [for (final tag in state.selectedTags) tag.id],
+          photoPath: state.photoPath,
+          note: state.note,
+        );
+      }
+      return true;
+    } finally {
+      state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Soft-deletes the meal being edited. Returns false when creating (no
+  /// id yet) or while another save/delete is in flight.
+  Future<bool> delete() async {
+    final id = state.id;
+    if (id == null || state.isSaving) return false;
+    state = state.copyWith(isSaving: true);
+    try {
+      await ref.read(mealEntryRepositoryProvider).deleteMeal(id);
       return true;
     } finally {
       state = state.copyWith(isSaving: false);

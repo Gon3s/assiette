@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SleepSummary {
 
- int get quality; DateTime? get bedTime; DateTime? get wakeTime;
+ int get quality; DateTime? get bedTime; DateTime? get wakeTime; String? get id;
 /// Create a copy of SleepSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SleepSummaryCopyWith<SleepSummary> get copyWith => _$SleepSummaryCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime);
+int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,id);
 
 @override
 String toString() {
-  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime)';
+  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, id: $id)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SleepSummaryCopyWith<$Res>  {
   factory $SleepSummaryCopyWith(SleepSummary value, $Res Function(SleepSummary) _then) = _$SleepSummaryCopyWithImpl;
 @useResult
 $Res call({
- int quality, DateTime? bedTime, DateTime? wakeTime
+ int quality, DateTime? bedTime, DateTime? wakeTime, String? id
 });
 
 
@@ -62,12 +62,13 @@ class _$SleepSummaryCopyWithImpl<$Res>
 
 /// Create a copy of SleepSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,Object? id = freezed,}) {
   return _then(_self.copyWith(
 quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
 as int,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,wakeTime: freezed == wakeTime ? _self.wakeTime : wakeTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -152,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  String? id)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SleepSummary() when $default != null:
-return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.id);case _:
   return orElse();
 
 }
@@ -173,10 +174,10 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  String? id)  $default,) {final _that = this;
 switch (_that) {
 case _SleepSummary():
-return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.id);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +194,10 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int quality,  DateTime? bedTime,  DateTime? wakeTime)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  String? id)?  $default,) {final _that = this;
 switch (_that) {
 case _SleepSummary() when $default != null:
-return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.id);case _:
   return null;
 
 }
@@ -208,12 +209,13 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime);case _:
 
 
 class _SleepSummary implements SleepSummary {
-  const _SleepSummary({required this.quality, this.bedTime, this.wakeTime});
+  const _SleepSummary({required this.quality, this.bedTime, this.wakeTime, this.id});
   
 
 @override final  int quality;
 @override final  DateTime? bedTime;
 @override final  DateTime? wakeTime;
+@override final  String? id;
 
 /// Create a copy of SleepSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +227,16 @@ _$SleepSummaryCopyWith<_SleepSummary> get copyWith => __$SleepSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime);
+int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,id);
 
 @override
 String toString() {
-  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime)';
+  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, id: $id)';
 }
 
 
@@ -245,7 +247,7 @@ abstract mixin class _$SleepSummaryCopyWith<$Res> implements $SleepSummaryCopyWi
   factory _$SleepSummaryCopyWith(_SleepSummary value, $Res Function(_SleepSummary) _then) = __$SleepSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- int quality, DateTime? bedTime, DateTime? wakeTime
+ int quality, DateTime? bedTime, DateTime? wakeTime, String? id
 });
 
 
@@ -262,12 +264,13 @@ class __$SleepSummaryCopyWithImpl<$Res>
 
 /// Create a copy of SleepSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,Object? id = freezed,}) {
   return _then(_SleepSummary(
 quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
 as int,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,wakeTime: freezed == wakeTime ? _self.wakeTime : wakeTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

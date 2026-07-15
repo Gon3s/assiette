@@ -10,5 +10,6 @@ abstract class SleepSummary with _$SleepSummary {
     required int quality,
     DateTime? bedTime,
     DateTime? wakeTime,
+    String? id,
   }) = _SleepSummary;
 }

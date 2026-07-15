@@ -1,3 +1,4 @@
+import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
@@ -15,6 +16,7 @@ class SleepEntryController extends _$SleepEntryController {
   SleepEntryState build() {
     final sleep = ref.read(daySleepProvider).value;
     return SleepEntryState(
+      id: sleep?.id,
       quality: sleep?.quality ?? 2,
       bedTime: sleep?.bedTime,
       wakeTime: sleep?.wakeTime,
@@ -52,6 +54,20 @@ class SleepEntryController extends _$SleepEntryController {
             bedTime: state.bedTime,
             wakeTime: state.wakeTime,
           );
+      return true;
+    } finally {
+      state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Soft-deletes the sleep entry. Returns false when nothing is logged
+  /// yet (no id) or while another save/delete is in flight.
+  Future<bool> delete() async {
+    final id = state.id;
+    if (id == null || state.isSaving) return false;
+    state = state.copyWith(isSaving: true);
+    try {
+      await ref.read(dayViewRepositoryProvider).deleteSleepEntry(id);
       return true;
     } finally {
       state = state.copyWith(isSaving: false);

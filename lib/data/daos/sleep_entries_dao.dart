@@ -21,4 +21,14 @@ class SleepEntriesDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> upsertSleepEntry(SleepEntriesCompanion entry) =>
       into(sleepEntries).insertOnConflictUpdate(entry);
+
+  Future<void> softDeleteSleepEntry(String id) =>
+      (update(sleepEntries)..where((t) => t.id.equals(id))).write(
+        SleepEntriesCompanion(deletedAt: Value(DateTime.now().toUtc())),
+      );
+
+  /// Clears `deletedAt`, undoing a soft delete.
+  Future<void> restoreSleepEntry(String id) =>
+      (update(sleepEntries)..where((t) => t.id.equals(id)))
+          .write(const SleepEntriesCompanion(deletedAt: Value(null)));
 }

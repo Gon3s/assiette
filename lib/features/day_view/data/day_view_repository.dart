@@ -49,6 +49,7 @@ class DriftDayViewRepository implements DayViewRepository {
           (entry) => entry == null
               ? null
               : SleepSummary(
+                  id: entry.id,
                   quality: entry.quality,
                   bedTime: entry.bedTime,
                   wakeTime: entry.wakeTime,
@@ -79,6 +80,14 @@ class DriftDayViewRepository implements DayViewRepository {
       ),
     );
   }
+
+  @override
+  Future<void> deleteSleepEntry(String id) =>
+      _sleepEntriesDao.softDeleteSleepEntry(id);
+
+  @override
+  Future<void> undoDeleteSleepEntry(String id) =>
+      _sleepEntriesDao.restoreSleepEntry(id);
 
   /// Mirrors the normalization done by [SleepEntriesDao.watchByDate] so the
   /// inserted row matches the same night when queried back.

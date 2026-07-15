@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MealEntryState {
 
- MealType get mealType; DateTime get timestamp; List<TagOption> get selectedTags; String get note; String? get photoPath; bool get isSaving;
+ MealType get mealType; DateTime get timestamp; List<TagOption> get selectedTags; String get note; String? get photoPath; bool get isSaving; String? get id;
 /// Create a copy of MealEntryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MealEntryStateCopyWith<MealEntryState> get copyWith => _$MealEntryStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.selectedTags, selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.selectedTags, selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(selectedTags),note,photoPath,isSaving);
+int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(selectedTags),note,photoPath,isSaving,id);
 
 @override
 String toString() {
-  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving)';
+  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving, id: $id)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MealEntryStateCopyWith<$Res>  {
   factory $MealEntryStateCopyWith(MealEntryState value, $Res Function(MealEntryState) _then) = _$MealEntryStateCopyWithImpl;
 @useResult
 $Res call({
- MealType mealType, DateTime timestamp, List<TagOption> selectedTags, String note, String? photoPath, bool isSaving
+ MealType mealType, DateTime timestamp, List<TagOption> selectedTags, String note, String? photoPath, bool isSaving, String? id
 });
 
 
@@ -62,7 +62,7 @@ class _$MealEntryStateCopyWithImpl<$Res>
 
 /// Create a copy of MealEntryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? mealType = null,Object? timestamp = null,Object? selectedTags = null,Object? note = null,Object? photoPath = freezed,Object? isSaving = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? mealType = null,Object? timestamp = null,Object? selectedTags = null,Object? note = null,Object? photoPath = freezed,Object? isSaving = null,Object? id = freezed,}) {
   return _then(_self.copyWith(
 mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as DateTime,selectedTags: null == selectedTags ? _self.selectedTags : selectedTa
 as List<TagOption>,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,photoPath: freezed == photoPath ? _self.photoPath : photoPath // ignore: cast_nullable_to_non_nullable
 as String?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving,  String? id)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MealEntryState() when $default != null:
-return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving);case _:
+return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving,_that.id);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving,  String? id)  $default,) {final _that = this;
 switch (_that) {
 case _MealEntryState():
-return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving);case _:
+return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving,_that.id);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( MealType mealType,  DateTime timestamp,  List<TagOption> selectedTags,  String note,  String? photoPath,  bool isSaving,  String? id)?  $default,) {final _that = this;
 switch (_that) {
 case _MealEntryState() when $default != null:
-return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving);case _:
+return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_that.photoPath,_that.isSaving,_that.id);case _:
   return null;
 
 }
@@ -211,7 +212,7 @@ return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_th
 
 
 class _MealEntryState implements MealEntryState {
-  const _MealEntryState({required this.mealType, required this.timestamp, required final  List<TagOption> selectedTags, this.note = '', this.photoPath, this.isSaving = false}): _selectedTags = selectedTags;
+  const _MealEntryState({required this.mealType, required this.timestamp, required final  List<TagOption> selectedTags, this.note = '', this.photoPath, this.isSaving = false, this.id}): _selectedTags = selectedTags;
   
 
 @override final  MealType mealType;
@@ -226,6 +227,7 @@ class _MealEntryState implements MealEntryState {
 @override@JsonKey() final  String note;
 @override final  String? photoPath;
 @override@JsonKey() final  bool isSaving;
+@override final  String? id;
 
 /// Create a copy of MealEntryState
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +239,16 @@ _$MealEntryStateCopyWith<_MealEntryState> get copyWith => __$MealEntryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other._selectedTags, _selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other._selectedTags, _selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(_selectedTags),note,photoPath,isSaving);
+int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(_selectedTags),note,photoPath,isSaving,id);
 
 @override
 String toString() {
-  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving)';
+  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving, id: $id)';
 }
 
 
@@ -257,7 +259,7 @@ abstract mixin class _$MealEntryStateCopyWith<$Res> implements $MealEntryStateCo
   factory _$MealEntryStateCopyWith(_MealEntryState value, $Res Function(_MealEntryState) _then) = __$MealEntryStateCopyWithImpl;
 @override @useResult
 $Res call({
- MealType mealType, DateTime timestamp, List<TagOption> selectedTags, String note, String? photoPath, bool isSaving
+ MealType mealType, DateTime timestamp, List<TagOption> selectedTags, String note, String? photoPath, bool isSaving, String? id
 });
 
 
@@ -274,7 +276,7 @@ class __$MealEntryStateCopyWithImpl<$Res>
 
 /// Create a copy of MealEntryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? mealType = null,Object? timestamp = null,Object? selectedTags = null,Object? note = null,Object? photoPath = freezed,Object? isSaving = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? mealType = null,Object? timestamp = null,Object? selectedTags = null,Object? note = null,Object? photoPath = freezed,Object? isSaving = null,Object? id = freezed,}) {
   return _then(_MealEntryState(
 mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
@@ -282,7 +284,8 @@ as DateTime,selectedTags: null == selectedTags ? _self._selectedTags : selectedT
 as List<TagOption>,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,photoPath: freezed == photoPath ? _self.photoPath : photoPath // ignore: cast_nullable_to_non_nullable
 as String?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

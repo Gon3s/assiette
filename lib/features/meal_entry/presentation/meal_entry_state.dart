@@ -15,5 +15,6 @@ abstract class MealEntryState with _$MealEntryState {
     @Default('') String note,
     String? photoPath,
     @Default(false) bool isSaving,
+    String? id,
   }) = _MealEntryState;
 }

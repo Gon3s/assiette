@@ -28,8 +28,20 @@ class SymptomsDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertSymptom(SymptomsCompanion entry) =>
       into(symptoms).insert(entry);
 
+  /// Loads a single symptom, or `null` if it doesn't exist.
+  Future<Symptom?> getSymptomById(String id) =>
+      (select(symptoms)..where((t) => t.id.equals(id))).getSingleOrNull();
+
+  Future<void> updateSymptom(String id, SymptomsCompanion entry) =>
+      (update(symptoms)..where((t) => t.id.equals(id))).write(entry);
+
   Future<void> softDeleteSymptom(String id) =>
       (update(symptoms)..where((t) => t.id.equals(id))).write(
         SymptomsCompanion(deletedAt: Value(DateTime.now().toUtc())),
       );
+
+  /// Clears `deletedAt`, undoing a soft delete.
+  Future<void> restoreSymptom(String id) =>
+      (update(symptoms)..where((t) => t.id.equals(id)))
+          .write(const SymptomsCompanion(deletedAt: Value(null)));
 }
