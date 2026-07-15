@@ -57,6 +57,13 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+            // Explicit: R8 shrinking strips WorkManager's reflectively-
+            // instantiated WorkDatabase_Impl on some AGP 9 toolchains,
+            // crashing at startup with NoSuchMethodException. Not needed
+            // yet at this project stage, so pin it off rather than rely
+            // on AGP's default.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }
