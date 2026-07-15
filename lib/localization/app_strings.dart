@@ -31,7 +31,83 @@ abstract class AppStrings {
 
   // Home
   String get homeTitle;
-  String get counterLabel;
+
+  // Day view
+  String get today;
+  String get emptyDayMessage;
+  String get logMealAction;
+  String get logSymptomAction;
+  String get sleepCardTitle;
+  String get sleepNotLogged;
+  String get sleepQualityBad;
+  String get sleepQualityMedium;
+  String get sleepQualityGood;
+  String get sleepQuestion;
+  String get weatherUnavailable;
+  String get pressureUnit;
+  String get mealTypeBreakfast;
+  String get mealTypeLunch;
+  String get mealTypeDinner;
+  String get mealTypeSnack;
+  String get symptomTypeMigraine;
+  String get symptomTypeDigestive;
+  String get symptomTypeMood;
+
+  // Meal entry
+  String get mealEntryTitle;
+  String get takePhoto;
+  String get retakePhoto;
+  String get removePhoto;
+  String get mealTypeLabel;
+  String get dateLabel;
+  String get timeLabel;
+  String get tagsLabel;
+  String get tagSearchHint;
+  String createTagLabel(String label);
+  String get noteHint;
+  String get saveAsFavorite;
+  String get favoriteNameTitle;
+  String get favoriteNameHint;
+  String get favoriteSaved;
+  String get mealSaved;
+  String get errorGeneric;
+
+  // Favorites
+  String get favoriteMealAdded;
+  String get undoAction;
+  String get favoritesManageTitle;
+  String get manageFavoritesAction;
+  String get noFavoritesMessage;
+  String get newFavoriteTitle;
+  String get editFavoriteTitle;
+  String get favoriteUpdated;
+  String get deleteAction;
+  String get deleteFavoriteConfirmTitle;
+  String get deleteFavoriteConfirmMessage;
+  String get favoriteDeleted;
+
+  // Symptom entry
+  String get symptomEntryTitle;
+  String get symptomEntryTypeLabel;
+  String get intensityLabel;
+  String get detailLabel;
+  String get endTimeLabel;
+  String get removeEndTime;
+  String get symptomSaved;
+  String get symptomDetailBloating;
+  String get symptomDetailPain;
+  String get symptomDetailNausea;
+  String get symptomDetailIrritable;
+  String get symptomDetailAnxious;
+  String get symptomDetailLow;
+
+  // Sleep entry
+  String get sleepQualityLabel;
+  String get bedTimeLabel;
+  String get wakeTimeLabel;
+  String get removeBedTime;
+  String get removeWakeTime;
+  String get sleepSaved;
 
   // Account
   String get accountTitle;
@@ -47,6 +123,11 @@ abstract class AppStrings {
   String get deleteAccountConfirmMessage;
   String get cancel;
   String get confirm;
+
+  // Settings
+  String get settingsTitle;
+  String get aboutSectionTitle;
+  String get openMeteoAttribution;
 
   // Errors
   String get emailEmpty;

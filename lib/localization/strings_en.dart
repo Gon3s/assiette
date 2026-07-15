@@ -27,8 +27,145 @@ class AppStringsEn implements AppStrings {
 
   @override
   String get homeTitle => 'Home';
+
   @override
-  String get counterLabel => 'You have pushed the button this many times:';
+  String get today => 'Today';
+  @override
+  String get emptyDayMessage => 'Nothing logged this day.';
+  @override
+  String get logMealAction => 'Meal photo';
+  @override
+  String get logSymptomAction => 'Symptom';
+  @override
+  String get sleepCardTitle => 'Sleep';
+  @override
+  String get sleepNotLogged => 'Night not logged';
+  @override
+  String get sleepQualityBad => 'Bad';
+  @override
+  String get sleepQualityMedium => 'Okay';
+  @override
+  String get sleepQualityGood => 'Good';
+  @override
+  String get sleepQuestion => 'How did you sleep?';
+  @override
+  String get weatherUnavailable => 'Weather unavailable';
+  @override
+  String get pressureUnit => 'hPa';
+  @override
+  String get mealTypeBreakfast => 'Breakfast';
+  @override
+  String get mealTypeLunch => 'Lunch';
+  @override
+  String get mealTypeDinner => 'Dinner';
+  @override
+  String get mealTypeSnack => 'Snack';
+  @override
+  String get symptomTypeMigraine => 'Migraine';
+  @override
+  String get symptomTypeDigestive => 'Digestive';
+  @override
+  String get symptomTypeMood => 'Mood';
+
+  @override
+  String get mealEntryTitle => 'New meal';
+  @override
+  String get takePhoto => 'Take a photo';
+  @override
+  String get retakePhoto => 'Retake';
+  @override
+  String get removePhoto => 'Remove photo';
+  @override
+  String get mealTypeLabel => 'Meal type';
+  @override
+  String get dateLabel => 'Date';
+  @override
+  String get timeLabel => 'Time';
+  @override
+  String get tagsLabel => 'Tags';
+  @override
+  String get tagSearchHint => 'Search or create a tag';
+  @override
+  String createTagLabel(String label) => 'Create "$label"';
+  @override
+  String get noteHint => 'Note (optional)';
+  @override
+  String get saveAsFavorite => 'Save as favorite';
+  @override
+  String get favoriteNameTitle => 'Favorite name';
+  @override
+  String get favoriteNameHint => 'E.g. Caesar salad';
+  @override
+  String get favoriteSaved => 'Favorite saved';
+  @override
+  String get mealSaved => 'Meal saved';
+  @override
+  String get errorGeneric => 'Something went wrong';
+
+  @override
+  String get favoriteMealAdded => 'Meal added';
+  @override
+  String get undoAction => 'Undo';
+  @override
+  String get favoritesManageTitle => 'My favorites';
+  @override
+  String get manageFavoritesAction => 'Manage my favorites';
+  @override
+  String get noFavoritesMessage => 'No favorites yet.';
+  @override
+  String get newFavoriteTitle => 'New favorite';
+  @override
+  String get editFavoriteTitle => 'Edit favorite';
+  @override
+  String get favoriteUpdated => 'Favorite updated';
+  @override
+  String get deleteAction => 'Delete';
+  @override
+  String get deleteFavoriteConfirmTitle => 'Delete this favorite?';
+  @override
+  String get deleteFavoriteConfirmMessage => 'This action cannot be undone.';
+  @override
+  String get favoriteDeleted => 'Favorite deleted';
+
+  @override
+  String get symptomEntryTitle => 'New symptom';
+  @override
+  String get symptomEntryTypeLabel => 'Symptom type';
+  @override
+  String get intensityLabel => 'Intensity';
+  @override
+  String get detailLabel => 'Detail (optional)';
+  @override
+  String get endTimeLabel => 'Add an end time';
+  @override
+  String get removeEndTime => 'Remove end time';
+  @override
+  String get symptomSaved => 'Symptom saved';
+  @override
+  String get symptomDetailBloating => 'Bloating';
+  @override
+  String get symptomDetailPain => 'Pain';
+  @override
+  String get symptomDetailNausea => 'Nausea';
+  @override
+  String get symptomDetailIrritable => 'Irritable';
+  @override
+  String get symptomDetailAnxious => 'Anxious';
+  @override
+  String get symptomDetailLow => 'Low';
+
+  @override
+  String get sleepQualityLabel => 'Quality';
+  @override
+  String get bedTimeLabel => 'Bed time';
+  @override
+  String get wakeTimeLabel => 'Wake time';
+  @override
+  String get removeBedTime => 'Remove bed time';
+  @override
+  String get removeWakeTime => 'Remove wake time';
+  @override
+  String get sleepSaved => 'Sleep saved';
 
   @override
   String get accountTitle => 'My account';
@@ -57,6 +194,14 @@ class AppStringsEn implements AppStrings {
   String get cancel => 'Cancel';
   @override
   String get confirm => 'Confirm';
+
+  @override
+  String get settingsTitle => 'About';
+  @override
+  String get aboutSectionTitle => 'Data sources';
+  @override
+  String get openMeteoAttribution =>
+      'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
 
   @override
   String get emailEmpty => 'Email cannot be empty';

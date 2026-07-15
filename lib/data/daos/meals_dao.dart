@@ -9,7 +9,7 @@ import 'package:drift/drift.dart';
 part 'meals_dao.g.dart';
 
 class MealWithTags {
-  const MealWithTags({required this.meal, required this.tags});
+  MealWithTags({required this.meal, required this.tags});
   final Meal meal;
   final List<Tag> tags;
 }
@@ -35,48 +35,54 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
   Stream<List<MealWithTags>> watchByDayWithTags(DateTime day) {
     final start = DateTime(day.year, day.month, day.day).toUtc();
     final end = start.add(const Duration(days: 1));
-    final q = select(meals).join([
+    final query = select(meals).join([
       leftOuterJoin(mealTags, mealTags.mealId.equalsExp(meals.id)),
       leftOuterJoin(
         tags,
         tags.id.equalsExp(mealTags.tagId) & tags.deletedAt.isNull(),
       ),
-    ]);
-    q
-      ..where(meals.deletedAt.isNull())
+    ])
       ..where(
-        meals.timestamp.isBiggerOrEqualValue(start) &
+        meals.deletedAt.isNull() &
+            meals.timestamp.isBiggerOrEqualValue(start) &
             meals.timestamp.isSmallerThanValue(end),
       )
       ..orderBy([OrderingTerm.asc(meals.timestamp)]);
-    return q.watch().map(_groupRows);
+
+    return query.watch().map((rows) {
+      final order = <String>[];
+      final grouped = <String, MealWithTags>{};
+      for (final row in rows) {
+        final meal = row.readTable(meals);
+        final tag = row.readTableOrNull(tags);
+        final entry = grouped.putIfAbsent(meal.id, () {
+          order.add(meal.id);
+          return MealWithTags(meal: meal, tags: []);
+        });
+        if (tag != null) entry.tags.add(tag);
+      }
+      return [for (final id in order) grouped[id]!];
+    });
   }
 
-  List<MealWithTags> _groupRows(List<TypedResult> rows) {
-    final order = <String>[];
-    final mealsById = <String, Meal>{};
-    final tagsById = <String, List<Tag>>{};
+  Future<void> insertMeal(MealsCompanion entry) =>
+      into(meals).insert(entry);
 
-    for (final row in rows) {
-      final meal = row.readTable(meals);
-      final tag = row.readTableOrNull(tags);
-
-      if (!mealsById.containsKey(meal.id)) {
-        order.add(meal.id);
-        mealsById[meal.id] = meal;
-      }
-      if (tag != null) {
-        tagsById.putIfAbsent(meal.id, () => []).add(tag);
-      }
-    }
-
-    return [
-      for (final id in order)
-        MealWithTags(meal: mealsById[id]!, tags: tagsById[id] ?? []),
-    ];
-  }
-
-  Future<void> insertMeal(MealsCompanion entry) => into(meals).insert(entry);
+  /// Inserts the meal and its tag links atomically.
+  Future<void> insertMealWithTags(
+    MealsCompanion entry,
+    List<String> tagIds,
+  ) =>
+      transaction(() async {
+        await into(meals).insert(entry);
+        final mealId = entry.id.value;
+        for (final tagId in tagIds) {
+          await into(mealTags).insert(
+            MealTagsCompanion.insert(mealId: mealId, tagId: tagId),
+            mode: InsertMode.insertOrIgnore,
+          );
+        }
+      });
 
   Future<void> softDeleteMeal(String id) =>
       (update(meals)..where((t) => t.id.equals(id))).write(

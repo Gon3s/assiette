@@ -1,4 +1,10 @@
-import 'package:assiette/features/day_timeline/presentation/day_timeline_screen.dart';
+import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
+import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
+import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
+import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/settings/presentation/settings_screen.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
+import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +22,24 @@ enum AppRouter {
 
   /// The home screen.
   home,
+
+  /// The meal entry screen.
+  mealEntry,
+
+  /// The symptom entry screen.
+  symptomEntry,
+
+  /// The sleep entry detail screen.
+  sleepEntry,
+
+  /// The app info / about screen.
+  settings,
+
+  /// The favorites management list.
+  favoritesManage,
+
+  /// The favorite create/edit form.
+  favoriteForm,
 }
 
 /// The application router provider.
@@ -46,7 +70,43 @@ GoRouter goRouter(Ref ref) {
         path: '/',
         name: AppRouter.home.name,
         pageBuilder: (context, state) =>
-            const NoTransitionPage(child: DayTimelineScreen()),
+            const NoTransitionPage(child: DayViewScreen()),
+        routes: [
+          GoRoute(
+            path: 'meal-entry',
+            name: AppRouter.mealEntry.name,
+            builder: (context, state) => const MealEntryScreen(),
+          ),
+          GoRoute(
+            path: 'symptom-entry',
+            name: AppRouter.symptomEntry.name,
+            builder: (context, state) => const SymptomEntryScreen(),
+          ),
+          GoRoute(
+            path: 'sleep-entry',
+            name: AppRouter.sleepEntry.name,
+            builder: (context, state) => const SleepEntryScreen(),
+          ),
+          GoRoute(
+            path: 'settings',
+            name: AppRouter.settings.name,
+            builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: 'favorites',
+            name: AppRouter.favoritesManage.name,
+            builder: (context, state) => const FavoritesManageScreen(),
+            routes: [
+              GoRoute(
+                path: 'form',
+                name: AppRouter.favoriteForm.name,
+                builder: (context, state) => FavoriteFormScreen(
+                  templateId: state.uri.queryParameters['id'],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
     errorPageBuilder: (context, state) =>
