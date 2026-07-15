@@ -210,6 +210,38 @@ class AppStringsFr implements AppStrings {
       'Météo et pression fournies par Open-Meteo.com (CC BY 4.0).';
 
   @override
+  String get onboardingSkip => 'Passer';
+  @override
+  String get onboardingNext => 'Suivant';
+  @override
+  String get onboardingValueTitle => 'Repas, symptômes, environnement';
+  @override
+  String get onboardingValueBody =>
+      "Assiette t'aide à relier ce que tu manges, comment tu te sens et "
+      'la météo du jour.';
+  @override
+  String get onboardingLoggingTitle => 'Une photo, quelques tags';
+  @override
+  String get onboardingLoggingBody =>
+      'Prends en photo ton repas et ajoute des tags en quelques secondes.';
+  @override
+  String get onboardingWeatherTitle => 'Météo et pression automatiques';
+  @override
+  String get onboardingWeatherBody =>
+      'La météo et la pression atmosphérique sont enregistrées pour toi, '
+      'en arrière-plan.';
+  @override
+  String get onboardingPermissionTitle => 'Autoriser la localisation';
+  @override
+  String get onboardingPermissionBody =>
+      'La pression atmosphérique peut être liée aux migraines. Autorise '
+      'la localisation pour la suivre automatiquement près de chez toi.';
+  @override
+  String get onboardingEnableLocation => 'Autoriser la localisation';
+  @override
+  String get onboardingMaybeLater => 'Plus tard';
+
+  @override
   String get emailEmpty => "L'email ne peut pas être vide";
   @override
   String get emailInvalid => "L'email n'est pas valide";

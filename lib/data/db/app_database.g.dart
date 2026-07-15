@@ -3657,6 +3657,208 @@ class EnvironmentSnapshotsCompanion
   }
 }
 
+class $AppSettingsTable extends AppSettings
+    with TableInfo<$AppSettingsTable, AppSetting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _onboardingDoneMeta = const VerificationMeta(
+    'onboardingDone',
+  );
+  @override
+  late final GeneratedColumn<bool> onboardingDone = GeneratedColumn<bool>(
+    'onboarding_done',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("onboarding_done" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, onboardingDone];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_settings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AppSetting> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('onboarding_done')) {
+      context.handle(
+        _onboardingDoneMeta,
+        onboardingDone.isAcceptableOrUnknown(
+          data['onboarding_done']!,
+          _onboardingDoneMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppSetting(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      onboardingDone: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}onboarding_done'],
+      )!,
+    );
+  }
+
+  @override
+  $AppSettingsTable createAlias(String alias) {
+    return $AppSettingsTable(attachedDatabase, alias);
+  }
+}
+
+class AppSetting extends DataClass implements Insertable<AppSetting> {
+  final int id;
+  final bool onboardingDone;
+  const AppSetting({required this.id, required this.onboardingDone});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['onboarding_done'] = Variable<bool>(onboardingDone);
+    return map;
+  }
+
+  AppSettingsCompanion toCompanion(bool nullToAbsent) {
+    return AppSettingsCompanion(
+      id: Value(id),
+      onboardingDone: Value(onboardingDone),
+    );
+  }
+
+  factory AppSetting.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppSetting(
+      id: serializer.fromJson<int>(json['id']),
+      onboardingDone: serializer.fromJson<bool>(json['onboardingDone']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'onboardingDone': serializer.toJson<bool>(onboardingDone),
+    };
+  }
+
+  AppSetting copyWith({int? id, bool? onboardingDone}) => AppSetting(
+    id: id ?? this.id,
+    onboardingDone: onboardingDone ?? this.onboardingDone,
+  );
+  AppSetting copyWithCompanion(AppSettingsCompanion data) {
+    return AppSetting(
+      id: data.id.present ? data.id.value : this.id,
+      onboardingDone: data.onboardingDone.present
+          ? data.onboardingDone.value
+          : this.onboardingDone,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSetting(')
+          ..write('id: $id, ')
+          ..write('onboardingDone: $onboardingDone')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, onboardingDone);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppSetting &&
+          other.id == this.id &&
+          other.onboardingDone == this.onboardingDone);
+}
+
+class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+  final Value<int> id;
+  final Value<bool> onboardingDone;
+  const AppSettingsCompanion({
+    this.id = const Value.absent(),
+    this.onboardingDone = const Value.absent(),
+  });
+  AppSettingsCompanion.insert({
+    this.id = const Value.absent(),
+    this.onboardingDone = const Value.absent(),
+  });
+  static Insertable<AppSetting> custom({
+    Expression<int>? id,
+    Expression<bool>? onboardingDone,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (onboardingDone != null) 'onboarding_done': onboardingDone,
+    });
+  }
+
+  AppSettingsCompanion copyWith({Value<int>? id, Value<bool>? onboardingDone}) {
+    return AppSettingsCompanion(
+      id: id ?? this.id,
+      onboardingDone: onboardingDone ?? this.onboardingDone,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (onboardingDone.present) {
+      map['onboarding_done'] = Variable<bool>(onboardingDone.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSettingsCompanion(')
+          ..write('id: $id, ')
+          ..write('onboardingDone: $onboardingDone')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3669,6 +3871,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SleepEntriesTable sleepEntries = $SleepEntriesTable(this);
   late final $EnvironmentSnapshotsTable environmentSnapshots =
       $EnvironmentSnapshotsTable(this);
+  late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final Index idxMealsTimestamp = Index(
     'idx_meals_timestamp',
     'CREATE INDEX idx_meals_timestamp ON meals (timestamp)',
@@ -3691,6 +3894,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final EnvironmentDao environmentDao = EnvironmentDao(
     this as AppDatabase,
   );
+  late final AppSettingsDao appSettingsDao = AppSettingsDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3704,6 +3910,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     symptoms,
     sleepEntries,
     environmentSnapshots,
+    appSettings,
     idxMealsTimestamp,
     idxSymptomsTimestamp,
     idxEnvTimestamp,
@@ -5595,6 +5802,137 @@ typedef $$EnvironmentSnapshotsTableProcessedTableManager =
       EnvironmentSnapshot,
       PrefetchHooks Function()
     >;
+typedef $$AppSettingsTableCreateCompanionBuilder =
+    AppSettingsCompanion Function({Value<int> id, Value<bool> onboardingDone});
+typedef $$AppSettingsTableUpdateCompanionBuilder =
+    AppSettingsCompanion Function({Value<int> id, Value<bool> onboardingDone});
+
+class $$AppSettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get onboardingDone => $composableBuilder(
+    column: $table.onboardingDone,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AppSettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get onboardingDone => $composableBuilder(
+    column: $table.onboardingDone,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AppSettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<bool> get onboardingDone => $composableBuilder(
+    column: $table.onboardingDone,
+    builder: (column) => column,
+  );
+}
+
+class $$AppSettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AppSettingsTable,
+          AppSetting,
+          $$AppSettingsTableFilterComposer,
+          $$AppSettingsTableOrderingComposer,
+          $$AppSettingsTableAnnotationComposer,
+          $$AppSettingsTableCreateCompanionBuilder,
+          $$AppSettingsTableUpdateCompanionBuilder,
+          (
+            AppSetting,
+            BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+          ),
+          AppSetting,
+          PrefetchHooks Function()
+        > {
+  $$AppSettingsTableTableManager(_$AppDatabase db, $AppSettingsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AppSettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppSettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppSettingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<bool> onboardingDone = const Value.absent(),
+              }) =>
+                  AppSettingsCompanion(id: id, onboardingDone: onboardingDone),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<bool> onboardingDone = const Value.absent(),
+              }) => AppSettingsCompanion.insert(
+                id: id,
+                onboardingDone: onboardingDone,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AppSettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AppSettingsTable,
+      AppSetting,
+      $$AppSettingsTableFilterComposer,
+      $$AppSettingsTableOrderingComposer,
+      $$AppSettingsTableAnnotationComposer,
+      $$AppSettingsTableCreateCompanionBuilder,
+      $$AppSettingsTableUpdateCompanionBuilder,
+      (
+        AppSetting,
+        BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>,
+      ),
+      AppSetting,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5614,4 +5952,6 @@ class $AppDatabaseManager {
       $$SleepEntriesTableTableManager(_db, _db.sleepEntries);
   $$EnvironmentSnapshotsTableTableManager get environmentSnapshots =>
       $$EnvironmentSnapshotsTableTableManager(_db, _db.environmentSnapshots);
+  $$AppSettingsTableTableManager get appSettings =>
+      $$AppSettingsTableTableManager(_db, _db.appSettings);
 }
