@@ -214,31 +214,4 @@ class AppStringsFr implements AppStrings {
       'Le mot de passe doit contenir au moins 8 caractères';
   @override
   String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
-
-  @override
-  String get nothingLoggedToday => "Rien de logué aujourd'hui";
-  @override
-  String get addMealPhoto => 'Photo repas';
-  @override
-  String get addSymptom => 'Symptôme';
-  @override
-  String get mealTypeBreakfast => 'Petit-déjeuner';
-  @override
-  String get mealTypeLunch => 'Déjeuner';
-  @override
-  String get mealTypeDinner => 'Dîner';
-  @override
-  String get mealTypeSnack => 'En-cas';
-  @override
-  String get symptomTypeMigraine => 'Migraine';
-  @override
-  String get symptomTypeDigestive => 'Digestif';
-  @override
-  String get symptomTypeMood => 'Humeur';
-  @override
-  String get sleepCardNoData => 'Aucune donnée de sommeil';
-  @override
-  String get favoritesComingSoon => 'Favoris (à venir)';
-  @override
-  String intensityLabel(int value) => 'Intensité : $value/10';
 }
