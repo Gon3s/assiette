@@ -213,31 +213,4 @@ class AppStringsEn implements AppStrings {
   String get passwordTooShort => 'Password must be at least 8 characters';
   @override
   String get passwordsDoNotMatch => 'Passwords do not match';
-
-  @override
-  String get nothingLoggedToday => 'Nothing logged today';
-  @override
-  String get addMealPhoto => 'Meal photo';
-  @override
-  String get addSymptom => 'Symptom';
-  @override
-  String get mealTypeBreakfast => 'Breakfast';
-  @override
-  String get mealTypeLunch => 'Lunch';
-  @override
-  String get mealTypeDinner => 'Dinner';
-  @override
-  String get mealTypeSnack => 'Snack';
-  @override
-  String get symptomTypeMigraine => 'Migraine';
-  @override
-  String get symptomTypeDigestive => 'Digestive';
-  @override
-  String get symptomTypeMood => 'Mood';
-  @override
-  String get sleepCardNoData => 'No sleep data';
-  @override
-  String get favoritesComingSoon => 'Favourites (coming soon)';
-  @override
-  String intensityLabel(int value) => 'Intensity: $value/10';
 }
