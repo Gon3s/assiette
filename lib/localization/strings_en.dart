@@ -210,6 +210,38 @@ class AppStringsEn implements AppStrings {
       'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
 
   @override
+  String get onboardingSkip => 'Skip';
+  @override
+  String get onboardingNext => 'Next';
+  @override
+  String get onboardingValueTitle => 'Food, symptoms, environment';
+  @override
+  String get onboardingValueBody =>
+      'Assiette helps you connect what you eat, how you feel, and the '
+      'weather.';
+  @override
+  String get onboardingLoggingTitle => 'A photo, a few tags';
+  @override
+  String get onboardingLoggingBody =>
+      'Snap a photo of your meal and add tags in seconds.';
+  @override
+  String get onboardingWeatherTitle => 'Automatic weather and pressure';
+  @override
+  String get onboardingWeatherBody =>
+      'Weather and atmospheric pressure are logged for you, in the '
+      'background.';
+  @override
+  String get onboardingPermissionTitle => 'Allow location';
+  @override
+  String get onboardingPermissionBody =>
+      'Atmospheric pressure can be linked to migraines. Allow location so '
+      'we can track it automatically near you.';
+  @override
+  String get onboardingEnableLocation => 'Allow location';
+  @override
+  String get onboardingMaybeLater => 'Maybe later';
+
+  @override
   String get emailEmpty => 'Email cannot be empty';
   @override
   String get emailInvalid => 'Email is not valid';

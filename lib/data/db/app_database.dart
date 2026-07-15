@@ -1,5 +1,6 @@
 // Drift database class is infrastructure — no public API docs needed.
 // ignore_for_file: public_member_api_docs
+import 'package:assiette/data/daos/app_settings_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
@@ -8,6 +9,7 @@ import 'package:assiette/data/daos/tags_dao.dart';
 import 'package:assiette/data/daos/templates_dao.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/data/db/tables/app_settings_table.dart';
 import 'package:assiette/data/db/tables/environment_snapshots_table.dart';
 import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
@@ -32,6 +34,7 @@ part 'app_database.g.dart';
     Symptoms,
     SleepEntries,
     EnvironmentSnapshots,
+    AppSettings,
   ],
   daos: [
     TagsDao,
@@ -40,6 +43,7 @@ part 'app_database.g.dart';
     SymptomsDao,
     SleepEntriesDao,
     EnvironmentDao,
+    AppSettingsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -47,13 +51,18 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
       await _seedSystemTags();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(appSettings);
+      }
     },
   );
 

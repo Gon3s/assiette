@@ -3,6 +3,8 @@ import 'package:assiette/features/favorites/presentation/favorite_form_screen.da
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
+import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
@@ -21,6 +23,9 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 enum AppRouter {
   /// The startup screen.
   startup,
+
+  /// The first-launch onboarding screens.
+  onboarding,
 
   /// The home screen.
   home,
@@ -48,6 +53,7 @@ enum AppRouter {
 @riverpod
 GoRouter goRouter(Ref ref) {
   final appStartupState = ref.watch(appStartupProvider);
+  final onboardingDoneState = ref.watch(onboardingDoneProvider);
 
   return GoRouter(
     initialLocation: '/',
@@ -56,6 +62,19 @@ GoRouter goRouter(Ref ref) {
     redirect: (context, state) {
       if (appStartupState.isLoading || appStartupState.hasError) {
         return '/${AppRouter.startup.name}';
+      }
+      if (onboardingDoneState.isLoading || onboardingDoneState.hasError) {
+        return '/${AppRouter.startup.name}';
+      }
+
+      final onboardingDone = onboardingDoneState.requireValue;
+      final isOnboardingRoute =
+          state.matchedLocation == '/${AppRouter.onboarding.name}';
+      if (!onboardingDone && !isOnboardingRoute) {
+        return '/${AppRouter.onboarding.name}';
+      }
+      if (onboardingDone && isOnboardingRoute) {
+        return '/';
       }
 
       return null;
@@ -67,6 +86,12 @@ GoRouter goRouter(Ref ref) {
         pageBuilder: (context, state) => NoTransitionPage(
           child: AppStartupWidget(onLoaded: (_) => const SizedBox.shrink()),
         ),
+      ),
+      GoRoute(
+        path: '/${AppRouter.onboarding.name}',
+        name: AppRouter.onboarding.name,
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: OnboardingScreen()),
       ),
       GoRoute(
         path: '/',

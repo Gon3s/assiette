@@ -132,6 +132,20 @@ abstract class AppStrings {
   String get aboutSectionTitle;
   String get openMeteoAttribution;
 
+  // Onboarding
+  String get onboardingSkip;
+  String get onboardingNext;
+  String get onboardingValueTitle;
+  String get onboardingValueBody;
+  String get onboardingLoggingTitle;
+  String get onboardingLoggingBody;
+  String get onboardingWeatherTitle;
+  String get onboardingWeatherBody;
+  String get onboardingPermissionTitle;
+  String get onboardingPermissionBody;
+  String get onboardingEnableLocation;
+  String get onboardingMaybeLater;
+
   // Errors
   String get emailEmpty;
   String get emailInvalid;
