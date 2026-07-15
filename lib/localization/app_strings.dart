@@ -135,19 +135,4 @@ abstract class AppStrings {
   String get passwordEmpty;
   String get passwordTooShort;
   String get passwordsDoNotMatch;
-
-  // Day timeline
-  String get nothingLoggedToday;
-  String get addMealPhoto;
-  String get addSymptom;
-  String get mealTypeBreakfast;
-  String get mealTypeLunch;
-  String get mealTypeDinner;
-  String get mealTypeSnack;
-  String get symptomTypeMigraine;
-  String get symptomTypeDigestive;
-  String get symptomTypeMood;
-  String get sleepCardNoData;
-  String get favoritesComingSoon;
-  String intensityLabel(int value);
 }
