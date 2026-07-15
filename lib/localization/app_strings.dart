@@ -75,6 +75,16 @@ abstract class AppStrings {
   // Favorites
   String get favoriteMealAdded;
   String get undoAction;
+  String get favoritesManageTitle;
+  String get manageFavoritesAction;
+  String get noFavoritesMessage;
+  String get newFavoriteTitle;
+  String get editFavoriteTitle;
+  String get favoriteUpdated;
+  String get deleteAction;
+  String get deleteFavoriteConfirmTitle;
+  String get deleteFavoriteConfirmMessage;
+  String get favoriteDeleted;
 
   // Symptom entry
   String get symptomEntryTitle;

@@ -58,6 +58,69 @@ void main() {
     });
   });
 
+  group('updateFavorite', () {
+    test('replaces the name, tags and defaults', () async {
+      final tags = await db.tagsDao.watchAll().first;
+      final tagA = tags[0];
+      final tagB = tags[1];
+
+      await repository.createFavorite(
+        name: 'Salade César',
+        tagIds: [tagA.id],
+        defaultMealType: MealType.lunch,
+        defaultPhotoPath: '/photos/salad.jpg',
+      );
+      final created = (await repository.watchFavorites().first).single;
+
+      await repository.updateFavorite(
+        id: created.id,
+        name: 'Salade César v2',
+        tagIds: [tagB.id],
+        defaultMealType: MealType.dinner,
+        defaultPhotoPath: '/photos/salad2.jpg',
+      );
+
+      final favorites = await repository.watchFavorites().first;
+      final favorite = favorites.single;
+      expect(favorite.name, 'Salade César v2');
+      expect(favorite.defaultMealType, MealType.dinner);
+      expect(favorite.defaultPhotoPath, '/photos/salad2.jpg');
+      expect(favorite.tags.single.id, tagB.id);
+    });
+
+    test('clears defaults when set to null', () async {
+      await repository.createFavorite(
+        name: 'Café',
+        tagIds: [],
+        defaultMealType: MealType.breakfast,
+        defaultPhotoPath: '/photos/coffee.jpg',
+      );
+      final created = (await repository.watchFavorites().first).single;
+
+      await repository.updateFavorite(
+        id: created.id,
+        name: 'Café',
+        tagIds: [],
+      );
+
+      final favorite = (await repository.watchFavorites().first).single;
+      expect(favorite.defaultMealType, isNull);
+      expect(favorite.defaultPhotoPath, isNull);
+    });
+  });
+
+  group('deleteFavorite', () {
+    test('soft-deletes the favorite, hiding it from watchFavorites', () async {
+      await repository.createFavorite(name: 'Café', tagIds: []);
+      final created = (await repository.watchFavorites().first).single;
+
+      await repository.deleteFavorite(created.id);
+
+      final favorites = await repository.watchFavorites().first;
+      expect(favorites, isEmpty);
+    });
+  });
+
   group('logFavorite', () {
     test(
       'creates a meal copying the template tags and returns its id',

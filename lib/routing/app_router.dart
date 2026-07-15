@@ -1,4 +1,6 @@
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
+import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
+import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
@@ -32,6 +34,12 @@ enum AppRouter {
 
   /// The app info / about screen.
   settings,
+
+  /// The favorites management list.
+  favoritesManage,
+
+  /// The favorite create/edit form.
+  favoriteForm,
 }
 
 /// The application router provider.
@@ -83,6 +91,20 @@ GoRouter goRouter(Ref ref) {
             path: 'settings',
             name: AppRouter.settings.name,
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: 'favorites',
+            name: AppRouter.favoritesManage.name,
+            builder: (context, state) => const FavoritesManageScreen(),
+            routes: [
+              GoRoute(
+                path: 'form',
+                name: AppRouter.favoriteForm.name,
+                builder: (context, state) => FavoriteFormScreen(
+                  templateId: state.uri.queryParameters['id'],
+                ),
+              ),
+            ],
           ),
         ],
       ),

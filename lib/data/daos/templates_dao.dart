@@ -75,4 +75,30 @@ class TemplatesDao extends DatabaseAccessor<AppDatabase>
       );
     }
   });
+
+  /// Updates the template and replaces its tag links atomically.
+  Future<void> updateTemplateWithTags(
+    String id,
+    MealTemplatesCompanion entry,
+    List<String> tagIds,
+  ) => transaction(() async {
+    await (update(
+      mealTemplates,
+    )..where((t) => t.id.equals(id))).write(entry);
+    await (delete(
+      templateTags,
+    )..where((t) => t.templateId.equals(id))).go();
+    for (final tagId in tagIds) {
+      await into(templateTags).insert(
+        TemplateTagsCompanion.insert(templateId: id, tagId: tagId),
+        mode: InsertMode.insertOrIgnore,
+      );
+    }
+  });
+
+  /// Soft-deletes the template.
+  Future<void> softDeleteTemplate(String id) =>
+      (update(mealTemplates)..where((t) => t.id.equals(id))).write(
+        MealTemplatesCompanion(deletedAt: Value(DateTime.now().toUtc())),
+      );
 }
