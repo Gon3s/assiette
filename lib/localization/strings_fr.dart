@@ -106,6 +106,26 @@ class AppStringsFr implements AppStrings {
   String get favoriteMealAdded => 'Repas ajouté';
   @override
   String get undoAction => 'Annuler';
+  @override
+  String get favoritesManageTitle => 'Mes favoris';
+  @override
+  String get manageFavoritesAction => 'Gérer mes favoris';
+  @override
+  String get noFavoritesMessage => 'Aucun favori pour le moment.';
+  @override
+  String get newFavoriteTitle => 'Nouveau favori';
+  @override
+  String get editFavoriteTitle => 'Modifier le favori';
+  @override
+  String get favoriteUpdated => 'Favori mis à jour';
+  @override
+  String get deleteAction => 'Supprimer';
+  @override
+  String get deleteFavoriteConfirmTitle => 'Supprimer ce favori ?';
+  @override
+  String get deleteFavoriteConfirmMessage => 'Cette action est définitive.';
+  @override
+  String get favoriteDeleted => 'Favori supprimé';
 
   @override
   String get symptomEntryTitle => 'Nouveau symptôme';

@@ -62,6 +62,30 @@ class DriftFavoritesRepository implements FavoritesRepository {
   }
 
   @override
+  Future<void> updateFavorite({
+    required String id,
+    required String name,
+    required List<String> tagIds,
+    MealType? defaultMealType,
+    String? defaultPhotoPath,
+  }) {
+    return _db.templatesDao.updateTemplateWithTags(
+      id,
+      MealTemplatesCompanion(
+        name: Value(name),
+        defaultMealType: Value(defaultMealType?.name),
+        defaultPhotoPath: Value(defaultPhotoPath),
+        updatedAt: Value(DateTime.now().toUtc()),
+      ),
+      tagIds,
+    );
+  }
+
+  @override
+  Future<void> deleteFavorite(String id) =>
+      _db.templatesDao.softDeleteTemplate(id);
+
+  @override
   Future<String> logFavorite(MealTemplateOption template) async {
     final id = _uuid.v4();
     final now = DateTime.now().toUtc();

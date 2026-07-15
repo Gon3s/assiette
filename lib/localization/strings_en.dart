@@ -106,6 +106,26 @@ class AppStringsEn implements AppStrings {
   String get favoriteMealAdded => 'Meal added';
   @override
   String get undoAction => 'Undo';
+  @override
+  String get favoritesManageTitle => 'My favorites';
+  @override
+  String get manageFavoritesAction => 'Manage my favorites';
+  @override
+  String get noFavoritesMessage => 'No favorites yet.';
+  @override
+  String get newFavoriteTitle => 'New favorite';
+  @override
+  String get editFavoriteTitle => 'Edit favorite';
+  @override
+  String get favoriteUpdated => 'Favorite updated';
+  @override
+  String get deleteAction => 'Delete';
+  @override
+  String get deleteFavoriteConfirmTitle => 'Delete this favorite?';
+  @override
+  String get deleteFavoriteConfirmMessage => 'This action cannot be undone.';
+  @override
+  String get favoriteDeleted => 'Favorite deleted';
 
   @override
   String get symptomEntryTitle => 'New symptom';

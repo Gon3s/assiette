@@ -19,6 +19,18 @@ abstract class FavoritesRepository {
     String? defaultPhotoPath,
   });
 
+  /// Updates the favorite [id]: name, tags and defaults.
+  Future<void> updateFavorite({
+    required String id,
+    required String name,
+    required List<String> tagIds,
+    MealType? defaultMealType,
+    String? defaultPhotoPath,
+  });
+
+  /// Soft-deletes the favorite [id].
+  Future<void> deleteFavorite(String id);
+
   /// Instantiates [template] into a new meal timestamped now, copying its
   /// tags into meal_tags (transaction). Returns the created meal's id, so
   /// it can be undone with [undoLogFavorite].
