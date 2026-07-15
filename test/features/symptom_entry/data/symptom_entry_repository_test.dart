@@ -62,4 +62,83 @@ void main() {
       expect(saved.note, isNull);
     });
   });
+
+  group('loadSymptom', () {
+    test('returns the symptom', () async {
+      await repository.saveSymptom(
+        timestamp: DateTime(2026, 7, 7, 9, 30),
+        type: SymptomType.migraine,
+        intensity: 7,
+        detail: 'aura',
+      );
+      final id =
+          (await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first)
+              .single
+              .id;
+
+      final draft = await repository.loadSymptom(id);
+
+      expect(draft, isNotNull);
+      expect(draft!.type, SymptomType.migraine);
+      expect(draft.intensity, 7);
+      expect(draft.detail, 'aura');
+    });
+
+    test('returns null for an unknown id', () async {
+      expect(await repository.loadSymptom('missing'), isNull);
+    });
+  });
+
+  group('updateSymptom', () {
+    test('replaces the fields', () async {
+      await repository.saveSymptom(
+        timestamp: DateTime(2026, 7, 7, 9),
+        type: SymptomType.migraine,
+        intensity: 7,
+      );
+      final id =
+          (await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first)
+              .single
+              .id;
+
+      await repository.updateSymptom(
+        id: id,
+        timestamp: DateTime(2026, 7, 7, 10),
+        type: SymptomType.mood,
+        intensity: 4,
+        detail: 'abattu',
+      );
+
+      final draft = await repository.loadSymptom(id);
+      expect(draft!.type, SymptomType.mood);
+      expect(draft.intensity, 4);
+      expect(draft.detail, 'abattu');
+    });
+  });
+
+  group('deleteSymptom / undoDeleteSymptom', () {
+    test('soft-deletes then restores the symptom', () async {
+      await repository.saveSymptom(
+        timestamp: DateTime(2026, 7, 7, 9),
+        type: SymptomType.migraine,
+        intensity: 7,
+      );
+      final id =
+          (await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first)
+              .single
+              .id;
+
+      await repository.deleteSymptom(id);
+      expect(
+        await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first,
+        isEmpty,
+      );
+
+      await repository.undoDeleteSymptom(id);
+      expect(
+        await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first,
+        hasLength(1),
+      );
+    });
+  });
 }

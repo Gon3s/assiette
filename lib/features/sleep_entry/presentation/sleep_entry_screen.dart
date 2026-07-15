@@ -1,4 +1,5 @@
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,39 @@ class SleepEntryScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final s = AppStrings.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    final id = ref.read(sleepEntryControllerProvider).id;
+    if (id == null) return;
+    // The screen pops after deleting, so capture the repository now rather
+    // than reading `ref` again from the Undo action (the widget will
+    // already be unmounted by then).
+    final repository = ref.read(dayViewRepositoryProvider);
+    try {
+      final deleted =
+          await ref.read(sleepEntryControllerProvider.notifier).delete();
+      if (!deleted) return;
+      router.pop();
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(s.entryDeleted),
+            action: SnackBarAction(
+              label: s.undoAction,
+              onPressed: () => repository.undoDeleteSleepEntry(id),
+            ),
+          ),
+        );
+    } on Exception {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
@@ -79,7 +113,17 @@ class SleepEntryScreen extends ConsumerWidget {
     final locale = Localizations.maybeLocaleOf(context)?.toString();
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.sleepCardTitle)),
+      appBar: AppBar(
+        title: Text(s.sleepCardTitle),
+        actions: [
+          if (state.id != null)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: s.deleteAction,
+              onPressed: () => _delete(context, ref),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [

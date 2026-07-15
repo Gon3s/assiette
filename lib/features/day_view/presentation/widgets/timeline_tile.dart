@@ -3,29 +3,57 @@ import 'dart:io';
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_labels.dart';
+import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
+import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 /// A single timeline row: a meal (photo thumbnail + tag chips) or a
-/// symptom (colored dot + intensity).
-class TimelineTile extends StatelessWidget {
+/// symptom (colored dot + intensity). Tapping opens the entry for
+/// editing (US-12).
+class TimelineTile extends ConsumerWidget {
   /// Creates a [TimelineTile] for the given [item].
   const TimelineTile({required this.item, super.key});
 
   /// The timeline entry to render.
   final TimelineItem item;
 
+  Future<void> _openMeal(BuildContext context, WidgetRef ref, String id) async {
+    final draft = await ref.read(mealEntryRepositoryProvider).loadMeal(id);
+    if (draft == null || !context.mounted) return;
+    await context.pushNamed(AppRouter.mealEntry.name, extra: draft);
+  }
+
+  Future<void> _openSymptom(
+    BuildContext context,
+    WidgetRef ref,
+    String id,
+  ) async {
+    final draft =
+        await ref.read(symptomEntryRepositoryProvider).loadSymptom(id);
+    if (draft == null || !context.mounted) return;
+    await context.pushNamed(AppRouter.symptomEntry.name, extra: draft);
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
     final locale = Localizations.maybeLocaleOf(context)?.toString();
     final time =
         DateFormat.Hm(locale).format(item.timestamp.toLocal());
 
     return switch (item) {
-      MealTimelineItem(:final mealType, :final tagLabels, :final photoPath) =>
+      MealTimelineItem(
+        :final id,
+        :final mealType,
+        :final tagLabels,
+        :final photoPath,
+      ) =>
         ListTile(
           leading: _MealThumbnail(photoPath: photoPath),
           title: Text(mealTypeLabel(s, mealType)),
@@ -45,8 +73,10 @@ class TimelineTile extends StatelessWidget {
                   ],
                 ),
           trailing: Text(time),
+          onTap: () => _openMeal(context, ref, id),
         ),
       SymptomTimelineItem(
+        :final id,
         :final symptomType,
         :final intensity,
         :final detail,
@@ -67,6 +97,7 @@ class TimelineTile extends StatelessWidget {
           title: Text(symptomTypeLabel(s, symptomType)),
           subtitle: detail == null ? null : Text(detail),
           trailing: Text(time),
+          onTap: () => _openSymptom(context, ref, id),
         ),
     };
   }

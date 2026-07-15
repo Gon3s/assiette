@@ -84,10 +84,47 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
         }
       });
 
+  /// Loads a single meal with its tags, or `null` if it doesn't exist.
+  Future<MealWithTags?> getMealWithTagsById(String id) async {
+    final meal =
+        await (select(meals)..where((t) => t.id.equals(id))).getSingleOrNull();
+    if (meal == null) return null;
+    final query = select(mealTags).join([
+      innerJoin(tags, tags.id.equalsExp(mealTags.tagId)),
+    ])..where(mealTags.mealId.equals(id));
+    final rows = await query.get();
+    return MealWithTags(
+      meal: meal,
+      tags: [for (final row in rows) row.readTable(tags)],
+    );
+  }
+
+  /// Replaces the meal's fields and tag links atomically.
+  Future<void> updateMealWithTags(
+    String id,
+    MealsCompanion entry,
+    List<String> tagIds,
+  ) =>
+      transaction(() async {
+        await (update(meals)..where((t) => t.id.equals(id))).write(entry);
+        await (delete(mealTags)..where((t) => t.mealId.equals(id))).go();
+        for (final tagId in tagIds) {
+          await into(mealTags).insert(
+            MealTagsCompanion.insert(mealId: id, tagId: tagId),
+            mode: InsertMode.insertOrIgnore,
+          );
+        }
+      });
+
   Future<void> softDeleteMeal(String id) =>
       (update(meals)..where((t) => t.id.equals(id))).write(
         MealsCompanion(deletedAt: Value(DateTime.now().toUtc())),
       );
+
+  /// Clears `deletedAt`, undoing a soft delete.
+  Future<void> restoreMeal(String id) =>
+      (update(meals)..where((t) => t.id.equals(id)))
+          .write(const MealsCompanion(deletedAt: Value(null)));
 
   Future<void> addTag(MealTagsCompanion entry) =>
       into(mealTags).insert(entry, mode: InsertMode.insertOrIgnore);

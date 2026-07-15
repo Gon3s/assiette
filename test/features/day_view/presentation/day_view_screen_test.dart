@@ -10,8 +10,14 @@ import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/favorites/domain/meal_template_option.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
+import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
+import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
+import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,13 +28,22 @@ class MockDayViewRepository extends Mock implements DayViewRepository {}
 
 class MockFavoritesRepository extends Mock implements FavoritesRepository {}
 
+class MockMealEntryRepository extends Mock implements MealEntryRepository {}
+
+class MockSymptomEntryRepository extends Mock
+    implements SymptomEntryRepository {}
+
 void main() {
   late MockDayViewRepository repository;
   late MockFavoritesRepository favoritesRepository;
+  late MockMealEntryRepository mealEntryRepository;
+  late MockSymptomEntryRepository symptomEntryRepository;
 
   setUp(() {
     repository = MockDayViewRepository();
     favoritesRepository = MockFavoritesRepository();
+    mealEntryRepository = MockMealEntryRepository();
+    symptomEntryRepository = MockSymptomEntryRepository();
     when(
       () => repository.watchTimeline(any()),
     ).thenAnswer((_) => Stream.value([]));
@@ -53,6 +68,18 @@ void main() {
           name: 'sleepEntry',
           builder: (_, _) => const SleepEntryScreen(),
         ),
+        GoRoute(
+          path: '/meal-entry',
+          name: 'mealEntry',
+          builder: (_, state) =>
+              MealEntryScreen(draft: state.extra as MealDraft?),
+        ),
+        GoRoute(
+          path: '/symptom-entry',
+          name: 'symptomEntry',
+          builder: (_, state) =>
+              SymptomEntryScreen(draft: state.extra as SymptomDraft?),
+        ),
       ],
     );
     await tester.pumpWidget(
@@ -60,6 +87,10 @@ void main() {
         overrides: [
           dayViewRepositoryProvider.overrideWithValue(repository),
           favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
+          mealEntryRepositoryProvider.overrideWithValue(mealEntryRepository),
+          symptomEntryRepositoryProvider.overrideWithValue(
+            symptomEntryRepository,
+          ),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
@@ -257,6 +288,66 @@ void main() {
       action.onPressed();
 
       verify(() => favoritesRepository.undoLogFavorite('meal-1')).called(1);
+    });
+  });
+
+  group('tapping a timeline entry', () {
+    testWidgets('opens the meal for editing', (tester) async {
+      when(() => repository.watchTimeline(any())).thenAnswer(
+        (_) => Stream.value([
+          TimelineItem.meal(
+            id: 'meal-1',
+            timestamp: DateTime.utc(2026, 7, 6, 12),
+            mealType: MealType.lunch,
+            tagLabels: const ['gluten'],
+          ),
+        ]),
+      );
+      when(() => mealEntryRepository.loadMeal('meal-1')).thenAnswer(
+        (_) async => MealDraft(
+          id: 'meal-1',
+          timestamp: DateTime(2026, 7, 6, 12),
+          mealType: MealType.lunch,
+          tags: const [
+            TagOption(id: 'tag-1', label: 'gluten', isSystem: true),
+          ],
+        ),
+      );
+
+      await pumpScreen(tester);
+      await tester.tap(find.text('Lunch'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MealEntryScreen), findsOneWidget);
+      expect(find.text('Edit meal'), findsOneWidget);
+    });
+
+    testWidgets('opens the symptom for editing', (tester) async {
+      when(() => repository.watchTimeline(any())).thenAnswer(
+        (_) => Stream.value([
+          TimelineItem.symptom(
+            id: 'symptom-1',
+            timestamp: DateTime.utc(2026, 7, 6, 9),
+            symptomType: SymptomType.migraine,
+            intensity: 7,
+          ),
+        ]),
+      );
+      when(() => symptomEntryRepository.loadSymptom('symptom-1')).thenAnswer(
+        (_) async => SymptomDraft(
+          id: 'symptom-1',
+          timestamp: DateTime(2026, 7, 6, 9),
+          type: SymptomType.migraine,
+          intensity: 7,
+        ),
+      );
+
+      await pumpScreen(tester);
+      await tester.tap(find.text('Migraine'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SymptomEntryScreen), findsOneWidget);
+      expect(find.text('Edit symptom'), findsOneWidget);
     });
   });
 }

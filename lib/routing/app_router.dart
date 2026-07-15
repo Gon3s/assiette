@@ -1,9 +1,11 @@
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
@@ -75,12 +77,14 @@ GoRouter goRouter(Ref ref) {
           GoRoute(
             path: 'meal-entry',
             name: AppRouter.mealEntry.name,
-            builder: (context, state) => const MealEntryScreen(),
+            builder: (context, state) =>
+                MealEntryScreen(draft: state.extra as MealDraft?),
           ),
           GoRoute(
             path: 'symptom-entry',
             name: AppRouter.symptomEntry.name,
-            builder: (context, state) => const SymptomEntryScreen(),
+            builder: (context, state) =>
+                SymptomEntryScreen(draft: state.extra as SymptomDraft?),
           ),
           GoRoute(
             path: 'sleep-entry',

@@ -126,4 +126,49 @@ void main() {
     ).called(1);
     expect(router.routerDelegate.currentConfiguration.uri.toString(), '/');
   });
+
+  testWidgets('no delete action when the sleep has no id yet', (
+    tester,
+  ) async {
+    await pumpScreen(tester);
+
+    expect(find.byIcon(Icons.delete_outline), findsNothing);
+  });
+
+  group('deleting a logged night', () {
+    setUp(() {
+      when(() => dayViewRepository.watchSleepForNight(any())).thenAnswer(
+        (_) => Stream.value(
+          const SleepSummary(id: 'sleep-1', quality: 2),
+        ),
+      );
+    });
+
+    testWidgets('pops back and shows an undo snackbar', (tester) async {
+      when(
+        () => dayViewRepository.deleteSleepEntry('sleep-1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => dayViewRepository.undoDeleteSleepEntry('sleep-1'),
+      ).thenAnswer((_) async {});
+
+      final router = await pumpScreen(tester);
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pumpAndSettle();
+
+      verify(() => dayViewRepository.deleteSleepEntry('sleep-1')).called(1);
+      expect(router.routerDelegate.currentConfiguration.uri.toString(), '/');
+      expect(find.text('Entry deleted'), findsOneWidget);
+
+      // The SnackBar sits at the viewport edge in the test surface, so
+      // invoke the action's callback directly rather than a hit-test tap.
+      final action = tester.widget<SnackBarAction>(
+        find.byType(SnackBarAction),
+      );
+      action.onPressed();
+      verify(
+        () => dayViewRepository.undoDeleteSleepEntry('sleep-1'),
+      ).called(1);
+    });
+  });
 }

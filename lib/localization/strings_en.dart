@@ -70,6 +70,8 @@ class AppStringsEn implements AppStrings {
   @override
   String get mealEntryTitle => 'New meal';
   @override
+  String get editMealTitle => 'Edit meal';
+  @override
   String get takePhoto => 'Take a photo';
   @override
   String get retakePhoto => 'Retake';
@@ -101,6 +103,8 @@ class AppStringsEn implements AppStrings {
   String get mealSaved => 'Meal saved';
   @override
   String get errorGeneric => 'Something went wrong';
+  @override
+  String get entryDeleted => 'Entry deleted';
 
   @override
   String get favoriteMealAdded => 'Meal added';
@@ -129,6 +133,8 @@ class AppStringsEn implements AppStrings {
 
   @override
   String get symptomEntryTitle => 'New symptom';
+  @override
+  String get editSymptomTitle => 'Edit symptom';
   @override
   String get symptomEntryTypeLabel => 'Symptom type';
   @override

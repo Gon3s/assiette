@@ -15,5 +15,6 @@ abstract class SymptomEntryState with _$SymptomEntryState {
     @Default('') String note,
     DateTime? endTime,
     @Default(false) bool isSaving,
+    String? id,
   }) = _SymptomEntryState;
 }

@@ -11,5 +11,6 @@ abstract class SleepEntryState with _$SleepEntryState {
     DateTime? bedTime,
     DateTime? wakeTime,
     @Default(false) bool isSaving,
+    String? id,
   }) = _SleepEntryState;
 }

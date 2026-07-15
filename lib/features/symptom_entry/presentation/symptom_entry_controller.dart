@@ -1,4 +1,5 @@
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -45,21 +46,60 @@ class SymptomEntryController extends _$SymptomEntryController {
   /// Clears the optional end time.
   void clearEndTime() => state = state.copyWith(endTime: null);
 
-  /// Persists the symptom. Returns true on success.
+  /// Seeds the form from a previously logged symptom for editing.
+  void loadForEdit(SymptomDraft draft) {
+    state = SymptomEntryState(
+      id: draft.id,
+      type: draft.type,
+      timestamp: draft.timestamp,
+      intensity: draft.intensity,
+      detail: draft.detail,
+      endTime: draft.endTime,
+      note: draft.note ?? '',
+    );
+  }
+
+  /// Persists the symptom (create or update). Returns true on success.
   Future<bool> save() async {
     if (state.isSaving) return false;
     state = state.copyWith(isSaving: true);
     try {
-      await ref
-          .read(symptomEntryRepositoryProvider)
-          .saveSymptom(
-            timestamp: state.timestamp,
-            type: state.type,
-            intensity: state.intensity,
-            detail: state.detail,
-            endTime: state.endTime,
-            note: state.note,
-          );
+      final repository = ref.read(symptomEntryRepositoryProvider);
+      final id = state.id;
+      if (id == null) {
+        await repository.saveSymptom(
+          timestamp: state.timestamp,
+          type: state.type,
+          intensity: state.intensity,
+          detail: state.detail,
+          endTime: state.endTime,
+          note: state.note,
+        );
+      } else {
+        await repository.updateSymptom(
+          id: id,
+          timestamp: state.timestamp,
+          type: state.type,
+          intensity: state.intensity,
+          detail: state.detail,
+          endTime: state.endTime,
+          note: state.note,
+        );
+      }
+      return true;
+    } finally {
+      state = state.copyWith(isSaving: false);
+    }
+  }
+
+  /// Soft-deletes the symptom being edited. Returns false when creating
+  /// (no id yet) or while another save/delete is in flight.
+  Future<bool> delete() async {
+    final id = state.id;
+    if (id == null || state.isSaving) return false;
+    state = state.copyWith(isSaving: true);
+    try {
+      await ref.read(symptomEntryRepositoryProvider).deleteSymptom(id);
       return true;
     } finally {
       state = state.copyWith(isSaving: false);

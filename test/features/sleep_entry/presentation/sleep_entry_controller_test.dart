@@ -161,5 +161,30 @@ void main() {
       await expectLater(controller.save(), throwsStateError);
       expect(container.read(sleepEntryControllerProvider).isSaving, isFalse);
     });
+
+    test('delete soft-deletes the logged night', () async {
+      when(() => dayViewRepository.watchSleepForNight(any())).thenAnswer(
+        (_) => Stream.value(const SleepSummary(id: 'sleep-1', quality: 3)),
+      );
+      when(
+        () => dayViewRepository.deleteSleepEntry('sleep-1'),
+      ).thenAnswer((_) async {});
+
+      final container = await makeContainer();
+      final deleted =
+          await container.read(sleepEntryControllerProvider.notifier).delete();
+
+      expect(deleted, isTrue);
+      verify(() => dayViewRepository.deleteSleepEntry('sleep-1')).called(1);
+    });
+
+    test('delete is a no-op when nothing is logged (no id)', () async {
+      final container = await makeContainer();
+      final deleted =
+          await container.read(sleepEntryControllerProvider.notifier).delete();
+
+      expect(deleted, isFalse);
+      verifyNever(() => dayViewRepository.deleteSleepEntry(any()));
+    });
   });
 }

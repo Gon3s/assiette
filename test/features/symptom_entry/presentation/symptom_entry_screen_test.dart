@@ -2,6 +2,7 @@
 library;
 
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +36,18 @@ void main() {
     ).thenAnswer((_) async {});
   });
 
-  Future<GoRouter> pumpScreen(WidgetTester tester) async {
+  Future<GoRouter> pumpScreen(
+    WidgetTester tester, {
+    SymptomDraft? draft,
+  }) async {
     final router = GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(path: '/', builder: (_, _) => const Scaffold()),
         GoRoute(
           path: '/symptom-entry',
-          builder: (_, _) => const SymptomEntryScreen(),
+          builder: (_, state) =>
+              SymptomEntryScreen(draft: state.extra as SymptomDraft?),
         ),
       ],
     );
@@ -55,7 +60,7 @@ void main() {
       ),
     );
     // Push the entry screen like the day view does, so pop() can return.
-    router.push('/symptom-entry');
+    router.push('/symptom-entry', extra: draft);
     await tester.pumpAndSettle();
     return router;
   }
@@ -172,5 +177,93 @@ void main() {
     await tester.pump();
 
     expect(find.text('Add an end time'), findsOneWidget);
+  });
+
+  group('editing an existing symptom', () {
+    final draft = SymptomDraft(
+      id: 'symptom-1',
+      timestamp: DateTime(2026, 7, 7, 9),
+      type: SymptomType.migraine,
+      intensity: 7,
+    );
+
+    testWidgets('shows the edit title and a delete action', (tester) async {
+      await pumpScreen(tester, draft: draft);
+
+      expect(find.text('Edit symptom'), findsOneWidget);
+      expect(find.text('Intensity: 7'), findsOneWidget);
+      expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+    });
+
+    testWidgets('saving calls updateSymptom, not saveSymptom', (tester) async {
+      when(
+        () => repository.updateSymptom(
+          id: any(named: 'id'),
+          timestamp: any(named: 'timestamp'),
+          type: any(named: 'type'),
+          intensity: any(named: 'intensity'),
+          detail: any(named: 'detail'),
+          endTime: any(named: 'endTime'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async {});
+
+      await pumpScreen(tester, draft: draft);
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => repository.updateSymptom(
+          id: 'symptom-1',
+          timestamp: any(named: 'timestamp'),
+          type: SymptomType.migraine,
+          intensity: 7,
+          detail: any(named: 'detail'),
+          endTime: any(named: 'endTime'),
+          note: any(named: 'note'),
+        ),
+      ).called(1);
+      verifyNever(
+        () => repository.saveSymptom(
+          timestamp: any(named: 'timestamp'),
+          type: any(named: 'type'),
+          intensity: any(named: 'intensity'),
+          detail: any(named: 'detail'),
+          endTime: any(named: 'endTime'),
+          note: any(named: 'note'),
+        ),
+      );
+    });
+
+    testWidgets('deleting pops back and shows an undo snackbar', (
+      tester,
+    ) async {
+      when(
+        () => repository.deleteSymptom('symptom-1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => repository.undoDeleteSymptom('symptom-1'),
+      ).thenAnswer((_) async {});
+
+      final router = await pumpScreen(tester, draft: draft);
+      await tester.tap(find.byIcon(Icons.delete_outline));
+      await tester.pumpAndSettle();
+
+      verify(() => repository.deleteSymptom('symptom-1')).called(1);
+      expect(
+        router.routerDelegate.currentConfiguration.uri.toString(),
+        '/',
+      );
+      expect(find.text('Entry deleted'), findsOneWidget);
+
+      // The SnackBar sits at the viewport edge in the test surface, so
+      // invoke the action's callback directly rather than a hit-test tap.
+      final action = tester.widget<SnackBarAction>(
+        find.byType(SnackBarAction),
+      );
+      action.onPressed();
+      verify(() => repository.undoDeleteSymptom('symptom-1')).called(1);
+    });
   });
 }

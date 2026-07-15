@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
+import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
 import 'package:assiette/features/meal_entry/presentation/widgets/photo_section.dart';
 import 'package:assiette/features/meal_entry/presentation/widgets/tag_selector.dart';
@@ -11,9 +15,36 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 /// Meal entry form: photo, meal type, tags, note, editable timestamp.
-class MealEntryScreen extends ConsumerWidget {
+///
+/// When [draft] is provided, the form is seeded from that existing meal
+/// (edit path of US-12) and a delete action is offered.
+class MealEntryScreen extends ConsumerStatefulWidget {
   /// Creates a [MealEntryScreen].
-  const MealEntryScreen({super.key});
+  const MealEntryScreen({this.draft, super.key});
+
+  /// The meal being edited, or `null` when creating a new one.
+  final MealDraft? draft;
+
+  @override
+  ConsumerState<MealEntryScreen> createState() => _MealEntryScreenState();
+}
+
+class _MealEntryScreenState extends ConsumerState<MealEntryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final draft = widget.draft;
+    if (draft != null) {
+      // Riverpod forbids mutating a provider from initState; defer to the
+      // next microtask, before the first frame is presented.
+      unawaited(
+        Future.microtask(
+          () =>
+              ref.read(mealEntryControllerProvider.notifier).loadForEdit(draft),
+        ),
+      );
+    }
+  }
 
   Future<void> _pickDate(
     BuildContext context,
@@ -132,16 +163,59 @@ class MealEntryScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final s = AppStrings.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    final id = ref.read(mealEntryControllerProvider).id;
+    if (id == null) return;
+    // The screen pops after deleting, so capture the repository now rather
+    // than reading `ref` again from the Undo action (the widget will
+    // already be unmounted by then).
+    final repository = ref.read(mealEntryRepositoryProvider);
+    try {
+      final deleted = await ref.read(mealEntryControllerProvider.notifier).delete();
+      if (!deleted) return;
+      router.pop();
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(s.entryDeleted),
+            action: SnackBarAction(
+              label: s.undoAction,
+              onPressed: () => repository.undoDeleteMeal(id),
+            ),
+          ),
+        );
+    } on Exception {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final s = AppStrings.of(context);
     final state = ref.watch(mealEntryControllerProvider);
     final locale = Localizations.maybeLocaleOf(context)?.toString();
     final dateLabel = DateFormat.yMMMd(locale).format(state.timestamp);
     final timeLabel = DateFormat.Hm(locale).format(state.timestamp);
+    final isEditing = state.id != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.mealEntryTitle)),
+      appBar: AppBar(
+        title: Text(isEditing ? s.editMealTitle : s.mealEntryTitle),
+        actions: [
+          if (isEditing)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: s.deleteAction,
+              onPressed: () => _delete(context, ref),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [

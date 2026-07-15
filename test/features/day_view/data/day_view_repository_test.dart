@@ -6,7 +6,7 @@ import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/day_view/data/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -119,6 +119,25 @@ void main() {
     test('returns null when the night is not logged', () async {
       final summary = await repository.watchSleepForNight(day).first;
       expect(summary, isNull);
+    });
+
+    test('exposes the entry id', () async {
+      await repository.logSleepQuality(day, 2);
+      final summary = await repository.watchSleepForNight(day).first;
+      expect(summary?.id, isNotNull);
+    });
+  });
+
+  group('deleteSleepEntry / undoDeleteSleepEntry', () {
+    test('soft-deletes then restores the night', () async {
+      await repository.logSleepQuality(day, 2);
+      final id = (await repository.watchSleepForNight(day).first)!.id!;
+
+      await repository.deleteSleepEntry(id);
+      expect(await repository.watchSleepForNight(day).first, isNull);
+
+      await repository.undoDeleteSleepEntry(id);
+      expect(await repository.watchSleepForNight(day).first, isNotNull);
     });
   });
 
