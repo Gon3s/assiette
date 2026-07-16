@@ -25,7 +25,7 @@ class RegexValidator implements StringValidator {
         }
       }
       return false;
-    } catch (e) {
+    } on FormatException catch (e) {
       // Invalid regex
       assert(false, e.toString());
       return true;

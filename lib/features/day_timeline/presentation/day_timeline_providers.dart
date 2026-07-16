@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs
 import 'dart:async';
 
 import 'package:assiette/data/daos/meals_dao.dart';
@@ -11,14 +10,15 @@ class _SelectedDateNotifier extends Notifier<DateTime> {
   @override
   DateTime build() => DateTime.now();
 
-  void selectDate(DateTime date) => state = date;
+  DateTime get selectedDate => state;
+  set selectedDate(DateTime date) => state = date;
 }
 
 final selectedDateProvider = NotifierProvider<_SelectedDateNotifier, DateTime>(
   _SelectedDateNotifier.new,
 );
 
-final dayTimelineProvider =
+final StreamProvider<List<TimelineItem>> dayTimelineProvider =
     StreamProvider.autoDispose<List<TimelineItem>>((ref) {
   final date = ref.watch(selectedDateProvider);
   final db = ref.watch(appDatabaseProvider);
@@ -53,7 +53,7 @@ final dayTimelineProvider =
   return controller.stream;
 });
 
-final latestEnvForDayProvider =
+final StreamProvider<EnvironmentSnapshot?> latestEnvForDayProvider =
     StreamProvider.autoDispose<EnvironmentSnapshot?>((ref) {
   final date = ref.watch(selectedDateProvider);
   final db = ref.watch(appDatabaseProvider);
@@ -62,7 +62,8 @@ final latestEnvForDayProvider =
       .map((list) => list.isEmpty ? null : list.last);
 });
 
-final sleepForDayProvider = StreamProvider.autoDispose<SleepEntry?>((ref) {
+final StreamProvider<SleepEntry?> sleepForDayProvider =
+    StreamProvider.autoDispose<SleepEntry?>((ref) {
   final date = ref.watch(selectedDateProvider);
   final db = ref.watch(appDatabaseProvider);
   return db.sleepEntriesDao.watchByDate(date);

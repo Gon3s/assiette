@@ -66,6 +66,16 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeDigestive => 'Digestif';
   @override
   String get symptomTypeMood => 'Humeur';
+  @override
+  String get addMealPhoto => 'Ajouter photo repas';
+  @override
+  String get addSymptom => 'Ajouter symptôme';
+  @override
+  String get sleepCardNoData => 'Aucune donnée de sommeil';
+  @override
+  String get favoritesComingSoon => 'Favoris bientôt disponibles';
+  @override
+  String get nothingLoggedToday => "Rien n'a été enregistré aujourd'hui";
 
   @override
   String get mealEntryTitle => 'Nouveau repas';

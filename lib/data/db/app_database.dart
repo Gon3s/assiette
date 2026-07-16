@@ -1,5 +1,3 @@
-// Drift database class is infrastructure — no public API docs needed.
-// ignore_for_file: public_member_api_docs
 import 'package:assiette/data/daos/app_settings_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';

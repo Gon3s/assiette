@@ -1,6 +1,8 @@
 @Timeout(Duration(seconds: 5))
 library;
 
+import 'dart:async';
+
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
@@ -76,7 +78,7 @@ void main() {
       ),
     );
     // Push the entry screen like the day view does, so pop() can return.
-    router.push('/sleep-entry');
+    unawaited(router.push('/sleep-entry'));
     await tester.pumpAndSettle();
     return router;
   }

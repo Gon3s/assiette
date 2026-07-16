@@ -7,12 +7,8 @@ abstract class AppStrings {
   /// Returns the [AppStrings] implementation for the current locale.
   /// Falls back to English if no localization ancestor is found.
   static AppStrings of(BuildContext context) {
-    try {
-      final locale = Localizations.localeOf(context);
-      if (locale.languageCode == 'fr') return AppStringsFr();
-    } catch (_) {
-      // No localization ancestor — use English default
-    }
+    final locale = Localizations.maybeLocaleOf(context);
+    if (locale?.languageCode == 'fr') return AppStringsFr();
     return AppStringsEn();
   }
 
@@ -52,6 +48,11 @@ abstract class AppStrings {
   String get symptomTypeMigraine;
   String get symptomTypeDigestive;
   String get symptomTypeMood;
+  String get addMealPhoto;
+  String get addSymptom;
+  String get sleepCardNoData;
+  String get favoritesComingSoon;
+  String get nothingLoggedToday;
 
   // Meal entry
   String get mealEntryTitle;

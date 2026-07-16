@@ -1,5 +1,3 @@
-// Drift table definitions are infrastructure — no public API docs needed.
-// ignore_for_file: public_member_api_docs
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:drift/drift.dart';
 

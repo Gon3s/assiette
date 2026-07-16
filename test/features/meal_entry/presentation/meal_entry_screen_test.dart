@@ -1,6 +1,8 @@
 @Timeout(Duration(seconds: 5))
 library;
 
+import 'dart:async';
+
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
@@ -82,7 +84,7 @@ void main() {
       ),
     );
     // Push the entry screen like the day view does, so pop() can return.
-    router.push('/meal-entry', extra: draft);
+    unawaited(router.push('/meal-entry', extra: draft));
     await tester.pumpAndSettle();
     return router;
   }

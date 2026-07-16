@@ -1,5 +1,3 @@
-// Riverpod provider for the Drift database singleton.
-// ignore_for_file: public_member_api_docs
 import 'package:assiette/data/db/app_database.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

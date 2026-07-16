@@ -1,6 +1,8 @@
 @Timeout(Duration(seconds: 5))
 library;
 
+import 'dart:async';
+
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
@@ -60,7 +62,7 @@ void main() {
       ),
     );
     // Push the entry screen like the day view does, so pop() can return.
-    router.push('/symptom-entry', extra: draft);
+    unawaited(router.push('/symptom-entry', extra: draft));
     await tester.pumpAndSettle();
     return router;
   }

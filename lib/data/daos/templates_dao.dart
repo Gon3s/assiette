@@ -1,5 +1,3 @@
-// Drift DAO files expose infrastructure types, not a user-facing API.
-// ignore_for_file: public_member_api_docs
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
 import 'package:assiette/data/db/tables/tags_table.dart';

@@ -72,6 +72,9 @@ void main() {
       final container = makeContainer(favorites: [existing]);
       // Keep favoriteTemplatesProvider alive (as the list screen would) and
       // let its stream resolve before reading the form controller.
+      // Can't cascade: the second call's Future must be awaited, which a
+      // void-cascade would discard.
+      // ignore: cascade_invocations
       container.listen(favoriteTemplatesProvider, (_, _) {});
       await container.read(favoriteTemplatesProvider.future);
 
@@ -209,6 +212,9 @@ void main() {
       ).thenAnswer((_) async {});
 
       final container = makeContainer(favorites: [existing]);
+      // Can't cascade: the second call's Future must be awaited, which a
+      // void-cascade would discard.
+      // ignore: cascade_invocations
       container.listen(favoriteTemplatesProvider, (_, _) {});
       await container.read(favoriteTemplatesProvider.future);
       final controller = container.read(

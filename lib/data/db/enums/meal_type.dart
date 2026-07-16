@@ -1,5 +1,3 @@
-// Drift enum used as column type — no public API docs needed.
-// ignore_for_file: public_member_api_docs
 enum MealType { breakfast, lunch, dinner, snack }
 
 /// Pre-selects the meal type most likely at [time] (local).

@@ -26,8 +26,8 @@ class DayTimelineScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(title), centerTitle: false),
-      body: Column(
-        children: const [
+      body: const Column(
+        children: [
           _EnvHeader(),
           _SleepCard(),
           _FavoritesRow(),
@@ -301,7 +301,7 @@ class _SymptomTile extends StatelessWidget {
         child: Icon(Icons.circle, color: color, size: 20),
       ),
       title: Text(_symptomTypeLabel(symptom.type, s)),
-      subtitle: Text(s.intensityLabel(symptom.intensity)),
+      subtitle: Text('${s.intensityLabel}: ${symptom.intensity}'),
       trailing: Text(
         time.format(context),
         style: Theme.of(context).textTheme.bodySmall,

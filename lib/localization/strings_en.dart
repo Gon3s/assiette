@@ -66,6 +66,16 @@ class AppStringsEn implements AppStrings {
   String get symptomTypeDigestive => 'Digestive';
   @override
   String get symptomTypeMood => 'Mood';
+  @override
+  String get addMealPhoto => 'Add meal photo';
+  @override
+  String get addSymptom => 'Add symptom';
+  @override
+  String get sleepCardNoData => 'No sleep data';
+  @override
+  String get favoritesComingSoon => 'Favorites coming soon';
+  @override
+  String get nothingLoggedToday => 'Nothing logged today';
 
   @override
   String get mealEntryTitle => 'New meal';
