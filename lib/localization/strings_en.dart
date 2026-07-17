@@ -3,30 +3,11 @@ import 'package:assiette/localization/app_strings.dart';
 /// English strings.
 class AppStringsEn implements AppStrings {
   @override
-  String get welcomeBack => 'Welcome back';
+  String get save => 'Save';
   @override
-  String get signInSubtitle => 'Sign in to your account';
+  String get cancel => 'Cancel';
   @override
-  String get email => 'Email';
-  @override
-  String get emailHint => 'example@domain.com';
-  @override
-  String get password => 'Password';
-  @override
-  String get signIn => 'Sign in';
-  @override
-  String get createAccount => 'Create an account';
-  @override
-  String get createAccountTitle => 'Create an account';
-  @override
-  String get createAccountSubtitle => 'Join us today';
-  @override
-  String get signUp => 'Sign up';
-  @override
-  String get alreadyHaveAccount => 'Already have an account? Sign in';
-
-  @override
-  String get homeTitle => 'Home';
+  String get confirm => 'Confirm';
 
   @override
   String get today => 'Today';
@@ -38,8 +19,6 @@ class AppStringsEn implements AppStrings {
   String get logSymptomAction => 'Symptom';
   @override
   String get sleepCardTitle => 'Sleep';
-  @override
-  String get sleepNotLogged => 'Night not logged';
   @override
   String get sleepQualityBad => 'Bad';
   @override
@@ -66,16 +45,6 @@ class AppStringsEn implements AppStrings {
   String get symptomTypeDigestive => 'Digestive';
   @override
   String get symptomTypeMood => 'Mood';
-  @override
-  String get addMealPhoto => 'Add meal photo';
-  @override
-  String get addSymptom => 'Add symptom';
-  @override
-  String get sleepCardNoData => 'No sleep data';
-  @override
-  String get favoritesComingSoon => 'Favorites coming soon';
-  @override
-  String get nothingLoggedToday => 'Nothing logged today';
 
   @override
   String get mealEntryTitle => 'New meal';
@@ -89,10 +58,6 @@ class AppStringsEn implements AppStrings {
   String get removePhoto => 'Remove photo';
   @override
   String get mealTypeLabel => 'Meal type';
-  @override
-  String get dateLabel => 'Date';
-  @override
-  String get timeLabel => 'Time';
   @override
   String get tagsLabel => 'Tags';
   @override
@@ -184,34 +149,6 @@ class AppStringsEn implements AppStrings {
   String get sleepSaved => 'Sleep saved';
 
   @override
-  String get accountTitle => 'My account';
-  @override
-  String get userInfo => 'Information';
-  @override
-  String get changePassword => 'Change password';
-  @override
-  String get currentPassword => 'Current password';
-  @override
-  String get newPassword => 'New password';
-  @override
-  String get confirmPassword => 'Confirm password';
-  @override
-  String get save => 'Save';
-  @override
-  String get signOut => 'Sign out';
-  @override
-  String get deleteAccount => 'Delete account';
-  @override
-  String get deleteAccountConfirmTitle => 'Delete account?';
-  @override
-  String get deleteAccountConfirmMessage =>
-      'This action is irreversible. All your data will be permanently deleted.';
-  @override
-  String get cancel => 'Cancel';
-  @override
-  String get confirm => 'Confirm';
-
-  @override
   String get settingsTitle => 'About';
   @override
   String get aboutSectionTitle => 'Data sources';
@@ -250,15 +187,4 @@ class AppStringsEn implements AppStrings {
   String get onboardingEnableLocation => 'Allow location';
   @override
   String get onboardingMaybeLater => 'Maybe later';
-
-  @override
-  String get emailEmpty => 'Email cannot be empty';
-  @override
-  String get emailInvalid => 'Email is not valid';
-  @override
-  String get passwordEmpty => 'Password cannot be empty';
-  @override
-  String get passwordTooShort => 'Password must be at least 8 characters';
-  @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
 }

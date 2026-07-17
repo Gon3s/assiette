@@ -12,21 +12,10 @@ abstract class AppStrings {
     return AppStringsEn();
   }
 
-  // Auth
-  String get welcomeBack;
-  String get signInSubtitle;
-  String get email;
-  String get emailHint;
-  String get password;
-  String get signIn;
-  String get createAccount;
-  String get createAccountTitle;
-  String get createAccountSubtitle;
-  String get signUp;
-  String get alreadyHaveAccount;
-
-  // Home
-  String get homeTitle;
+  // Common
+  String get save;
+  String get cancel;
+  String get confirm;
 
   // Day view
   String get today;
@@ -34,7 +23,6 @@ abstract class AppStrings {
   String get logMealAction;
   String get logSymptomAction;
   String get sleepCardTitle;
-  String get sleepNotLogged;
   String get sleepQualityBad;
   String get sleepQualityMedium;
   String get sleepQualityGood;
@@ -48,11 +36,6 @@ abstract class AppStrings {
   String get symptomTypeMigraine;
   String get symptomTypeDigestive;
   String get symptomTypeMood;
-  String get addMealPhoto;
-  String get addSymptom;
-  String get sleepCardNoData;
-  String get favoritesComingSoon;
-  String get nothingLoggedToday;
 
   // Meal entry
   String get mealEntryTitle;
@@ -61,8 +44,6 @@ abstract class AppStrings {
   String get retakePhoto;
   String get removePhoto;
   String get mealTypeLabel;
-  String get dateLabel;
-  String get timeLabel;
   String get tagsLabel;
   String get tagSearchHint;
   String createTagLabel(String label);
@@ -113,21 +94,6 @@ abstract class AppStrings {
   String get removeWakeTime;
   String get sleepSaved;
 
-  // Account
-  String get accountTitle;
-  String get userInfo;
-  String get changePassword;
-  String get currentPassword;
-  String get newPassword;
-  String get confirmPassword;
-  String get save;
-  String get signOut;
-  String get deleteAccount;
-  String get deleteAccountConfirmTitle;
-  String get deleteAccountConfirmMessage;
-  String get cancel;
-  String get confirm;
-
   // Settings
   String get settingsTitle;
   String get aboutSectionTitle;
@@ -146,11 +112,4 @@ abstract class AppStrings {
   String get onboardingPermissionBody;
   String get onboardingEnableLocation;
   String get onboardingMaybeLater;
-
-  // Errors
-  String get emailEmpty;
-  String get emailInvalid;
-  String get passwordEmpty;
-  String get passwordTooShort;
-  String get passwordsDoNotMatch;
 }

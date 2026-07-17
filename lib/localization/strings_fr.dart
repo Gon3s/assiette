@@ -3,30 +3,11 @@ import 'package:assiette/localization/app_strings.dart';
 /// French strings.
 class AppStringsFr implements AppStrings {
   @override
-  String get welcomeBack => 'Bon retour';
+  String get save => 'Enregistrer';
   @override
-  String get signInSubtitle => 'Connectez-vous à votre compte';
+  String get cancel => 'Annuler';
   @override
-  String get email => 'Email';
-  @override
-  String get emailHint => 'exemple@domaine.fr';
-  @override
-  String get password => 'Mot de passe';
-  @override
-  String get signIn => 'Se connecter';
-  @override
-  String get createAccount => 'Créer un compte';
-  @override
-  String get createAccountTitle => 'Créer un compte';
-  @override
-  String get createAccountSubtitle => 'Rejoignez-nous dès maintenant';
-  @override
-  String get signUp => "S'inscrire";
-  @override
-  String get alreadyHaveAccount => 'Déjà un compte ? Se connecter';
-
-  @override
-  String get homeTitle => 'Accueil';
+  String get confirm => 'Confirmer';
 
   @override
   String get today => "Aujourd'hui";
@@ -38,8 +19,6 @@ class AppStringsFr implements AppStrings {
   String get logSymptomAction => 'Symptôme';
   @override
   String get sleepCardTitle => 'Sommeil';
-  @override
-  String get sleepNotLogged => 'Nuit non renseignée';
   @override
   String get sleepQualityBad => 'Mauvais';
   @override
@@ -66,16 +45,6 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeDigestive => 'Digestif';
   @override
   String get symptomTypeMood => 'Humeur';
-  @override
-  String get addMealPhoto => 'Ajouter photo repas';
-  @override
-  String get addSymptom => 'Ajouter symptôme';
-  @override
-  String get sleepCardNoData => 'Aucune donnée de sommeil';
-  @override
-  String get favoritesComingSoon => 'Favoris bientôt disponibles';
-  @override
-  String get nothingLoggedToday => "Rien n'a été enregistré aujourd'hui";
 
   @override
   String get mealEntryTitle => 'Nouveau repas';
@@ -89,10 +58,6 @@ class AppStringsFr implements AppStrings {
   String get removePhoto => 'Supprimer la photo';
   @override
   String get mealTypeLabel => 'Type de repas';
-  @override
-  String get dateLabel => 'Date';
-  @override
-  String get timeLabel => 'Heure';
   @override
   String get tagsLabel => 'Tags';
   @override
@@ -184,34 +149,6 @@ class AppStringsFr implements AppStrings {
   String get sleepSaved => 'Sommeil enregistré';
 
   @override
-  String get accountTitle => 'Mon compte';
-  @override
-  String get userInfo => 'Informations';
-  @override
-  String get changePassword => 'Changer le mot de passe';
-  @override
-  String get currentPassword => 'Mot de passe actuel';
-  @override
-  String get newPassword => 'Nouveau mot de passe';
-  @override
-  String get confirmPassword => 'Confirmer le mot de passe';
-  @override
-  String get save => 'Enregistrer';
-  @override
-  String get signOut => 'Se déconnecter';
-  @override
-  String get deleteAccount => 'Supprimer le compte';
-  @override
-  String get deleteAccountConfirmTitle => 'Supprimer le compte ?';
-  @override
-  String get deleteAccountConfirmMessage =>
-      'Cette action est irréversible. Toutes vos données seront supprimées définitivement.';
-  @override
-  String get cancel => 'Annuler';
-  @override
-  String get confirm => 'Confirmer';
-
-  @override
   String get settingsTitle => 'À propos';
   @override
   String get aboutSectionTitle => 'Sources de données';
@@ -250,16 +187,4 @@ class AppStringsFr implements AppStrings {
   String get onboardingEnableLocation => 'Autoriser la localisation';
   @override
   String get onboardingMaybeLater => 'Plus tard';
-
-  @override
-  String get emailEmpty => "L'email ne peut pas être vide";
-  @override
-  String get emailInvalid => "L'email n'est pas valide";
-  @override
-  String get passwordEmpty => 'Le mot de passe ne peut pas être vide';
-  @override
-  String get passwordTooShort =>
-      'Le mot de passe doit contenir au moins 8 caractères';
-  @override
-  String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
 }

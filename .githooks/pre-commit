@@ -1,0 +1,35 @@
+#!/bin/bash
+# Enforces the CLAUDE.md pre-commit gate: analyze must be clean, tests must
+# pass. build_runner is NOT run here (it's slow and only needed when an
+# annotated file changed — CLAUDE.md already tells contributors to run it
+# manually before committing).
+#
+# Enabled via: git config core.hooksPath .githooks (done automatically by
+# .claude/hooks/session-start.sh for Claude Code sessions).
+#
+# Escape hatch for deliberate WIP commits: SKIP_GATE=1 git commit ...
+set -uo pipefail
+
+if [ "${SKIP_GATE:-0}" = "1" ]; then
+  echo "pre-commit: SKIP_GATE=1, bypassing analyze/test gate"
+  exit 0
+fi
+
+if ! command -v flutter >/dev/null 2>&1; then
+  echo "pre-commit: flutter not on PATH, skipping gate" >&2
+  exit 0
+fi
+
+echo "pre-commit: flutter analyze --no-pub"
+if ! flutter analyze --no-pub; then
+  echo "pre-commit: analyze failed. Fix the errors above, or SKIP_GATE=1 git commit for deliberate WIP." >&2
+  exit 1
+fi
+
+echo "pre-commit: flutter test"
+if ! flutter test; then
+  echo "pre-commit: tests failed. Fix them, or SKIP_GATE=1 git commit for deliberate WIP." >&2
+  exit 1
+fi
+
+exit 0
