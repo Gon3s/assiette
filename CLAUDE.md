@@ -48,10 +48,10 @@ flutter analyze --no-pub                           # lint (ignorer public_member
 
 ## Drift (SQLite local)
 
-- Tables → `lib/data/db/` (schéma dans `*_database.dart`, `schemaVersion`)
-- DAOs → `lib/data/db/daos/`
-- Migrations : incrémenter `schemaVersion` + `MigrationStrategy` avec `recreateAllViews`
-- Seed système → `lib/data/db/seed/` (tags système - ne pas modifier sans US dédiée)
+- Tables → `lib/data/db/tables/` (schéma déclaré dans `lib/data/db/app_database.dart`, `schemaVersion`)
+- DAOs → `lib/data/daos/`
+- Migrations : incrémenter `schemaVersion` + `MigrationStrategy` (`onUpgrade`)
+- Seed système → inline dans `AppDatabase._seedSystemTags()` (`lib/data/db/app_database.dart`) - tags système, ne pas modifier sans US dédiée
 - `.g.dart` : jamais à la main - `build_runner` uniquement
 
 ## Architecture & conventions
@@ -151,6 +151,13 @@ Scopes : `db`, `feature/<name>`, `routing`, `ui`, `i18n`, `deps`, `config`
 Utiliser `/caveman-commit` pour générer le message.
 
 ## Before you commit
+
+Hook git disponible (`.githooks/pre-commit`) : bloque le commit si `flutter
+analyze` ou `flutter test` échoue. Activation (une fois par clone) :
+```bash
+git config core.hooksPath .githooks
+```
+Bypass volontaire pour un commit WIP : `SKIP_GATE=1 git commit ...`.
 
 Gate obligatoire (dans cet ordre) :
 ```bash
