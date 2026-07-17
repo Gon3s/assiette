@@ -13,14 +13,23 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 /// Reference date for day 0 of the day-navigation [PageView].
-final _epoch = DateTime(2000);
+///
+/// Kept in UTC so [_pageForDate] never crosses a local DST boundary: a
+/// local-time diff between a winter epoch and a summer "today" loses an
+/// hour to the clock shift, and [Duration.inDays] truncates that into an
+/// off-by-one page.
+final _epoch = DateTime.utc(2000);
 
 /// Number of days reachable by swiping around [_epoch] (~135 years).
 const _pageCount = 50000;
 
-int _pageForDate(DateTime date) => date.difference(_epoch).inDays;
+int _pageForDate(DateTime date) =>
+    DateTime.utc(date.year, date.month, date.day).difference(_epoch).inDays;
 
-DateTime _dateForPage(int page) => _epoch.add(Duration(days: page));
+DateTime _dateForPage(int page) {
+  final utc = _epoch.add(Duration(days: page));
+  return DateTime(utc.year, utc.month, utc.day);
+}
 
 /// Home screen: everything logged for the selected day, as a timeline.
 ///
