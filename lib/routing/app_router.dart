@@ -17,7 +17,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+/// The navigator key backing the app's [GoRouter], exposed so code with no
+/// [BuildContext] (e.g. a notification tap handler) can still navigate.
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 /// The application router.
 enum AppRouter {
@@ -57,7 +59,7 @@ GoRouter goRouter(Ref ref) {
 
   return GoRouter(
     initialLocation: '/',
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
     redirect: (context, state) {
       if (appStartupState.isLoading || appStartupState.hasError) {

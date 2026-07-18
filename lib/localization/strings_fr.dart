@@ -157,6 +157,28 @@ class AppStringsFr implements AppStrings {
       'Météo et pression fournies par Open-Meteo.com (CC BY 4.0).';
 
   @override
+  String get notificationChannelMealsName => 'Repas';
+  @override
+  String get notificationChannelMealsDescription =>
+      'Rappels pour loguer un repas';
+  @override
+  String get notificationChannelSleepName => 'Sommeil';
+  @override
+  String get notificationChannelSleepDescription =>
+      'Rappel matinal pour loguer ton sommeil';
+  @override
+  String get notificationChannelWeatherName => 'Météo';
+  @override
+  String get notificationChannelWeatherDescription =>
+      'Alertes liées à la météo et à la pression';
+  @override
+  String get mealReminderTitle => 'As-tu mangé ?';
+  @override
+  String get mealReminderPhotoAction => 'Photo';
+  @override
+  String get mealReminderFavoriteAction => 'Favori';
+
+  @override
   String get onboardingSkip => 'Passer';
   @override
   String get onboardingNext => 'Suivant';

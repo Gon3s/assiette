@@ -157,6 +157,28 @@ class AppStringsEn implements AppStrings {
       'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
 
   @override
+  String get notificationChannelMealsName => 'Meals';
+  @override
+  String get notificationChannelMealsDescription =>
+      'Reminders to log a meal';
+  @override
+  String get notificationChannelSleepName => 'Sleep';
+  @override
+  String get notificationChannelSleepDescription =>
+      'Morning reminder to log your sleep';
+  @override
+  String get notificationChannelWeatherName => 'Weather';
+  @override
+  String get notificationChannelWeatherDescription =>
+      'Alerts related to weather and pressure';
+  @override
+  String get mealReminderTitle => 'Did you eat?';
+  @override
+  String get mealReminderPhotoAction => 'Photo';
+  @override
+  String get mealReminderFavoriteAction => 'Favorite';
+
+  @override
   String get onboardingSkip => 'Skip';
   @override
   String get onboardingNext => 'Next';

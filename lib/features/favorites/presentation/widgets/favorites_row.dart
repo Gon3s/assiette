@@ -2,6 +2,7 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/favorites/domain/meal_template_option.dart';
 import 'package:assiette/features/favorites/presentation/favorites_providers.dart';
+import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,10 @@ class FavoritesRow extends ConsumerWidget {
       final mealId = await ref
           .read(favoritesRepositoryProvider)
           .logFavorite(template);
+      // Requested here, in the foreground, right after the user's first
+      // meal log - the earliest moment the reminders being permitted
+      // becomes actually useful to them.
+      await LocalNotificationsService().requestPermission();
       messenger
         ..hideCurrentSnackBar()
         ..showSnackBar(

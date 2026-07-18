@@ -7,7 +7,13 @@ abstract class AppStrings {
   /// Returns the [AppStrings] implementation for the current locale.
   /// Falls back to English if no localization ancestor is found.
   static AppStrings of(BuildContext context) {
-    final locale = Localizations.maybeLocaleOf(context);
+    return ofLocale(Localizations.maybeLocaleOf(context));
+  }
+
+  /// Returns the [AppStrings] implementation for [locale], for call sites
+  /// with no [BuildContext] (background isolates, bootstrap). Falls back to
+  /// English.
+  static AppStrings ofLocale(Locale? locale) {
     if (locale?.languageCode == 'fr') return AppStringsFr();
     return AppStringsEn();
   }
@@ -98,6 +104,17 @@ abstract class AppStrings {
   String get settingsTitle;
   String get aboutSectionTitle;
   String get openMeteoAttribution;
+
+  // Notifications
+  String get notificationChannelMealsName;
+  String get notificationChannelMealsDescription;
+  String get notificationChannelSleepName;
+  String get notificationChannelSleepDescription;
+  String get notificationChannelWeatherName;
+  String get notificationChannelWeatherDescription;
+  String get mealReminderTitle;
+  String get mealReminderPhotoAction;
+  String get mealReminderFavoriteAction;
 
   // Onboarding
   String get onboardingSkip;

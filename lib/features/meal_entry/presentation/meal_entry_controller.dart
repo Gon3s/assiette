@@ -5,6 +5,7 @@ import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_state.dart';
+import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'meal_entry_controller.g.dart';
@@ -104,6 +105,10 @@ class MealEntryController extends _$MealEntryController {
           note: state.note,
         );
       }
+      // Requested here, in the foreground, right after the user's first
+      // meal log - the earliest moment the reminders being permitted
+      // becomes actually useful to them.
+      await LocalNotificationsService().requestPermission();
       return true;
     } finally {
       state = state.copyWith(isSaving: false);

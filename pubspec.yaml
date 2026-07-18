@@ -17,6 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^3.3.1
+  flutter_timezone: ^4.1.1
   freezed_annotation: ^3.1.0
   # Localisation & météo (Open-Meteo)
   geolocator: ^14.0.2
@@ -36,6 +37,7 @@ dependencies:
   printing: ^5.14.3
   riverpod_annotation: ^4.0.2
   share_plus: ^13.1.0
+  timezone: ^0.11.0
   uuid: ^4.5.3
   # Tâches de fond
   workmanager: ^0.9.0
