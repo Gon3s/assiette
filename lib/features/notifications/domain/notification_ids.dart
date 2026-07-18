@@ -35,4 +35,7 @@ abstract final class NotificationIds {
 
   /// The proactive pressure-drop alert (US-15).
   static const pressureDropAlert = 5;
+
+  /// The daily symptom check-in reminder (US-16, off by default).
+  static const symptomsReminder = 6;
 }

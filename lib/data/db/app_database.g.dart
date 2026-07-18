@@ -3698,11 +3698,205 @@ class $AppSettingsTable extends AppSettings
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _remindersMealsEnabledMeta =
+      const VerificationMeta('remindersMealsEnabled');
+  @override
+  late final GeneratedColumn<bool> remindersMealsEnabled =
+      GeneratedColumn<bool>(
+        'reminders_meals_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("reminders_meals_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(true),
+      );
+  static const VerificationMeta _breakfastHourMeta = const VerificationMeta(
+    'breakfastHour',
+  );
+  @override
+  late final GeneratedColumn<int> breakfastHour = GeneratedColumn<int>(
+    'breakfast_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(8),
+  );
+  static const VerificationMeta _breakfastMinuteMeta = const VerificationMeta(
+    'breakfastMinute',
+  );
+  @override
+  late final GeneratedColumn<int> breakfastMinute = GeneratedColumn<int>(
+    'breakfast_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(30),
+  );
+  static const VerificationMeta _lunchHourMeta = const VerificationMeta(
+    'lunchHour',
+  );
+  @override
+  late final GeneratedColumn<int> lunchHour = GeneratedColumn<int>(
+    'lunch_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(12),
+  );
+  static const VerificationMeta _lunchMinuteMeta = const VerificationMeta(
+    'lunchMinute',
+  );
+  @override
+  late final GeneratedColumn<int> lunchMinute = GeneratedColumn<int>(
+    'lunch_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(30),
+  );
+  static const VerificationMeta _dinnerHourMeta = const VerificationMeta(
+    'dinnerHour',
+  );
+  @override
+  late final GeneratedColumn<int> dinnerHour = GeneratedColumn<int>(
+    'dinner_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(19),
+  );
+  static const VerificationMeta _dinnerMinuteMeta = const VerificationMeta(
+    'dinnerMinute',
+  );
+  @override
+  late final GeneratedColumn<int> dinnerMinute = GeneratedColumn<int>(
+    'dinner_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(30),
+  );
+  static const VerificationMeta _remindersSleepEnabledMeta =
+      const VerificationMeta('remindersSleepEnabled');
+  @override
+  late final GeneratedColumn<bool> remindersSleepEnabled =
+      GeneratedColumn<bool>(
+        'reminders_sleep_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("reminders_sleep_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(true),
+      );
+  static const VerificationMeta _sleepHourMeta = const VerificationMeta(
+    'sleepHour',
+  );
+  @override
+  late final GeneratedColumn<int> sleepHour = GeneratedColumn<int>(
+    'sleep_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(8),
+  );
+  static const VerificationMeta _sleepMinuteMeta = const VerificationMeta(
+    'sleepMinute',
+  );
+  @override
+  late final GeneratedColumn<int> sleepMinute = GeneratedColumn<int>(
+    'sleep_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _remindersWeatherEnabledMeta =
+      const VerificationMeta('remindersWeatherEnabled');
+  @override
+  late final GeneratedColumn<bool> remindersWeatherEnabled =
+      GeneratedColumn<bool>(
+        'reminders_weather_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("reminders_weather_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(true),
+      );
+  static const VerificationMeta _remindersSymptomsEnabledMeta =
+      const VerificationMeta('remindersSymptomsEnabled');
+  @override
+  late final GeneratedColumn<bool> remindersSymptomsEnabled =
+      GeneratedColumn<bool>(
+        'reminders_symptoms_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("reminders_symptoms_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _symptomsHourMeta = const VerificationMeta(
+    'symptomsHour',
+  );
+  @override
+  late final GeneratedColumn<int> symptomsHour = GeneratedColumn<int>(
+    'symptoms_hour',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(20),
+  );
+  static const VerificationMeta _symptomsMinuteMeta = const VerificationMeta(
+    'symptomsMinute',
+  );
+  @override
+  late final GeneratedColumn<int> symptomsMinute = GeneratedColumn<int>(
+    'symptoms_minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     onboardingDone,
     lastPressureAlertDate,
+    remindersMealsEnabled,
+    breakfastHour,
+    breakfastMinute,
+    lunchHour,
+    lunchMinute,
+    dinnerHour,
+    dinnerMinute,
+    remindersSleepEnabled,
+    sleepHour,
+    sleepMinute,
+    remindersWeatherEnabled,
+    remindersSymptomsEnabled,
+    symptomsHour,
+    symptomsMinute,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3737,6 +3931,123 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('reminders_meals_enabled')) {
+      context.handle(
+        _remindersMealsEnabledMeta,
+        remindersMealsEnabled.isAcceptableOrUnknown(
+          data['reminders_meals_enabled']!,
+          _remindersMealsEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('breakfast_hour')) {
+      context.handle(
+        _breakfastHourMeta,
+        breakfastHour.isAcceptableOrUnknown(
+          data['breakfast_hour']!,
+          _breakfastHourMeta,
+        ),
+      );
+    }
+    if (data.containsKey('breakfast_minute')) {
+      context.handle(
+        _breakfastMinuteMeta,
+        breakfastMinute.isAcceptableOrUnknown(
+          data['breakfast_minute']!,
+          _breakfastMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('lunch_hour')) {
+      context.handle(
+        _lunchHourMeta,
+        lunchHour.isAcceptableOrUnknown(data['lunch_hour']!, _lunchHourMeta),
+      );
+    }
+    if (data.containsKey('lunch_minute')) {
+      context.handle(
+        _lunchMinuteMeta,
+        lunchMinute.isAcceptableOrUnknown(
+          data['lunch_minute']!,
+          _lunchMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('dinner_hour')) {
+      context.handle(
+        _dinnerHourMeta,
+        dinnerHour.isAcceptableOrUnknown(data['dinner_hour']!, _dinnerHourMeta),
+      );
+    }
+    if (data.containsKey('dinner_minute')) {
+      context.handle(
+        _dinnerMinuteMeta,
+        dinnerMinute.isAcceptableOrUnknown(
+          data['dinner_minute']!,
+          _dinnerMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reminders_sleep_enabled')) {
+      context.handle(
+        _remindersSleepEnabledMeta,
+        remindersSleepEnabled.isAcceptableOrUnknown(
+          data['reminders_sleep_enabled']!,
+          _remindersSleepEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sleep_hour')) {
+      context.handle(
+        _sleepHourMeta,
+        sleepHour.isAcceptableOrUnknown(data['sleep_hour']!, _sleepHourMeta),
+      );
+    }
+    if (data.containsKey('sleep_minute')) {
+      context.handle(
+        _sleepMinuteMeta,
+        sleepMinute.isAcceptableOrUnknown(
+          data['sleep_minute']!,
+          _sleepMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reminders_weather_enabled')) {
+      context.handle(
+        _remindersWeatherEnabledMeta,
+        remindersWeatherEnabled.isAcceptableOrUnknown(
+          data['reminders_weather_enabled']!,
+          _remindersWeatherEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reminders_symptoms_enabled')) {
+      context.handle(
+        _remindersSymptomsEnabledMeta,
+        remindersSymptomsEnabled.isAcceptableOrUnknown(
+          data['reminders_symptoms_enabled']!,
+          _remindersSymptomsEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('symptoms_hour')) {
+      context.handle(
+        _symptomsHourMeta,
+        symptomsHour.isAcceptableOrUnknown(
+          data['symptoms_hour']!,
+          _symptomsHourMeta,
+        ),
+      );
+    }
+    if (data.containsKey('symptoms_minute')) {
+      context.handle(
+        _symptomsMinuteMeta,
+        symptomsMinute.isAcceptableOrUnknown(
+          data['symptoms_minute']!,
+          _symptomsMinuteMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -3758,6 +4069,62 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_pressure_alert_date'],
       ),
+      remindersMealsEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}reminders_meals_enabled'],
+      )!,
+      breakfastHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}breakfast_hour'],
+      )!,
+      breakfastMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}breakfast_minute'],
+      )!,
+      lunchHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}lunch_hour'],
+      )!,
+      lunchMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}lunch_minute'],
+      )!,
+      dinnerHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dinner_hour'],
+      )!,
+      dinnerMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dinner_minute'],
+      )!,
+      remindersSleepEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}reminders_sleep_enabled'],
+      )!,
+      sleepHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sleep_hour'],
+      )!,
+      sleepMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sleep_minute'],
+      )!,
+      remindersWeatherEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}reminders_weather_enabled'],
+      )!,
+      remindersSymptomsEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}reminders_symptoms_enabled'],
+      )!,
+      symptomsHour: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}symptoms_hour'],
+      )!,
+      symptomsMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}symptoms_minute'],
+      )!,
     );
   }
 
@@ -3771,10 +4138,41 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   final int id;
   final bool onboardingDone;
   final DateTime? lastPressureAlertDate;
+  final bool remindersMealsEnabled;
+  final int breakfastHour;
+  final int breakfastMinute;
+  final int lunchHour;
+  final int lunchMinute;
+  final int dinnerHour;
+  final int dinnerMinute;
+  final bool remindersSleepEnabled;
+  final int sleepHour;
+  final int sleepMinute;
+  final bool remindersWeatherEnabled;
+
+  /// Off by default: symptom check-in is more intrusive than the other
+  /// reminders, so it's opt-in (US-16 acceptance criteria).
+  final bool remindersSymptomsEnabled;
+  final int symptomsHour;
+  final int symptomsMinute;
   const AppSetting({
     required this.id,
     required this.onboardingDone,
     this.lastPressureAlertDate,
+    required this.remindersMealsEnabled,
+    required this.breakfastHour,
+    required this.breakfastMinute,
+    required this.lunchHour,
+    required this.lunchMinute,
+    required this.dinnerHour,
+    required this.dinnerMinute,
+    required this.remindersSleepEnabled,
+    required this.sleepHour,
+    required this.sleepMinute,
+    required this.remindersWeatherEnabled,
+    required this.remindersSymptomsEnabled,
+    required this.symptomsHour,
+    required this.symptomsMinute,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3786,6 +4184,22 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
         lastPressureAlertDate,
       );
     }
+    map['reminders_meals_enabled'] = Variable<bool>(remindersMealsEnabled);
+    map['breakfast_hour'] = Variable<int>(breakfastHour);
+    map['breakfast_minute'] = Variable<int>(breakfastMinute);
+    map['lunch_hour'] = Variable<int>(lunchHour);
+    map['lunch_minute'] = Variable<int>(lunchMinute);
+    map['dinner_hour'] = Variable<int>(dinnerHour);
+    map['dinner_minute'] = Variable<int>(dinnerMinute);
+    map['reminders_sleep_enabled'] = Variable<bool>(remindersSleepEnabled);
+    map['sleep_hour'] = Variable<int>(sleepHour);
+    map['sleep_minute'] = Variable<int>(sleepMinute);
+    map['reminders_weather_enabled'] = Variable<bool>(remindersWeatherEnabled);
+    map['reminders_symptoms_enabled'] = Variable<bool>(
+      remindersSymptomsEnabled,
+    );
+    map['symptoms_hour'] = Variable<int>(symptomsHour);
+    map['symptoms_minute'] = Variable<int>(symptomsMinute);
     return map;
   }
 
@@ -3796,6 +4210,20 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       lastPressureAlertDate: lastPressureAlertDate == null && nullToAbsent
           ? const Value.absent()
           : Value(lastPressureAlertDate),
+      remindersMealsEnabled: Value(remindersMealsEnabled),
+      breakfastHour: Value(breakfastHour),
+      breakfastMinute: Value(breakfastMinute),
+      lunchHour: Value(lunchHour),
+      lunchMinute: Value(lunchMinute),
+      dinnerHour: Value(dinnerHour),
+      dinnerMinute: Value(dinnerMinute),
+      remindersSleepEnabled: Value(remindersSleepEnabled),
+      sleepHour: Value(sleepHour),
+      sleepMinute: Value(sleepMinute),
+      remindersWeatherEnabled: Value(remindersWeatherEnabled),
+      remindersSymptomsEnabled: Value(remindersSymptomsEnabled),
+      symptomsHour: Value(symptomsHour),
+      symptomsMinute: Value(symptomsMinute),
     );
   }
 
@@ -3810,6 +4238,28 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       lastPressureAlertDate: serializer.fromJson<DateTime?>(
         json['lastPressureAlertDate'],
       ),
+      remindersMealsEnabled: serializer.fromJson<bool>(
+        json['remindersMealsEnabled'],
+      ),
+      breakfastHour: serializer.fromJson<int>(json['breakfastHour']),
+      breakfastMinute: serializer.fromJson<int>(json['breakfastMinute']),
+      lunchHour: serializer.fromJson<int>(json['lunchHour']),
+      lunchMinute: serializer.fromJson<int>(json['lunchMinute']),
+      dinnerHour: serializer.fromJson<int>(json['dinnerHour']),
+      dinnerMinute: serializer.fromJson<int>(json['dinnerMinute']),
+      remindersSleepEnabled: serializer.fromJson<bool>(
+        json['remindersSleepEnabled'],
+      ),
+      sleepHour: serializer.fromJson<int>(json['sleepHour']),
+      sleepMinute: serializer.fromJson<int>(json['sleepMinute']),
+      remindersWeatherEnabled: serializer.fromJson<bool>(
+        json['remindersWeatherEnabled'],
+      ),
+      remindersSymptomsEnabled: serializer.fromJson<bool>(
+        json['remindersSymptomsEnabled'],
+      ),
+      symptomsHour: serializer.fromJson<int>(json['symptomsHour']),
+      symptomsMinute: serializer.fromJson<int>(json['symptomsMinute']),
     );
   }
   @override
@@ -3821,6 +4271,24 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'lastPressureAlertDate': serializer.toJson<DateTime?>(
         lastPressureAlertDate,
       ),
+      'remindersMealsEnabled': serializer.toJson<bool>(remindersMealsEnabled),
+      'breakfastHour': serializer.toJson<int>(breakfastHour),
+      'breakfastMinute': serializer.toJson<int>(breakfastMinute),
+      'lunchHour': serializer.toJson<int>(lunchHour),
+      'lunchMinute': serializer.toJson<int>(lunchMinute),
+      'dinnerHour': serializer.toJson<int>(dinnerHour),
+      'dinnerMinute': serializer.toJson<int>(dinnerMinute),
+      'remindersSleepEnabled': serializer.toJson<bool>(remindersSleepEnabled),
+      'sleepHour': serializer.toJson<int>(sleepHour),
+      'sleepMinute': serializer.toJson<int>(sleepMinute),
+      'remindersWeatherEnabled': serializer.toJson<bool>(
+        remindersWeatherEnabled,
+      ),
+      'remindersSymptomsEnabled': serializer.toJson<bool>(
+        remindersSymptomsEnabled,
+      ),
+      'symptomsHour': serializer.toJson<int>(symptomsHour),
+      'symptomsMinute': serializer.toJson<int>(symptomsMinute),
     };
   }
 
@@ -3828,12 +4296,42 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     int? id,
     bool? onboardingDone,
     Value<DateTime?> lastPressureAlertDate = const Value.absent(),
+    bool? remindersMealsEnabled,
+    int? breakfastHour,
+    int? breakfastMinute,
+    int? lunchHour,
+    int? lunchMinute,
+    int? dinnerHour,
+    int? dinnerMinute,
+    bool? remindersSleepEnabled,
+    int? sleepHour,
+    int? sleepMinute,
+    bool? remindersWeatherEnabled,
+    bool? remindersSymptomsEnabled,
+    int? symptomsHour,
+    int? symptomsMinute,
   }) => AppSetting(
     id: id ?? this.id,
     onboardingDone: onboardingDone ?? this.onboardingDone,
     lastPressureAlertDate: lastPressureAlertDate.present
         ? lastPressureAlertDate.value
         : this.lastPressureAlertDate,
+    remindersMealsEnabled: remindersMealsEnabled ?? this.remindersMealsEnabled,
+    breakfastHour: breakfastHour ?? this.breakfastHour,
+    breakfastMinute: breakfastMinute ?? this.breakfastMinute,
+    lunchHour: lunchHour ?? this.lunchHour,
+    lunchMinute: lunchMinute ?? this.lunchMinute,
+    dinnerHour: dinnerHour ?? this.dinnerHour,
+    dinnerMinute: dinnerMinute ?? this.dinnerMinute,
+    remindersSleepEnabled: remindersSleepEnabled ?? this.remindersSleepEnabled,
+    sleepHour: sleepHour ?? this.sleepHour,
+    sleepMinute: sleepMinute ?? this.sleepMinute,
+    remindersWeatherEnabled:
+        remindersWeatherEnabled ?? this.remindersWeatherEnabled,
+    remindersSymptomsEnabled:
+        remindersSymptomsEnabled ?? this.remindersSymptomsEnabled,
+    symptomsHour: symptomsHour ?? this.symptomsHour,
+    symptomsMinute: symptomsMinute ?? this.symptomsMinute,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
@@ -3844,6 +4342,44 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       lastPressureAlertDate: data.lastPressureAlertDate.present
           ? data.lastPressureAlertDate.value
           : this.lastPressureAlertDate,
+      remindersMealsEnabled: data.remindersMealsEnabled.present
+          ? data.remindersMealsEnabled.value
+          : this.remindersMealsEnabled,
+      breakfastHour: data.breakfastHour.present
+          ? data.breakfastHour.value
+          : this.breakfastHour,
+      breakfastMinute: data.breakfastMinute.present
+          ? data.breakfastMinute.value
+          : this.breakfastMinute,
+      lunchHour: data.lunchHour.present ? data.lunchHour.value : this.lunchHour,
+      lunchMinute: data.lunchMinute.present
+          ? data.lunchMinute.value
+          : this.lunchMinute,
+      dinnerHour: data.dinnerHour.present
+          ? data.dinnerHour.value
+          : this.dinnerHour,
+      dinnerMinute: data.dinnerMinute.present
+          ? data.dinnerMinute.value
+          : this.dinnerMinute,
+      remindersSleepEnabled: data.remindersSleepEnabled.present
+          ? data.remindersSleepEnabled.value
+          : this.remindersSleepEnabled,
+      sleepHour: data.sleepHour.present ? data.sleepHour.value : this.sleepHour,
+      sleepMinute: data.sleepMinute.present
+          ? data.sleepMinute.value
+          : this.sleepMinute,
+      remindersWeatherEnabled: data.remindersWeatherEnabled.present
+          ? data.remindersWeatherEnabled.value
+          : this.remindersWeatherEnabled,
+      remindersSymptomsEnabled: data.remindersSymptomsEnabled.present
+          ? data.remindersSymptomsEnabled.value
+          : this.remindersSymptomsEnabled,
+      symptomsHour: data.symptomsHour.present
+          ? data.symptomsHour.value
+          : this.symptomsHour,
+      symptomsMinute: data.symptomsMinute.present
+          ? data.symptomsMinute.value
+          : this.symptomsMinute,
     );
   }
 
@@ -3852,46 +4388,166 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return (StringBuffer('AppSetting(')
           ..write('id: $id, ')
           ..write('onboardingDone: $onboardingDone, ')
-          ..write('lastPressureAlertDate: $lastPressureAlertDate')
+          ..write('lastPressureAlertDate: $lastPressureAlertDate, ')
+          ..write('remindersMealsEnabled: $remindersMealsEnabled, ')
+          ..write('breakfastHour: $breakfastHour, ')
+          ..write('breakfastMinute: $breakfastMinute, ')
+          ..write('lunchHour: $lunchHour, ')
+          ..write('lunchMinute: $lunchMinute, ')
+          ..write('dinnerHour: $dinnerHour, ')
+          ..write('dinnerMinute: $dinnerMinute, ')
+          ..write('remindersSleepEnabled: $remindersSleepEnabled, ')
+          ..write('sleepHour: $sleepHour, ')
+          ..write('sleepMinute: $sleepMinute, ')
+          ..write('remindersWeatherEnabled: $remindersWeatherEnabled, ')
+          ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
+          ..write('symptomsHour: $symptomsHour, ')
+          ..write('symptomsMinute: $symptomsMinute')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, onboardingDone, lastPressureAlertDate);
+  int get hashCode => Object.hash(
+    id,
+    onboardingDone,
+    lastPressureAlertDate,
+    remindersMealsEnabled,
+    breakfastHour,
+    breakfastMinute,
+    lunchHour,
+    lunchMinute,
+    dinnerHour,
+    dinnerMinute,
+    remindersSleepEnabled,
+    sleepHour,
+    sleepMinute,
+    remindersWeatherEnabled,
+    remindersSymptomsEnabled,
+    symptomsHour,
+    symptomsMinute,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AppSetting &&
           other.id == this.id &&
           other.onboardingDone == this.onboardingDone &&
-          other.lastPressureAlertDate == this.lastPressureAlertDate);
+          other.lastPressureAlertDate == this.lastPressureAlertDate &&
+          other.remindersMealsEnabled == this.remindersMealsEnabled &&
+          other.breakfastHour == this.breakfastHour &&
+          other.breakfastMinute == this.breakfastMinute &&
+          other.lunchHour == this.lunchHour &&
+          other.lunchMinute == this.lunchMinute &&
+          other.dinnerHour == this.dinnerHour &&
+          other.dinnerMinute == this.dinnerMinute &&
+          other.remindersSleepEnabled == this.remindersSleepEnabled &&
+          other.sleepHour == this.sleepHour &&
+          other.sleepMinute == this.sleepMinute &&
+          other.remindersWeatherEnabled == this.remindersWeatherEnabled &&
+          other.remindersSymptomsEnabled == this.remindersSymptomsEnabled &&
+          other.symptomsHour == this.symptomsHour &&
+          other.symptomsMinute == this.symptomsMinute);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<int> id;
   final Value<bool> onboardingDone;
   final Value<DateTime?> lastPressureAlertDate;
+  final Value<bool> remindersMealsEnabled;
+  final Value<int> breakfastHour;
+  final Value<int> breakfastMinute;
+  final Value<int> lunchHour;
+  final Value<int> lunchMinute;
+  final Value<int> dinnerHour;
+  final Value<int> dinnerMinute;
+  final Value<bool> remindersSleepEnabled;
+  final Value<int> sleepHour;
+  final Value<int> sleepMinute;
+  final Value<bool> remindersWeatherEnabled;
+  final Value<bool> remindersSymptomsEnabled;
+  final Value<int> symptomsHour;
+  final Value<int> symptomsMinute;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
     this.lastPressureAlertDate = const Value.absent(),
+    this.remindersMealsEnabled = const Value.absent(),
+    this.breakfastHour = const Value.absent(),
+    this.breakfastMinute = const Value.absent(),
+    this.lunchHour = const Value.absent(),
+    this.lunchMinute = const Value.absent(),
+    this.dinnerHour = const Value.absent(),
+    this.dinnerMinute = const Value.absent(),
+    this.remindersSleepEnabled = const Value.absent(),
+    this.sleepHour = const Value.absent(),
+    this.sleepMinute = const Value.absent(),
+    this.remindersWeatherEnabled = const Value.absent(),
+    this.remindersSymptomsEnabled = const Value.absent(),
+    this.symptomsHour = const Value.absent(),
+    this.symptomsMinute = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
     this.lastPressureAlertDate = const Value.absent(),
+    this.remindersMealsEnabled = const Value.absent(),
+    this.breakfastHour = const Value.absent(),
+    this.breakfastMinute = const Value.absent(),
+    this.lunchHour = const Value.absent(),
+    this.lunchMinute = const Value.absent(),
+    this.dinnerHour = const Value.absent(),
+    this.dinnerMinute = const Value.absent(),
+    this.remindersSleepEnabled = const Value.absent(),
+    this.sleepHour = const Value.absent(),
+    this.sleepMinute = const Value.absent(),
+    this.remindersWeatherEnabled = const Value.absent(),
+    this.remindersSymptomsEnabled = const Value.absent(),
+    this.symptomsHour = const Value.absent(),
+    this.symptomsMinute = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? id,
     Expression<bool>? onboardingDone,
     Expression<DateTime>? lastPressureAlertDate,
+    Expression<bool>? remindersMealsEnabled,
+    Expression<int>? breakfastHour,
+    Expression<int>? breakfastMinute,
+    Expression<int>? lunchHour,
+    Expression<int>? lunchMinute,
+    Expression<int>? dinnerHour,
+    Expression<int>? dinnerMinute,
+    Expression<bool>? remindersSleepEnabled,
+    Expression<int>? sleepHour,
+    Expression<int>? sleepMinute,
+    Expression<bool>? remindersWeatherEnabled,
+    Expression<bool>? remindersSymptomsEnabled,
+    Expression<int>? symptomsHour,
+    Expression<int>? symptomsMinute,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (onboardingDone != null) 'onboarding_done': onboardingDone,
       if (lastPressureAlertDate != null)
         'last_pressure_alert_date': lastPressureAlertDate,
+      if (remindersMealsEnabled != null)
+        'reminders_meals_enabled': remindersMealsEnabled,
+      if (breakfastHour != null) 'breakfast_hour': breakfastHour,
+      if (breakfastMinute != null) 'breakfast_minute': breakfastMinute,
+      if (lunchHour != null) 'lunch_hour': lunchHour,
+      if (lunchMinute != null) 'lunch_minute': lunchMinute,
+      if (dinnerHour != null) 'dinner_hour': dinnerHour,
+      if (dinnerMinute != null) 'dinner_minute': dinnerMinute,
+      if (remindersSleepEnabled != null)
+        'reminders_sleep_enabled': remindersSleepEnabled,
+      if (sleepHour != null) 'sleep_hour': sleepHour,
+      if (sleepMinute != null) 'sleep_minute': sleepMinute,
+      if (remindersWeatherEnabled != null)
+        'reminders_weather_enabled': remindersWeatherEnabled,
+      if (remindersSymptomsEnabled != null)
+        'reminders_symptoms_enabled': remindersSymptomsEnabled,
+      if (symptomsHour != null) 'symptoms_hour': symptomsHour,
+      if (symptomsMinute != null) 'symptoms_minute': symptomsMinute,
     });
   }
 
@@ -3899,12 +4555,44 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<int>? id,
     Value<bool>? onboardingDone,
     Value<DateTime?>? lastPressureAlertDate,
+    Value<bool>? remindersMealsEnabled,
+    Value<int>? breakfastHour,
+    Value<int>? breakfastMinute,
+    Value<int>? lunchHour,
+    Value<int>? lunchMinute,
+    Value<int>? dinnerHour,
+    Value<int>? dinnerMinute,
+    Value<bool>? remindersSleepEnabled,
+    Value<int>? sleepHour,
+    Value<int>? sleepMinute,
+    Value<bool>? remindersWeatherEnabled,
+    Value<bool>? remindersSymptomsEnabled,
+    Value<int>? symptomsHour,
+    Value<int>? symptomsMinute,
   }) {
     return AppSettingsCompanion(
       id: id ?? this.id,
       onboardingDone: onboardingDone ?? this.onboardingDone,
       lastPressureAlertDate:
           lastPressureAlertDate ?? this.lastPressureAlertDate,
+      remindersMealsEnabled:
+          remindersMealsEnabled ?? this.remindersMealsEnabled,
+      breakfastHour: breakfastHour ?? this.breakfastHour,
+      breakfastMinute: breakfastMinute ?? this.breakfastMinute,
+      lunchHour: lunchHour ?? this.lunchHour,
+      lunchMinute: lunchMinute ?? this.lunchMinute,
+      dinnerHour: dinnerHour ?? this.dinnerHour,
+      dinnerMinute: dinnerMinute ?? this.dinnerMinute,
+      remindersSleepEnabled:
+          remindersSleepEnabled ?? this.remindersSleepEnabled,
+      sleepHour: sleepHour ?? this.sleepHour,
+      sleepMinute: sleepMinute ?? this.sleepMinute,
+      remindersWeatherEnabled:
+          remindersWeatherEnabled ?? this.remindersWeatherEnabled,
+      remindersSymptomsEnabled:
+          remindersSymptomsEnabled ?? this.remindersSymptomsEnabled,
+      symptomsHour: symptomsHour ?? this.symptomsHour,
+      symptomsMinute: symptomsMinute ?? this.symptomsMinute,
     );
   }
 
@@ -3922,6 +4610,56 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
         lastPressureAlertDate.value,
       );
     }
+    if (remindersMealsEnabled.present) {
+      map['reminders_meals_enabled'] = Variable<bool>(
+        remindersMealsEnabled.value,
+      );
+    }
+    if (breakfastHour.present) {
+      map['breakfast_hour'] = Variable<int>(breakfastHour.value);
+    }
+    if (breakfastMinute.present) {
+      map['breakfast_minute'] = Variable<int>(breakfastMinute.value);
+    }
+    if (lunchHour.present) {
+      map['lunch_hour'] = Variable<int>(lunchHour.value);
+    }
+    if (lunchMinute.present) {
+      map['lunch_minute'] = Variable<int>(lunchMinute.value);
+    }
+    if (dinnerHour.present) {
+      map['dinner_hour'] = Variable<int>(dinnerHour.value);
+    }
+    if (dinnerMinute.present) {
+      map['dinner_minute'] = Variable<int>(dinnerMinute.value);
+    }
+    if (remindersSleepEnabled.present) {
+      map['reminders_sleep_enabled'] = Variable<bool>(
+        remindersSleepEnabled.value,
+      );
+    }
+    if (sleepHour.present) {
+      map['sleep_hour'] = Variable<int>(sleepHour.value);
+    }
+    if (sleepMinute.present) {
+      map['sleep_minute'] = Variable<int>(sleepMinute.value);
+    }
+    if (remindersWeatherEnabled.present) {
+      map['reminders_weather_enabled'] = Variable<bool>(
+        remindersWeatherEnabled.value,
+      );
+    }
+    if (remindersSymptomsEnabled.present) {
+      map['reminders_symptoms_enabled'] = Variable<bool>(
+        remindersSymptomsEnabled.value,
+      );
+    }
+    if (symptomsHour.present) {
+      map['symptoms_hour'] = Variable<int>(symptomsHour.value);
+    }
+    if (symptomsMinute.present) {
+      map['symptoms_minute'] = Variable<int>(symptomsMinute.value);
+    }
     return map;
   }
 
@@ -3930,7 +4668,21 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     return (StringBuffer('AppSettingsCompanion(')
           ..write('id: $id, ')
           ..write('onboardingDone: $onboardingDone, ')
-          ..write('lastPressureAlertDate: $lastPressureAlertDate')
+          ..write('lastPressureAlertDate: $lastPressureAlertDate, ')
+          ..write('remindersMealsEnabled: $remindersMealsEnabled, ')
+          ..write('breakfastHour: $breakfastHour, ')
+          ..write('breakfastMinute: $breakfastMinute, ')
+          ..write('lunchHour: $lunchHour, ')
+          ..write('lunchMinute: $lunchMinute, ')
+          ..write('dinnerHour: $dinnerHour, ')
+          ..write('dinnerMinute: $dinnerMinute, ')
+          ..write('remindersSleepEnabled: $remindersSleepEnabled, ')
+          ..write('sleepHour: $sleepHour, ')
+          ..write('sleepMinute: $sleepMinute, ')
+          ..write('remindersWeatherEnabled: $remindersWeatherEnabled, ')
+          ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
+          ..write('symptomsHour: $symptomsHour, ')
+          ..write('symptomsMinute: $symptomsMinute')
           ..write(')'))
         .toString();
   }
@@ -5884,12 +6636,40 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<int> id,
       Value<bool> onboardingDone,
       Value<DateTime?> lastPressureAlertDate,
+      Value<bool> remindersMealsEnabled,
+      Value<int> breakfastHour,
+      Value<int> breakfastMinute,
+      Value<int> lunchHour,
+      Value<int> lunchMinute,
+      Value<int> dinnerHour,
+      Value<int> dinnerMinute,
+      Value<bool> remindersSleepEnabled,
+      Value<int> sleepHour,
+      Value<int> sleepMinute,
+      Value<bool> remindersWeatherEnabled,
+      Value<bool> remindersSymptomsEnabled,
+      Value<int> symptomsHour,
+      Value<int> symptomsMinute,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
       Value<int> id,
       Value<bool> onboardingDone,
       Value<DateTime?> lastPressureAlertDate,
+      Value<bool> remindersMealsEnabled,
+      Value<int> breakfastHour,
+      Value<int> breakfastMinute,
+      Value<int> lunchHour,
+      Value<int> lunchMinute,
+      Value<int> dinnerHour,
+      Value<int> dinnerMinute,
+      Value<bool> remindersSleepEnabled,
+      Value<int> sleepHour,
+      Value<int> sleepMinute,
+      Value<bool> remindersWeatherEnabled,
+      Value<bool> remindersSymptomsEnabled,
+      Value<int> symptomsHour,
+      Value<int> symptomsMinute,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -5913,6 +6693,76 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<DateTime> get lastPressureAlertDate => $composableBuilder(
     column: $table.lastPressureAlertDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get remindersMealsEnabled => $composableBuilder(
+    column: $table.remindersMealsEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get breakfastHour => $composableBuilder(
+    column: $table.breakfastHour,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get breakfastMinute => $composableBuilder(
+    column: $table.breakfastMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lunchHour => $composableBuilder(
+    column: $table.lunchHour,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lunchMinute => $composableBuilder(
+    column: $table.lunchMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dinnerHour => $composableBuilder(
+    column: $table.dinnerHour,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dinnerMinute => $composableBuilder(
+    column: $table.dinnerMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get remindersSleepEnabled => $composableBuilder(
+    column: $table.remindersSleepEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sleepHour => $composableBuilder(
+    column: $table.sleepHour,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sleepMinute => $composableBuilder(
+    column: $table.sleepMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get remindersWeatherEnabled => $composableBuilder(
+    column: $table.remindersWeatherEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get remindersSymptomsEnabled => $composableBuilder(
+    column: $table.remindersSymptomsEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get symptomsHour => $composableBuilder(
+    column: $table.symptomsHour,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get symptomsMinute => $composableBuilder(
+    column: $table.symptomsMinute,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -5940,6 +6790,76 @@ class $$AppSettingsTableOrderingComposer
     column: $table.lastPressureAlertDate,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get remindersMealsEnabled => $composableBuilder(
+    column: $table.remindersMealsEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get breakfastHour => $composableBuilder(
+    column: $table.breakfastHour,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get breakfastMinute => $composableBuilder(
+    column: $table.breakfastMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lunchHour => $composableBuilder(
+    column: $table.lunchHour,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lunchMinute => $composableBuilder(
+    column: $table.lunchMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dinnerHour => $composableBuilder(
+    column: $table.dinnerHour,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dinnerMinute => $composableBuilder(
+    column: $table.dinnerMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get remindersSleepEnabled => $composableBuilder(
+    column: $table.remindersSleepEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sleepHour => $composableBuilder(
+    column: $table.sleepHour,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sleepMinute => $composableBuilder(
+    column: $table.sleepMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get remindersWeatherEnabled => $composableBuilder(
+    column: $table.remindersWeatherEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get remindersSymptomsEnabled => $composableBuilder(
+    column: $table.remindersSymptomsEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get symptomsHour => $composableBuilder(
+    column: $table.symptomsHour,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get symptomsMinute => $composableBuilder(
+    column: $table.symptomsMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -5961,6 +6881,72 @@ class $$AppSettingsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get lastPressureAlertDate => $composableBuilder(
     column: $table.lastPressureAlertDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get remindersMealsEnabled => $composableBuilder(
+    column: $table.remindersMealsEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get breakfastHour => $composableBuilder(
+    column: $table.breakfastHour,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get breakfastMinute => $composableBuilder(
+    column: $table.breakfastMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get lunchHour =>
+      $composableBuilder(column: $table.lunchHour, builder: (column) => column);
+
+  GeneratedColumn<int> get lunchMinute => $composableBuilder(
+    column: $table.lunchMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get dinnerHour => $composableBuilder(
+    column: $table.dinnerHour,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get dinnerMinute => $composableBuilder(
+    column: $table.dinnerMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get remindersSleepEnabled => $composableBuilder(
+    column: $table.remindersSleepEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get sleepHour =>
+      $composableBuilder(column: $table.sleepHour, builder: (column) => column);
+
+  GeneratedColumn<int> get sleepMinute => $composableBuilder(
+    column: $table.sleepMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get remindersWeatherEnabled => $composableBuilder(
+    column: $table.remindersWeatherEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get remindersSymptomsEnabled => $composableBuilder(
+    column: $table.remindersSymptomsEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get symptomsHour => $composableBuilder(
+    column: $table.symptomsHour,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get symptomsMinute => $composableBuilder(
+    column: $table.symptomsMinute,
     builder: (column) => column,
   );
 }
@@ -5999,20 +6985,76 @@ class $$AppSettingsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
                 Value<DateTime?> lastPressureAlertDate = const Value.absent(),
+                Value<bool> remindersMealsEnabled = const Value.absent(),
+                Value<int> breakfastHour = const Value.absent(),
+                Value<int> breakfastMinute = const Value.absent(),
+                Value<int> lunchHour = const Value.absent(),
+                Value<int> lunchMinute = const Value.absent(),
+                Value<int> dinnerHour = const Value.absent(),
+                Value<int> dinnerMinute = const Value.absent(),
+                Value<bool> remindersSleepEnabled = const Value.absent(),
+                Value<int> sleepHour = const Value.absent(),
+                Value<int> sleepMinute = const Value.absent(),
+                Value<bool> remindersWeatherEnabled = const Value.absent(),
+                Value<bool> remindersSymptomsEnabled = const Value.absent(),
+                Value<int> symptomsHour = const Value.absent(),
+                Value<int> symptomsMinute = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
                 onboardingDone: onboardingDone,
                 lastPressureAlertDate: lastPressureAlertDate,
+                remindersMealsEnabled: remindersMealsEnabled,
+                breakfastHour: breakfastHour,
+                breakfastMinute: breakfastMinute,
+                lunchHour: lunchHour,
+                lunchMinute: lunchMinute,
+                dinnerHour: dinnerHour,
+                dinnerMinute: dinnerMinute,
+                remindersSleepEnabled: remindersSleepEnabled,
+                sleepHour: sleepHour,
+                sleepMinute: sleepMinute,
+                remindersWeatherEnabled: remindersWeatherEnabled,
+                remindersSymptomsEnabled: remindersSymptomsEnabled,
+                symptomsHour: symptomsHour,
+                symptomsMinute: symptomsMinute,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
                 Value<DateTime?> lastPressureAlertDate = const Value.absent(),
+                Value<bool> remindersMealsEnabled = const Value.absent(),
+                Value<int> breakfastHour = const Value.absent(),
+                Value<int> breakfastMinute = const Value.absent(),
+                Value<int> lunchHour = const Value.absent(),
+                Value<int> lunchMinute = const Value.absent(),
+                Value<int> dinnerHour = const Value.absent(),
+                Value<int> dinnerMinute = const Value.absent(),
+                Value<bool> remindersSleepEnabled = const Value.absent(),
+                Value<int> sleepHour = const Value.absent(),
+                Value<int> sleepMinute = const Value.absent(),
+                Value<bool> remindersWeatherEnabled = const Value.absent(),
+                Value<bool> remindersSymptomsEnabled = const Value.absent(),
+                Value<int> symptomsHour = const Value.absent(),
+                Value<int> symptomsMinute = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
                 onboardingDone: onboardingDone,
                 lastPressureAlertDate: lastPressureAlertDate,
+                remindersMealsEnabled: remindersMealsEnabled,
+                breakfastHour: breakfastHour,
+                breakfastMinute: breakfastMinute,
+                lunchHour: lunchHour,
+                lunchMinute: lunchMinute,
+                dinnerHour: dinnerHour,
+                dinnerMinute: dinnerMinute,
+                remindersSleepEnabled: remindersSleepEnabled,
+                sleepHour: sleepHour,
+                sleepMinute: sleepMinute,
+                remindersWeatherEnabled: remindersWeatherEnabled,
+                remindersSymptomsEnabled: remindersSymptomsEnabled,
+                symptomsHour: symptomsHour,
+                symptomsMinute: symptomsMinute,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

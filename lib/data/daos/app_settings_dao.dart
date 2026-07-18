@@ -40,4 +40,55 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
           lastPressureAlertDate: Value(date),
         ),
       );
+
+  /// Whether proactive weather alerts (US-15) are enabled, per the US-16
+  /// notification settings. Defaults to `true` when no row exists yet.
+  Future<bool> getRemindersWeatherEnabled() async {
+    final row = await (select(
+      appSettings,
+    )..where((t) => t.id.equals(_rowId))).getSingleOrNull();
+    return row?.remindersWeatherEnabled ?? true;
+  }
+
+  /// Notification preferences row, or `null` if nothing has been saved yet
+  /// (callers should fall back to defaults in that case).
+  Stream<AppSetting?> watchNotificationSettingsRow() =>
+      (select(appSettings)..where((t) => t.id.equals(_rowId)))
+          .watchSingleOrNull();
+
+  /// Persists the full set of notification preferences (US-16).
+  Future<void> saveNotificationPreferences({
+    required bool mealsEnabled,
+    required int breakfastHour,
+    required int breakfastMinute,
+    required int lunchHour,
+    required int lunchMinute,
+    required int dinnerHour,
+    required int dinnerMinute,
+    required bool sleepEnabled,
+    required int sleepHour,
+    required int sleepMinute,
+    required bool weatherEnabled,
+    required bool symptomsEnabled,
+    required int symptomsHour,
+    required int symptomsMinute,
+  }) => into(appSettings).insertOnConflictUpdate(
+    AppSettingsCompanion.insert(
+      id: const Value(_rowId),
+      remindersMealsEnabled: Value(mealsEnabled),
+      breakfastHour: Value(breakfastHour),
+      breakfastMinute: Value(breakfastMinute),
+      lunchHour: Value(lunchHour),
+      lunchMinute: Value(lunchMinute),
+      dinnerHour: Value(dinnerHour),
+      dinnerMinute: Value(dinnerMinute),
+      remindersSleepEnabled: Value(sleepEnabled),
+      sleepHour: Value(sleepHour),
+      sleepMinute: Value(sleepMinute),
+      remindersWeatherEnabled: Value(weatherEnabled),
+      remindersSymptomsEnabled: Value(symptomsEnabled),
+      symptomsHour: Value(symptomsHour),
+      symptomsMinute: Value(symptomsMinute),
+    ),
+  );
 }

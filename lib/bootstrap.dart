@@ -4,8 +4,10 @@ import 'dart:ui';
 
 import 'package:assiette/app.dart';
 import 'package:assiette/app_env.dart';
+import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/environment_capture/background/environment_background_task.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
+import 'package:assiette/features/notifications/data/notification_preferences_repository.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/features/notifications/presentation/notification_response_handler.dart';
 import 'package:assiette/localization/app_strings.dart';
@@ -59,7 +61,19 @@ Future<void> _registerNotifications() async {
       strings: strings,
       onForegroundResponse: handleForegroundNotificationResponse,
     );
-    await service.scheduleDailyReminders(strings);
+
+    // A throwaway connection: at this point in startup the Riverpod
+    // ProviderScope isn't up yet, so this can't reuse appDatabaseProvider's
+    // instance (mirrors the pattern in environment_background_task.dart).
+    final db = AppDatabase();
+    try {
+      final preferences = await DriftNotificationPreferencesRepository(
+        appSettingsDao: db.appSettingsDao,
+      ).watchPreferences().first;
+      await service.scheduleDailyReminders(strings, preferences);
+    } finally {
+      await db.close();
+    }
   } on Exception catch (e) {
     Print.red('DLOG', 'Failed to register notifications: $e');
   }

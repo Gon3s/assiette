@@ -32,6 +32,9 @@ class DriftPressureAlertRepository implements PressureAlertRepository {
   @override
   Future<bool> checkAndNotify(AppStrings strings) async {
     try {
+      final weatherEnabled = await _appSettingsDao.getRemindersWeatherEnabled();
+      if (!weatherEnabled) return false;
+
       final today = _dateOnly(DateTime.now().toUtc());
       final lastAlert = await _appSettingsDao.getLastPressureAlertDate();
       if (lastAlert != null && _dateOnly(lastAlert) == today) return false;

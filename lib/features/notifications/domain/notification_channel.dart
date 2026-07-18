@@ -10,7 +10,10 @@ enum NotificationChannel {
   sleep('reminders_sleep'),
 
   /// Weather/pressure alerts (US-15).
-  weather('reminders_weather');
+  weather('reminders_weather'),
+
+  /// Symptom check-in reminder (US-16). Off by default.
+  symptoms('reminders_symptoms');
 
   const NotificationChannel(this.id);
 
@@ -23,6 +26,7 @@ enum NotificationChannel {
     NotificationChannel.meals => s.notificationChannelMealsName,
     NotificationChannel.sleep => s.notificationChannelSleepName,
     NotificationChannel.weather => s.notificationChannelWeatherName,
+    NotificationChannel.symptoms => s.notificationChannelSymptomsName,
   };
 
   /// The channel's user-visible description, localized.
@@ -30,5 +34,6 @@ enum NotificationChannel {
     NotificationChannel.meals => s.notificationChannelMealsDescription,
     NotificationChannel.sleep => s.notificationChannelSleepDescription,
     NotificationChannel.weather => s.notificationChannelWeatherDescription,
+    NotificationChannel.symptoms => s.notificationChannelSymptomsDescription,
   };
 }

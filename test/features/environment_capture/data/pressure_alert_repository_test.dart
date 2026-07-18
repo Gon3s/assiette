@@ -5,6 +5,7 @@ import 'package:assiette/features/environment_capture/data/location_reader.dart'
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
+import 'package:assiette/features/notifications/domain/notification_preferences.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/widgets.dart';
@@ -36,7 +37,10 @@ class _FakeNotificationsService implements NotificationsService {
   }) async {}
 
   @override
-  Future<void> scheduleDailyReminders(AppStrings strings) async {}
+  Future<void> scheduleDailyReminders(
+    AppStrings strings,
+    NotificationPreferences preferences,
+  ) async {}
 
   @override
   Future<void> requestPermission() async {}
@@ -136,6 +140,40 @@ void main() {
       expect(sent, isTrue);
       expect(notifications.showPressureDropAlertCalls, 1);
       expect(await db.appSettingsDao.getLastPressureAlertDate(), isNotNull);
+    });
+
+    test('returns false when weather reminders are disabled', () async {
+      await db.appSettingsDao.saveNotificationPreferences(
+        mealsEnabled: true,
+        breakfastHour: 8,
+        breakfastMinute: 30,
+        lunchHour: 12,
+        lunchMinute: 30,
+        dinnerHour: 19,
+        dinnerMinute: 30,
+        sleepEnabled: true,
+        sleepHour: 8,
+        sleepMinute: 0,
+        weatherEnabled: false,
+        symptomsEnabled: false,
+        symptomsHour: 20,
+        symptomsMinute: 0,
+      );
+      final notifications = _FakeNotificationsService();
+      final repository = DriftPressureAlertRepository(
+        appSettingsDao: db.appSettingsDao,
+        locationReader: _FakeLocationReader(_position()),
+        openMeteoClient: _openMeteoClientReturning([
+          1013,
+          for (var i = 0; i < 24; i++) 1005,
+        ]),
+        notificationsService: notifications,
+      );
+
+      final sent = await repository.checkAndNotify(strings);
+
+      expect(sent, isFalse);
+      expect(notifications.showPressureDropAlertCalls, 0);
     });
 
     test('does not send a second alert the same day', () async {

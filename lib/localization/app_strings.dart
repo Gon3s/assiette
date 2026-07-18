@@ -104,6 +104,7 @@ abstract class AppStrings {
   String get settingsTitle;
   String get aboutSectionTitle;
   String get openMeteoAttribution;
+  String get manageNotificationsAction;
 
   // Notifications
   String get notificationChannelMealsName;
@@ -112,11 +113,18 @@ abstract class AppStrings {
   String get notificationChannelSleepDescription;
   String get notificationChannelWeatherName;
   String get notificationChannelWeatherDescription;
+  String get notificationChannelSymptomsName;
+  String get notificationChannelSymptomsDescription;
   String get mealReminderTitle;
   String get mealReminderPhotoAction;
   String get mealReminderFavoriteAction;
   String get pressureDropAlertTitle;
   String get pressureDropAlertBody;
+  String get symptomsReminderTitle;
+
+  // Notification settings (US-16)
+  String get notificationSettingsTitle;
+  String get notificationSettingsSaved;
 
   // Onboarding
   String get onboardingSkip;

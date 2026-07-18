@@ -49,7 +49,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -63,6 +63,22 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 3) {
         await m.addColumn(appSettings, appSettings.lastPressureAlertDate);
+      }
+      if (from < 4) {
+        await m.addColumn(appSettings, appSettings.remindersMealsEnabled);
+        await m.addColumn(appSettings, appSettings.breakfastHour);
+        await m.addColumn(appSettings, appSettings.breakfastMinute);
+        await m.addColumn(appSettings, appSettings.lunchHour);
+        await m.addColumn(appSettings, appSettings.lunchMinute);
+        await m.addColumn(appSettings, appSettings.dinnerHour);
+        await m.addColumn(appSettings, appSettings.dinnerMinute);
+        await m.addColumn(appSettings, appSettings.remindersSleepEnabled);
+        await m.addColumn(appSettings, appSettings.sleepHour);
+        await m.addColumn(appSettings, appSettings.sleepMinute);
+        await m.addColumn(appSettings, appSettings.remindersWeatherEnabled);
+        await m.addColumn(appSettings, appSettings.remindersSymptomsEnabled);
+        await m.addColumn(appSettings, appSettings.symptomsHour);
+        await m.addColumn(appSettings, appSettings.symptomsMinute);
       }
     },
   );

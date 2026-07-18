@@ -26,6 +26,14 @@ class SettingsScreen extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(AppRouter.favoritesManage.name),
           ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.notifications_outlined),
+            title: Text(s.manageNotificationsAction),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () =>
+                context.pushNamed(AppRouter.notificationSettings.name),
+          ),
           gapH16,
           Text(s.aboutSectionTitle, style: theme.textTheme.titleMedium),
           gapH8,

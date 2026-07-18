@@ -155,6 +155,8 @@ class AppStringsFr implements AppStrings {
   @override
   String get openMeteoAttribution =>
       'Météo et pression fournies par Open-Meteo.com (CC BY 4.0).';
+  @override
+  String get manageNotificationsAction => 'Réglages notifications';
 
   @override
   String get notificationChannelMealsName => 'Repas';
@@ -172,6 +174,11 @@ class AppStringsFr implements AppStrings {
   String get notificationChannelWeatherDescription =>
       'Alertes liées à la météo et à la pression';
   @override
+  String get notificationChannelSymptomsName => 'Check-in symptômes';
+  @override
+  String get notificationChannelSymptomsDescription =>
+      'Rappel pour noter tes symptômes';
+  @override
   String get mealReminderTitle => 'As-tu mangé ?';
   @override
   String get mealReminderPhotoAction => 'Photo';
@@ -183,6 +190,13 @@ class AppStringsFr implements AppStrings {
   String get pressureDropAlertBody =>
       'Une baisse de pression est prévue dans les prochaines 24h — '
       'déclencheur fréquent pour certaines personnes.';
+  @override
+  String get symptomsReminderTitle => 'Comment te sens-tu ?';
+
+  @override
+  String get notificationSettingsTitle => 'Réglages notifications';
+  @override
+  String get notificationSettingsSaved => 'Préférences enregistrées';
 
   @override
   String get onboardingSkip => 'Passer';

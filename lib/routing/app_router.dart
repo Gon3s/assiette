@@ -3,6 +3,7 @@ import 'package:assiette/features/favorites/presentation/favorite_form_screen.da
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
 import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
 import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
@@ -43,6 +44,9 @@ enum AppRouter {
 
   /// The app info / about screen.
   settings,
+
+  /// The notification settings screen.
+  notificationSettings,
 
   /// The favorites management list.
   favoritesManage,
@@ -122,6 +126,14 @@ GoRouter goRouter(Ref ref) {
             path: 'settings',
             name: AppRouter.settings.name,
             builder: (context, state) => const SettingsScreen(),
+            routes: [
+              GoRoute(
+                path: 'notifications',
+                name: AppRouter.notificationSettings.name,
+                builder: (context, state) =>
+                    const NotificationSettingsScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: 'favorites',

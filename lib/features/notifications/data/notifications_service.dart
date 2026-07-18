@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:assiette/features/notifications/background/notification_action_dispatcher.dart';
 import 'package:assiette/features/notifications/domain/notification_channel.dart';
 import 'package:assiette/features/notifications/domain/notification_ids.dart';
+import 'package:assiette/features/notifications/domain/notification_preferences.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
+
+part 'notifications_service.g.dart';
 
 /// Local reminder notifications: channel setup, daily scheduling, and the
 /// POST_NOTIFICATIONS permission request.
@@ -16,15 +20,19 @@ import 'package:timezone/timezone.dart' as tz;
 /// fake without touching the real plugin (mirrors `LocationReader`).
 abstract class NotificationsService {
   /// Initializes the plugin, wires the foreground/background response
-  /// handlers, and creates the three reminder channels.
+  /// handlers, and creates the reminder channels.
   Future<void> init({
     required AppStrings strings,
     DidReceiveNotificationResponseCallback? onForegroundResponse,
   });
 
-  /// (Re)schedules the daily sleep and meal reminders at their default
-  /// times, using [strings] for the localized titles/action labels.
-  Future<void> scheduleDailyReminders(AppStrings strings);
+  /// (Re)schedules the daily reminders per [preferences]: enabled channels
+  /// are scheduled at their configured times, disabled ones are cancelled.
+  /// [strings] provides the localized titles/action labels.
+  Future<void> scheduleDailyReminders(
+    AppStrings strings,
+    NotificationPreferences preferences,
+  );
 
   /// Requests the POST_NOTIFICATIONS permission (Android 13+). A no-op on
   /// older versions, and idempotent once granted or permanently denied.
@@ -81,32 +89,64 @@ class LocalNotificationsService implements NotificationsService {
   }
 
   @override
-  Future<void> scheduleDailyReminders(AppStrings strings) async {
-    await _scheduleSleepReminder(strings);
-    await _scheduleMealReminder(
-      id: NotificationIds.breakfastReminder,
-      hour: 8,
-      minute: 30,
-      strings: strings,
-    );
-    await _scheduleMealReminder(
-      id: NotificationIds.lunchReminder,
-      hour: 12,
-      minute: 30,
-      strings: strings,
-    );
-    await _scheduleMealReminder(
-      id: NotificationIds.dinnerReminder,
-      hour: 19,
-      minute: 30,
-      strings: strings,
-    );
+  Future<void> scheduleDailyReminders(
+    AppStrings strings,
+    NotificationPreferences preferences,
+  ) async {
+    if (preferences.sleepEnabled) {
+      await _scheduleSleepReminder(
+        strings,
+        hour: preferences.sleepHour,
+        minute: preferences.sleepMinute,
+      );
+    } else {
+      await _plugin.cancel(id: NotificationIds.sleepReminder);
+    }
+
+    if (preferences.mealsEnabled) {
+      await _scheduleMealReminder(
+        id: NotificationIds.breakfastReminder,
+        hour: preferences.breakfastHour,
+        minute: preferences.breakfastMinute,
+        strings: strings,
+      );
+      await _scheduleMealReminder(
+        id: NotificationIds.lunchReminder,
+        hour: preferences.lunchHour,
+        minute: preferences.lunchMinute,
+        strings: strings,
+      );
+      await _scheduleMealReminder(
+        id: NotificationIds.dinnerReminder,
+        hour: preferences.dinnerHour,
+        minute: preferences.dinnerMinute,
+        strings: strings,
+      );
+    } else {
+      await _plugin.cancel(id: NotificationIds.breakfastReminder);
+      await _plugin.cancel(id: NotificationIds.lunchReminder);
+      await _plugin.cancel(id: NotificationIds.dinnerReminder);
+    }
+
+    if (preferences.symptomsEnabled) {
+      await _scheduleSymptomsReminder(
+        strings,
+        hour: preferences.symptomsHour,
+        minute: preferences.symptomsMinute,
+      );
+    } else {
+      await _plugin.cancel(id: NotificationIds.symptomsReminder);
+    }
   }
 
-  Future<void> _scheduleSleepReminder(AppStrings strings) => _plugin.zonedSchedule(
+  Future<void> _scheduleSleepReminder(
+    AppStrings strings, {
+    required int hour,
+    required int minute,
+  }) => _plugin.zonedSchedule(
     id: NotificationIds.sleepReminder,
     title: strings.sleepQuestion,
-    scheduledDate: _nextInstanceOf(hour: 8, minute: 0),
+    scheduledDate: _nextInstanceOf(hour: hour, minute: minute),
     notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(
         NotificationChannel.sleep.id,
@@ -169,6 +209,27 @@ class LocalNotificationsService implements NotificationsService {
     matchDateTimeComponents: DateTimeComponents.time,
   );
 
+  Future<void> _scheduleSymptomsReminder(
+    AppStrings strings, {
+    required int hour,
+    required int minute,
+  }) => _plugin.zonedSchedule(
+    id: NotificationIds.symptomsReminder,
+    title: strings.symptomsReminderTitle,
+    scheduledDate: _nextInstanceOf(hour: hour, minute: minute),
+    notificationDetails: NotificationDetails(
+      android: AndroidNotificationDetails(
+        NotificationChannel.symptoms.id,
+        NotificationChannel.symptoms.channelName(strings),
+        channelDescription: NotificationChannel.symptoms.channelDescription(
+          strings,
+        ),
+      ),
+    ),
+    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    matchDateTimeComponents: DateTimeComponents.time,
+  );
+
   tz.TZDateTime _nextInstanceOf({required int hour, required int minute}) {
     final now = tz.TZDateTime.now(tz.local);
     var scheduled = tz.TZDateTime(
@@ -213,3 +274,11 @@ class LocalNotificationsService implements NotificationsService {
     ),
   );
 }
+
+/// Provides the [NotificationsService] implementation. Overridden with a
+/// fake in tests that exercise callers of this provider (e.g. the
+/// notification settings controller), since the real one needs a platform
+/// channel that isn't registered in unit tests.
+@riverpod
+NotificationsService notificationsService(Ref ref) =>
+    LocalNotificationsService();
