@@ -3687,8 +3687,23 @@ class $AppSettingsTable extends AppSettings
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _lastPressureAlertDateMeta =
+      const VerificationMeta('lastPressureAlertDate');
   @override
-  List<GeneratedColumn> get $columns => [id, onboardingDone];
+  late final GeneratedColumn<DateTime> lastPressureAlertDate =
+      GeneratedColumn<DateTime>(
+        'last_pressure_alert_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    onboardingDone,
+    lastPressureAlertDate,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -3713,6 +3728,15 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('last_pressure_alert_date')) {
+      context.handle(
+        _lastPressureAlertDateMeta,
+        lastPressureAlertDate.isAcceptableOrUnknown(
+          data['last_pressure_alert_date']!,
+          _lastPressureAlertDateMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -3730,6 +3754,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.bool,
         data['${effectivePrefix}onboarding_done'],
       )!,
+      lastPressureAlertDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_pressure_alert_date'],
+      ),
     );
   }
 
@@ -3742,12 +3770,22 @@ class $AppSettingsTable extends AppSettings
 class AppSetting extends DataClass implements Insertable<AppSetting> {
   final int id;
   final bool onboardingDone;
-  const AppSetting({required this.id, required this.onboardingDone});
+  final DateTime? lastPressureAlertDate;
+  const AppSetting({
+    required this.id,
+    required this.onboardingDone,
+    this.lastPressureAlertDate,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['onboarding_done'] = Variable<bool>(onboardingDone);
+    if (!nullToAbsent || lastPressureAlertDate != null) {
+      map['last_pressure_alert_date'] = Variable<DateTime>(
+        lastPressureAlertDate,
+      );
+    }
     return map;
   }
 
@@ -3755,6 +3793,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return AppSettingsCompanion(
       id: Value(id),
       onboardingDone: Value(onboardingDone),
+      lastPressureAlertDate: lastPressureAlertDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastPressureAlertDate),
     );
   }
 
@@ -3766,6 +3807,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return AppSetting(
       id: serializer.fromJson<int>(json['id']),
       onboardingDone: serializer.fromJson<bool>(json['onboardingDone']),
+      lastPressureAlertDate: serializer.fromJson<DateTime?>(
+        json['lastPressureAlertDate'],
+      ),
     );
   }
   @override
@@ -3774,12 +3818,22 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'onboardingDone': serializer.toJson<bool>(onboardingDone),
+      'lastPressureAlertDate': serializer.toJson<DateTime?>(
+        lastPressureAlertDate,
+      ),
     };
   }
 
-  AppSetting copyWith({int? id, bool? onboardingDone}) => AppSetting(
+  AppSetting copyWith({
+    int? id,
+    bool? onboardingDone,
+    Value<DateTime?> lastPressureAlertDate = const Value.absent(),
+  }) => AppSetting(
     id: id ?? this.id,
     onboardingDone: onboardingDone ?? this.onboardingDone,
+    lastPressureAlertDate: lastPressureAlertDate.present
+        ? lastPressureAlertDate.value
+        : this.lastPressureAlertDate,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
@@ -3787,6 +3841,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       onboardingDone: data.onboardingDone.present
           ? data.onboardingDone.value
           : this.onboardingDone,
+      lastPressureAlertDate: data.lastPressureAlertDate.present
+          ? data.lastPressureAlertDate.value
+          : this.lastPressureAlertDate,
     );
   }
 
@@ -3794,46 +3851,60 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   String toString() {
     return (StringBuffer('AppSetting(')
           ..write('id: $id, ')
-          ..write('onboardingDone: $onboardingDone')
+          ..write('onboardingDone: $onboardingDone, ')
+          ..write('lastPressureAlertDate: $lastPressureAlertDate')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, onboardingDone);
+  int get hashCode => Object.hash(id, onboardingDone, lastPressureAlertDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AppSetting &&
           other.id == this.id &&
-          other.onboardingDone == this.onboardingDone);
+          other.onboardingDone == this.onboardingDone &&
+          other.lastPressureAlertDate == this.lastPressureAlertDate);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<int> id;
   final Value<bool> onboardingDone;
+  final Value<DateTime?> lastPressureAlertDate;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
+    this.lastPressureAlertDate = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
+    this.lastPressureAlertDate = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? id,
     Expression<bool>? onboardingDone,
+    Expression<DateTime>? lastPressureAlertDate,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (onboardingDone != null) 'onboarding_done': onboardingDone,
+      if (lastPressureAlertDate != null)
+        'last_pressure_alert_date': lastPressureAlertDate,
     });
   }
 
-  AppSettingsCompanion copyWith({Value<int>? id, Value<bool>? onboardingDone}) {
+  AppSettingsCompanion copyWith({
+    Value<int>? id,
+    Value<bool>? onboardingDone,
+    Value<DateTime?>? lastPressureAlertDate,
+  }) {
     return AppSettingsCompanion(
       id: id ?? this.id,
       onboardingDone: onboardingDone ?? this.onboardingDone,
+      lastPressureAlertDate:
+          lastPressureAlertDate ?? this.lastPressureAlertDate,
     );
   }
 
@@ -3846,6 +3917,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (onboardingDone.present) {
       map['onboarding_done'] = Variable<bool>(onboardingDone.value);
     }
+    if (lastPressureAlertDate.present) {
+      map['last_pressure_alert_date'] = Variable<DateTime>(
+        lastPressureAlertDate.value,
+      );
+    }
     return map;
   }
 
@@ -3853,7 +3929,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   String toString() {
     return (StringBuffer('AppSettingsCompanion(')
           ..write('id: $id, ')
-          ..write('onboardingDone: $onboardingDone')
+          ..write('onboardingDone: $onboardingDone, ')
+          ..write('lastPressureAlertDate: $lastPressureAlertDate')
           ..write(')'))
         .toString();
   }
@@ -5803,9 +5880,17 @@ typedef $$EnvironmentSnapshotsTableProcessedTableManager =
       PrefetchHooks Function()
     >;
 typedef $$AppSettingsTableCreateCompanionBuilder =
-    AppSettingsCompanion Function({Value<int> id, Value<bool> onboardingDone});
+    AppSettingsCompanion Function({
+      Value<int> id,
+      Value<bool> onboardingDone,
+      Value<DateTime?> lastPressureAlertDate,
+    });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
-    AppSettingsCompanion Function({Value<int> id, Value<bool> onboardingDone});
+    AppSettingsCompanion Function({
+      Value<int> id,
+      Value<bool> onboardingDone,
+      Value<DateTime?> lastPressureAlertDate,
+    });
 
 class $$AppSettingsTableFilterComposer
     extends Composer<_$AppDatabase, $AppSettingsTable> {
@@ -5823,6 +5908,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<bool> get onboardingDone => $composableBuilder(
     column: $table.onboardingDone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastPressureAlertDate => $composableBuilder(
+    column: $table.lastPressureAlertDate,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -5845,6 +5935,11 @@ class $$AppSettingsTableOrderingComposer
     column: $table.onboardingDone,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<DateTime> get lastPressureAlertDate => $composableBuilder(
+    column: $table.lastPressureAlertDate,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -5861,6 +5956,11 @@ class $$AppSettingsTableAnnotationComposer
 
   GeneratedColumn<bool> get onboardingDone => $composableBuilder(
     column: $table.onboardingDone,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastPressureAlertDate => $composableBuilder(
+    column: $table.lastPressureAlertDate,
     builder: (column) => column,
   );
 }
@@ -5898,15 +5998,21 @@ class $$AppSettingsTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
-              }) =>
-                  AppSettingsCompanion(id: id, onboardingDone: onboardingDone),
+                Value<DateTime?> lastPressureAlertDate = const Value.absent(),
+              }) => AppSettingsCompanion(
+                id: id,
+                onboardingDone: onboardingDone,
+                lastPressureAlertDate: lastPressureAlertDate,
+              ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
+                Value<DateTime?> lastPressureAlertDate = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
                 onboardingDone: onboardingDone,
+                lastPressureAlertDate: lastPressureAlertDate,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

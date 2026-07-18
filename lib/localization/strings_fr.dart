@@ -177,6 +177,12 @@ class AppStringsFr implements AppStrings {
   String get mealReminderPhotoAction => 'Photo';
   @override
   String get mealReminderFavoriteAction => 'Favori';
+  @override
+  String get pressureDropAlertTitle => 'Baisse de pression prévue';
+  @override
+  String get pressureDropAlertBody =>
+      'Une baisse de pression est prévue dans les prochaines 24h — '
+      'déclencheur fréquent pour certaines personnes.';
 
   @override
   String get onboardingSkip => 'Passer';

@@ -23,4 +23,21 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
           onboardingDone: Value(done),
         ),
       );
+
+  /// Date (UTC, midnight) of the last pressure-drop alert sent, or `null`
+  /// if none has been sent yet. Used to cap alerts to one per day.
+  Future<DateTime?> getLastPressureAlertDate() async {
+    final row = await (select(
+      appSettings,
+    )..where((t) => t.id.equals(_rowId))).getSingleOrNull();
+    return row?.lastPressureAlertDate;
+  }
+
+  Future<void> setLastPressureAlertDate(DateTime date) => into(appSettings)
+      .insertOnConflictUpdate(
+        AppSettingsCompanion.insert(
+          id: const Value(_rowId),
+          lastPressureAlertDate: Value(date),
+        ),
+      );
 }

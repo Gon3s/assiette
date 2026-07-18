@@ -32,4 +32,7 @@ abstract final class NotificationIds {
 
   /// The dinner reminder.
   static const dinnerReminder = 4;
+
+  /// The proactive pressure-drop alert (US-15).
+  static const pressureDropAlert = 5;
 }

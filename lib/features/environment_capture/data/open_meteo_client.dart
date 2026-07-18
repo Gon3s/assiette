@@ -68,6 +68,47 @@ class OpenMeteoClient {
     );
   }
 
+  /// Fetches hourly pressure forecast (hPa) at the given coordinates, one
+  /// value per hour starting from the current hour, covering the next 48h.
+  Future<List<double>> fetchPressureForecast({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final uri = Uri.parse(_baseUrl).replace(
+      queryParameters: {
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
+        'hourly': 'pressure_msl',
+        'forecast_days': '2',
+      },
+    );
+
+    final response = await _httpClient.get(uri);
+    if (response.statusCode != 200) {
+      throw OpenMeteoException(
+        'Unexpected status code ${response.statusCode}',
+      );
+    }
+
+    final body = jsonDecode(response.body);
+    if (body is! Map<String, dynamic>) {
+      throw OpenMeteoException('Unexpected response body');
+    }
+    final hourly = body['hourly'];
+    if (hourly is! Map<String, dynamic>) {
+      throw OpenMeteoException('Missing "hourly" block');
+    }
+    final pressures = hourly['pressure_msl'];
+    if (pressures is! List) {
+      throw OpenMeteoException('Missing "pressure_msl" series');
+    }
+
+    return [
+      for (final value in pressures)
+        if (value is num) value.toDouble(),
+    ];
+  }
+
   static double? _asDouble(Object? value) =>
       value is num ? value.toDouble() : null;
 }

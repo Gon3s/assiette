@@ -177,6 +177,12 @@ class AppStringsEn implements AppStrings {
   String get mealReminderPhotoAction => 'Photo';
   @override
   String get mealReminderFavoriteAction => 'Favorite';
+  @override
+  String get pressureDropAlertTitle => 'Pressure drop expected';
+  @override
+  String get pressureDropAlertBody =>
+      'A pressure drop is expected in the next 24h — a common trigger '
+      'for some people.';
 
   @override
   String get onboardingSkip => 'Skip';

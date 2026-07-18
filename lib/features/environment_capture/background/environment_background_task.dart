@@ -2,10 +2,15 @@
 // this file as its own executable entry point, so it can't see that
 // bootstrap.dart calls registerEnvironmentCaptureTask.
 // ignore_for_file: unreachable_from_main
+import 'dart:ui';
+
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/environment_capture/data/environment_capture_repository.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
+import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/notifications/data/notifications_service.dart';
+import 'package:assiette/localization/app_strings.dart';
 import 'package:workmanager/workmanager.dart';
 
 /// Unique name identifying the periodic background capture in WorkManager.
@@ -27,12 +32,25 @@ void environmentCaptureCallbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     final db = AppDatabase();
     try {
+      final locationReader = GeolocatorLocationReader();
+      final openMeteoClient = OpenMeteoClient();
       final repository = DriftEnvironmentCaptureRepository(
         environmentDao: db.environmentDao,
-        locationReader: GeolocatorLocationReader(),
-        openMeteoClient: OpenMeteoClient(),
+        locationReader: locationReader,
+        openMeteoClient: openMeteoClient,
       );
       await repository.captureSnapshot();
+
+      final strings = AppStrings.ofLocale(PlatformDispatcher.instance.locale);
+      final notificationsService = LocalNotificationsService();
+      await notificationsService.init(strings: strings);
+      final pressureAlertRepository = DriftPressureAlertRepository(
+        appSettingsDao: db.appSettingsDao,
+        locationReader: locationReader,
+        openMeteoClient: openMeteoClient,
+        notificationsService: notificationsService,
+      );
+      await pressureAlertRepository.checkAndNotify(strings);
     } finally {
       await db.close();
     }

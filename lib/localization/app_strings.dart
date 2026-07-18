@@ -115,6 +115,8 @@ abstract class AppStrings {
   String get mealReminderTitle;
   String get mealReminderPhotoAction;
   String get mealReminderFavoriteAction;
+  String get pressureDropAlertTitle;
+  String get pressureDropAlertBody;
 
   // Onboarding
   String get onboardingSkip;

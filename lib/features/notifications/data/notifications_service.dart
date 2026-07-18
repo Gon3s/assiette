@@ -29,6 +29,10 @@ abstract class NotificationsService {
   /// Requests the POST_NOTIFICATIONS permission (Android 13+). A no-op on
   /// older versions, and idempotent once granted or permanently denied.
   Future<void> requestPermission();
+
+  /// Shows an immediate (non-scheduled) proactive pressure-drop alert on
+  /// the weather channel.
+  Future<void> showPressureDropAlert(AppStrings strings);
 }
 
 /// [NotificationsService] backed by `flutter_local_notifications`.
@@ -192,4 +196,20 @@ class LocalNotificationsService implements NotificationsService {
         >();
     await android?.requestNotificationsPermission();
   }
+
+  @override
+  Future<void> showPressureDropAlert(AppStrings strings) => _plugin.show(
+    id: NotificationIds.pressureDropAlert,
+    title: strings.pressureDropAlertTitle,
+    body: strings.pressureDropAlertBody,
+    notificationDetails: NotificationDetails(
+      android: AndroidNotificationDetails(
+        NotificationChannel.weather.id,
+        NotificationChannel.weather.channelName(strings),
+        channelDescription: NotificationChannel.weather.channelDescription(
+          strings,
+        ),
+      ),
+    ),
+  );
 }
