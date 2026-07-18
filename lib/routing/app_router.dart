@@ -6,6 +6,7 @@ import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart
 import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
 import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
 import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:assiette/features/pdf_export/presentation/pdf_export_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
@@ -47,6 +48,9 @@ enum AppRouter {
 
   /// The notification settings screen.
   notificationSettings,
+
+  /// The PDF journal export screen.
+  pdfExport,
 
   /// The favorites management list.
   favoritesManage,
@@ -132,6 +136,11 @@ GoRouter goRouter(Ref ref) {
                 name: AppRouter.notificationSettings.name,
                 builder: (context, state) =>
                     const NotificationSettingsScreen(),
+              ),
+              GoRoute(
+                path: 'pdf-export',
+                name: AppRouter.pdfExport.name,
+                builder: (context, state) => const PdfExportScreen(),
               ),
             ],
           ),

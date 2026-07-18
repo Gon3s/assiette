@@ -126,6 +126,19 @@ abstract class AppStrings {
   String get notificationSettingsTitle;
   String get notificationSettingsSaved;
 
+  // PDF export (US-17)
+  String get exportPdfAction;
+  String get pdfExportScreenTitle;
+  String get pdfExportRangeLabel;
+  String get pdfExportChooseRange;
+  String get pdfExportGenerate;
+  String get pdfExportShare;
+  String get pdfExportEmptyRange;
+  String get pdfDocTitle;
+  String get pdfSectionMeals;
+  String get pdfSectionSymptoms;
+  String get pdfSectionWeather;
+
   // Onboarding
   String get onboardingSkip;
   String get onboardingNext;

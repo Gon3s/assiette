@@ -23,6 +23,18 @@ class SymptomsDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
+  /// One-shot fetch of symptoms timestamped in `[start, end)`.
+  Future<List<Symptom>> getRange(DateTime start, DateTime end) =>
+      (select(symptoms)
+            ..where((t) => t.deletedAt.isNull())
+            ..where(
+              (t) =>
+                  t.timestamp.isBiggerOrEqualValue(start) &
+                  t.timestamp.isSmallerThanValue(end),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.timestamp)]))
+          .get();
+
   Future<void> insertSymptom(SymptomsCompanion entry) =>
       into(symptoms).insert(entry);
 

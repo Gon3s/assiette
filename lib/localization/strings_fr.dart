@@ -199,6 +199,29 @@ class AppStringsFr implements AppStrings {
   String get notificationSettingsSaved => 'Préférences enregistrées';
 
   @override
+  String get exportPdfAction => 'Exporter le journal en PDF';
+  @override
+  String get pdfExportScreenTitle => 'Export PDF';
+  @override
+  String get pdfExportRangeLabel => 'Période';
+  @override
+  String get pdfExportChooseRange => 'Choisir une période';
+  @override
+  String get pdfExportGenerate => 'Générer le PDF';
+  @override
+  String get pdfExportShare => 'Partager';
+  @override
+  String get pdfExportEmptyRange => 'Aucune donnée sur cette période';
+  @override
+  String get pdfDocTitle => 'Journal - Assiette';
+  @override
+  String get pdfSectionMeals => 'Repas';
+  @override
+  String get pdfSectionSymptoms => 'Symptômes';
+  @override
+  String get pdfSectionWeather => 'Pression';
+
+  @override
   String get onboardingSkip => 'Passer';
   @override
   String get onboardingNext => 'Suivant';

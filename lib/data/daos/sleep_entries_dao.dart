@@ -17,6 +17,18 @@ class SleepEntriesDao extends DatabaseAccessor<AppDatabase>
         .watchSingleOrNull();
   }
 
+  /// One-shot fetch of sleep entries whose night falls in `[start, end)`.
+  Future<List<SleepEntry>> getRange(DateTime start, DateTime end) =>
+      (select(sleepEntries)
+            ..where((t) => t.deletedAt.isNull())
+            ..where(
+              (t) =>
+                  t.nightDate.isBiggerOrEqualValue(start) &
+                  t.nightDate.isSmallerThanValue(end),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.nightDate)]))
+          .get();
+
   Future<void> upsertSleepEntry(SleepEntriesCompanion entry) =>
       into(sleepEntries).insertOnConflictUpdate(entry);
 

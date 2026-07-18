@@ -22,6 +22,17 @@ class EnvironmentDao extends DatabaseAccessor<AppDatabase>
         .watch();
   }
 
+  /// One-shot fetch of snapshots timestamped in `[start, end)`.
+  Future<List<EnvironmentSnapshot>> getRange(DateTime start, DateTime end) =>
+      (select(environmentSnapshots)
+            ..where(
+              (t) =>
+                  t.timestamp.isBiggerOrEqualValue(start) &
+                  t.timestamp.isSmallerThanValue(end),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.timestamp)]))
+          .get();
+
   Future<void> insertSnapshot(EnvironmentSnapshotsCompanion entry) =>
       into(environmentSnapshots).insert(entry);
 

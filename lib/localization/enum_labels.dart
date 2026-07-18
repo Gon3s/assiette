@@ -17,6 +17,13 @@ String symptomTypeLabel(AppStrings s, SymptomType type) => switch (type) {
       SymptomType.mood => s.symptomTypeMood,
     };
 
+/// Localized label for a sleep [quality] score (1-3).
+String sleepQualityLabel(AppStrings s, int quality) => switch (quality) {
+      1 => s.sleepQualityBad,
+      2 => s.sleepQualityMedium,
+      _ => s.sleepQualityGood,
+    };
+
 /// Suggested detail chips for a [SymptomType]; empty when none apply.
 List<String> symptomDetailSuggestions(AppStrings s, SymptomType type) =>
     switch (type) {

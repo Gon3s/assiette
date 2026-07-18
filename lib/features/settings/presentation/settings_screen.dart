@@ -34,6 +34,13 @@ class SettingsScreen extends StatelessWidget {
             onTap: () =>
                 context.pushNamed(AppRouter.notificationSettings.name),
           ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.picture_as_pdf_outlined),
+            title: Text(s.exportPdfAction),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRouter.pdfExport.name),
+          ),
           gapH16,
           Text(s.aboutSectionTitle, style: theme.textTheme.titleMedium),
           gapH8,

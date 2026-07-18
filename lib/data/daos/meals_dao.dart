@@ -33,7 +33,18 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
   Stream<List<MealWithTags>> watchByDayWithTags(DateTime day) {
     final start = DateTime(day.year, day.month, day.day).toUtc();
     final end = start.add(const Duration(days: 1));
-    final query = select(meals).join([
+    return _withTagsQuery(start, end).watch().map(_groupWithTags);
+  }
+
+  /// One-shot fetch of meals (with tags) timestamped in `[start, end)`.
+  Future<List<MealWithTags>> getRangeWithTags(DateTime start, DateTime end) =>
+      _withTagsQuery(start, end).get().then(_groupWithTags);
+
+  JoinedSelectStatement<HasResultSet, dynamic> _withTagsQuery(
+    DateTime start,
+    DateTime end,
+  ) {
+    return select(meals).join([
       leftOuterJoin(mealTags, mealTags.mealId.equalsExp(meals.id)),
       leftOuterJoin(
         tags,
@@ -46,21 +57,21 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
             meals.timestamp.isSmallerThanValue(end),
       )
       ..orderBy([OrderingTerm.asc(meals.timestamp)]);
+  }
 
-    return query.watch().map((rows) {
-      final order = <String>[];
-      final grouped = <String, MealWithTags>{};
-      for (final row in rows) {
-        final meal = row.readTable(meals);
-        final tag = row.readTableOrNull(tags);
-        final entry = grouped.putIfAbsent(meal.id, () {
-          order.add(meal.id);
-          return MealWithTags(meal: meal, tags: []);
-        });
-        if (tag != null) entry.tags.add(tag);
-      }
-      return [for (final id in order) grouped[id]!];
-    });
+  List<MealWithTags> _groupWithTags(List<TypedResult> rows) {
+    final order = <String>[];
+    final grouped = <String, MealWithTags>{};
+    for (final row in rows) {
+      final meal = row.readTable(meals);
+      final tag = row.readTableOrNull(tags);
+      final entry = grouped.putIfAbsent(meal.id, () {
+        order.add(meal.id);
+        return MealWithTags(meal: meal, tags: []);
+      });
+      if (tag != null) entry.tags.add(tag);
+    }
+    return [for (final id in order) grouped[id]!];
   }
 
   Future<void> insertMeal(MealsCompanion entry) =>
