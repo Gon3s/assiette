@@ -34,6 +34,10 @@ class AppSettings extends Table {
   IntColumn get symptomsHour => integer().withDefault(const Constant(20))();
   IntColumn get symptomsMinute => integer().withDefault(const Constant(0))();
 
+  /// Whether photo-based tag suggestions (US-19, on-device) are enabled.
+  BoolColumn get photoTagSuggestionsEnabled =>
+      boolean().withDefault(const Constant(true))();
+
   @override
   Set<Column<Object>> get primaryKey => {id};
 }

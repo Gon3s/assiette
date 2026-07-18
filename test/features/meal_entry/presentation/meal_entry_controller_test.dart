@@ -6,6 +6,7 @@ import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
+import 'package:assiette/features/meal_entry/domain/photo_tag_suggestion_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,11 +17,15 @@ class MockMealEntryRepository extends Mock implements MealEntryRepository {}
 
 class MockMealPhotoService extends Mock implements MealPhotoService {}
 
+class MockPhotoTagSuggestionService extends Mock
+    implements PhotoTagSuggestionService {}
+
 class MockFavoritesRepository extends Mock implements FavoritesRepository {}
 
 void main() {
   late MockMealEntryRepository repository;
   late MockMealPhotoService photoService;
+  late MockPhotoTagSuggestionService tagSuggestionService;
   late MockFavoritesRepository favoritesRepository;
 
   const tag = TagOption(id: 'tag-1', label: 'café', isSystem: true);
@@ -33,18 +38,32 @@ void main() {
   setUp(() {
     repository = MockMealEntryRepository();
     photoService = MockMealPhotoService();
+    tagSuggestionService = MockPhotoTagSuggestionService();
     favoritesRepository = MockFavoritesRepository();
+    when(
+      repository.photoTagSuggestionsEnabled,
+    ).thenAnswer((_) async => false);
   });
 
-  ProviderContainer makeContainer() {
+  ProviderContainer makeContainer({List<TagOption> availableTags = const []}) {
     final container = ProviderContainer(
       overrides: [
         mealEntryRepositoryProvider.overrideWithValue(repository),
         mealPhotoServiceProvider.overrideWithValue(photoService),
+        photoTagSuggestionServiceProvider.overrideWithValue(
+          tagSuggestionService,
+        ),
         favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
+        availableTagsProvider.overrideWith(
+          (ref) => Stream.value(availableTags),
+        ),
       ],
     );
     addTearDown(container.dispose);
+    // Keep availableTagsProvider (autoDispose) alive for the test's
+    // lifetime, so reads inside the controller see a settled value instead
+    // of racing a dispose-and-rebuild.
+    container.listen(availableTagsProvider, (_, _) {});
     return container;
   }
 
@@ -136,6 +155,103 @@ void main() {
 
       controller.removePhoto();
       expect(container.read(mealEntryControllerProvider).photoPath, isNull);
+    });
+
+    test(
+      'takePhoto suggests tags when enabled, excluding already-selected '
+      'labels',
+      () async {
+        when(
+          photoService.captureFromCamera,
+        ).thenAnswer((_) async => '/photos/a.jpg');
+        when(
+          repository.photoTagSuggestionsEnabled,
+        ).thenAnswer((_) async => true);
+        when(
+          () => tagSuggestionService.suggestLabels('/photos/a.jpg'),
+        ).thenAnswer((_) async => ['Pizza', 'café', 'Fast food']);
+
+        final container = makeContainer();
+        final controller = container.read(mealEntryControllerProvider.notifier)
+          ..addTag(tag); // already-selected 'café', case-insensitive match
+        await controller.takePhoto();
+
+        final state = container.read(mealEntryControllerProvider);
+        expect(state.isSuggestingTags, isFalse);
+        expect(state.suggestedTagLabels, ['Pizza', 'Fast food']);
+      },
+    );
+
+    test('takePhoto skips suggestions when disabled in settings', () async {
+      when(
+        photoService.captureFromCamera,
+      ).thenAnswer((_) async => '/photos/a.jpg');
+
+      final container = makeContainer();
+      final controller = container.read(mealEntryControllerProvider.notifier);
+      await controller.takePhoto();
+
+      expect(
+        container.read(mealEntryControllerProvider).suggestedTagLabels,
+        isEmpty,
+      );
+      verifyNever(() => tagSuggestionService.suggestLabels(any()));
+    });
+
+    test(
+      'acceptSuggestedTag matches an existing tag case-insensitively and '
+      'clears the suggestion',
+      () async {
+        final container = makeContainer(availableTags: [tag]);
+        // Let availableTagsProvider settle before exercising the controller,
+        // since acceptSuggestedTag reads its current value synchronously.
+        await container.read(availableTagsProvider.future);
+        final controller = container.read(mealEntryControllerProvider.notifier);
+
+        await controller.acceptSuggestedTag('CAFÉ');
+
+        final state = container.read(mealEntryControllerProvider);
+        expect(state.selectedTags, [tag]);
+        expect(state.suggestedTagLabels, isNot(contains('CAFÉ')));
+        verifyNever(() => repository.createTag(any()));
+      },
+    );
+
+    test(
+      'acceptSuggestedTag creates a new tag when no match exists',
+      () async {
+        when(() => repository.createTag('kiwi')).thenAnswer(
+          (_) async =>
+              const TagOption(id: 'tag-3', label: 'kiwi', isSystem: false),
+        );
+
+        final container = makeContainer();
+        await container.read(availableTagsProvider.future);
+        final controller = container.read(mealEntryControllerProvider.notifier);
+        await controller.acceptSuggestedTag('kiwi');
+
+        expect(
+          container.read(mealEntryControllerProvider).selectedTags.single.label,
+          'kiwi',
+        );
+      },
+    );
+
+    test('dismissSuggestedTag removes the label without adding a tag', () {
+      when(
+        photoService.captureFromCamera,
+      ).thenAnswer((_) async => '/photos/a.jpg');
+
+      final container = makeContainer();
+      container
+          .read(mealEntryControllerProvider.notifier)
+          .dismissSuggestedTag('kiwi');
+
+      expect(
+        container.read(mealEntryControllerProvider).suggestedTagLabels,
+        isEmpty,
+      );
+      verifyNever(() => repository.createTag(any()));
     });
 
     test(

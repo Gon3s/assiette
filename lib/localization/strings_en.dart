@@ -65,6 +65,8 @@ class AppStringsEn implements AppStrings {
   @override
   String createTagLabel(String label) => 'Create "$label"';
   @override
+  String get suggestedTagsLabel => 'Suggestions';
+  @override
   String get noteHint => 'Note (optional)';
   @override
   String get saveAsFavorite => 'Save as favorite';
@@ -157,6 +159,12 @@ class AppStringsEn implements AppStrings {
       'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
   @override
   String get manageNotificationsAction => 'Notification settings';
+  @override
+  String get photoTagSuggestionsSettingTitle => 'Suggest tags from photo';
+  @override
+  String get photoTagSuggestionsSettingSubtitle =>
+      'Analyzes the photo on-device to suggest tags to confirm. Never sent '
+      'anywhere, never applied automatically.';
 
   @override
   String get notificationChannelMealsName => 'Meals';

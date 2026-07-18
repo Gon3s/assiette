@@ -16,5 +16,7 @@ abstract class MealEntryState with _$MealEntryState {
     String? photoPath,
     @Default(false) bool isSaving,
     String? id,
+    @Default([]) List<String> suggestedTagLabels,
+    @Default(false) bool isSuggestingTags,
   }) = _MealEntryState;
 }

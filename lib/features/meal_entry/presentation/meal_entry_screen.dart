@@ -6,6 +6,7 @@ import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
 import 'package:assiette/features/meal_entry/presentation/widgets/photo_section.dart';
+import 'package:assiette/features/meal_entry/presentation/widgets/suggested_tags_row.dart';
 import 'package:assiette/features/meal_entry/presentation/widgets/tag_selector.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
@@ -220,6 +221,7 @@ class _MealEntryScreenState extends ConsumerState<MealEntryScreen> {
         padding: const EdgeInsets.all(Sizes.p16),
         children: [
           const PhotoSection(),
+          const SuggestedTagsRow(),
           gapH16,
           Text(s.mealTypeLabel, style: Theme.of(context).textTheme.labelLarge),
           gapH8,

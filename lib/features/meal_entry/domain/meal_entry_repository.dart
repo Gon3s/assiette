@@ -43,6 +43,9 @@ abstract class MealEntryRepository {
 
   /// Undoes [deleteMeal].
   Future<void> undoDeleteMeal(String id);
+
+  /// Whether photo-based tag suggestions (US-19) are enabled in settings.
+  Future<bool> photoTagSuggestionsEnabled();
 }
 
 /// Provides the [MealEntryRepository] implementation.

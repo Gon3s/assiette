@@ -107,4 +107,8 @@ class DriftMealEntryRepository implements MealEntryRepository {
 
   @override
   Future<void> undoDeleteMeal(String id) => _db.mealsDao.restoreMeal(id);
+
+  @override
+  Future<bool> photoTagSuggestionsEnabled() =>
+      _db.appSettingsDao.getPhotoTagSuggestionsEnabled();
 }

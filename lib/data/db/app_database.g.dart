@@ -3878,6 +3878,21 @@ class $AppSettingsTable extends AppSettings
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
+  static const VerificationMeta _photoTagSuggestionsEnabledMeta =
+      const VerificationMeta('photoTagSuggestionsEnabled');
+  @override
+  late final GeneratedColumn<bool> photoTagSuggestionsEnabled =
+      GeneratedColumn<bool>(
+        'photo_tag_suggestions_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("photo_tag_suggestions_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(true),
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -3897,6 +3912,7 @@ class $AppSettingsTable extends AppSettings
     remindersSymptomsEnabled,
     symptomsHour,
     symptomsMinute,
+    photoTagSuggestionsEnabled,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4048,6 +4064,15 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('photo_tag_suggestions_enabled')) {
+      context.handle(
+        _photoTagSuggestionsEnabledMeta,
+        photoTagSuggestionsEnabled.isAcceptableOrUnknown(
+          data['photo_tag_suggestions_enabled']!,
+          _photoTagSuggestionsEnabledMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -4125,6 +4150,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.int,
         data['${effectivePrefix}symptoms_minute'],
       )!,
+      photoTagSuggestionsEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}photo_tag_suggestions_enabled'],
+      )!,
     );
   }
 
@@ -4155,6 +4184,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   final bool remindersSymptomsEnabled;
   final int symptomsHour;
   final int symptomsMinute;
+
+  /// Whether photo-based tag suggestions (US-19, on-device) are enabled.
+  final bool photoTagSuggestionsEnabled;
   const AppSetting({
     required this.id,
     required this.onboardingDone,
@@ -4173,6 +4205,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.remindersSymptomsEnabled,
     required this.symptomsHour,
     required this.symptomsMinute,
+    required this.photoTagSuggestionsEnabled,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4200,6 +4233,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     );
     map['symptoms_hour'] = Variable<int>(symptomsHour);
     map['symptoms_minute'] = Variable<int>(symptomsMinute);
+    map['photo_tag_suggestions_enabled'] = Variable<bool>(
+      photoTagSuggestionsEnabled,
+    );
     return map;
   }
 
@@ -4224,6 +4260,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       remindersSymptomsEnabled: Value(remindersSymptomsEnabled),
       symptomsHour: Value(symptomsHour),
       symptomsMinute: Value(symptomsMinute),
+      photoTagSuggestionsEnabled: Value(photoTagSuggestionsEnabled),
     );
   }
 
@@ -4260,6 +4297,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       ),
       symptomsHour: serializer.fromJson<int>(json['symptomsHour']),
       symptomsMinute: serializer.fromJson<int>(json['symptomsMinute']),
+      photoTagSuggestionsEnabled: serializer.fromJson<bool>(
+        json['photoTagSuggestionsEnabled'],
+      ),
     );
   }
   @override
@@ -4289,6 +4329,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       ),
       'symptomsHour': serializer.toJson<int>(symptomsHour),
       'symptomsMinute': serializer.toJson<int>(symptomsMinute),
+      'photoTagSuggestionsEnabled': serializer.toJson<bool>(
+        photoTagSuggestionsEnabled,
+      ),
     };
   }
 
@@ -4310,6 +4353,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     bool? remindersSymptomsEnabled,
     int? symptomsHour,
     int? symptomsMinute,
+    bool? photoTagSuggestionsEnabled,
   }) => AppSetting(
     id: id ?? this.id,
     onboardingDone: onboardingDone ?? this.onboardingDone,
@@ -4332,6 +4376,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
         remindersSymptomsEnabled ?? this.remindersSymptomsEnabled,
     symptomsHour: symptomsHour ?? this.symptomsHour,
     symptomsMinute: symptomsMinute ?? this.symptomsMinute,
+    photoTagSuggestionsEnabled:
+        photoTagSuggestionsEnabled ?? this.photoTagSuggestionsEnabled,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
@@ -4380,6 +4426,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       symptomsMinute: data.symptomsMinute.present
           ? data.symptomsMinute.value
           : this.symptomsMinute,
+      photoTagSuggestionsEnabled: data.photoTagSuggestionsEnabled.present
+          ? data.photoTagSuggestionsEnabled.value
+          : this.photoTagSuggestionsEnabled,
     );
   }
 
@@ -4402,7 +4451,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('remindersWeatherEnabled: $remindersWeatherEnabled, ')
           ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
           ..write('symptomsHour: $symptomsHour, ')
-          ..write('symptomsMinute: $symptomsMinute')
+          ..write('symptomsMinute: $symptomsMinute, ')
+          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled')
           ..write(')'))
         .toString();
   }
@@ -4426,6 +4476,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     remindersSymptomsEnabled,
     symptomsHour,
     symptomsMinute,
+    photoTagSuggestionsEnabled,
   );
   @override
   bool operator ==(Object other) =>
@@ -4447,7 +4498,8 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.remindersWeatherEnabled == this.remindersWeatherEnabled &&
           other.remindersSymptomsEnabled == this.remindersSymptomsEnabled &&
           other.symptomsHour == this.symptomsHour &&
-          other.symptomsMinute == this.symptomsMinute);
+          other.symptomsMinute == this.symptomsMinute &&
+          other.photoTagSuggestionsEnabled == this.photoTagSuggestionsEnabled);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
@@ -4468,6 +4520,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<bool> remindersSymptomsEnabled;
   final Value<int> symptomsHour;
   final Value<int> symptomsMinute;
+  final Value<bool> photoTagSuggestionsEnabled;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
@@ -4486,6 +4539,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.remindersSymptomsEnabled = const Value.absent(),
     this.symptomsHour = const Value.absent(),
     this.symptomsMinute = const Value.absent(),
+    this.photoTagSuggestionsEnabled = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.id = const Value.absent(),
@@ -4505,6 +4559,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.remindersSymptomsEnabled = const Value.absent(),
     this.symptomsHour = const Value.absent(),
     this.symptomsMinute = const Value.absent(),
+    this.photoTagSuggestionsEnabled = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? id,
@@ -4524,6 +4579,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<bool>? remindersSymptomsEnabled,
     Expression<int>? symptomsHour,
     Expression<int>? symptomsMinute,
+    Expression<bool>? photoTagSuggestionsEnabled,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -4548,6 +4604,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
         'reminders_symptoms_enabled': remindersSymptomsEnabled,
       if (symptomsHour != null) 'symptoms_hour': symptomsHour,
       if (symptomsMinute != null) 'symptoms_minute': symptomsMinute,
+      if (photoTagSuggestionsEnabled != null)
+        'photo_tag_suggestions_enabled': photoTagSuggestionsEnabled,
     });
   }
 
@@ -4569,6 +4627,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<bool>? remindersSymptomsEnabled,
     Value<int>? symptomsHour,
     Value<int>? symptomsMinute,
+    Value<bool>? photoTagSuggestionsEnabled,
   }) {
     return AppSettingsCompanion(
       id: id ?? this.id,
@@ -4593,6 +4652,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           remindersSymptomsEnabled ?? this.remindersSymptomsEnabled,
       symptomsHour: symptomsHour ?? this.symptomsHour,
       symptomsMinute: symptomsMinute ?? this.symptomsMinute,
+      photoTagSuggestionsEnabled:
+          photoTagSuggestionsEnabled ?? this.photoTagSuggestionsEnabled,
     );
   }
 
@@ -4660,6 +4721,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (symptomsMinute.present) {
       map['symptoms_minute'] = Variable<int>(symptomsMinute.value);
     }
+    if (photoTagSuggestionsEnabled.present) {
+      map['photo_tag_suggestions_enabled'] = Variable<bool>(
+        photoTagSuggestionsEnabled.value,
+      );
+    }
     return map;
   }
 
@@ -4682,7 +4748,8 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('remindersWeatherEnabled: $remindersWeatherEnabled, ')
           ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
           ..write('symptomsHour: $symptomsHour, ')
-          ..write('symptomsMinute: $symptomsMinute')
+          ..write('symptomsMinute: $symptomsMinute, ')
+          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled')
           ..write(')'))
         .toString();
   }
@@ -6650,6 +6717,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<bool> remindersSymptomsEnabled,
       Value<int> symptomsHour,
       Value<int> symptomsMinute,
+      Value<bool> photoTagSuggestionsEnabled,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
@@ -6670,6 +6738,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<bool> remindersSymptomsEnabled,
       Value<int> symptomsHour,
       Value<int> symptomsMinute,
+      Value<bool> photoTagSuggestionsEnabled,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -6763,6 +6832,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<int> get symptomsMinute => $composableBuilder(
     column: $table.symptomsMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get photoTagSuggestionsEnabled => $composableBuilder(
+    column: $table.photoTagSuggestionsEnabled,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -6860,6 +6934,11 @@ class $$AppSettingsTableOrderingComposer
     column: $table.symptomsMinute,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get photoTagSuggestionsEnabled => $composableBuilder(
+    column: $table.photoTagSuggestionsEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -6949,6 +7028,11 @@ class $$AppSettingsTableAnnotationComposer
     column: $table.symptomsMinute,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get photoTagSuggestionsEnabled => $composableBuilder(
+    column: $table.photoTagSuggestionsEnabled,
+    builder: (column) => column,
+  );
 }
 
 class $$AppSettingsTableTableManager
@@ -6999,6 +7083,7 @@ class $$AppSettingsTableTableManager
                 Value<bool> remindersSymptomsEnabled = const Value.absent(),
                 Value<int> symptomsHour = const Value.absent(),
                 Value<int> symptomsMinute = const Value.absent(),
+                Value<bool> photoTagSuggestionsEnabled = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
                 onboardingDone: onboardingDone,
@@ -7017,6 +7102,7 @@ class $$AppSettingsTableTableManager
                 remindersSymptomsEnabled: remindersSymptomsEnabled,
                 symptomsHour: symptomsHour,
                 symptomsMinute: symptomsMinute,
+                photoTagSuggestionsEnabled: photoTagSuggestionsEnabled,
               ),
           createCompanionCallback:
               ({
@@ -7037,6 +7123,7 @@ class $$AppSettingsTableTableManager
                 Value<bool> remindersSymptomsEnabled = const Value.absent(),
                 Value<int> symptomsHour = const Value.absent(),
                 Value<int> symptomsMinute = const Value.absent(),
+                Value<bool> photoTagSuggestionsEnabled = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
                 onboardingDone: onboardingDone,
@@ -7055,6 +7142,7 @@ class $$AppSettingsTableTableManager
                 remindersSymptomsEnabled: remindersSymptomsEnabled,
                 symptomsHour: symptomsHour,
                 symptomsMinute: symptomsMinute,
+                photoTagSuggestionsEnabled: photoTagSuggestionsEnabled,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

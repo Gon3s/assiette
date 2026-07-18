@@ -23,6 +23,8 @@ dependencies:
   # Localisation & météo (Open-Meteo)
   geolocator: ^14.0.2
   go_router: ^17.3.0
+  # Suggestion de tags depuis photo (US-19), modèle on-device
+  google_mlkit_image_labeling: ^0.15.0
   # Appel API Open-Meteo
   http: ^1.6.0
   # Photo
