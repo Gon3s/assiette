@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:assiette/app.dart';
 import 'package:assiette/app_env.dart';
+import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/environment_capture/background/environment_background_task.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
@@ -91,7 +92,7 @@ void _registerErrorHandlers() {
   ErrorWidget.builder = (details) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.alert,
         title: Text('An error occurred'.hardcoded),
       ),
       body: Center(child: Text(details.toString())),
@@ -104,7 +105,7 @@ void _setupSystemUIOverlayStyle() {
     SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.black,
+      systemNavigationBarColor: AppColors.background,
     ),
   );
 }

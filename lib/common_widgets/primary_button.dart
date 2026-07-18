@@ -43,13 +43,7 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressed,
         child: isLoading
             ? const CircularProgressIndicator()
-            : Text(
-                text,
-                textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge!.copyWith(color: Colors.white),
-              ),
+            : Text(text, textAlign: TextAlign.center),
       ),
     );
   }

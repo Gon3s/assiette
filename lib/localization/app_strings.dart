@@ -35,6 +35,8 @@ abstract class AppStrings {
   String get sleepQuestion;
   String get weatherUnavailable;
   String get pressureUnit;
+  String get weatherTemperatureLabel;
+  String get weatherPressureLabel;
   String get mealTypeBreakfast;
   String get mealTypeLunch;
   String get mealTypeDinner;

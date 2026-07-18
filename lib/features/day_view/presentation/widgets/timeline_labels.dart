@@ -1,10 +1,11 @@
+import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:flutter/material.dart';
 
-/// Accent color for a [SymptomType] (migraine=red, digestive=amber,
-/// mood=blue).
+/// Accent color for a [SymptomType], taken from the app palette
+/// (migraine=alert red, digestive=warm yellow, mood=primary blue).
 Color symptomTypeColor(SymptomType type) => switch (type) {
-      SymptomType.migraine => Colors.red,
-      SymptomType.digestive => Colors.amber,
-      SymptomType.mood => Colors.blue,
+      SymptomType.migraine => AppColors.alert,
+      SymptomType.digestive => AppColors.warning,
+      SymptomType.mood => AppColors.primary,
     };

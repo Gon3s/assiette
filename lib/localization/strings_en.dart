@@ -32,6 +32,10 @@ class AppStringsEn implements AppStrings {
   @override
   String get pressureUnit => 'hPa';
   @override
+  String get weatherTemperatureLabel => 'Temperature';
+  @override
+  String get weatherPressureLabel => 'Pressure';
+  @override
   String get mealTypeBreakfast => 'Breakfast';
   @override
   String get mealTypeLunch => 'Lunch';

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_labels.dart';
@@ -82,17 +83,9 @@ class TimelineTile extends ConsumerWidget {
         :final detail,
       ) =>
         ListTile(
-          leading: CircleAvatar(
-            radius: Sizes.p12,
-            backgroundColor: symptomTypeColor(symptomType),
-            child: Text(
-              '$intensity',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: Sizes.p12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          leading: _SymptomBadge(
+            color: symptomTypeColor(symptomType),
+            intensity: intensity,
           ),
           title: Text(symptomTypeLabel(s, symptomType)),
           subtitle: detail == null ? null : Text(detail),
@@ -100,6 +93,34 @@ class TimelineTile extends ConsumerWidget {
           onTap: () => _openSymptom(context, ref, id),
         ),
     };
+  }
+}
+
+class _SymptomBadge extends StatelessWidget {
+  const _SymptomBadge({required this.color, required this.intensity});
+
+  final Color color;
+  final int intensity;
+
+  @override
+  Widget build(BuildContext context) {
+    // Dark navy text on light accents (yellow), white on dark ones.
+    final onColor =
+        ThemeData.estimateBrightnessForColor(color) == Brightness.light
+            ? AppColors.background
+            : Colors.white;
+    return CircleAvatar(
+      radius: Sizes.p12,
+      backgroundColor: color,
+      child: Text(
+        '$intensity',
+        style: TextStyle(
+          color: onColor,
+          fontSize: Sizes.p12,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }
 
