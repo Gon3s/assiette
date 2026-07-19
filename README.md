@@ -21,26 +21,44 @@ identifier vos déclencheurs probables.
 
 ### Disponibles
 
-- **Vue journée** : timeline chronologique des repas et symptômes, en-tête
-  météo/pression, carte sommeil, mise à jour réactive en temps réel.
-- **Saisie de repas en quelques secondes** : photo (optionnelle), type
-  pré-sélectionné selon l'heure, tags (25 déclencheurs classiques pré-remplis +
-  création à la volée), note, horodatage éditable, enregistrement en favori.
-- **Saisie de symptômes** (migraine, digestif, humeur) en deux taps :
-  intensité 0-10, détail contextuel, heure de fin optionnelle.
+- **Onboarding** : présentation en 4 pages, demande de permission
+  localisation contextualisée au lien pression/migraine, jamais réaffiché une
+  fois complété.
+- **Vue journée** : timeline chronologique des repas, symptômes et prises de
+  traitement de crise, navigation entre jours (swipe, sélecteur de date,
+  raccourci "aujourd'hui"), édition/suppression (soft delete + annuler) en
+  tapant une entrée, en-tête météo/pression avec nom du lieu, icône de
+  condition, tuiles météo (température, pression, UV, PM2.5/PM10, pollen)
+  ouvrant un graphique d'évolution sur 48h (prévision de pression incluse),
+  carte sommeil, mise à jour réactive en temps réel.
+- **Saisie de repas en quelques secondes** : photo (optionnelle) avec
+  suggestions de tags par analyse d'image on-device (ML Kit, aucun réseau,
+  jamais appliquées automatiquement), type pré-sélectionné selon l'heure,
+  tags (25 déclencheurs classiques pré-remplis + création à la volée), note,
+  horodatage éditable, enregistrement en favori.
+- **Repas favoris** : liste dédiée (créer, éditer, supprimer), relog en 1 tap.
+- **Saisie de symptômes** (migraine, digestif, humeur, douleur) en deux
+  taps : intensité 0-10, détail contextuel, heure de fin optionnelle.
+- **Prises de traitement de crise** : nom libre (autocomplétion depuis
+  l'historique), dose optionnelle, horodatage propre, rattachable ou non à un
+  symptôme.
 - **Sommeil 1-tap** : qualité (mauvais / moyen / bon), heures de coucher/réveil
   éditables.
 - **Capture automatique météo/pression en tâche de fond** : position
   approximative, appel [Open-Meteo](https://open-meteo.com/) toutes les
-  heures, delta de pression calculé, dégradation silencieuse sans réseau ni
-  permission localisation.
+  heures, rattrapage des jours manqués au démarrage, delta de pression
+  calculé, dégradation silencieuse sans réseau ni permission localisation.
+- **Rappels et alertes** : notifications actionnables pour repas/sommeil
+  (réponse directe depuis la notification), check-in symptôme, alerte
+  proactive en cas de chute de pression (>6hPa/24h) ; réglages par canal
+  (activer/désactiver, horaires) dans un écran dédié.
+- **Export PDF pour votre médecin** : sélection d'une plage de dates,
+  génération d'un PDF par jour (repas + tags, symptômes + intensité,
+  traitements, sommeil, pression), prévisualisation et partage.
+- **Thème sombre** dédié (palette, typographie Rubik, cartes arrondies).
 
 ### En cours de développement
 
-- Repas favoris re-loggables en un tap
-- Navigation entre les jours, édition/suppression des entrées
-- Rappels par notifications actionnables, alertes pression
-- Export PDF pour votre médecin
 - Insights locaux (corrélations facteurs ↔ symptômes)
 
 > ⚠️ assiette est un outil de suivi personnel, pas un dispositif médical.
@@ -56,6 +74,12 @@ identifier vos déclencheurs probables.
 | Base locale | [Drift](https://drift.simonbinder.eu/) (SQLite réactif) |
 | Navigation | [GoRouter](https://pub.dev/packages/go_router) |
 | Modèles | [Freezed 3](https://pub.dev/packages/freezed) |
+| Tâches de fond | [workmanager](https://pub.dev/packages/workmanager) |
+| Notifications | [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) |
+| Graphiques | [fl_chart](https://pub.dev/packages/fl_chart) |
+| Export PDF | [pdf](https://pub.dev/packages/pdf) + [printing](https://pub.dev/packages/printing) + [share_plus](https://pub.dev/packages/share_plus) |
+| Tags photo | [google_mlkit_image_labeling](https://pub.dev/packages/google_mlkit_image_labeling) (on-device) |
+| Typographie | [google_fonts](https://pub.dev/packages/google_fonts) (Rubik) |
 | Lints | [very_good_analysis](https://pub.dev/packages/very_good_analysis) |
 
 ### Architecture
