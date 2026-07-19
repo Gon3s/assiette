@@ -1,4 +1,5 @@
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/constants/app_theme.dart';
 import 'package:flutter/material.dart';
 
 /// Small stat tile mirroring the reference mockups' data grid: muted
@@ -11,6 +12,7 @@ class StatTileCard extends StatelessWidget {
     required this.value,
     this.accent,
     this.trailing,
+    this.onTap,
     super.key,
   });
 
@@ -27,50 +29,58 @@ class StatTileCard extends StatelessWidget {
   /// takes precedence over [accent].
   final Widget? trailing;
 
+  /// Optional tap handler; when set, the whole tile is tappable.
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
       margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.p16,
-          vertical: Sizes.p12,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            gapH4,
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    value,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppTheme.cardRadius),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.p16,
+            vertical: Sizes.p12,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-                if (trailing != null)
-                  trailing!
-                else if (accent != null)
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: accent,
-                      shape: BoxShape.circle,
+                overflow: TextOverflow.ellipsis,
+              ),
+              gapH4,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      value,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    child: const SizedBox.square(dimension: Sizes.p8),
                   ),
-              ],
-            ),
-          ],
+                  if (trailing != null)
+                    trailing!
+                  else if (accent != null)
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: accent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const SizedBox.square(dimension: Sizes.p8),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

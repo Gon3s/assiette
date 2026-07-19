@@ -36,6 +36,35 @@ class AppStringsEn implements AppStrings {
   @override
   String get weatherPressureLabel => 'Pressure';
   @override
+  String get weatherHumidityLabel => 'Humidity';
+  @override
+  String get weatherUvLabel => 'UV';
+  @override
+  String get weatherPollenLabel => 'Pollen';
+  @override
+  String get weatherAirLabel => 'Air (PM2.5)';
+  @override
+  String get airQualityUnit => 'µg/m³';
+  @override
+  String get pollenLevelLow => 'Low';
+  @override
+  String get pollenLevelModerate => 'Moderate';
+  @override
+  String get pollenLevelHigh => 'High';
+  @override
+  String get weatherUpdatedJustNow => 'Updated just now';
+  @override
+  String weatherUpdatedMinutesAgo(int minutes) =>
+      'Updated $minutes min ago';
+  @override
+  String weatherUpdatedHoursAgo(int hours) => 'Updated ${hours}h ago';
+  @override
+  String get weatherChartNoData => 'Not enough readings for today yet';
+  @override
+  String get weatherChartMeasuredLegend => 'Measured';
+  @override
+  String get weatherChartForecastLegend => 'Forecast';
+  @override
   String get mealTypeBreakfast => 'Breakfast';
   @override
   String get mealTypeLunch => 'Lunch';

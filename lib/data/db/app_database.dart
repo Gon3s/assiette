@@ -53,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -93,6 +93,39 @@ class AppDatabase extends _$AppDatabase {
       if (from < 6) {
         await m.createTable(medicationIntakes);
         await m.createIndex(idxMedicationIntakesTimestamp);
+      }
+      if (from < 7) {
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.weatherCode,
+        );
+        await m.addColumn(environmentSnapshots, environmentSnapshots.uvIndex);
+        await m.addColumn(environmentSnapshots, environmentSnapshots.pm25);
+        await m.addColumn(environmentSnapshots, environmentSnapshots.pm10);
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.alderPollen,
+        );
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.birchPollen,
+        );
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.grassPollen,
+        );
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.mugwortPollen,
+        );
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.olivePollen,
+        );
+        await m.addColumn(
+          environmentSnapshots,
+          environmentSnapshots.ragweedPollen,
+        );
       }
     },
   );

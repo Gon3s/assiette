@@ -9,7 +9,9 @@ import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
+import 'package:assiette/features/day_view/domain/weather_point.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
@@ -69,6 +71,20 @@ class DriftDayViewRepository implements DayViewRepository {
     return _environmentDao.watchByDay(day).map(
           (snapshots) =>
               snapshots.isEmpty ? null : _toWeatherSummary(snapshots.last),
+        );
+  }
+
+  @override
+  Stream<List<WeatherPoint>> watchWeatherSeries(DateTime day) {
+    return _environmentDao.watchByDay(day).map(
+          (snapshots) => [
+            for (final snapshot in snapshots)
+              WeatherPoint(
+                timestamp: snapshot.timestamp,
+                temperature: snapshot.temperature,
+                pressure: snapshot.pressure,
+              ),
+          ],
         );
   }
 
@@ -134,6 +150,20 @@ class DriftDayViewRepository implements DayViewRepository {
         pressureDelta: snapshot.pressureDelta,
         temperature: snapshot.temperature,
         humidity: snapshot.humidity,
+        lat: snapshot.lat,
+        lon: snapshot.lon,
+        weatherCode: snapshot.weatherCode,
+        uvIndex: snapshot.uvIndex,
+        pm25: snapshot.pm25,
+        pm10: snapshot.pm10,
+        pollenMax: [
+          snapshot.alderPollen,
+          snapshot.birchPollen,
+          snapshot.grassPollen,
+          snapshot.mugwortPollen,
+          snapshot.olivePollen,
+          snapshot.ragweedPollen,
+        ].nonNulls.maxOrNull,
       );
 
   /// Merges reactive lists into a single stream sorted by timestamp,

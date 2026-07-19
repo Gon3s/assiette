@@ -36,6 +36,10 @@ class EnvironmentDao extends DatabaseAccessor<AppDatabase>
   Future<void> insertSnapshot(EnvironmentSnapshotsCompanion entry) =>
       into(environmentSnapshots).insert(entry);
 
+  /// Batch-inserts snapshots (used by the history backfill).
+  Future<void> insertSnapshots(List<EnvironmentSnapshotsCompanion> entries) =>
+      batch((b) => b.insertAll(environmentSnapshots, entries));
+
   Future<EnvironmentSnapshot?> getLatest() {
     return (select(environmentSnapshots)
           ..orderBy([(t) => OrderingTerm.desc(t.timestamp)])

@@ -2,6 +2,7 @@ import 'package:assiette/data/db/database_provider.dart';
 import 'package:assiette/features/day_view/data/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
+import 'package:assiette/features/day_view/domain/weather_point.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,6 +18,10 @@ abstract class DayViewRepository {
 
   /// Watches the most recent weather/pressure snapshot captured on [day].
   Stream<WeatherSummary?> watchLatestWeather(DateTime day);
+
+  /// Watches the full measured weather series (all snapshots) for [day],
+  /// feeding the temperature/pressure evolution charts.
+  Stream<List<WeatherPoint>> watchWeatherSeries(DateTime day);
 
   /// Logs (or updates) the sleep quality for the night of [day].
   Future<void> logSleepQuality(DateTime day, int quality);

@@ -3729,6 +3729,112 @@ class $EnvironmentSnapshotsTable extends EnvironmentSnapshots
     type: DriftSqlType.double,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _weatherCodeMeta = const VerificationMeta(
+    'weatherCode',
+  );
+  @override
+  late final GeneratedColumn<int> weatherCode = GeneratedColumn<int>(
+    'weather_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _uvIndexMeta = const VerificationMeta(
+    'uvIndex',
+  );
+  @override
+  late final GeneratedColumn<double> uvIndex = GeneratedColumn<double>(
+    'uv_index',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pm25Meta = const VerificationMeta('pm25');
+  @override
+  late final GeneratedColumn<double> pm25 = GeneratedColumn<double>(
+    'pm25',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pm10Meta = const VerificationMeta('pm10');
+  @override
+  late final GeneratedColumn<double> pm10 = GeneratedColumn<double>(
+    'pm10',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _alderPollenMeta = const VerificationMeta(
+    'alderPollen',
+  );
+  @override
+  late final GeneratedColumn<double> alderPollen = GeneratedColumn<double>(
+    'alder_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _birchPollenMeta = const VerificationMeta(
+    'birchPollen',
+  );
+  @override
+  late final GeneratedColumn<double> birchPollen = GeneratedColumn<double>(
+    'birch_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _grassPollenMeta = const VerificationMeta(
+    'grassPollen',
+  );
+  @override
+  late final GeneratedColumn<double> grassPollen = GeneratedColumn<double>(
+    'grass_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _mugwortPollenMeta = const VerificationMeta(
+    'mugwortPollen',
+  );
+  @override
+  late final GeneratedColumn<double> mugwortPollen = GeneratedColumn<double>(
+    'mugwort_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _olivePollenMeta = const VerificationMeta(
+    'olivePollen',
+  );
+  @override
+  late final GeneratedColumn<double> olivePollen = GeneratedColumn<double>(
+    'olive_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ragweedPollenMeta = const VerificationMeta(
+    'ragweedPollen',
+  );
+  @override
+  late final GeneratedColumn<double> ragweedPollen = GeneratedColumn<double>(
+    'ragweed_pollen',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -3751,6 +3857,16 @@ class $EnvironmentSnapshotsTable extends EnvironmentSnapshots
     humidity,
     lat,
     lon,
+    weatherCode,
+    uvIndex,
+    pm25,
+    pm10,
+    alderPollen,
+    birchPollen,
+    grassPollen,
+    mugwortPollen,
+    olivePollen,
+    ragweedPollen,
     createdAt,
   ];
   @override
@@ -3820,6 +3936,87 @@ class $EnvironmentSnapshotsTable extends EnvironmentSnapshots
         lon.isAcceptableOrUnknown(data['lon']!, _lonMeta),
       );
     }
+    if (data.containsKey('weather_code')) {
+      context.handle(
+        _weatherCodeMeta,
+        weatherCode.isAcceptableOrUnknown(
+          data['weather_code']!,
+          _weatherCodeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('uv_index')) {
+      context.handle(
+        _uvIndexMeta,
+        uvIndex.isAcceptableOrUnknown(data['uv_index']!, _uvIndexMeta),
+      );
+    }
+    if (data.containsKey('pm25')) {
+      context.handle(
+        _pm25Meta,
+        pm25.isAcceptableOrUnknown(data['pm25']!, _pm25Meta),
+      );
+    }
+    if (data.containsKey('pm10')) {
+      context.handle(
+        _pm10Meta,
+        pm10.isAcceptableOrUnknown(data['pm10']!, _pm10Meta),
+      );
+    }
+    if (data.containsKey('alder_pollen')) {
+      context.handle(
+        _alderPollenMeta,
+        alderPollen.isAcceptableOrUnknown(
+          data['alder_pollen']!,
+          _alderPollenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('birch_pollen')) {
+      context.handle(
+        _birchPollenMeta,
+        birchPollen.isAcceptableOrUnknown(
+          data['birch_pollen']!,
+          _birchPollenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('grass_pollen')) {
+      context.handle(
+        _grassPollenMeta,
+        grassPollen.isAcceptableOrUnknown(
+          data['grass_pollen']!,
+          _grassPollenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('mugwort_pollen')) {
+      context.handle(
+        _mugwortPollenMeta,
+        mugwortPollen.isAcceptableOrUnknown(
+          data['mugwort_pollen']!,
+          _mugwortPollenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('olive_pollen')) {
+      context.handle(
+        _olivePollenMeta,
+        olivePollen.isAcceptableOrUnknown(
+          data['olive_pollen']!,
+          _olivePollenMeta,
+        ),
+      );
+    }
+    if (data.containsKey('ragweed_pollen')) {
+      context.handle(
+        _ragweedPollenMeta,
+        ragweedPollen.isAcceptableOrUnknown(
+          data['ragweed_pollen']!,
+          _ragweedPollenMeta,
+        ),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -3867,6 +4064,46 @@ class $EnvironmentSnapshotsTable extends EnvironmentSnapshots
         DriftSqlType.double,
         data['${effectivePrefix}lon'],
       ),
+      weatherCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weather_code'],
+      ),
+      uvIndex: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}uv_index'],
+      ),
+      pm25: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pm25'],
+      ),
+      pm10: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pm10'],
+      ),
+      alderPollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}alder_pollen'],
+      ),
+      birchPollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}birch_pollen'],
+      ),
+      grassPollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}grass_pollen'],
+      ),
+      mugwortPollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}mugwort_pollen'],
+      ),
+      olivePollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}olive_pollen'],
+      ),
+      ragweedPollen: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}ragweed_pollen'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -3890,6 +4127,22 @@ class EnvironmentSnapshot extends DataClass
   final double? humidity;
   final double? lat;
   final double? lon;
+
+  /// WMO weather interpretation code (0 = clear sky, 61 = rain, ...).
+  final int? weatherCode;
+  final double? uvIndex;
+
+  /// Air quality (µg/m³) from the Open-Meteo air-quality API.
+  final double? pm25;
+  final double? pm10;
+
+  /// Pollen concentrations (grains/m³), European coverage only.
+  final double? alderPollen;
+  final double? birchPollen;
+  final double? grassPollen;
+  final double? mugwortPollen;
+  final double? olivePollen;
+  final double? ragweedPollen;
   final DateTime createdAt;
   const EnvironmentSnapshot({
     required this.id,
@@ -3900,6 +4153,16 @@ class EnvironmentSnapshot extends DataClass
     this.humidity,
     this.lat,
     this.lon,
+    this.weatherCode,
+    this.uvIndex,
+    this.pm25,
+    this.pm10,
+    this.alderPollen,
+    this.birchPollen,
+    this.grassPollen,
+    this.mugwortPollen,
+    this.olivePollen,
+    this.ragweedPollen,
     required this.createdAt,
   });
   @override
@@ -3925,6 +4188,36 @@ class EnvironmentSnapshot extends DataClass
     if (!nullToAbsent || lon != null) {
       map['lon'] = Variable<double>(lon);
     }
+    if (!nullToAbsent || weatherCode != null) {
+      map['weather_code'] = Variable<int>(weatherCode);
+    }
+    if (!nullToAbsent || uvIndex != null) {
+      map['uv_index'] = Variable<double>(uvIndex);
+    }
+    if (!nullToAbsent || pm25 != null) {
+      map['pm25'] = Variable<double>(pm25);
+    }
+    if (!nullToAbsent || pm10 != null) {
+      map['pm10'] = Variable<double>(pm10);
+    }
+    if (!nullToAbsent || alderPollen != null) {
+      map['alder_pollen'] = Variable<double>(alderPollen);
+    }
+    if (!nullToAbsent || birchPollen != null) {
+      map['birch_pollen'] = Variable<double>(birchPollen);
+    }
+    if (!nullToAbsent || grassPollen != null) {
+      map['grass_pollen'] = Variable<double>(grassPollen);
+    }
+    if (!nullToAbsent || mugwortPollen != null) {
+      map['mugwort_pollen'] = Variable<double>(mugwortPollen);
+    }
+    if (!nullToAbsent || olivePollen != null) {
+      map['olive_pollen'] = Variable<double>(olivePollen);
+    }
+    if (!nullToAbsent || ragweedPollen != null) {
+      map['ragweed_pollen'] = Variable<double>(ragweedPollen);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -3947,6 +4240,32 @@ class EnvironmentSnapshot extends DataClass
           : Value(humidity),
       lat: lat == null && nullToAbsent ? const Value.absent() : Value(lat),
       lon: lon == null && nullToAbsent ? const Value.absent() : Value(lon),
+      weatherCode: weatherCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(weatherCode),
+      uvIndex: uvIndex == null && nullToAbsent
+          ? const Value.absent()
+          : Value(uvIndex),
+      pm25: pm25 == null && nullToAbsent ? const Value.absent() : Value(pm25),
+      pm10: pm10 == null && nullToAbsent ? const Value.absent() : Value(pm10),
+      alderPollen: alderPollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(alderPollen),
+      birchPollen: birchPollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(birchPollen),
+      grassPollen: grassPollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(grassPollen),
+      mugwortPollen: mugwortPollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mugwortPollen),
+      olivePollen: olivePollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(olivePollen),
+      ragweedPollen: ragweedPollen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ragweedPollen),
       createdAt: Value(createdAt),
     );
   }
@@ -3965,6 +4284,16 @@ class EnvironmentSnapshot extends DataClass
       humidity: serializer.fromJson<double?>(json['humidity']),
       lat: serializer.fromJson<double?>(json['lat']),
       lon: serializer.fromJson<double?>(json['lon']),
+      weatherCode: serializer.fromJson<int?>(json['weatherCode']),
+      uvIndex: serializer.fromJson<double?>(json['uvIndex']),
+      pm25: serializer.fromJson<double?>(json['pm25']),
+      pm10: serializer.fromJson<double?>(json['pm10']),
+      alderPollen: serializer.fromJson<double?>(json['alderPollen']),
+      birchPollen: serializer.fromJson<double?>(json['birchPollen']),
+      grassPollen: serializer.fromJson<double?>(json['grassPollen']),
+      mugwortPollen: serializer.fromJson<double?>(json['mugwortPollen']),
+      olivePollen: serializer.fromJson<double?>(json['olivePollen']),
+      ragweedPollen: serializer.fromJson<double?>(json['ragweedPollen']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -3980,6 +4309,16 @@ class EnvironmentSnapshot extends DataClass
       'humidity': serializer.toJson<double?>(humidity),
       'lat': serializer.toJson<double?>(lat),
       'lon': serializer.toJson<double?>(lon),
+      'weatherCode': serializer.toJson<int?>(weatherCode),
+      'uvIndex': serializer.toJson<double?>(uvIndex),
+      'pm25': serializer.toJson<double?>(pm25),
+      'pm10': serializer.toJson<double?>(pm10),
+      'alderPollen': serializer.toJson<double?>(alderPollen),
+      'birchPollen': serializer.toJson<double?>(birchPollen),
+      'grassPollen': serializer.toJson<double?>(grassPollen),
+      'mugwortPollen': serializer.toJson<double?>(mugwortPollen),
+      'olivePollen': serializer.toJson<double?>(olivePollen),
+      'ragweedPollen': serializer.toJson<double?>(ragweedPollen),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -3993,6 +4332,16 @@ class EnvironmentSnapshot extends DataClass
     Value<double?> humidity = const Value.absent(),
     Value<double?> lat = const Value.absent(),
     Value<double?> lon = const Value.absent(),
+    Value<int?> weatherCode = const Value.absent(),
+    Value<double?> uvIndex = const Value.absent(),
+    Value<double?> pm25 = const Value.absent(),
+    Value<double?> pm10 = const Value.absent(),
+    Value<double?> alderPollen = const Value.absent(),
+    Value<double?> birchPollen = const Value.absent(),
+    Value<double?> grassPollen = const Value.absent(),
+    Value<double?> mugwortPollen = const Value.absent(),
+    Value<double?> olivePollen = const Value.absent(),
+    Value<double?> ragweedPollen = const Value.absent(),
     DateTime? createdAt,
   }) => EnvironmentSnapshot(
     id: id ?? this.id,
@@ -4005,6 +4354,20 @@ class EnvironmentSnapshot extends DataClass
     humidity: humidity.present ? humidity.value : this.humidity,
     lat: lat.present ? lat.value : this.lat,
     lon: lon.present ? lon.value : this.lon,
+    weatherCode: weatherCode.present ? weatherCode.value : this.weatherCode,
+    uvIndex: uvIndex.present ? uvIndex.value : this.uvIndex,
+    pm25: pm25.present ? pm25.value : this.pm25,
+    pm10: pm10.present ? pm10.value : this.pm10,
+    alderPollen: alderPollen.present ? alderPollen.value : this.alderPollen,
+    birchPollen: birchPollen.present ? birchPollen.value : this.birchPollen,
+    grassPollen: grassPollen.present ? grassPollen.value : this.grassPollen,
+    mugwortPollen: mugwortPollen.present
+        ? mugwortPollen.value
+        : this.mugwortPollen,
+    olivePollen: olivePollen.present ? olivePollen.value : this.olivePollen,
+    ragweedPollen: ragweedPollen.present
+        ? ragweedPollen.value
+        : this.ragweedPollen,
     createdAt: createdAt ?? this.createdAt,
   );
   EnvironmentSnapshot copyWithCompanion(EnvironmentSnapshotsCompanion data) {
@@ -4021,6 +4384,30 @@ class EnvironmentSnapshot extends DataClass
       humidity: data.humidity.present ? data.humidity.value : this.humidity,
       lat: data.lat.present ? data.lat.value : this.lat,
       lon: data.lon.present ? data.lon.value : this.lon,
+      weatherCode: data.weatherCode.present
+          ? data.weatherCode.value
+          : this.weatherCode,
+      uvIndex: data.uvIndex.present ? data.uvIndex.value : this.uvIndex,
+      pm25: data.pm25.present ? data.pm25.value : this.pm25,
+      pm10: data.pm10.present ? data.pm10.value : this.pm10,
+      alderPollen: data.alderPollen.present
+          ? data.alderPollen.value
+          : this.alderPollen,
+      birchPollen: data.birchPollen.present
+          ? data.birchPollen.value
+          : this.birchPollen,
+      grassPollen: data.grassPollen.present
+          ? data.grassPollen.value
+          : this.grassPollen,
+      mugwortPollen: data.mugwortPollen.present
+          ? data.mugwortPollen.value
+          : this.mugwortPollen,
+      olivePollen: data.olivePollen.present
+          ? data.olivePollen.value
+          : this.olivePollen,
+      ragweedPollen: data.ragweedPollen.present
+          ? data.ragweedPollen.value
+          : this.ragweedPollen,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -4036,6 +4423,16 @@ class EnvironmentSnapshot extends DataClass
           ..write('humidity: $humidity, ')
           ..write('lat: $lat, ')
           ..write('lon: $lon, ')
+          ..write('weatherCode: $weatherCode, ')
+          ..write('uvIndex: $uvIndex, ')
+          ..write('pm25: $pm25, ')
+          ..write('pm10: $pm10, ')
+          ..write('alderPollen: $alderPollen, ')
+          ..write('birchPollen: $birchPollen, ')
+          ..write('grassPollen: $grassPollen, ')
+          ..write('mugwortPollen: $mugwortPollen, ')
+          ..write('olivePollen: $olivePollen, ')
+          ..write('ragweedPollen: $ragweedPollen, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -4051,6 +4448,16 @@ class EnvironmentSnapshot extends DataClass
     humidity,
     lat,
     lon,
+    weatherCode,
+    uvIndex,
+    pm25,
+    pm10,
+    alderPollen,
+    birchPollen,
+    grassPollen,
+    mugwortPollen,
+    olivePollen,
+    ragweedPollen,
     createdAt,
   );
   @override
@@ -4065,6 +4472,16 @@ class EnvironmentSnapshot extends DataClass
           other.humidity == this.humidity &&
           other.lat == this.lat &&
           other.lon == this.lon &&
+          other.weatherCode == this.weatherCode &&
+          other.uvIndex == this.uvIndex &&
+          other.pm25 == this.pm25 &&
+          other.pm10 == this.pm10 &&
+          other.alderPollen == this.alderPollen &&
+          other.birchPollen == this.birchPollen &&
+          other.grassPollen == this.grassPollen &&
+          other.mugwortPollen == this.mugwortPollen &&
+          other.olivePollen == this.olivePollen &&
+          other.ragweedPollen == this.ragweedPollen &&
           other.createdAt == this.createdAt);
 }
 
@@ -4078,6 +4495,16 @@ class EnvironmentSnapshotsCompanion
   final Value<double?> humidity;
   final Value<double?> lat;
   final Value<double?> lon;
+  final Value<int?> weatherCode;
+  final Value<double?> uvIndex;
+  final Value<double?> pm25;
+  final Value<double?> pm10;
+  final Value<double?> alderPollen;
+  final Value<double?> birchPollen;
+  final Value<double?> grassPollen;
+  final Value<double?> mugwortPollen;
+  final Value<double?> olivePollen;
+  final Value<double?> ragweedPollen;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const EnvironmentSnapshotsCompanion({
@@ -4089,6 +4516,16 @@ class EnvironmentSnapshotsCompanion
     this.humidity = const Value.absent(),
     this.lat = const Value.absent(),
     this.lon = const Value.absent(),
+    this.weatherCode = const Value.absent(),
+    this.uvIndex = const Value.absent(),
+    this.pm25 = const Value.absent(),
+    this.pm10 = const Value.absent(),
+    this.alderPollen = const Value.absent(),
+    this.birchPollen = const Value.absent(),
+    this.grassPollen = const Value.absent(),
+    this.mugwortPollen = const Value.absent(),
+    this.olivePollen = const Value.absent(),
+    this.ragweedPollen = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -4101,6 +4538,16 @@ class EnvironmentSnapshotsCompanion
     this.humidity = const Value.absent(),
     this.lat = const Value.absent(),
     this.lon = const Value.absent(),
+    this.weatherCode = const Value.absent(),
+    this.uvIndex = const Value.absent(),
+    this.pm25 = const Value.absent(),
+    this.pm10 = const Value.absent(),
+    this.alderPollen = const Value.absent(),
+    this.birchPollen = const Value.absent(),
+    this.grassPollen = const Value.absent(),
+    this.mugwortPollen = const Value.absent(),
+    this.olivePollen = const Value.absent(),
+    this.ragweedPollen = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -4114,6 +4561,16 @@ class EnvironmentSnapshotsCompanion
     Expression<double>? humidity,
     Expression<double>? lat,
     Expression<double>? lon,
+    Expression<int>? weatherCode,
+    Expression<double>? uvIndex,
+    Expression<double>? pm25,
+    Expression<double>? pm10,
+    Expression<double>? alderPollen,
+    Expression<double>? birchPollen,
+    Expression<double>? grassPollen,
+    Expression<double>? mugwortPollen,
+    Expression<double>? olivePollen,
+    Expression<double>? ragweedPollen,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -4126,6 +4583,16 @@ class EnvironmentSnapshotsCompanion
       if (humidity != null) 'humidity': humidity,
       if (lat != null) 'lat': lat,
       if (lon != null) 'lon': lon,
+      if (weatherCode != null) 'weather_code': weatherCode,
+      if (uvIndex != null) 'uv_index': uvIndex,
+      if (pm25 != null) 'pm25': pm25,
+      if (pm10 != null) 'pm10': pm10,
+      if (alderPollen != null) 'alder_pollen': alderPollen,
+      if (birchPollen != null) 'birch_pollen': birchPollen,
+      if (grassPollen != null) 'grass_pollen': grassPollen,
+      if (mugwortPollen != null) 'mugwort_pollen': mugwortPollen,
+      if (olivePollen != null) 'olive_pollen': olivePollen,
+      if (ragweedPollen != null) 'ragweed_pollen': ragweedPollen,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -4140,6 +4607,16 @@ class EnvironmentSnapshotsCompanion
     Value<double?>? humidity,
     Value<double?>? lat,
     Value<double?>? lon,
+    Value<int?>? weatherCode,
+    Value<double?>? uvIndex,
+    Value<double?>? pm25,
+    Value<double?>? pm10,
+    Value<double?>? alderPollen,
+    Value<double?>? birchPollen,
+    Value<double?>? grassPollen,
+    Value<double?>? mugwortPollen,
+    Value<double?>? olivePollen,
+    Value<double?>? ragweedPollen,
     Value<DateTime>? createdAt,
     Value<int>? rowid,
   }) {
@@ -4152,6 +4629,16 @@ class EnvironmentSnapshotsCompanion
       humidity: humidity ?? this.humidity,
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
+      weatherCode: weatherCode ?? this.weatherCode,
+      uvIndex: uvIndex ?? this.uvIndex,
+      pm25: pm25 ?? this.pm25,
+      pm10: pm10 ?? this.pm10,
+      alderPollen: alderPollen ?? this.alderPollen,
+      birchPollen: birchPollen ?? this.birchPollen,
+      grassPollen: grassPollen ?? this.grassPollen,
+      mugwortPollen: mugwortPollen ?? this.mugwortPollen,
+      olivePollen: olivePollen ?? this.olivePollen,
+      ragweedPollen: ragweedPollen ?? this.ragweedPollen,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -4184,6 +4671,36 @@ class EnvironmentSnapshotsCompanion
     if (lon.present) {
       map['lon'] = Variable<double>(lon.value);
     }
+    if (weatherCode.present) {
+      map['weather_code'] = Variable<int>(weatherCode.value);
+    }
+    if (uvIndex.present) {
+      map['uv_index'] = Variable<double>(uvIndex.value);
+    }
+    if (pm25.present) {
+      map['pm25'] = Variable<double>(pm25.value);
+    }
+    if (pm10.present) {
+      map['pm10'] = Variable<double>(pm10.value);
+    }
+    if (alderPollen.present) {
+      map['alder_pollen'] = Variable<double>(alderPollen.value);
+    }
+    if (birchPollen.present) {
+      map['birch_pollen'] = Variable<double>(birchPollen.value);
+    }
+    if (grassPollen.present) {
+      map['grass_pollen'] = Variable<double>(grassPollen.value);
+    }
+    if (mugwortPollen.present) {
+      map['mugwort_pollen'] = Variable<double>(mugwortPollen.value);
+    }
+    if (olivePollen.present) {
+      map['olive_pollen'] = Variable<double>(olivePollen.value);
+    }
+    if (ragweedPollen.present) {
+      map['ragweed_pollen'] = Variable<double>(ragweedPollen.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -4204,6 +4721,16 @@ class EnvironmentSnapshotsCompanion
           ..write('humidity: $humidity, ')
           ..write('lat: $lat, ')
           ..write('lon: $lon, ')
+          ..write('weatherCode: $weatherCode, ')
+          ..write('uvIndex: $uvIndex, ')
+          ..write('pm25: $pm25, ')
+          ..write('pm10: $pm10, ')
+          ..write('alderPollen: $alderPollen, ')
+          ..write('birchPollen: $birchPollen, ')
+          ..write('grassPollen: $grassPollen, ')
+          ..write('mugwortPollen: $mugwortPollen, ')
+          ..write('olivePollen: $olivePollen, ')
+          ..write('ragweedPollen: $ragweedPollen, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -7503,6 +8030,16 @@ typedef $$EnvironmentSnapshotsTableCreateCompanionBuilder =
       Value<double?> humidity,
       Value<double?> lat,
       Value<double?> lon,
+      Value<int?> weatherCode,
+      Value<double?> uvIndex,
+      Value<double?> pm25,
+      Value<double?> pm10,
+      Value<double?> alderPollen,
+      Value<double?> birchPollen,
+      Value<double?> grassPollen,
+      Value<double?> mugwortPollen,
+      Value<double?> olivePollen,
+      Value<double?> ragweedPollen,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -7516,6 +8053,16 @@ typedef $$EnvironmentSnapshotsTableUpdateCompanionBuilder =
       Value<double?> humidity,
       Value<double?> lat,
       Value<double?> lon,
+      Value<int?> weatherCode,
+      Value<double?> uvIndex,
+      Value<double?> pm25,
+      Value<double?> pm10,
+      Value<double?> alderPollen,
+      Value<double?> birchPollen,
+      Value<double?> grassPollen,
+      Value<double?> mugwortPollen,
+      Value<double?> olivePollen,
+      Value<double?> ragweedPollen,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -7566,6 +8113,56 @@ class $$EnvironmentSnapshotsTableFilterComposer
 
   ColumnFilters<double> get lon => $composableBuilder(
     column: $table.lon,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get weatherCode => $composableBuilder(
+    column: $table.weatherCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get uvIndex => $composableBuilder(
+    column: $table.uvIndex,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get pm25 => $composableBuilder(
+    column: $table.pm25,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get pm10 => $composableBuilder(
+    column: $table.pm10,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get alderPollen => $composableBuilder(
+    column: $table.alderPollen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get birchPollen => $composableBuilder(
+    column: $table.birchPollen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get grassPollen => $composableBuilder(
+    column: $table.grassPollen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get mugwortPollen => $composableBuilder(
+    column: $table.mugwortPollen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get olivePollen => $composableBuilder(
+    column: $table.olivePollen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get ragweedPollen => $composableBuilder(
+    column: $table.ragweedPollen,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7624,6 +8221,56 @@ class $$EnvironmentSnapshotsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get weatherCode => $composableBuilder(
+    column: $table.weatherCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get uvIndex => $composableBuilder(
+    column: $table.uvIndex,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get pm25 => $composableBuilder(
+    column: $table.pm25,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get pm10 => $composableBuilder(
+    column: $table.pm10,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get alderPollen => $composableBuilder(
+    column: $table.alderPollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get birchPollen => $composableBuilder(
+    column: $table.birchPollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get grassPollen => $composableBuilder(
+    column: $table.grassPollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get mugwortPollen => $composableBuilder(
+    column: $table.mugwortPollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get olivePollen => $composableBuilder(
+    column: $table.olivePollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get ragweedPollen => $composableBuilder(
+    column: $table.ragweedPollen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -7666,6 +8313,50 @@ class $$EnvironmentSnapshotsTableAnnotationComposer
 
   GeneratedColumn<double> get lon =>
       $composableBuilder(column: $table.lon, builder: (column) => column);
+
+  GeneratedColumn<int> get weatherCode => $composableBuilder(
+    column: $table.weatherCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get uvIndex =>
+      $composableBuilder(column: $table.uvIndex, builder: (column) => column);
+
+  GeneratedColumn<double> get pm25 =>
+      $composableBuilder(column: $table.pm25, builder: (column) => column);
+
+  GeneratedColumn<double> get pm10 =>
+      $composableBuilder(column: $table.pm10, builder: (column) => column);
+
+  GeneratedColumn<double> get alderPollen => $composableBuilder(
+    column: $table.alderPollen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get birchPollen => $composableBuilder(
+    column: $table.birchPollen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get grassPollen => $composableBuilder(
+    column: $table.grassPollen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get mugwortPollen => $composableBuilder(
+    column: $table.mugwortPollen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get olivePollen => $composableBuilder(
+    column: $table.olivePollen,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get ragweedPollen => $composableBuilder(
+    column: $table.ragweedPollen,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -7722,6 +8413,16 @@ class $$EnvironmentSnapshotsTableTableManager
                 Value<double?> humidity = const Value.absent(),
                 Value<double?> lat = const Value.absent(),
                 Value<double?> lon = const Value.absent(),
+                Value<int?> weatherCode = const Value.absent(),
+                Value<double?> uvIndex = const Value.absent(),
+                Value<double?> pm25 = const Value.absent(),
+                Value<double?> pm10 = const Value.absent(),
+                Value<double?> alderPollen = const Value.absent(),
+                Value<double?> birchPollen = const Value.absent(),
+                Value<double?> grassPollen = const Value.absent(),
+                Value<double?> mugwortPollen = const Value.absent(),
+                Value<double?> olivePollen = const Value.absent(),
+                Value<double?> ragweedPollen = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EnvironmentSnapshotsCompanion(
@@ -7733,6 +8434,16 @@ class $$EnvironmentSnapshotsTableTableManager
                 humidity: humidity,
                 lat: lat,
                 lon: lon,
+                weatherCode: weatherCode,
+                uvIndex: uvIndex,
+                pm25: pm25,
+                pm10: pm10,
+                alderPollen: alderPollen,
+                birchPollen: birchPollen,
+                grassPollen: grassPollen,
+                mugwortPollen: mugwortPollen,
+                olivePollen: olivePollen,
+                ragweedPollen: ragweedPollen,
                 createdAt: createdAt,
                 rowid: rowid,
               ),
@@ -7746,6 +8457,16 @@ class $$EnvironmentSnapshotsTableTableManager
                 Value<double?> humidity = const Value.absent(),
                 Value<double?> lat = const Value.absent(),
                 Value<double?> lon = const Value.absent(),
+                Value<int?> weatherCode = const Value.absent(),
+                Value<double?> uvIndex = const Value.absent(),
+                Value<double?> pm25 = const Value.absent(),
+                Value<double?> pm10 = const Value.absent(),
+                Value<double?> alderPollen = const Value.absent(),
+                Value<double?> birchPollen = const Value.absent(),
+                Value<double?> grassPollen = const Value.absent(),
+                Value<double?> mugwortPollen = const Value.absent(),
+                Value<double?> olivePollen = const Value.absent(),
+                Value<double?> ragweedPollen = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EnvironmentSnapshotsCompanion.insert(
@@ -7757,6 +8478,16 @@ class $$EnvironmentSnapshotsTableTableManager
                 humidity: humidity,
                 lat: lat,
                 lon: lon,
+                weatherCode: weatherCode,
+                uvIndex: uvIndex,
+                pm25: pm25,
+                pm10: pm10,
+                alderPollen: alderPollen,
+                birchPollen: birchPollen,
+                grassPollen: grassPollen,
+                mugwortPollen: mugwortPollen,
+                olivePollen: olivePollen,
+                ragweedPollen: ragweedPollen,
                 createdAt: createdAt,
                 rowid: rowid,
               ),

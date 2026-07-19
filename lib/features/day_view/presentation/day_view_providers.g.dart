@@ -141,3 +141,194 @@ final class DayWeatherProvider
 }
 
 String _$dayWeatherHash() => r'618d127c563f0477e638422b21013886924618a4';
+
+/// The full measured weather series for the selected day (charts).
+
+@ProviderFor(dayWeatherSeries)
+final dayWeatherSeriesProvider = DayWeatherSeriesProvider._();
+
+/// The full measured weather series for the selected day (charts).
+
+final class DayWeatherSeriesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<WeatherPoint>>,
+          List<WeatherPoint>,
+          Stream<List<WeatherPoint>>
+        >
+    with
+        $FutureModifier<List<WeatherPoint>>,
+        $StreamProvider<List<WeatherPoint>> {
+  /// The full measured weather series for the selected day (charts).
+  DayWeatherSeriesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dayWeatherSeriesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dayWeatherSeriesHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<WeatherPoint>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<WeatherPoint>> create(Ref ref) {
+    return dayWeatherSeries(ref);
+  }
+}
+
+String _$dayWeatherSeriesHash() => r'f9b04575caa7e799b7c90d74b6698e5dfe968fc7';
+
+/// Resolves place names from coordinates; kept alive so its per-location
+/// memoization survives day changes.
+
+@ProviderFor(localityResolver)
+final localityResolverProvider = LocalityResolverProvider._();
+
+/// Resolves place names from coordinates; kept alive so its per-location
+/// memoization survives day changes.
+
+final class LocalityResolverProvider
+    extends
+        $FunctionalProvider<
+          LocalityResolver,
+          LocalityResolver,
+          LocalityResolver
+        >
+    with $Provider<LocalityResolver> {
+  /// Resolves place names from coordinates; kept alive so its per-location
+  /// memoization survives day changes.
+  LocalityResolverProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localityResolverProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$localityResolverHash();
+
+  @$internal
+  @override
+  $ProviderElement<LocalityResolver> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LocalityResolver create(Ref ref) {
+    return localityResolver(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LocalityResolver value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LocalityResolver>(value),
+    );
+  }
+}
+
+String _$localityResolverHash() => r'2429b8aeef4f68c904b6253b2dd0143ad0843de1';
+
+/// The place name (city) of the selected day's latest snapshot, or `null`
+/// when unknown.
+
+@ProviderFor(dayLocality)
+final dayLocalityProvider = DayLocalityProvider._();
+
+/// The place name (city) of the selected day's latest snapshot, or `null`
+/// when unknown.
+
+final class DayLocalityProvider
+    extends $FunctionalProvider<AsyncValue<String?>, String?, FutureOr<String?>>
+    with $FutureModifier<String?>, $FutureProvider<String?> {
+  /// The place name (city) of the selected day's latest snapshot, or `null`
+  /// when unknown.
+  DayLocalityProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dayLocalityProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dayLocalityHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<String?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<String?> create(Ref ref) {
+    return dayLocality(ref);
+  }
+}
+
+String _$dayLocalityHash() => r'99e44b415e2ad2a708132eb3bd33b0ac77631f50';
+
+/// Hourly pressure forecast (today + tomorrow) at the selected day's
+/// snapshot location; empty when no coordinates are known.
+
+@ProviderFor(dayPressureForecast)
+final dayPressureForecastProvider = DayPressureForecastProvider._();
+
+/// Hourly pressure forecast (today + tomorrow) at the selected day's
+/// snapshot location; empty when no coordinates are known.
+
+final class DayPressureForecastProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<HourlyMeasure>>,
+          List<HourlyMeasure>,
+          FutureOr<List<HourlyMeasure>>
+        >
+    with
+        $FutureModifier<List<HourlyMeasure>>,
+        $FutureProvider<List<HourlyMeasure>> {
+  /// Hourly pressure forecast (today + tomorrow) at the selected day's
+  /// snapshot location; empty when no coordinates are known.
+  DayPressureForecastProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dayPressureForecastProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dayPressureForecastHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<HourlyMeasure>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<HourlyMeasure>> create(Ref ref) {
+    return dayPressureForecast(ref);
+  }
+}
+
+String _$dayPressureForecastHash() =>
+    r'ce6f00a6cf6e9de9331534309bc89e2d2130f20d';

@@ -7,7 +7,9 @@ import 'package:assiette/app_env.dart';
 import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/environment_capture/background/environment_background_task.dart';
+import 'package:assiette/features/environment_capture/data/environment_capture_repository.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
+import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/notifications/data/notification_preferences_repository.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/features/notifications/presentation/notification_response_handler.dart';
@@ -30,7 +32,37 @@ Future<void> bootstrap(AppEnvironment environment) async {
   await _registerBackgroundTasks();
   await _registerNotifications();
 
+  // Deliberately not awaited: needs the network and possibly a location
+  // fix, and must never delay first paint.
+  unawaited(_backfillEnvironmentHistory());
+
   runApp(const ProviderScope(child: MyApp()));
+}
+
+/// Fills past days with no environment snapshot (phone off, background task
+/// killed...) from the Open-Meteo hourly history.
+Future<void> _backfillEnvironmentHistory() async {
+  if (!Platform.isAndroid) return;
+  try {
+    // Same throwaway-connection pattern as _registerNotifications: the
+    // Riverpod ProviderScope isn't up yet at this point in startup.
+    final db = AppDatabase();
+    try {
+      final repository = DriftEnvironmentCaptureRepository(
+        environmentDao: db.environmentDao,
+        locationReader: GeolocatorLocationReader(),
+        openMeteoClient: OpenMeteoClient(),
+      );
+      final filledDays = await repository.backfillMissingDays();
+      if (filledDays > 0) {
+        Print.green('DLOG', 'Backfilled $filledDays day(s) of weather');
+      }
+    } finally {
+      await db.close();
+    }
+  } on Exception catch (e) {
+    Print.red('DLOG', 'Failed to backfill environment history: $e');
+  }
 }
 
 Future<void> _registerBackgroundTasks() async {

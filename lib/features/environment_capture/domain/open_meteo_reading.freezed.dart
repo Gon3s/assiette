@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OpenMeteoReading {
 
- double? get pressure; double? get surfacePressure; double? get temperature; double? get humidity;
+ double? get pressure; double? get surfacePressure; double? get temperature; double? get humidity; int? get weatherCode; double? get uvIndex;
 /// Create a copy of OpenMeteoReading
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $OpenMeteoReadingCopyWith<OpenMeteoReading> get copyWith => _$OpenMeteoReadingCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OpenMeteoReading&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.surfacePressure, surfacePressure) || other.surfacePressure == surfacePressure)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OpenMeteoReading&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.surfacePressure, surfacePressure) || other.surfacePressure == surfacePressure)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.weatherCode, weatherCode) || other.weatherCode == weatherCode)&&(identical(other.uvIndex, uvIndex) || other.uvIndex == uvIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pressure,surfacePressure,temperature,humidity);
+int get hashCode => Object.hash(runtimeType,pressure,surfacePressure,temperature,humidity,weatherCode,uvIndex);
 
 @override
 String toString() {
-  return 'OpenMeteoReading(pressure: $pressure, surfacePressure: $surfacePressure, temperature: $temperature, humidity: $humidity)';
+  return 'OpenMeteoReading(pressure: $pressure, surfacePressure: $surfacePressure, temperature: $temperature, humidity: $humidity, weatherCode: $weatherCode, uvIndex: $uvIndex)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $OpenMeteoReadingCopyWith<$Res>  {
   factory $OpenMeteoReadingCopyWith(OpenMeteoReading value, $Res Function(OpenMeteoReading) _then) = _$OpenMeteoReadingCopyWithImpl;
 @useResult
 $Res call({
- double? pressure, double? surfacePressure, double? temperature, double? humidity
+ double? pressure, double? surfacePressure, double? temperature, double? humidity, int? weatherCode, double? uvIndex
 });
 
 
@@ -62,12 +62,14 @@ class _$OpenMeteoReadingCopyWithImpl<$Res>
 
 /// Create a copy of OpenMeteoReading
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? pressure = freezed,Object? surfacePressure = freezed,Object? temperature = freezed,Object? humidity = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? pressure = freezed,Object? surfacePressure = freezed,Object? temperature = freezed,Object? humidity = freezed,Object? weatherCode = freezed,Object? uvIndex = freezed,}) {
   return _then(_self.copyWith(
 pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as double?,surfacePressure: freezed == surfacePressure ? _self.surfacePressure : surfacePressure // ignore: cast_nullable_to_non_nullable
 as double?,temperature: freezed == temperature ? _self.temperature : temperature // ignore: cast_nullable_to_non_nullable
 as double?,humidity: freezed == humidity ? _self.humidity : humidity // ignore: cast_nullable_to_non_nullable
+as double?,weatherCode: freezed == weatherCode ? _self.weatherCode : weatherCode // ignore: cast_nullable_to_non_nullable
+as int?,uvIndex: freezed == uvIndex ? _self.uvIndex : uvIndex // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }
@@ -153,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity,  int? weatherCode,  double? uvIndex)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OpenMeteoReading() when $default != null:
-return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity);case _:
+return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity,_that.weatherCode,_that.uvIndex);case _:
   return orElse();
 
 }
@@ -174,10 +176,10 @@ return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.hum
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity,  int? weatherCode,  double? uvIndex)  $default,) {final _that = this;
 switch (_that) {
 case _OpenMeteoReading():
-return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity);case _:
+return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity,_that.weatherCode,_that.uvIndex);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +196,10 @@ return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.hum
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double? pressure,  double? surfacePressure,  double? temperature,  double? humidity,  int? weatherCode,  double? uvIndex)?  $default,) {final _that = this;
 switch (_that) {
 case _OpenMeteoReading() when $default != null:
-return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity);case _:
+return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.humidity,_that.weatherCode,_that.uvIndex);case _:
   return null;
 
 }
@@ -209,13 +211,15 @@ return $default(_that.pressure,_that.surfacePressure,_that.temperature,_that.hum
 
 
 class _OpenMeteoReading implements OpenMeteoReading {
-  const _OpenMeteoReading({this.pressure, this.surfacePressure, this.temperature, this.humidity});
+  const _OpenMeteoReading({this.pressure, this.surfacePressure, this.temperature, this.humidity, this.weatherCode, this.uvIndex});
   
 
 @override final  double? pressure;
 @override final  double? surfacePressure;
 @override final  double? temperature;
 @override final  double? humidity;
+@override final  int? weatherCode;
+@override final  double? uvIndex;
 
 /// Create a copy of OpenMeteoReading
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +231,16 @@ _$OpenMeteoReadingCopyWith<_OpenMeteoReading> get copyWith => __$OpenMeteoReadin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OpenMeteoReading&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.surfacePressure, surfacePressure) || other.surfacePressure == surfacePressure)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OpenMeteoReading&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.surfacePressure, surfacePressure) || other.surfacePressure == surfacePressure)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.weatherCode, weatherCode) || other.weatherCode == weatherCode)&&(identical(other.uvIndex, uvIndex) || other.uvIndex == uvIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pressure,surfacePressure,temperature,humidity);
+int get hashCode => Object.hash(runtimeType,pressure,surfacePressure,temperature,humidity,weatherCode,uvIndex);
 
 @override
 String toString() {
-  return 'OpenMeteoReading(pressure: $pressure, surfacePressure: $surfacePressure, temperature: $temperature, humidity: $humidity)';
+  return 'OpenMeteoReading(pressure: $pressure, surfacePressure: $surfacePressure, temperature: $temperature, humidity: $humidity, weatherCode: $weatherCode, uvIndex: $uvIndex)';
 }
 
 
@@ -247,7 +251,7 @@ abstract mixin class _$OpenMeteoReadingCopyWith<$Res> implements $OpenMeteoReadi
   factory _$OpenMeteoReadingCopyWith(_OpenMeteoReading value, $Res Function(_OpenMeteoReading) _then) = __$OpenMeteoReadingCopyWithImpl;
 @override @useResult
 $Res call({
- double? pressure, double? surfacePressure, double? temperature, double? humidity
+ double? pressure, double? surfacePressure, double? temperature, double? humidity, int? weatherCode, double? uvIndex
 });
 
 
@@ -264,12 +268,14 @@ class __$OpenMeteoReadingCopyWithImpl<$Res>
 
 /// Create a copy of OpenMeteoReading
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? pressure = freezed,Object? surfacePressure = freezed,Object? temperature = freezed,Object? humidity = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? pressure = freezed,Object? surfacePressure = freezed,Object? temperature = freezed,Object? humidity = freezed,Object? weatherCode = freezed,Object? uvIndex = freezed,}) {
   return _then(_OpenMeteoReading(
 pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as double?,surfacePressure: freezed == surfacePressure ? _self.surfacePressure : surfacePressure // ignore: cast_nullable_to_non_nullable
 as double?,temperature: freezed == temperature ? _self.temperature : temperature // ignore: cast_nullable_to_non_nullable
 as double?,humidity: freezed == humidity ? _self.humidity : humidity // ignore: cast_nullable_to_non_nullable
+as double?,weatherCode: freezed == weatherCode ? _self.weatherCode : weatherCode // ignore: cast_nullable_to_non_nullable
+as int?,uvIndex: freezed == uvIndex ? _self.uvIndex : uvIndex // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }

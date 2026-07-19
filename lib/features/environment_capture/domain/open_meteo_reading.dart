@@ -11,5 +11,7 @@ abstract class OpenMeteoReading with _$OpenMeteoReading {
     double? surfacePressure,
     double? temperature,
     double? humidity,
+    int? weatherCode,
+    double? uvIndex,
   }) = _OpenMeteoReading;
 }
