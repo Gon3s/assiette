@@ -8,8 +8,9 @@ part 'symptom_entry_repository.g.dart';
 
 /// Persistence for the symptom entry form: save, edit and delete.
 abstract class SymptomEntryRepository {
-  /// Inserts the symptom entry.
-  Future<void> saveSymptom({
+  /// Inserts the symptom entry and returns its generated id, so callers
+  /// can link related records (e.g. medication intakes) to it.
+  Future<String> saveSymptom({
     required DateTime timestamp,
     required SymptomType type,
     required int intensity,
@@ -32,10 +33,10 @@ abstract class SymptomEntryRepository {
     String? note,
   });
 
-  /// Soft-deletes the symptom.
+  /// Soft-deletes the symptom and the medication intakes linked to it.
   Future<void> deleteSymptom(String id);
 
-  /// Undoes [deleteSymptom].
+  /// Undoes [deleteSymptom], restoring the linked medication intakes too.
   Future<void> undoDeleteSymptom(String id);
 }
 

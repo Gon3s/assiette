@@ -1,6 +1,7 @@
 import 'package:assiette/data/daos/app_settings_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
+import 'package:assiette/data/daos/medication_intakes_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/daos/tags_dao.dart';
@@ -12,6 +13,7 @@ import 'package:assiette/data/db/tables/environment_snapshots_table.dart';
 import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
 import 'package:assiette/data/db/tables/meals_table.dart';
+import 'package:assiette/data/db/tables/medication_intakes_table.dart';
 import 'package:assiette/data/db/tables/sleep_entries_table.dart';
 import 'package:assiette/data/db/tables/symptoms_table.dart';
 import 'package:assiette/data/db/tables/tags_table.dart';
@@ -30,6 +32,7 @@ part 'app_database.g.dart';
     MealTemplates,
     TemplateTags,
     Symptoms,
+    MedicationIntakes,
     SleepEntries,
     EnvironmentSnapshots,
     AppSettings,
@@ -39,6 +42,7 @@ part 'app_database.g.dart';
     MealsDao,
     TemplatesDao,
     SymptomsDao,
+    MedicationIntakesDao,
     SleepEntriesDao,
     EnvironmentDao,
     AppSettingsDao,
@@ -49,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -85,6 +89,10 @@ class AppDatabase extends _$AppDatabase {
           appSettings,
           appSettings.photoTagSuggestionsEnabled,
         );
+      }
+      if (from < 6) {
+        await m.createTable(medicationIntakes);
+        await m.createIndex(idxMedicationIntakesTimestamp);
       }
     },
   );

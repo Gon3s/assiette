@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
+import 'package:assiette/data/daos/medication_intakes_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/db/app_database.dart';
@@ -18,15 +19,18 @@ class DriftDayViewRepository implements DayViewRepository {
   DriftDayViewRepository({
     required MealsDao mealsDao,
     required SymptomsDao symptomsDao,
+    required MedicationIntakesDao medicationIntakesDao,
     required SleepEntriesDao sleepEntriesDao,
     required EnvironmentDao environmentDao,
   })  : _mealsDao = mealsDao,
         _symptomsDao = symptomsDao,
+        _medicationIntakesDao = medicationIntakesDao,
         _sleepEntriesDao = sleepEntriesDao,
         _environmentDao = environmentDao;
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;
+  final MedicationIntakesDao _medicationIntakesDao;
   final SleepEntriesDao _sleepEntriesDao;
   final EnvironmentDao _environmentDao;
 
@@ -40,7 +44,10 @@ class DriftDayViewRepository implements DayViewRepository {
     final symptoms = _symptomsDao
         .watchByDay(day)
         .map((rows) => rows.map(_symptomToTimelineItem).toList());
-    return _combineSorted(meals, symptoms);
+    final medications = _medicationIntakesDao
+        .watchByDay(day)
+        .map((rows) => rows.map(_intakeToTimelineItem).toList());
+    return _combineSorted([meals, symptoms, medications]);
   }
 
   @override
@@ -112,6 +119,14 @@ class DriftDayViewRepository implements DayViewRepository {
         detail: symptom.detail,
       );
 
+  static TimelineItem _intakeToTimelineItem(MedicationIntake intake) =>
+      TimelineItem.medication(
+        id: intake.id,
+        timestamp: intake.timestamp,
+        name: intake.name,
+        dose: intake.dose,
+      );
+
   static WeatherSummary _toWeatherSummary(EnvironmentSnapshot snapshot) =>
       WeatherSummary(
         timestamp: snapshot.timestamp,
@@ -121,45 +136,41 @@ class DriftDayViewRepository implements DayViewRepository {
         humidity: snapshot.humidity,
       );
 
-  /// Merges two reactive lists into a single stream sorted by timestamp,
-  /// re-emitting whenever either source emits (once both have emitted once).
+  /// Merges reactive lists into a single stream sorted by timestamp,
+  /// re-emitting whenever any source emits (once all have emitted once).
   static Stream<List<TimelineItem>> _combineSorted(
-    Stream<List<TimelineItem>> a,
-    Stream<List<TimelineItem>> b,
+    List<Stream<List<TimelineItem>>> sources,
   ) {
-    List<TimelineItem>? latestA;
-    List<TimelineItem>? latestB;
-    StreamSubscription<List<TimelineItem>>? subA;
-    StreamSubscription<List<TimelineItem>>? subB;
+    final latest = List<List<TimelineItem>?>.filled(sources.length, null);
+    final subs = <StreamSubscription<List<TimelineItem>>>[];
     late final StreamController<List<TimelineItem>> controller;
 
     void emit() {
-      if (latestA == null || latestB == null) return;
-      final merged = [...latestA!, ...latestB!]
+      if (latest.any((value) => value == null)) return;
+      final merged = [for (final value in latest) ...value!]
         ..sort((x, y) => x.timestamp.compareTo(y.timestamp));
       controller.add(merged);
     }
 
     controller = StreamController<List<TimelineItem>>.broadcast(
       onListen: () {
-        subA = a.listen(
-          (value) {
-            latestA = value;
-            emit();
-          },
-          onError: controller.addError,
-        );
-        subB = b.listen(
-          (value) {
-            latestB = value;
-            emit();
-          },
-          onError: controller.addError,
-        );
+        for (var i = 0; i < sources.length; i++) {
+          subs.add(
+            sources[i].listen(
+              (value) {
+                latest[i] = value;
+                emit();
+              },
+              onError: controller.addError,
+            ),
+          );
+        }
       },
       onCancel: () async {
-        await subA?.cancel();
-        await subB?.cancel();
+        for (final sub in subs) {
+          await sub.cancel();
+        }
+        subs.clear();
       },
     );
     return controller.stream;

@@ -92,6 +92,15 @@ class TimelineTile extends ConsumerWidget {
           trailing: Text(time),
           onTap: () => _openSymptom(context, ref, id),
         ),
+      MedicationTimelineItem(:final name, :final dose) => ListTile(
+          leading: const CircleAvatar(
+            radius: Sizes.p20,
+            child: Icon(Icons.medication_outlined),
+          ),
+          title: Text(name),
+          subtitle: dose == null ? null : Text(dose),
+          trailing: Text(time),
+        ),
     };
   }
 }

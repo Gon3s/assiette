@@ -4,6 +4,7 @@ library;
 import 'dart:async';
 
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
@@ -16,8 +17,12 @@ import 'package:mocktail/mocktail.dart';
 class MockSymptomEntryRepository extends Mock
     implements SymptomEntryRepository {}
 
+class MockMedicationEntryRepository extends Mock
+    implements MedicationEntryRepository {}
+
 void main() {
   late MockSymptomEntryRepository repository;
+  late MockMedicationEntryRepository medicationRepository;
 
   setUpAll(() {
     registerFallbackValue(SymptomType.migraine);
@@ -26,6 +31,7 @@ void main() {
 
   setUp(() {
     repository = MockSymptomEntryRepository();
+    medicationRepository = MockMedicationEntryRepository();
     when(
       () => repository.saveSymptom(
         timestamp: any(named: 'timestamp'),
@@ -35,8 +41,32 @@ void main() {
         endTime: any(named: 'endTime'),
         note: any(named: 'note'),
       ),
+    ).thenAnswer((_) async => 'symptom-new');
+    when(() => medicationRepository.recentNames())
+        .thenAnswer((_) async => []);
+    when(() => medicationRepository.loadIntakesForSymptom(any()))
+        .thenAnswer((_) async => []);
+    when(
+      () => medicationRepository.saveIntake(
+        timestamp: any(named: 'timestamp'),
+        name: any(named: 'name'),
+        dose: any(named: 'dose'),
+        symptomId: any(named: 'symptomId'),
+      ),
     ).thenAnswer((_) async {});
   });
+
+  // The form ListView builds lazily: scroll until the target is built,
+  // then make sure it is actually on screen before tapping it.
+  Future<void> scrollTo(WidgetTester tester, Finder finder) async {
+    await tester.scrollUntilVisible(
+      finder,
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+  }
 
   Future<GoRouter> pumpScreen(
     WidgetTester tester, {
@@ -57,6 +87,8 @@ void main() {
       ProviderScope(
         overrides: [
           symptomEntryRepositoryProvider.overrideWithValue(repository),
+          medicationEntryRepositoryProvider
+              .overrideWithValue(medicationRepository),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
@@ -154,7 +186,7 @@ void main() {
     await tester.tap(find.text('Bloating'));
     await tester.pump();
 
-    await tester.ensureVisible(find.text('Save'));
+    await scrollTo(tester, find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
@@ -193,6 +225,74 @@ void main() {
     await tester.pump();
 
     expect(find.text('Add an end time'), findsOneWidget);
+  });
+
+  testWidgets('adding a medication intake shows a chip and saves it', (
+    tester,
+  ) async {
+    await pumpScreen(tester);
+
+    await scrollTo(tester, find.text('Add an intake'));
+    await tester.tap(find.text('Add an intake'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Medication'),
+      'Bi-Profenid',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Dose (optional)'),
+      '100 mg',
+    );
+    // The dialog's confirm button (the form's Save sits behind the dialog).
+    await tester.tap(find.widgetWithText(FilledButton, 'Save').last);
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Bi-Profenid'), findsOneWidget);
+
+    await scrollTo(tester, find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => medicationRepository.saveIntake(
+        timestamp: any(named: 'timestamp'),
+        name: 'Bi-Profenid',
+        dose: '100 mg',
+        symptomId: 'symptom-new',
+      ),
+    ).called(1);
+  });
+
+  testWidgets('a recent medication name is offered as a one-tap chip', (
+    tester,
+  ) async {
+    when(() => medicationRepository.recentNames())
+        .thenAnswer((_) async => ['Sumatriptan']);
+
+    await pumpScreen(tester);
+
+    await scrollTo(tester, find.text('Sumatriptan'));
+    await tester.tap(find.text('Sumatriptan'));
+    await tester.pump();
+
+    // The chip moved from suggestion (ActionChip) to added intake
+    // (InputChip, labeled with the intake time).
+    expect(find.widgetWithText(ActionChip, 'Sumatriptan'), findsNothing);
+    expect(find.textContaining('Sumatriptan'), findsOneWidget);
+
+    await scrollTo(tester, find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => medicationRepository.saveIntake(
+        timestamp: any(named: 'timestamp'),
+        name: 'Sumatriptan',
+        dose: any(named: 'dose'),
+        symptomId: 'symptom-new',
+      ),
+    ).called(1);
   });
 
   group('editing an existing symptom', () {

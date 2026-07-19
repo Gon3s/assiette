@@ -1,4 +1,6 @@
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
+import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_state.dart';
@@ -46,8 +48,26 @@ class SymptomEntryController extends _$SymptomEntryController {
   /// Clears the optional end time.
   void clearEndTime() => state = state.copyWith(endTime: null);
 
-  /// Seeds the form from a previously logged symptom for editing.
-  void loadForEdit(SymptomDraft draft) {
+  /// Adds a medication intake to the form (persisted on save).
+  void addIntake(MedicationIntakeDraft intake) =>
+      state = state.copyWith(intakes: [...state.intakes, intake]);
+
+  /// Removes an intake from the form. Already-persisted intakes are
+  /// remembered so save() can soft-delete them.
+  void removeIntakeAt(int index) {
+    final intake = state.intakes[index];
+    state = state.copyWith(
+      intakes: [...state.intakes]..removeAt(index),
+      removedIntakeIds: [
+        ...state.removedIntakeIds,
+        if (intake.id != null) intake.id!,
+      ],
+    );
+  }
+
+  /// Seeds the form from a previously logged symptom for editing, then
+  /// loads its medication intakes.
+  Future<void> loadForEdit(SymptomDraft draft) async {
     state = SymptomEntryState(
       id: draft.id,
       type: draft.type,
@@ -57,17 +77,27 @@ class SymptomEntryController extends _$SymptomEntryController {
       endTime: draft.endTime,
       note: draft.note ?? '',
     );
+    final intakes = await ref
+        .read(medicationEntryRepositoryProvider)
+        .loadIntakesForSymptom(draft.id);
+    // The user may have started a fresh form meanwhile; only attach the
+    // intakes when the edited symptom is still the one on screen.
+    if (state.id == draft.id) {
+      state = state.copyWith(intakes: intakes);
+    }
   }
 
-  /// Persists the symptom (create or update). Returns true on success.
+  /// Persists the symptom (create or update) and its medication intakes.
+  /// Returns true on success.
   Future<bool> save() async {
     if (state.isSaving) return false;
     state = state.copyWith(isSaving: true);
     try {
       final repository = ref.read(symptomEntryRepositoryProvider);
       final id = state.id;
+      final String symptomId;
       if (id == null) {
-        await repository.saveSymptom(
+        symptomId = await repository.saveSymptom(
           timestamp: state.timestamp,
           type: state.type,
           intensity: state.intensity,
@@ -85,6 +115,22 @@ class SymptomEntryController extends _$SymptomEntryController {
           endTime: state.endTime,
           note: state.note,
         );
+        symptomId = id;
+      }
+      final medicationRepository =
+          ref.read(medicationEntryRepositoryProvider);
+      for (final intake in state.intakes) {
+        if (intake.id == null) {
+          await medicationRepository.saveIntake(
+            timestamp: intake.timestamp,
+            name: intake.name,
+            dose: intake.dose,
+            symptomId: symptomId,
+          );
+        }
+      }
+      for (final removedId in state.removedIntakeIds) {
+        await medicationRepository.deleteIntake(removedId);
       }
       return true;
     } finally {

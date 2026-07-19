@@ -31,6 +31,17 @@ abstract class JournalSymptomEntry with _$JournalSymptomEntry {
   }) = _JournalSymptomEntry;
 }
 
+/// A single medication intake, as shown in the PDF export (US-20).
+@freezed
+abstract class JournalMedicationEntry with _$JournalMedicationEntry {
+  /// Creates a [JournalMedicationEntry].
+  const factory JournalMedicationEntry({
+    required DateTime timestamp,
+    required String name,
+    String? dose,
+  }) = _JournalMedicationEntry;
+}
+
 /// Everything logged on a single day, aggregated for the PDF export.
 @freezed
 abstract class DayJournalEntry with _$DayJournalEntry {
@@ -39,6 +50,8 @@ abstract class DayJournalEntry with _$DayJournalEntry {
     required DateTime date,
     required List<JournalMealEntry> meals,
     required List<JournalSymptomEntry> symptoms,
+    @Default(<JournalMedicationEntry>[])
+    List<JournalMedicationEntry> medications,
     SleepSummary? sleep,
     WeatherSummary? weather,
   }) = _DayJournalEntry;
@@ -47,6 +60,6 @@ abstract class DayJournalEntry with _$DayJournalEntry {
 
   /// Whether anything was logged this day.
   bool get hasData =>
-      meals.isNotEmpty || symptoms.isNotEmpty || sleep != null ||
-      weather != null;
+      meals.isNotEmpty || symptoms.isNotEmpty || medications.isNotEmpty ||
+      sleep != null || weather != null;
 }

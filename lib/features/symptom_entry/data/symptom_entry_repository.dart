@@ -15,18 +15,19 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
   static const _uuid = Uuid();
 
   @override
-  Future<void> saveSymptom({
+  Future<String> saveSymptom({
     required DateTime timestamp,
     required SymptomType type,
     required int intensity,
     String? detail,
     DateTime? endTime,
     String? note,
-  }) {
+  }) async {
     final now = DateTime.now().toUtc();
-    return _db.symptomsDao.insertSymptom(
+    final id = _uuid.v4();
+    await _db.symptomsDao.insertSymptom(
       SymptomsCompanion.insert(
-        id: _uuid.v4(),
+        id: id,
         timestamp: timestamp.toUtc(),
         type: type,
         intensity: intensity,
@@ -37,6 +38,7 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
         updatedAt: Value(now),
       ),
     );
+    return id;
   }
 
   @override
@@ -79,10 +81,14 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
   }
 
   @override
-  Future<void> deleteSymptom(String id) =>
-      _db.symptomsDao.softDeleteSymptom(id);
+  Future<void> deleteSymptom(String id) async {
+    await _db.symptomsDao.softDeleteSymptom(id);
+    await _db.medicationIntakesDao.softDeleteBySymptomId(id);
+  }
 
   @override
-  Future<void> undoDeleteSymptom(String id) =>
-      _db.symptomsDao.restoreSymptom(id);
+  Future<void> undoDeleteSymptom(String id) async {
+    await _db.symptomsDao.restoreSymptom(id);
+    await _db.medicationIntakesDao.restoreBySymptomId(id);
+  }
 }

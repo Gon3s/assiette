@@ -99,6 +99,15 @@ abstract class AppStrings {
   String get symptomDetailJoint;
   String get symptomDetailMuscle;
 
+  // Medication intakes (US-20)
+  String get medicationSectionTitle;
+  String get addMedicationAction;
+  String get medicationNameLabel;
+  String get medicationDoseLabel;
+  String get medicationIntakeTimeLabel;
+  String get removeMedicationIntake;
+  String get pdfSectionMedications;
+
   // Sleep entry
   String get sleepQualityLabel;
   String get bedTimeLabel;

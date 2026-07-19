@@ -553,9 +553,272 @@ as String?,
 }
 
 /// @nodoc
+mixin _$JournalMedicationEntry {
+
+ DateTime get timestamp; String get name; String? get dose;
+/// Create a copy of JournalMedicationEntry
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$JournalMedicationEntryCopyWith<JournalMedicationEntry> get copyWith => _$JournalMedicationEntryCopyWithImpl<JournalMedicationEntry>(this as JournalMedicationEntry, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalMedicationEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,timestamp,name,dose);
+
+@override
+String toString() {
+  return 'JournalMedicationEntry(timestamp: $timestamp, name: $name, dose: $dose)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $JournalMedicationEntryCopyWith<$Res>  {
+  factory $JournalMedicationEntryCopyWith(JournalMedicationEntry value, $Res Function(JournalMedicationEntry) _then) = _$JournalMedicationEntryCopyWithImpl;
+@useResult
+$Res call({
+ DateTime timestamp, String name, String? dose
+});
+
+
+
+
+}
+/// @nodoc
+class _$JournalMedicationEntryCopyWithImpl<$Res>
+    implements $JournalMedicationEntryCopyWith<$Res> {
+  _$JournalMedicationEntryCopyWithImpl(this._self, this._then);
+
+  final JournalMedicationEntry _self;
+  final $Res Function(JournalMedicationEntry) _then;
+
+/// Create a copy of JournalMedicationEntry
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? name = null,Object? dose = freezed,}) {
+  return _then(_self.copyWith(
+timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,dose: freezed == dose ? _self.dose : dose // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [JournalMedicationEntry].
+extension JournalMedicationEntryPatterns on JournalMedicationEntry {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _JournalMedicationEntry value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _JournalMedicationEntry() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _JournalMedicationEntry value)  $default,){
+final _that = this;
+switch (_that) {
+case _JournalMedicationEntry():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _JournalMedicationEntry value)?  $default,){
+final _that = this;
+switch (_that) {
+case _JournalMedicationEntry() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime timestamp,  String name,  String? dose)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _JournalMedicationEntry() when $default != null:
+return $default(_that.timestamp,_that.name,_that.dose);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime timestamp,  String name,  String? dose)  $default,) {final _that = this;
+switch (_that) {
+case _JournalMedicationEntry():
+return $default(_that.timestamp,_that.name,_that.dose);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime timestamp,  String name,  String? dose)?  $default,) {final _that = this;
+switch (_that) {
+case _JournalMedicationEntry() when $default != null:
+return $default(_that.timestamp,_that.name,_that.dose);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _JournalMedicationEntry implements JournalMedicationEntry {
+  const _JournalMedicationEntry({required this.timestamp, required this.name, this.dose});
+  
+
+@override final  DateTime timestamp;
+@override final  String name;
+@override final  String? dose;
+
+/// Create a copy of JournalMedicationEntry
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$JournalMedicationEntryCopyWith<_JournalMedicationEntry> get copyWith => __$JournalMedicationEntryCopyWithImpl<_JournalMedicationEntry>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalMedicationEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,timestamp,name,dose);
+
+@override
+String toString() {
+  return 'JournalMedicationEntry(timestamp: $timestamp, name: $name, dose: $dose)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$JournalMedicationEntryCopyWith<$Res> implements $JournalMedicationEntryCopyWith<$Res> {
+  factory _$JournalMedicationEntryCopyWith(_JournalMedicationEntry value, $Res Function(_JournalMedicationEntry) _then) = __$JournalMedicationEntryCopyWithImpl;
+@override @useResult
+$Res call({
+ DateTime timestamp, String name, String? dose
+});
+
+
+
+
+}
+/// @nodoc
+class __$JournalMedicationEntryCopyWithImpl<$Res>
+    implements _$JournalMedicationEntryCopyWith<$Res> {
+  __$JournalMedicationEntryCopyWithImpl(this._self, this._then);
+
+  final _JournalMedicationEntry _self;
+  final $Res Function(_JournalMedicationEntry) _then;
+
+/// Create a copy of JournalMedicationEntry
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? timestamp = null,Object? name = null,Object? dose = freezed,}) {
+  return _then(_JournalMedicationEntry(
+timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,dose: freezed == dose ? _self.dose : dose // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$DayJournalEntry {
 
- DateTime get date; List<JournalMealEntry> get meals; List<JournalSymptomEntry> get symptoms; SleepSummary? get sleep; WeatherSummary? get weather;
+ DateTime get date; List<JournalMealEntry> get meals; List<JournalSymptomEntry> get symptoms; List<JournalMedicationEntry> get medications; SleepSummary? get sleep; WeatherSummary? get weather;
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -566,16 +829,16 @@ $DayJournalEntryCopyWith<DayJournalEntry> get copyWith => _$DayJournalEntryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, meals)&&const DeepCollectionEquality().equals(other.symptoms, symptoms)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, meals)&&const DeepCollectionEquality().equals(other.symptoms, symptoms)&&const DeepCollectionEquality().equals(other.medications, medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(meals),const DeepCollectionEquality().hash(symptoms),sleep,weather);
+int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(meals),const DeepCollectionEquality().hash(symptoms),const DeepCollectionEquality().hash(medications),sleep,weather);
 
 @override
 String toString() {
-  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, sleep: $sleep, weather: $weather)';
+  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather)';
 }
 
 
@@ -586,7 +849,7 @@ abstract mixin class $DayJournalEntryCopyWith<$Res>  {
   factory $DayJournalEntryCopyWith(DayJournalEntry value, $Res Function(DayJournalEntry) _then) = _$DayJournalEntryCopyWithImpl;
 @useResult
 $Res call({
- DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, SleepSummary? sleep, WeatherSummary? weather
+ DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather
 });
 
 
@@ -603,12 +866,13 @@ class _$DayJournalEntryCopyWithImpl<$Res>
 
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? sleep = freezed,Object? weather = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,}) {
   return _then(_self.copyWith(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,meals: null == meals ? _self.meals : meals // ignore: cast_nullable_to_non_nullable
 as List<JournalMealEntry>,symptoms: null == symptoms ? _self.symptoms : symptoms // ignore: cast_nullable_to_non_nullable
-as List<JournalSymptomEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
+as List<JournalSymptomEntry>,medications: null == medications ? _self.medications : medications // ignore: cast_nullable_to_non_nullable
+as List<JournalMedicationEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
 as SleepSummary?,weather: freezed == weather ? _self.weather : weather // ignore: cast_nullable_to_non_nullable
 as WeatherSummary?,
   ));
@@ -719,10 +983,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  SleepSummary? sleep,  WeatherSummary? weather)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DayJournalEntry() when $default != null:
-return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather);case _:
   return orElse();
 
 }
@@ -740,10 +1004,10 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  SleepSummary? sleep,  WeatherSummary? weather)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather)  $default,) {final _that = this;
 switch (_that) {
 case _DayJournalEntry():
-return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -760,10 +1024,10 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  SleepSummary? sleep,  WeatherSummary? weather)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather)?  $default,) {final _that = this;
 switch (_that) {
 case _DayJournalEntry() when $default != null:
-return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather);case _:
   return null;
 
 }
@@ -775,7 +1039,7 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.sleep,_that.weather)
 
 
 class _DayJournalEntry extends DayJournalEntry {
-  const _DayJournalEntry({required this.date, required final  List<JournalMealEntry> meals, required final  List<JournalSymptomEntry> symptoms, this.sleep, this.weather}): _meals = meals,_symptoms = symptoms,super._();
+  const _DayJournalEntry({required this.date, required final  List<JournalMealEntry> meals, required final  List<JournalSymptomEntry> symptoms, final  List<JournalMedicationEntry> medications = const <JournalMedicationEntry>[], this.sleep, this.weather}): _meals = meals,_symptoms = symptoms,_medications = medications,super._();
   
 
 @override final  DateTime date;
@@ -793,6 +1057,13 @@ class _DayJournalEntry extends DayJournalEntry {
   return EqualUnmodifiableListView(_symptoms);
 }
 
+ final  List<JournalMedicationEntry> _medications;
+@override@JsonKey() List<JournalMedicationEntry> get medications {
+  if (_medications is EqualUnmodifiableListView) return _medications;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_medications);
+}
+
 @override final  SleepSummary? sleep;
 @override final  WeatherSummary? weather;
 
@@ -806,16 +1077,16 @@ _$DayJournalEntryCopyWith<_DayJournalEntry> get copyWith => __$DayJournalEntryCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other._meals, _meals)&&const DeepCollectionEquality().equals(other._symptoms, _symptoms)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other._meals, _meals)&&const DeepCollectionEquality().equals(other._symptoms, _symptoms)&&const DeepCollectionEquality().equals(other._medications, _medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),sleep,weather);
+int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),const DeepCollectionEquality().hash(_medications),sleep,weather);
 
 @override
 String toString() {
-  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, sleep: $sleep, weather: $weather)';
+  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather)';
 }
 
 
@@ -826,7 +1097,7 @@ abstract mixin class _$DayJournalEntryCopyWith<$Res> implements $DayJournalEntry
   factory _$DayJournalEntryCopyWith(_DayJournalEntry value, $Res Function(_DayJournalEntry) _then) = __$DayJournalEntryCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, SleepSummary? sleep, WeatherSummary? weather
+ DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather
 });
 
 
@@ -843,12 +1114,13 @@ class __$DayJournalEntryCopyWithImpl<$Res>
 
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? sleep = freezed,Object? weather = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,}) {
   return _then(_DayJournalEntry(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,meals: null == meals ? _self._meals : meals // ignore: cast_nullable_to_non_nullable
 as List<JournalMealEntry>,symptoms: null == symptoms ? _self._symptoms : symptoms // ignore: cast_nullable_to_non_nullable
-as List<JournalSymptomEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
+as List<JournalSymptomEntry>,medications: null == medications ? _self._medications : medications // ignore: cast_nullable_to_non_nullable
+as List<JournalMedicationEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
 as SleepSummary?,weather: freezed == weather ? _self.weather : weather // ignore: cast_nullable_to_non_nullable
 as WeatherSummary?,
   ));

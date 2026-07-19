@@ -4,9 +4,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'timeline_item.freezed.dart';
 
-/// A single entry shown on the day view timeline: either a meal or a
-/// symptom, both sharing an [id] and [timestamp] so they can be merged
-/// and sorted chronologically.
+/// A single entry shown on the day view timeline: a meal, a symptom or a
+/// medication intake, all sharing an [id] and [timestamp] so they can be
+/// merged and sorted chronologically.
 @freezed
 sealed class TimelineItem with _$TimelineItem {
   /// A logged meal.
@@ -26,4 +26,12 @@ sealed class TimelineItem with _$TimelineItem {
     required int intensity,
     String? detail,
   }) = SymptomTimelineItem;
+
+  /// A logged medication intake (US-20).
+  const factory TimelineItem.medication({
+    required String id,
+    required DateTime timestamp,
+    required String name,
+    String? dose,
+  }) = MedicationTimelineItem;
 }

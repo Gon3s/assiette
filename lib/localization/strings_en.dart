@@ -150,6 +150,21 @@ class AppStringsEn implements AppStrings {
   String get symptomDetailMuscle => 'Muscle';
 
   @override
+  String get medicationSectionTitle => 'Medications';
+  @override
+  String get addMedicationAction => 'Add an intake';
+  @override
+  String get medicationNameLabel => 'Medication';
+  @override
+  String get medicationDoseLabel => 'Dose (optional)';
+  @override
+  String get medicationIntakeTimeLabel => 'Intake time';
+  @override
+  String get removeMedicationIntake => 'Remove intake';
+  @override
+  String get pdfSectionMedications => 'Medications';
+
+  @override
   String get sleepQualityLabel => 'Quality';
   @override
   String get bedTimeLabel => 'Bed time';

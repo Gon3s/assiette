@@ -23,6 +23,7 @@ void main() {
     repository = DriftDayViewRepository(
       mealsDao: db.mealsDao,
       symptomsDao: db.symptomsDao,
+      medicationIntakesDao: db.medicationIntakesDao,
       sleepEntriesDao: db.sleepEntriesDao,
       environmentDao: db.environmentDao,
     );

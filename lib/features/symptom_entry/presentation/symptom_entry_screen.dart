@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
+import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_controller.dart';
@@ -116,6 +118,19 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
             picked.minute,
           ),
         );
+  }
+
+  Future<void> _addIntake(
+    BuildContext context,
+    WidgetRef ref,
+    DateTime defaultTime,
+  ) async {
+    final intake = await showDialog<MedicationIntakeDraft>(
+      context: context,
+      builder: (context) => _MedicationIntakeDialog(initialTime: defaultTime),
+    );
+    if (intake == null) return;
+    ref.read(symptomEntryControllerProvider.notifier).addIntake(intake);
   }
 
   Future<void> _save(BuildContext context, WidgetRef ref) async {
@@ -283,6 +298,24 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
               deleteButtonTooltipMessage: s.removeEndTime,
             ),
           gapH16,
+          Text(
+            s.medicationSectionTitle,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          gapH8,
+          _MedicationSection(
+            intakes: state.intakes,
+            defaultTime: state.timestamp,
+            onAdd: () => _addIntake(context, ref, state.timestamp),
+            onQuickAdd: (name) => notifier.addIntake(
+              MedicationIntakeDraft(
+                timestamp: state.timestamp,
+                name: name,
+              ),
+            ),
+            onRemove: notifier.removeIntakeAt,
+          ),
+          gapH16,
           TextField(
             decoration: InputDecoration(
               hintText: s.noteHint,
@@ -304,6 +337,196 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Medication intakes of the crisis: chips of added intakes, one-tap
+/// suggestions from the user's history, and an "add" button for a new
+/// name/dose/time. No hardcoded drug list (US-20).
+class _MedicationSection extends ConsumerWidget {
+  const _MedicationSection({
+    required this.intakes,
+    required this.defaultTime,
+    required this.onAdd,
+    required this.onQuickAdd,
+    required this.onRemove,
+  });
+
+  final List<MedicationIntakeDraft> intakes;
+  final DateTime defaultTime;
+  final VoidCallback onAdd;
+  final ValueChanged<String> onQuickAdd;
+  final ValueChanged<int> onRemove;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = AppStrings.of(context);
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+    final recentNames =
+        ref.watch(recentMedicationNamesProvider).value ?? [];
+    final suggestions = [
+      for (final name in recentNames)
+        if (!intakes.any((intake) => intake.name == name)) name,
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (intakes.isNotEmpty) ...[
+          Wrap(
+            spacing: Sizes.p8,
+            runSpacing: Sizes.p8,
+            children: [
+              for (var i = 0; i < intakes.length; i++)
+                InputChip(
+                  avatar: const Icon(Icons.medication_outlined,
+                      size: Sizes.p16),
+                  label: Text(
+                    [
+                      intakes[i].name,
+                      if (intakes[i].dose != null) intakes[i].dose!,
+                      DateFormat.Hm(locale)
+                          .format(intakes[i].timestamp.toLocal()),
+                    ].join(' · '),
+                  ),
+                  onDeleted: () => onRemove(i),
+                  deleteButtonTooltipMessage: s.removeMedicationIntake,
+                ),
+            ],
+          ),
+          gapH8,
+        ],
+        if (suggestions.isNotEmpty) ...[
+          Wrap(
+            spacing: Sizes.p8,
+            runSpacing: Sizes.p8,
+            children: [
+              for (final name in suggestions)
+                ActionChip(
+                  avatar: const Icon(Icons.add, size: Sizes.p16),
+                  label: Text(name),
+                  onPressed: () => onQuickAdd(name),
+                ),
+            ],
+          ),
+          gapH8,
+        ],
+        OutlinedButton.icon(
+          onPressed: onAdd,
+          icon: const Icon(Icons.medication_outlined, size: Sizes.p16),
+          label: Text(s.addMedicationAction),
+        ),
+      ],
+    );
+  }
+}
+
+/// Dialog collecting a medication intake: free-text name, optional dose,
+/// intake time (defaults to the crisis time).
+class _MedicationIntakeDialog extends StatefulWidget {
+  const _MedicationIntakeDialog({required this.initialTime});
+
+  final DateTime initialTime;
+
+  @override
+  State<_MedicationIntakeDialog> createState() =>
+      _MedicationIntakeDialogState();
+}
+
+class _MedicationIntakeDialogState extends State<_MedicationIntakeDialog> {
+  final _nameController = TextEditingController();
+  final _doseController = TextEditingController();
+  late DateTime _time = widget.initialTime;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _doseController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_time),
+    );
+    if (picked == null) return;
+    setState(() {
+      _time = DateTime(
+        _time.year,
+        _time.month,
+        _time.day,
+        picked.hour,
+        picked.minute,
+      );
+    });
+  }
+
+  void _submit() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
+    final dose = _doseController.text.trim();
+    Navigator.of(context).pop(
+      MedicationIntakeDraft(
+        timestamp: _time,
+        name: name,
+        dose: dose.isEmpty ? null : dose,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = AppStrings.of(context);
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+
+    return AlertDialog(
+      title: Text(s.addMedicationAction),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _nameController,
+            autofocus: true,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: s.medicationNameLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          gapH16,
+          TextField(
+            controller: _doseController,
+            decoration: InputDecoration(
+              labelText: s.medicationDoseLabel,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+          gapH16,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: _pickTime,
+              icon: const Icon(Icons.schedule, size: Sizes.p16),
+              label: Text(
+                '${s.medicationIntakeTimeLabel} : '
+                '${DateFormat.Hm(locale).format(_time)}',
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(s.cancel),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(s.save),
+        ),
+      ],
     );
   }
 }

@@ -69,6 +69,8 @@ class JournalPdfBuilder {
             ..._mealsSection(s, entry.meals, timeFormat),
           if (entry.symptoms.isNotEmpty)
             ..._symptomsSection(s, entry.symptoms, timeFormat),
+          if (entry.medications.isNotEmpty)
+            ..._medicationsSection(s, entry.medications, timeFormat),
           if (entry.sleep != null) _sleepLine(s, entry.sleep!),
           if (entry.weather != null) _weatherLine(s, entry.weather!),
         ],
@@ -108,6 +110,24 @@ class JournalPdfBuilder {
             symptomTypeLabel(s, symptom.symptomType),
             '${s.intensityLabel} ${symptom.intensity}/10',
             if (symptom.detail != null) symptom.detail!,
+          ].join(' - '),
+        ),
+    ];
+  }
+
+  List<pw.Widget> _medicationsSection(
+    AppStrings s,
+    List<JournalMedicationEntry> medications,
+    DateFormat timeFormat,
+  ) {
+    return [
+      pw.Text(s.pdfSectionMedications, style: _sectionStyle),
+      for (final medication in medications)
+        pw.Bullet(
+          text: [
+            timeFormat.format(medication.timestamp.toLocal()),
+            medication.name,
+            if (medication.dose != null) medication.dose!,
           ].join(' - '),
         ),
     ];

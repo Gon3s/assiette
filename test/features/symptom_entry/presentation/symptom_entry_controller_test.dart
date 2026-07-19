@@ -2,6 +2,8 @@
 library;
 
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
+import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_controller.dart';
@@ -12,8 +14,12 @@ import 'package:mocktail/mocktail.dart';
 class MockSymptomEntryRepository extends Mock
     implements SymptomEntryRepository {}
 
+class MockMedicationEntryRepository extends Mock
+    implements MedicationEntryRepository {}
+
 void main() {
   late MockSymptomEntryRepository repository;
+  late MockMedicationEntryRepository medicationRepository;
 
   setUpAll(() {
     registerFallbackValue(SymptomType.migraine);
@@ -22,12 +28,19 @@ void main() {
 
   setUp(() {
     repository = MockSymptomEntryRepository();
+    medicationRepository = MockMedicationEntryRepository();
+    when(() => medicationRepository.loadIntakesForSymptom(any()))
+        .thenAnswer((_) async => []);
+    when(() => medicationRepository.recentNames())
+        .thenAnswer((_) async => []);
   });
 
   ProviderContainer makeContainer() {
     final container = ProviderContainer(
       overrides: [
         symptomEntryRepositoryProvider.overrideWithValue(repository),
+        medicationEntryRepositoryProvider
+            .overrideWithValue(medicationRepository),
       ],
     );
     addTearDown(container.dispose);
@@ -100,7 +113,7 @@ void main() {
           endTime: any(named: 'endTime'),
           note: any(named: 'note'),
         ),
-      ).thenAnswer((_) async {});
+      ).thenAnswer((_) async => 'symptom-new');
 
       final container = makeContainer();
       final controller =
@@ -128,6 +141,108 @@ void main() {
       ).called(1);
     });
 
+    test('save persists new intakes linked to the created symptom', () async {
+      when(
+        () => repository.saveSymptom(
+          timestamp: any(named: 'timestamp'),
+          type: any(named: 'type'),
+          intensity: any(named: 'intensity'),
+          detail: any(named: 'detail'),
+          endTime: any(named: 'endTime'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async => 'symptom-new');
+      when(
+        () => medicationRepository.saveIntake(
+          timestamp: any(named: 'timestamp'),
+          name: any(named: 'name'),
+          dose: any(named: 'dose'),
+          symptomId: any(named: 'symptomId'),
+        ),
+      ).thenAnswer((_) async {});
+
+      final container = makeContainer();
+      final controller =
+          container.read(symptomEntryControllerProvider.notifier)
+            ..addIntake(
+              MedicationIntakeDraft(
+                timestamp: DateTime(2026, 7, 19, 10),
+                name: 'Bi-Profenid',
+                dose: '100 mg',
+              ),
+            );
+
+      final saved = await controller.save();
+
+      expect(saved, isTrue);
+      verify(
+        () => medicationRepository.saveIntake(
+          timestamp: DateTime(2026, 7, 19, 10),
+          name: 'Bi-Profenid',
+          dose: '100 mg',
+          symptomId: 'symptom-new',
+        ),
+      ).called(1);
+    });
+
+    test('removeIntakeAt on a persisted intake soft-deletes it on save',
+        () async {
+      when(
+        () => repository.updateSymptom(
+          id: any(named: 'id'),
+          timestamp: any(named: 'timestamp'),
+          type: any(named: 'type'),
+          intensity: any(named: 'intensity'),
+          detail: any(named: 'detail'),
+          endTime: any(named: 'endTime'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer((_) async {});
+      when(() => medicationRepository.deleteIntake(any()))
+          .thenAnswer((_) async {});
+      when(() => medicationRepository.loadIntakesForSymptom('symptom-1'))
+          .thenAnswer(
+        (_) async => [
+          MedicationIntakeDraft(
+            id: 'intake-1',
+            timestamp: DateTime(2026, 7, 7, 9, 30),
+            name: 'Sumatriptan',
+            symptomId: 'symptom-1',
+          ),
+        ],
+      );
+
+      final container = makeContainer();
+      final controller =
+          container.read(symptomEntryControllerProvider.notifier);
+      await controller.loadForEdit(
+        SymptomDraft(
+          id: 'symptom-1',
+          timestamp: DateTime(2026, 7, 7, 9),
+          type: SymptomType.migraine,
+          intensity: 5,
+        ),
+      );
+      expect(
+        container.read(symptomEntryControllerProvider).intakes,
+        hasLength(1),
+      );
+
+      controller.removeIntakeAt(0);
+      final saved = await controller.save();
+
+      expect(saved, isTrue);
+      verify(() => medicationRepository.deleteIntake('intake-1')).called(1);
+      verifyNever(
+        () => medicationRepository.saveIntake(
+          timestamp: any(named: 'timestamp'),
+          name: any(named: 'name'),
+          dose: any(named: 'dose'),
+          symptomId: any(named: 'symptomId'),
+        ),
+      );
+    });
+
     test('save resets isSaving and rethrows on failure', () async {
       when(
         () => repository.saveSymptom(
@@ -152,9 +267,11 @@ void main() {
       );
     });
 
-    test('loadForEdit seeds the form from an existing symptom', () {
+    test('loadForEdit seeds the form from an existing symptom', () async {
       final container = makeContainer();
-      container.read(symptomEntryControllerProvider.notifier).loadForEdit(
+      await container
+          .read(symptomEntryControllerProvider.notifier)
+          .loadForEdit(
         SymptomDraft(
           id: 'symptom-1',
           timestamp: DateTime(2026, 7, 7, 9),
@@ -189,16 +306,16 @@ void main() {
 
       final container = makeContainer();
       final controller =
-          container.read(symptomEntryControllerProvider.notifier)
-            ..loadForEdit(
-              SymptomDraft(
-                id: 'symptom-1',
-                timestamp: DateTime(2026, 7, 7, 9),
-                type: SymptomType.migraine,
-                intensity: 5,
-              ),
-            )
-            ..setIntensity(9);
+          container.read(symptomEntryControllerProvider.notifier);
+      await controller.loadForEdit(
+        SymptomDraft(
+          id: 'symptom-1',
+          timestamp: DateTime(2026, 7, 7, 9),
+          type: SymptomType.migraine,
+          intensity: 5,
+        ),
+      );
+      controller.setIntensity(9);
 
       final saved = await controller.save();
 
@@ -233,15 +350,15 @@ void main() {
 
       final container = makeContainer();
       final controller =
-          container.read(symptomEntryControllerProvider.notifier)
-            ..loadForEdit(
-              SymptomDraft(
-                id: 'symptom-1',
-                timestamp: DateTime(2026, 7, 7, 9),
-                type: SymptomType.migraine,
-                intensity: 5,
-              ),
-            );
+          container.read(symptomEntryControllerProvider.notifier);
+      await controller.loadForEdit(
+        SymptomDraft(
+          id: 'symptom-1',
+          timestamp: DateTime(2026, 7, 7, 9),
+          type: SymptomType.migraine,
+          intensity: 5,
+        ),
+      );
 
       final deleted = await controller.delete();
 

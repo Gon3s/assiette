@@ -150,6 +150,21 @@ class AppStringsFr implements AppStrings {
   String get symptomDetailMuscle => 'Musculaire';
 
   @override
+  String get medicationSectionTitle => 'Médicaments';
+  @override
+  String get addMedicationAction => 'Ajouter une prise';
+  @override
+  String get medicationNameLabel => 'Médicament';
+  @override
+  String get medicationDoseLabel => 'Dose (optionnel)';
+  @override
+  String get medicationIntakeTimeLabel => 'Heure de prise';
+  @override
+  String get removeMedicationIntake => 'Supprimer la prise';
+  @override
+  String get pdfSectionMedications => 'Médicaments';
+
+  @override
   String get sleepQualityLabel => 'Qualité';
   @override
   String get bedTimeLabel => 'Heure du coucher';

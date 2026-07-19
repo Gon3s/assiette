@@ -1,5 +1,6 @@
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
+import 'package:assiette/data/daos/medication_intakes_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/db/app_database.dart';
@@ -15,15 +16,18 @@ class DriftJournalExportRepository implements JournalExportRepository {
   DriftJournalExportRepository({
     required MealsDao mealsDao,
     required SymptomsDao symptomsDao,
+    required MedicationIntakesDao medicationIntakesDao,
     required SleepEntriesDao sleepEntriesDao,
     required EnvironmentDao environmentDao,
   })  : _mealsDao = mealsDao,
         _symptomsDao = symptomsDao,
+        _medicationIntakesDao = medicationIntakesDao,
         _sleepEntriesDao = sleepEntriesDao,
         _environmentDao = environmentDao;
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;
+  final MedicationIntakesDao _medicationIntakesDao;
   final SleepEntriesDao _sleepEntriesDao;
   final EnvironmentDao _environmentDao;
 
@@ -34,6 +38,8 @@ class DriftJournalExportRepository implements JournalExportRepository {
 
     final meals = await _mealsDao.getRangeWithTags(rangeStart, rangeEnd);
     final symptoms = await _symptomsDao.getRange(rangeStart, rangeEnd);
+    final intakes =
+        await _medicationIntakesDao.getRange(rangeStart, rangeEnd);
     final sleepEntries = await _sleepEntriesDao.getRange(
       rangeStart,
       rangeEnd,
@@ -68,6 +74,15 @@ class DriftJournalExportRepository implements JournalExportRepository {
               note: symptom.note,
             ),
       ];
+      final dayMedications = [
+        for (final intake in intakes)
+          if (_inRange(intake.timestamp, day, dayEnd))
+            JournalMedicationEntry(
+              timestamp: intake.timestamp,
+              name: intake.name,
+              dose: intake.dose,
+            ),
+      ];
       final sleepEntry = sleepEntries
           .where((e) => e.nightDate.isAtSameMomentAs(day))
           .firstOrNull;
@@ -80,6 +95,7 @@ class DriftJournalExportRepository implements JournalExportRepository {
         date: day,
         meals: dayMeals,
         symptoms: daySymptoms,
+        medications: dayMedications,
         sleep: sleepEntry == null
             ? null
             : SleepSummary(

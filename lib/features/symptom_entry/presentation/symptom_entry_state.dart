@@ -1,4 +1,5 @@
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'symptom_entry_state.freezed.dart';
@@ -16,5 +17,7 @@ abstract class SymptomEntryState with _$SymptomEntryState {
     DateTime? endTime,
     @Default(false) bool isSaving,
     String? id,
+    @Default(<MedicationIntakeDraft>[]) List<MedicationIntakeDraft> intakes,
+    @Default(<String>[]) List<String> removedIntakeIds,
   }) = _SymptomEntryState;
 }
