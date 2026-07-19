@@ -49,6 +49,8 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeDigestive => 'Digestif';
   @override
   String get symptomTypeMood => 'Humeur';
+  @override
+  String get symptomTypePain => 'Douleur';
 
   @override
   String get mealEntryTitle => 'Nouveau repas';
@@ -140,6 +142,12 @@ class AppStringsFr implements AppStrings {
   String get symptomDetailAnxious => 'Anxieux';
   @override
   String get symptomDetailLow => 'Abattu';
+  @override
+  String get symptomDetailBack => 'Dos';
+  @override
+  String get symptomDetailJoint => 'Articulaire';
+  @override
+  String get symptomDetailMuscle => 'Musculaire';
 
   @override
   String get sleepQualityLabel => 'Qualité';

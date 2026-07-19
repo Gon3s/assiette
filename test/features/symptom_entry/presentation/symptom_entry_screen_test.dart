@@ -77,6 +77,7 @@ void main() {
     expect(find.text('Migraine'), findsOneWidget);
     expect(find.text('Digestive'), findsOneWidget);
     expect(find.text('Mood'), findsOneWidget);
+    expect(find.text('Pain'), findsOneWidget);
     expect(find.text('Intensity: 5'), findsOneWidget);
     expect(find.text('Save'), findsOneWidget);
   });
@@ -95,8 +96,21 @@ void main() {
 
     expect(find.text('Detail (optional)'), findsOneWidget);
     expect(find.text('Bloating'), findsOneWidget);
-    expect(find.text('Pain'), findsOneWidget);
+    // 'Pain' also labels the type segment, so target the chip widget.
+    expect(find.widgetWithText(ChoiceChip, 'Pain'), findsOneWidget);
     expect(find.text('Nausea'), findsOneWidget);
+  });
+
+  testWidgets('selecting pain shows its detail chips', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.text('Pain'));
+    await tester.pump();
+
+    expect(find.text('Detail (optional)'), findsOneWidget);
+    expect(find.text('Back'), findsOneWidget);
+    expect(find.text('Joint'), findsOneWidget);
+    expect(find.text('Muscle'), findsOneWidget);
   });
 
   testWidgets('tapping a detail chip selects it, tapping again clears it', (

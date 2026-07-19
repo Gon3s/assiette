@@ -15,6 +15,7 @@ String symptomTypeLabel(AppStrings s, SymptomType type) => switch (type) {
       SymptomType.migraine => s.symptomTypeMigraine,
       SymptomType.digestive => s.symptomTypeDigestive,
       SymptomType.mood => s.symptomTypeMood,
+      SymptomType.pain => s.symptomTypePain,
     };
 
 /// Localized label for a sleep [quality] score (1-3).
@@ -36,6 +37,11 @@ List<String> symptomDetailSuggestions(AppStrings s, SymptomType type) =>
           s.symptomDetailIrritable,
           s.symptomDetailAnxious,
           s.symptomDetailLow,
+        ],
+      SymptomType.pain => [
+          s.symptomDetailBack,
+          s.symptomDetailJoint,
+          s.symptomDetailMuscle,
         ],
       SymptomType.migraine => const [],
     };

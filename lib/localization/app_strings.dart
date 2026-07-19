@@ -44,6 +44,7 @@ abstract class AppStrings {
   String get symptomTypeMigraine;
   String get symptomTypeDigestive;
   String get symptomTypeMood;
+  String get symptomTypePain;
 
   // Meal entry
   String get mealEntryTitle;
@@ -94,6 +95,9 @@ abstract class AppStrings {
   String get symptomDetailIrritable;
   String get symptomDetailAnxious;
   String get symptomDetailLow;
+  String get symptomDetailBack;
+  String get symptomDetailJoint;
+  String get symptomDetailMuscle;
 
   // Sleep entry
   String get sleepQualityLabel;
