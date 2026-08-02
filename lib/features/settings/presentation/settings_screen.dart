@@ -46,6 +46,13 @@ class SettingsScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(AppRouter.pdfExport.name),
           ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.cloud_outlined),
+            title: Text(s.cloudBackupAction),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRouter.cloudBackup.name),
+          ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             secondary: const Icon(Icons.auto_awesome_outlined),

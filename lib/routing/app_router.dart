@@ -1,3 +1,4 @@
+import 'package:assiette/features/cloud_backup/presentation/cloud_backup_screen.dart';
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
@@ -51,6 +52,9 @@ enum AppRouter {
 
   /// The PDF journal export screen.
   pdfExport,
+
+  /// The Google Drive cloud backup screen.
+  cloudBackup,
 
   /// The favorites management list.
   favoritesManage,
@@ -141,6 +145,11 @@ GoRouter goRouter(Ref ref) {
                 path: 'pdf-export',
                 name: AppRouter.pdfExport.name,
                 builder: (context, state) => const PdfExportScreen(),
+              ),
+              GoRoute(
+                path: 'cloud-backup',
+                name: AppRouter.cloudBackup.name,
+                builder: (context, state) => const CloudBackupScreen(),
               ),
             ],
           ),

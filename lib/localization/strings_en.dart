@@ -286,6 +286,56 @@ class AppStringsEn implements AppStrings {
   String get pdfSectionWeather => 'Pressure';
 
   @override
+  String get cloudBackupAction => 'Cloud backup';
+  @override
+  String get cloudBackupScreenTitle => 'Cloud backup';
+  @override
+  String get cloudBackupSignInAction => 'Sign in with Google';
+  @override
+  String get cloudBackupSignOutAction => 'Sign out';
+  @override
+  String cloudBackupSignedInAs(String email) => 'Signed in as $email';
+  @override
+  String get cloudBackupNotSignedIn => 'No account connected';
+  @override
+  String get cloudBackupNowAction => 'Back up now';
+  @override
+  String get cloudBackupInProgress => 'Backing up…';
+  @override
+  String get cloudBackupLastBackupLabel => 'Last backup';
+  @override
+  String get cloudBackupNeverBackedUp => 'Never backed up';
+  @override
+  String get cloudBackupSuccess => 'Backup complete';
+  @override
+  String get cloudBackupFailure =>
+      'Backup failed. Check your connection and try again.';
+  @override
+  String get cloudRestoreAction => 'Restore my backup';
+  @override
+  String get cloudRestoreInProgress => 'Restoring…';
+  @override
+  String get cloudRestoreSuccess => 'Restore complete';
+  @override
+  String get cloudRestoreFailure =>
+      'Restore failed. Check your connection and try again.';
+  @override
+  String get cloudRestoreConfirmTitle => 'Restore backup?';
+  @override
+  String get cloudRestoreConfirmBody =>
+      'All current local data will be replaced by the latest backup. '
+      'This cannot be undone.';
+  @override
+  String get cloudRestoreNoBackupFound => 'No backup found for this account';
+  @override
+  String get cloudRestorePromptTitle => 'Backup found';
+  @override
+  String get cloudRestorePromptBody =>
+      'A backup exists for this Google account. Restore it now?';
+  @override
+  String get cloudRestorePromptLater => 'Later';
+
+  @override
   String get onboardingSkip => 'Skip';
   @override
   String get onboardingNext => 'Next';

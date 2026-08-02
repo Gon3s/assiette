@@ -3,6 +3,7 @@ library;
 
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
@@ -91,6 +92,9 @@ void main() {
           symptomEntryRepositoryProvider.overrideWithValue(
             symptomEntryRepository,
           ),
+          // Avoids touching Google Sign-In / the real DB for the US-26
+          // startup restore-offer check, which this screen now watches.
+          shouldOfferRestoreProvider.overrideWith((ref) async => false),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),

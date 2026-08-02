@@ -287,6 +287,58 @@ class AppStringsFr implements AppStrings {
   String get pdfSectionWeather => 'Pression';
 
   @override
+  String get cloudBackupAction => 'Sauvegarde cloud';
+  @override
+  String get cloudBackupScreenTitle => 'Sauvegarde cloud';
+  @override
+  String get cloudBackupSignInAction => 'Se connecter avec Google';
+  @override
+  String get cloudBackupSignOutAction => 'Se déconnecter';
+  @override
+  String cloudBackupSignedInAs(String email) => 'Connecté en tant que $email';
+  @override
+  String get cloudBackupNotSignedIn => 'Aucun compte connecté';
+  @override
+  String get cloudBackupNowAction => 'Sauvegarder maintenant';
+  @override
+  String get cloudBackupInProgress => 'Sauvegarde en cours…';
+  @override
+  String get cloudBackupLastBackupLabel => 'Dernière sauvegarde';
+  @override
+  String get cloudBackupNeverBackedUp => 'Jamais sauvegardé';
+  @override
+  String get cloudBackupSuccess => 'Sauvegarde terminée';
+  @override
+  String get cloudBackupFailure =>
+      'Échec de la sauvegarde. Vérifie ta connexion et réessaie.';
+  @override
+  String get cloudRestoreAction => 'Restaurer ma sauvegarde';
+  @override
+  String get cloudRestoreInProgress => 'Restauration en cours…';
+  @override
+  String get cloudRestoreSuccess => 'Restauration terminée';
+  @override
+  String get cloudRestoreFailure =>
+      'Échec de la restauration. Vérifie ta connexion et réessaie.';
+  @override
+  String get cloudRestoreConfirmTitle => 'Restaurer la sauvegarde ?';
+  @override
+  String get cloudRestoreConfirmBody =>
+      'Toutes les données locales actuelles seront remplacées par la '
+      'dernière sauvegarde. Action irréversible.';
+  @override
+  String get cloudRestoreNoBackupFound =>
+      'Aucune sauvegarde trouvée pour ce compte';
+  @override
+  String get cloudRestorePromptTitle => 'Sauvegarde trouvée';
+  @override
+  String get cloudRestorePromptBody =>
+      'Une sauvegarde existe pour ce compte Google. La restaurer '
+      'maintenant ?';
+  @override
+  String get cloudRestorePromptLater => 'Plus tard';
+
+  @override
   String get onboardingSkip => 'Passer';
   @override
   String get onboardingNext => 'Suivant';

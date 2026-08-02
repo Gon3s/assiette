@@ -5836,6 +5836,285 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
+class $CloudBackupStatesTable extends CloudBackupStates
+    with TableInfo<$CloudBackupStatesTable, CloudBackupState> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CloudBackupStatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastBackupAtMeta = const VerificationMeta(
+    'lastBackupAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastBackupAt = GeneratedColumn<DateTime>(
+    'last_backup_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasRestoredOnThisDeviceMeta =
+      const VerificationMeta('hasRestoredOnThisDevice');
+  @override
+  late final GeneratedColumn<bool> hasRestoredOnThisDevice =
+      GeneratedColumn<bool>(
+        'has_restored_on_this_device',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("has_restored_on_this_device" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    lastBackupAt,
+    hasRestoredOnThisDevice,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cloud_backup_states';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CloudBackupState> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('last_backup_at')) {
+      context.handle(
+        _lastBackupAtMeta,
+        lastBackupAt.isAcceptableOrUnknown(
+          data['last_backup_at']!,
+          _lastBackupAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('has_restored_on_this_device')) {
+      context.handle(
+        _hasRestoredOnThisDeviceMeta,
+        hasRestoredOnThisDevice.isAcceptableOrUnknown(
+          data['has_restored_on_this_device']!,
+          _hasRestoredOnThisDeviceMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CloudBackupState map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CloudBackupState(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      lastBackupAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_backup_at'],
+      ),
+      hasRestoredOnThisDevice: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_restored_on_this_device'],
+      )!,
+    );
+  }
+
+  @override
+  $CloudBackupStatesTable createAlias(String alias) {
+    return $CloudBackupStatesTable(attachedDatabase, alias);
+  }
+}
+
+class CloudBackupState extends DataClass
+    implements Insertable<CloudBackupState> {
+  final int id;
+  final DateTime? lastBackupAt;
+  final bool hasRestoredOnThisDevice;
+  const CloudBackupState({
+    required this.id,
+    this.lastBackupAt,
+    required this.hasRestoredOnThisDevice,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || lastBackupAt != null) {
+      map['last_backup_at'] = Variable<DateTime>(lastBackupAt);
+    }
+    map['has_restored_on_this_device'] = Variable<bool>(
+      hasRestoredOnThisDevice,
+    );
+    return map;
+  }
+
+  CloudBackupStatesCompanion toCompanion(bool nullToAbsent) {
+    return CloudBackupStatesCompanion(
+      id: Value(id),
+      lastBackupAt: lastBackupAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastBackupAt),
+      hasRestoredOnThisDevice: Value(hasRestoredOnThisDevice),
+    );
+  }
+
+  factory CloudBackupState.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CloudBackupState(
+      id: serializer.fromJson<int>(json['id']),
+      lastBackupAt: serializer.fromJson<DateTime?>(json['lastBackupAt']),
+      hasRestoredOnThisDevice: serializer.fromJson<bool>(
+        json['hasRestoredOnThisDevice'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'lastBackupAt': serializer.toJson<DateTime?>(lastBackupAt),
+      'hasRestoredOnThisDevice': serializer.toJson<bool>(
+        hasRestoredOnThisDevice,
+      ),
+    };
+  }
+
+  CloudBackupState copyWith({
+    int? id,
+    Value<DateTime?> lastBackupAt = const Value.absent(),
+    bool? hasRestoredOnThisDevice,
+  }) => CloudBackupState(
+    id: id ?? this.id,
+    lastBackupAt: lastBackupAt.present ? lastBackupAt.value : this.lastBackupAt,
+    hasRestoredOnThisDevice:
+        hasRestoredOnThisDevice ?? this.hasRestoredOnThisDevice,
+  );
+  CloudBackupState copyWithCompanion(CloudBackupStatesCompanion data) {
+    return CloudBackupState(
+      id: data.id.present ? data.id.value : this.id,
+      lastBackupAt: data.lastBackupAt.present
+          ? data.lastBackupAt.value
+          : this.lastBackupAt,
+      hasRestoredOnThisDevice: data.hasRestoredOnThisDevice.present
+          ? data.hasRestoredOnThisDevice.value
+          : this.hasRestoredOnThisDevice,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CloudBackupState(')
+          ..write('id: $id, ')
+          ..write('lastBackupAt: $lastBackupAt, ')
+          ..write('hasRestoredOnThisDevice: $hasRestoredOnThisDevice')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, lastBackupAt, hasRestoredOnThisDevice);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CloudBackupState &&
+          other.id == this.id &&
+          other.lastBackupAt == this.lastBackupAt &&
+          other.hasRestoredOnThisDevice == this.hasRestoredOnThisDevice);
+}
+
+class CloudBackupStatesCompanion extends UpdateCompanion<CloudBackupState> {
+  final Value<int> id;
+  final Value<DateTime?> lastBackupAt;
+  final Value<bool> hasRestoredOnThisDevice;
+  const CloudBackupStatesCompanion({
+    this.id = const Value.absent(),
+    this.lastBackupAt = const Value.absent(),
+    this.hasRestoredOnThisDevice = const Value.absent(),
+  });
+  CloudBackupStatesCompanion.insert({
+    this.id = const Value.absent(),
+    this.lastBackupAt = const Value.absent(),
+    this.hasRestoredOnThisDevice = const Value.absent(),
+  });
+  static Insertable<CloudBackupState> custom({
+    Expression<int>? id,
+    Expression<DateTime>? lastBackupAt,
+    Expression<bool>? hasRestoredOnThisDevice,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (lastBackupAt != null) 'last_backup_at': lastBackupAt,
+      if (hasRestoredOnThisDevice != null)
+        'has_restored_on_this_device': hasRestoredOnThisDevice,
+    });
+  }
+
+  CloudBackupStatesCompanion copyWith({
+    Value<int>? id,
+    Value<DateTime?>? lastBackupAt,
+    Value<bool>? hasRestoredOnThisDevice,
+  }) {
+    return CloudBackupStatesCompanion(
+      id: id ?? this.id,
+      lastBackupAt: lastBackupAt ?? this.lastBackupAt,
+      hasRestoredOnThisDevice:
+          hasRestoredOnThisDevice ?? this.hasRestoredOnThisDevice,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (lastBackupAt.present) {
+      map['last_backup_at'] = Variable<DateTime>(lastBackupAt.value);
+    }
+    if (hasRestoredOnThisDevice.present) {
+      map['has_restored_on_this_device'] = Variable<bool>(
+        hasRestoredOnThisDevice.value,
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CloudBackupStatesCompanion(')
+          ..write('id: $id, ')
+          ..write('lastBackupAt: $lastBackupAt, ')
+          ..write('hasRestoredOnThisDevice: $hasRestoredOnThisDevice')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -5851,6 +6130,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $EnvironmentSnapshotsTable environmentSnapshots =
       $EnvironmentSnapshotsTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $CloudBackupStatesTable cloudBackupStates =
+      $CloudBackupStatesTable(this);
   late final Index idxMealsTimestamp = Index(
     'idx_meals_timestamp',
     'CREATE INDEX idx_meals_timestamp ON meals (timestamp)',
@@ -5883,6 +6164,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final AppSettingsDao appSettingsDao = AppSettingsDao(
     this as AppDatabase,
   );
+  late final CloudBackupStateDao cloudBackupStateDao = CloudBackupStateDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5898,6 +6182,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     sleepEntries,
     environmentSnapshots,
     appSettings,
+    cloudBackupStates,
     idxMealsTimestamp,
     idxSymptomsTimestamp,
     idxMedicationIntakesTimestamp,
@@ -8991,6 +9276,179 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
+typedef $$CloudBackupStatesTableCreateCompanionBuilder =
+    CloudBackupStatesCompanion Function({
+      Value<int> id,
+      Value<DateTime?> lastBackupAt,
+      Value<bool> hasRestoredOnThisDevice,
+    });
+typedef $$CloudBackupStatesTableUpdateCompanionBuilder =
+    CloudBackupStatesCompanion Function({
+      Value<int> id,
+      Value<DateTime?> lastBackupAt,
+      Value<bool> hasRestoredOnThisDevice,
+    });
+
+class $$CloudBackupStatesTableFilterComposer
+    extends Composer<_$AppDatabase, $CloudBackupStatesTable> {
+  $$CloudBackupStatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastBackupAt => $composableBuilder(
+    column: $table.lastBackupAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hasRestoredOnThisDevice => $composableBuilder(
+    column: $table.hasRestoredOnThisDevice,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CloudBackupStatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CloudBackupStatesTable> {
+  $$CloudBackupStatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastBackupAt => $composableBuilder(
+    column: $table.lastBackupAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hasRestoredOnThisDevice => $composableBuilder(
+    column: $table.hasRestoredOnThisDevice,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CloudBackupStatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CloudBackupStatesTable> {
+  $$CloudBackupStatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastBackupAt => $composableBuilder(
+    column: $table.lastBackupAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get hasRestoredOnThisDevice => $composableBuilder(
+    column: $table.hasRestoredOnThisDevice,
+    builder: (column) => column,
+  );
+}
+
+class $$CloudBackupStatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CloudBackupStatesTable,
+          CloudBackupState,
+          $$CloudBackupStatesTableFilterComposer,
+          $$CloudBackupStatesTableOrderingComposer,
+          $$CloudBackupStatesTableAnnotationComposer,
+          $$CloudBackupStatesTableCreateCompanionBuilder,
+          $$CloudBackupStatesTableUpdateCompanionBuilder,
+          (
+            CloudBackupState,
+            BaseReferences<
+              _$AppDatabase,
+              $CloudBackupStatesTable,
+              CloudBackupState
+            >,
+          ),
+          CloudBackupState,
+          PrefetchHooks Function()
+        > {
+  $$CloudBackupStatesTableTableManager(
+    _$AppDatabase db,
+    $CloudBackupStatesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CloudBackupStatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CloudBackupStatesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CloudBackupStatesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime?> lastBackupAt = const Value.absent(),
+                Value<bool> hasRestoredOnThisDevice = const Value.absent(),
+              }) => CloudBackupStatesCompanion(
+                id: id,
+                lastBackupAt: lastBackupAt,
+                hasRestoredOnThisDevice: hasRestoredOnThisDevice,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<DateTime?> lastBackupAt = const Value.absent(),
+                Value<bool> hasRestoredOnThisDevice = const Value.absent(),
+              }) => CloudBackupStatesCompanion.insert(
+                id: id,
+                lastBackupAt: lastBackupAt,
+                hasRestoredOnThisDevice: hasRestoredOnThisDevice,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CloudBackupStatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CloudBackupStatesTable,
+      CloudBackupState,
+      $$CloudBackupStatesTableFilterComposer,
+      $$CloudBackupStatesTableOrderingComposer,
+      $$CloudBackupStatesTableAnnotationComposer,
+      $$CloudBackupStatesTableCreateCompanionBuilder,
+      $$CloudBackupStatesTableUpdateCompanionBuilder,
+      (
+        CloudBackupState,
+        BaseReferences<
+          _$AppDatabase,
+          $CloudBackupStatesTable,
+          CloudBackupState
+        >,
+      ),
+      CloudBackupState,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -9014,4 +9472,6 @@ class $AppDatabaseManager {
       $$EnvironmentSnapshotsTableTableManager(_db, _db.environmentSnapshots);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
+  $$CloudBackupStatesTableTableManager get cloudBackupStates =>
+      $$CloudBackupStatesTableTableManager(_db, _db.cloudBackupStates);
 }
