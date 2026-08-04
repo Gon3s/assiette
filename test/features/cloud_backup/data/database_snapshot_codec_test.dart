@@ -8,6 +8,7 @@ import 'package:assiette/features/cloud_backup/data/database_snapshot_codec.dart
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart' as p;
 
 void main() {
   late AppDatabase source;
@@ -128,12 +129,12 @@ void main() {
 
       final meal = (await target.select(target.meals).get()).single;
       expect(meal.id, 'meal-1');
-      expect(meal.photoPath, '/new/device/meal_photos/meal.jpg');
+      expect(meal.photoPath, p.join('/new/device/meal_photos', 'meal.jpg'));
 
       final template = (await target.select(target.mealTemplates).get()).single;
       expect(
         template.defaultPhotoPath,
-        '/new/device/meal_photos/fav.jpg',
+        p.join('/new/device/meal_photos', 'fav.jpg'),
       );
 
       final mealTag = (await target.select(target.mealTags).get()).single;

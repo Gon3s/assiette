@@ -12,8 +12,17 @@ part 'cloud_backup_controller.g.dart';
 class CloudBackupController extends _$CloudBackupController {
   @override
   Future<CloudBackupState> build() async {
-    final email = await ref.read(cloudBackupRepositoryProvider).signInSilently();
-    return CloudBackupState(signedInEmail: email);
+    // Silent sign-in restores a previous session but must never crash the
+    // screen if it fails (missing account, Credential Manager error...) —
+    // fall back to signed-out and let the user tap "Sign in" instead.
+    try {
+      final email = await ref
+          .read(cloudBackupRepositoryProvider)
+          .signInSilently();
+      return CloudBackupState(signedInEmail: email);
+    } on CloudBackupException {
+      return const CloudBackupState();
+    }
   }
 
   /// Shows the Google account picker. Returns `false` if cancelled or

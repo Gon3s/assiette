@@ -32,11 +32,24 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
   static const _photosDirName = 'meal_photos';
   static const _databaseEntryName = 'database.json';
 
+  // Android's Credential Manager (used by google_sign_in v7) always
+  // requires a "Web application" OAuth client ID here, even for an
+  // Android-only, client-side flow — it has nothing to do with a backend.
+  // Passed at build time: --dart-define=GOOGLE_SERVER_CLIENT_ID=xxx.
+  static const _serverClientId = String.fromEnvironment(
+    'GOOGLE_SERVER_CLIENT_ID',
+  );
+
   bool _initialized = false;
 
   Future<void> _ensureInitialized() async {
     if (_initialized) return;
-    await _googleSignIn.initialize();
+    if (_serverClientId.isEmpty) {
+      throw CloudBackupException(
+        'Missing --dart-define=GOOGLE_SERVER_CLIENT_ID at build time',
+      );
+    }
+    await _googleSignIn.initialize(serverClientId: _serverClientId);
     _initialized = true;
   }
 
