@@ -171,6 +171,30 @@ abstract class AppStrings {
   String get pdfSectionSymptoms;
   String get pdfSectionWeather;
 
+  // Cloud backup (US-26)
+  String get cloudBackupAction;
+  String get cloudBackupScreenTitle;
+  String get cloudBackupSignInAction;
+  String get cloudBackupSignOutAction;
+  String cloudBackupSignedInAs(String email);
+  String get cloudBackupNotSignedIn;
+  String get cloudBackupNowAction;
+  String get cloudBackupInProgress;
+  String get cloudBackupLastBackupLabel;
+  String get cloudBackupNeverBackedUp;
+  String get cloudBackupSuccess;
+  String get cloudBackupFailure;
+  String get cloudRestoreAction;
+  String get cloudRestoreInProgress;
+  String get cloudRestoreSuccess;
+  String get cloudRestoreFailure;
+  String get cloudRestoreConfirmTitle;
+  String get cloudRestoreConfirmBody;
+  String get cloudRestoreNoBackupFound;
+  String get cloudRestorePromptTitle;
+  String get cloudRestorePromptBody;
+  String get cloudRestorePromptLater;
+
   // Onboarding
   String get onboardingSkip;
   String get onboardingNext;

@@ -6,6 +6,8 @@ environment:
   sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
+  # Sauvegarde/restauration cloud (US-26)
+  archive: ^4.0.7
   collection: ^1.19.1
   cupertino_icons: ^1.0.8
   # Base locale (SQLite)
@@ -32,6 +34,10 @@ dependencies:
   google_fonts: ^6.3.0
   # Suggestion de tags depuis photo (US-19), modèle on-device
   google_mlkit_image_labeling: ^0.15.0
+  # Auth Google Drive (US-26, sauvegarde cloud)
+  google_sign_in: ^7.2.0
+  # API Google Drive (US-26, sauvegarde cloud)
+  googleapis: ^15.0.0
   # Appel API Open-Meteo
   http: ^1.6.0
   # Photo

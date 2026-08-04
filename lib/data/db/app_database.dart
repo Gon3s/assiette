@@ -1,4 +1,5 @@
 import 'package:assiette/data/daos/app_settings_dao.dart';
+import 'package:assiette/data/daos/cloud_backup_state_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/medication_intakes_dao.dart';
@@ -9,6 +10,7 @@ import 'package:assiette/data/daos/templates_dao.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/data/db/tables/app_settings_table.dart';
+import 'package:assiette/data/db/tables/cloud_backup_state_table.dart';
 import 'package:assiette/data/db/tables/environment_snapshots_table.dart';
 import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
@@ -36,6 +38,7 @@ part 'app_database.g.dart';
     SleepEntries,
     EnvironmentSnapshots,
     AppSettings,
+    CloudBackupStates,
   ],
   daos: [
     TagsDao,
@@ -46,6 +49,7 @@ part 'app_database.g.dart';
     SleepEntriesDao,
     EnvironmentDao,
     AppSettingsDao,
+    CloudBackupStateDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -53,7 +57,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -126,6 +130,9 @@ class AppDatabase extends _$AppDatabase {
           environmentSnapshots,
           environmentSnapshots.ragweedPollen,
         );
+      }
+      if (from < 8) {
+        await m.createTable(cloudBackupStates);
       }
     },
   );

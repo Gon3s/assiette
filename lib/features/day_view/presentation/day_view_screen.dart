@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
+import 'package:assiette/features/cloud_backup/presentation/cloud_backup_controller.dart';
+import 'package:assiette/features/cloud_backup/presentation/cloud_backup_state.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/day_view/presentation/widgets/day_header.dart';
@@ -65,6 +70,42 @@ class _DayViewScreenState extends ConsumerState<DayViewScreen> {
     ref.read(selectedDateProvider.notifier).select(_dateForPage(page));
   }
 
+  Future<void> _offerRestore(BuildContext context, AppStrings s) async {
+    final restore = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(s.cloudRestorePromptTitle),
+        content: Text(s.cloudRestorePromptBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(s.cloudRestorePromptLater),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(s.cloudRestoreAction),
+          ),
+        ],
+      ),
+    );
+    if (!context.mounted) return;
+    final notifier = ref.read(cloudBackupControllerProvider.notifier);
+    if (restore != true) {
+      await notifier.dismissRestoreOffer();
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    final outcome = await notifier.restoreLatest();
+    final message = switch (outcome) {
+      RestoreOutcome.success => s.cloudRestoreSuccess,
+      RestoreOutcome.notFound => s.cloudRestoreNoBackupFound,
+      RestoreOutcome.failure => s.cloudRestoreFailure,
+    };
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
   Future<void> _pickDate(DateTime current) async {
     final picked = await showDatePicker(
       context: context,
@@ -84,13 +125,23 @@ class _DayViewScreenState extends ConsumerState<DayViewScreen> {
 
     // Keep the PageView in sync when the date changes from outside a
     // swipe (the "today" shortcut or the date picker).
-    ref.listen(selectedDateProvider, (previous, next) {
-      final targetPage = _pageForDate(next);
-      if (_pageController.hasClients &&
-          _pageController.page?.round() != targetPage) {
-        _pageController.jumpToPage(targetPage);
-      }
-    });
+    ref
+      ..listen(selectedDateProvider, (previous, next) {
+        final targetPage = _pageForDate(next);
+        if (_pageController.hasClients &&
+            _pageController.page?.round() != targetPage) {
+          _pageController.jumpToPage(targetPage);
+        }
+      })
+      // Startup restore offer (US-26): fires once per app session, at
+      // most, when a Drive backup is found for a silently-restored Google
+      // session.
+      ..listen(shouldOfferRestoreProvider, (previous, next) {
+        if (next.value != true) return;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (context.mounted) unawaited(_offerRestore(context, s));
+        });
+      });
 
     final now = DateTime.now();
     final isToday =
