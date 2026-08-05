@@ -87,7 +87,9 @@ class CloudBackupScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(s.cloudBackupScreenTitle)),
       body: controllerState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text(s.errorGeneric)),
+        // TODO(US-26): revert to s.errorGeneric once the repeated silent
+        // sign-in failure is diagnosed.
+        error: (error, stack) => Center(child: Text('$error')),
         data: (state) => ListView(
           padding: const EdgeInsets.all(Sizes.p16),
           children: [
