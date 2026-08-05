@@ -48,7 +48,9 @@ jobs:
         run: flutter test
 
       - name: Build debug APK
-        run: flutter build apk --debug -t lib/main_dev.dart
+        run: >-
+          flutter build apk --debug -t lib/main_dev.dart
+          --dart-define=GOOGLE_SERVER_CLIENT_ID=${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
 
       - name: Publish debug APK to rolling release
         uses: softprops/action-gh-release@v2

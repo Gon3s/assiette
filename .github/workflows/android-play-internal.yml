@@ -57,7 +57,10 @@ jobs:
       # versionCode must strictly increase between Play Store uploads, so it's
       # driven by the CI run number instead of the pubspec version.
       - name: Build release App Bundle
-        run: flutter build appbundle --release -t lib/main.dart --build-number=${{ github.run_number }}
+        run: >-
+          flutter build appbundle --release -t lib/main.dart
+          --build-number=${{ github.run_number }}
+          --dart-define=GOOGLE_SERVER_CLIENT_ID=${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
 
       - name: Publish to Play Store internal track
         uses: r0adkll/upload-google-play@v1
