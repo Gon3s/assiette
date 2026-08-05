@@ -25,18 +25,18 @@ class CloudBackupController extends _$CloudBackupController {
     }
   }
 
-  /// Shows the Google account picker. Returns `false` if cancelled or
-  /// sign-in failed.
-  Future<bool> signIn() async {
+  /// Shows the Google account picker. Returns `null` on success, or a
+  /// diagnostic (non-localized) message if cancelled or sign-in failed.
+  Future<String?> signIn() async {
     final current = state.value ?? const CloudBackupState();
     state = AsyncData(current.copyWith(isBusy: true));
     try {
       final email = await ref.read(cloudBackupRepositoryProvider).signIn();
       state = AsyncData(CloudBackupState(signedInEmail: email));
-      return true;
-    } on CloudBackupException {
+      return null;
+    } on CloudBackupException catch (e) {
       state = AsyncData(current.copyWith(isBusy: false));
-      return false;
+      return e.message;
     }
   }
 

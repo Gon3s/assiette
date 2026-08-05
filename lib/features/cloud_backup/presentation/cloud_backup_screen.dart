@@ -15,11 +15,14 @@ class CloudBackupScreen extends ConsumerWidget {
 
   Future<void> _signIn(BuildContext context, WidgetRef ref, AppStrings s) async {
     final messenger = ScaffoldMessenger.of(context);
-    final ok = await ref.read(cloudBackupControllerProvider.notifier).signIn();
-    if (!ok) {
+    final error = await ref.read(cloudBackupControllerProvider.notifier).signIn();
+    if (error != null) {
+      // TODO(US-26): revert to s.errorGeneric once the internal-testing
+      // sign-in failure is diagnosed — this surfaces the raw diagnostic
+      // message so it shows up in a bug report/screenshot.
       messenger
         ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+        ..showSnackBar(SnackBar(content: Text(error)));
     }
   }
 
