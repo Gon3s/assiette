@@ -157,4 +157,5 @@ Le projet suit un backlog d'user stories. Avant tout commit :
 Format des commits : `type(scope): message` (anglais, impératif, ≤ 72
 caractères) — ex. `feat(feature/day_view): add day navigation`.
 
-Les conventions détaillées du projet sont dans [CLAUDE.md](CLAUDE.md).
+Les conventions détaillées du projet sont dans [AGENTS.md](AGENTS.md). Le
+fichier [CLAUDE.md](CLAUDE.md) reste disponible pour les sessions Claude Code.

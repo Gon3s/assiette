@@ -1,0 +1,193 @@
+# assiette - Project Guide for Codex
+
+> This project was generated from the **flutter_starter_kit** Mason brick.
+> This file gives Codex (and any contributor) the conventions and commands to
+> work effectively in this codebase. Keep it up to date as the project evolves.
+
+## Project overview
+
+Food · symptoms · environment. Connect the dots.
+
+- **State management:** Riverpod 3 with code generation (`@riverpod`)
+- **Routing:** GoRouter with code generation + redirect guards
+- **Models:** Freezed 3 + `json_serializable`
+- **Architecture:** feature-first (`data` / `domain` / `presentation`)
+
+## Agent handover
+
+- `AGENTS.md` is the authoritative repository guide for Codex and other
+  compatible agents. Keep `CLAUDE.md` aligned while Claude Code remains in use.
+- Project-specific reusable workflows live in `.agents/skills/`. The copies in
+  `.claude/skills/` are retained only for Claude Code compatibility.
+- Codex startup configuration lives in `.codex/`; it must stay portable,
+  repository-local and offline. Do not install tools or modify user-level agent
+  configuration from a repository hook.
+- The shared Git pre-commit hook lives in `.githooks/pre-commit`; configure it
+  with `git config core.hooksPath .githooks` if the session hook did not run.
+- CI is the reproducible toolchain reference and currently pins Flutter 3.44.5.
+  A different local patch version is acceptable for exploration, but delivery
+  validation should use the pinned CI version or explicitly report the gap.
+
+
+
+## Golden rules
+
+1. **Never hand-write generated files.** Files ending in `.g.dart` and
+   `.freezed.dart` are produced by `build_runner`. Edit the source annotated
+   file, then re-run the generator.
+2. **Always run code generation after touching annotated files** (providers,
+   Freezed models, routes):
+   ```bash
+   dart run build_runner build --delete-conflicting-outputs
+   # or keep it running while you work:
+   dart run build_runner watch --delete-conflicting-outputs
+   ```
+3. **No hardcoded user-facing strings.** Add them to `AppStrings` and the
+   `AppStringsFr` / `AppStringsEn` implementations, then use
+   `AppStrings.of(context).yourKey`.
+4. **Keep the analyzer clean.** Run `flutter analyze` - this project uses
+   `very_good_analysis` (strict lints). Fix warnings/errors before committing.
+5. **Respect the feature-first layering.** UI never talks to Firebase/storage
+   directly - it goes through a repository in `domain` implemented in `data`.
+
+## Common commands
+
+```bash
+flutter pub get                                    # install deps
+dart run build_runner build --delete-conflicting-outputs   # code gen
+flutter run -t lib/main_dev.dart                   # run (development)
+flutter run -t lib/main.dart                       # run (production)
+flutter test                                       # run tests
+flutter analyze --no-pub                           # lint (ignorer public_member_api_docs)
+```
+
+## Drift (SQLite local)
+
+- Tables → `lib/data/db/tables/` (schéma déclaré dans `lib/data/db/app_database.dart`, `schemaVersion`)
+- DAOs → `lib/data/daos/`
+- Migrations : incrémenter `schemaVersion` + `MigrationStrategy` (`onUpgrade`)
+- Seed système → inline dans `AppDatabase._seedSystemTags()` (`lib/data/db/app_database.dart`) - tags système, ne pas modifier sans US dédiée
+- `.g.dart` : jamais à la main - `build_runner` uniquement
+
+## Architecture & conventions
+
+```
+lib/
+├── main.dart / main_dev.dart   # entry points (prod / dev flavors)
+├── bootstrap.dart              # init + error zone + runApp
+├── app.dart                    # MaterialApp.router, theme, localization
+├── app_env.dart                # environment selector
+├── common_widgets/             # shared widgets
+├── constants/                  # sizes, spacing
+├── localization/               # AppStrings (FR/EN)
+├── routing/                    # GoRouter, app startup, 404
+├── utils/                      # helpers
+└── features/<feature>/
+    ├── data/                   # repository implementations, DTOs
+    ├── domain/                 # models + repository contracts (abstractions)
+    └── presentation/<screen>/  # screen widget + Riverpod controller
+```
+
+### Adding a new feature
+
+1. Create `lib/features/<feature>/{data,domain,presentation}/`.
+2. Define the model with Freezed in `domain/` (remember: `abstract class`).
+3. Define a repository **contract** (abstract class) in `domain/` and a
+   `@riverpod` provider returning it.
+4. Implement the repository in `data/`.
+5. Build the screen + a `@riverpod` controller in `presentation/<screen>/`.
+6. Register the route in `lib/routing/app_router.dart`.
+7. Run `build_runner`.
+
+### Riverpod 3.x notes (important)
+
+- Functional providers take a plain `Ref` parameter - the old generated
+  `*Ref` aliases (e.g. `MyProviderRef`) **no longer exist**.
+- `isLoading` / `requireValue` are native on `AsyncValue` - don't redefine them.
+- For async controllers, use `AsyncValue.guard` so the state transitions
+  `AsyncLoading → AsyncData/AsyncError` cleanly:
+  ```dart
+  state = const AsyncLoading();
+  state = await AsyncValue.guard(() async { /* work */ });
+  ```
+
+### Freezed 3.x notes
+
+- Data classes that use `with _$X` **must be declared `abstract`**:
+  ```dart
+  @freezed
+  abstract class MyModel with _$MyModel { ... }
+  ```
+
+### Background tasks (workmanager)
+
+- Live under `lib/features/<feature>/background/`.
+- The callback dispatcher is a **top-level** function tagged
+  `@pragma('vm:entry-point')`. It runs in its own isolate with no shared
+  memory: reopen `AppDatabase()` directly there, never reuse the instance
+  from `appDatabaseProvider`.
+- The `@pragma('vm:entry-point')` marker makes `very_good_analysis`'s
+  `unreachable_from_main` lint treat that file as its own entry point, so it
+  can't see callers in `bootstrap.dart`. Add
+  `// ignore_for_file: unreachable_from_main` with a one-line justification
+  comment at the top of the file rather than fighting the false positive.
+- Register the task from `bootstrap.dart` inside a `try/catch`, gated on
+  `Platform.isAndroid` (or the platforms you actually support) so an
+  unsupported platform or a plugin failure never blocks app startup.
+- See `lib/features/environment_capture/` (US-8) for the reference
+  implementation.
+
+
+## Testing conventions
+
+- Tests use `mocktail`.
+- Test controllers by listening to their `AsyncValue` state through a
+  `ProviderContainer` with overridden providers.
+- Mirror the `lib/` structure under `test/`.
+- **Sandbox sessions only**: `flutter test` needs a native `libsqlite3` and
+  the sandbox has no network access to the GitHub host serving the
+  prebuilt binary (`Bad state: Hash of downloaded file libsqlite3...`). Fix
+  locally, **do not commit**, by pointing the `sqlite3` package hook at the
+  OS-provided library (already present via `libsqlite3-dev`):
+  ```yaml
+  # pubspec.yaml — temporary, revert before committing
+  hooks:
+    user_defines:
+      sqlite3:
+        source: system
+  ```
+  Run `flutter pub get` after adding it, run the tests, then remove the
+  block again before committing.
+
+## Convention commits
+
+Format : `type(scope): message` - anglais, impératif, ≤72 car.
+Scopes : `db`, `feature/<name>`, `routing`, `ui`, `i18n`, `deps`, `config`
+Utiliser `/caveman-commit` pour générer le message.
+
+## Before you commit
+
+Hook git disponible (`.githooks/pre-commit`) : bloque le commit si `flutter
+analyze` ou `flutter test` échoue. Activation (une fois par clone) :
+```bash
+git config core.hooksPath .githooks
+```
+Bypass volontaire pour un commit WIP : `SKIP_GATE=1 git commit ...`.
+
+Gate obligatoire (dans cet ordre) :
+```bash
+dart run build_runner build --delete-conflicting-outputs  # si fichiers annotés modifiés
+flutter analyze --no-pub   # zéro erreur/warning hors public_member_api_docs
+flutter test               # doit passer
+```
+- [ ] Aucune string UI hardcodée
+- [ ] Page Notion de l'US mise à jour (status + hash commit)
+
+## Notion - suivi des US
+
+Après chaque US livrée :
+1. MCP Notion → page US → `status = Done`
+2. Ajouter hash commit court dans les notes de la page
+3. Noter blocages éventuels
+
+MCP `notion-update-page` et `notion-fetch` disponibles en session.

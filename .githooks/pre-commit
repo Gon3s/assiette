@@ -1,11 +1,11 @@
 #!/bin/bash
-# Enforces the CLAUDE.md pre-commit gate: analyze must be clean, tests must
+# Enforces the AGENTS.md pre-commit gate: analyze must be clean, tests must
 # pass. build_runner is NOT run here (it's slow and only needed when an
-# annotated file changed — CLAUDE.md already tells contributors to run it
+# annotated file changed — AGENTS.md already tells contributors to run it
 # manually before committing).
 #
 # Enabled via: git config core.hooksPath .githooks (done automatically by
-# .claude/hooks/session-start.sh for Claude Code sessions).
+# the supported agent session hooks).
 #
 # Escape hatch for deliberate WIP commits: SKIP_GATE=1 git commit ...
 set -uo pipefail
