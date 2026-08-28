@@ -1989,6 +1989,62 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<MigraineStartPrecision?, int>
+  startPrecision =
+      GeneratedColumn<int>(
+        'start_precision',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<MigraineStartPrecision?>(
+        $SymptomsTable.$converterstartPrecisionn,
+      );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _initialIntensityMeta = const VerificationMeta(
+    'initialIntensity',
+  );
+  @override
+  late final GeneratedColumn<int> initialIntensity = GeneratedColumn<int>(
+    'initial_intensity',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _maximumIntensityMeta = const VerificationMeta(
+    'maximumIntensity',
+  );
+  @override
+  late final GeneratedColumn<int> maximumIntensity = GeneratedColumn<int>(
+    'maximum_intensity',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
   late final GeneratedColumn<String> note = GeneratedColumn<String>(
@@ -2041,6 +2097,11 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
     intensity,
     detail,
     endTime,
+    startedAt,
+    startPrecision,
+    endedAt,
+    initialIntensity,
+    maximumIntensity,
     note,
     createdAt,
     updatedAt,
@@ -2089,6 +2150,36 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
       context.handle(
         _endTimeMeta,
         endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
+      );
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    }
+    if (data.containsKey('initial_intensity')) {
+      context.handle(
+        _initialIntensityMeta,
+        initialIntensity.isAcceptableOrUnknown(
+          data['initial_intensity']!,
+          _initialIntensityMeta,
+        ),
+      );
+    }
+    if (data.containsKey('maximum_intensity')) {
+      context.handle(
+        _maximumIntensityMeta,
+        maximumIntensity.isAcceptableOrUnknown(
+          data['maximum_intensity']!,
+          _maximumIntensityMeta,
+        ),
       );
     }
     if (data.containsKey('note')) {
@@ -2150,6 +2241,28 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}end_time'],
       ),
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      ),
+      startPrecision: $SymptomsTable.$converterstartPrecisionn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}start_precision'],
+        ),
+      ),
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      ),
+      initialIntensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}initial_intensity'],
+      ),
+      maximumIntensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}maximum_intensity'],
+      ),
       note: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note'],
@@ -2176,6 +2289,14 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
 
   static JsonTypeConverter2<SymptomType, int, int> $convertertype =
       const EnumIndexConverter<SymptomType>(SymptomType.values);
+  static JsonTypeConverter2<MigraineStartPrecision, int, int>
+  $converterstartPrecision = const EnumIndexConverter<MigraineStartPrecision>(
+    MigraineStartPrecision.values,
+  );
+  static JsonTypeConverter2<MigraineStartPrecision?, int?, int?>
+  $converterstartPrecisionn = JsonTypeConverter2.asNullable(
+    $converterstartPrecision,
+  );
 }
 
 class Symptom extends DataClass implements Insertable<Symptom> {
@@ -2185,6 +2306,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
   final int intensity;
   final String? detail;
   final DateTime? endTime;
+  final DateTime? startedAt;
+  final MigraineStartPrecision? startPrecision;
+  final DateTime? endedAt;
+  final int? initialIntensity;
+  final int? maximumIntensity;
   final String? note;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -2196,6 +2322,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     required this.intensity,
     this.detail,
     this.endTime,
+    this.startedAt,
+    this.startPrecision,
+    this.endedAt,
+    this.initialIntensity,
+    this.maximumIntensity,
     this.note,
     required this.createdAt,
     required this.updatedAt,
@@ -2215,6 +2346,23 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     }
     if (!nullToAbsent || endTime != null) {
       map['end_time'] = Variable<DateTime>(endTime);
+    }
+    if (!nullToAbsent || startedAt != null) {
+      map['started_at'] = Variable<DateTime>(startedAt);
+    }
+    if (!nullToAbsent || startPrecision != null) {
+      map['start_precision'] = Variable<int>(
+        $SymptomsTable.$converterstartPrecisionn.toSql(startPrecision),
+      );
+    }
+    if (!nullToAbsent || endedAt != null) {
+      map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    if (!nullToAbsent || initialIntensity != null) {
+      map['initial_intensity'] = Variable<int>(initialIntensity);
+    }
+    if (!nullToAbsent || maximumIntensity != null) {
+      map['maximum_intensity'] = Variable<int>(maximumIntensity);
     }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
@@ -2239,6 +2387,21 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       endTime: endTime == null && nullToAbsent
           ? const Value.absent()
           : Value(endTime),
+      startedAt: startedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startedAt),
+      startPrecision: startPrecision == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startPrecision),
+      endedAt: endedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endedAt),
+      initialIntensity: initialIntensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(initialIntensity),
+      maximumIntensity: maximumIntensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maximumIntensity),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -2262,6 +2425,13 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       intensity: serializer.fromJson<int>(json['intensity']),
       detail: serializer.fromJson<String?>(json['detail']),
       endTime: serializer.fromJson<DateTime?>(json['endTime']),
+      startedAt: serializer.fromJson<DateTime?>(json['startedAt']),
+      startPrecision: $SymptomsTable.$converterstartPrecisionn.fromJson(
+        serializer.fromJson<int?>(json['startPrecision']),
+      ),
+      endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+      initialIntensity: serializer.fromJson<int?>(json['initialIntensity']),
+      maximumIntensity: serializer.fromJson<int?>(json['maximumIntensity']),
       note: serializer.fromJson<String?>(json['note']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -2280,6 +2450,13 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       'intensity': serializer.toJson<int>(intensity),
       'detail': serializer.toJson<String?>(detail),
       'endTime': serializer.toJson<DateTime?>(endTime),
+      'startedAt': serializer.toJson<DateTime?>(startedAt),
+      'startPrecision': serializer.toJson<int?>(
+        $SymptomsTable.$converterstartPrecisionn.toJson(startPrecision),
+      ),
+      'endedAt': serializer.toJson<DateTime?>(endedAt),
+      'initialIntensity': serializer.toJson<int?>(initialIntensity),
+      'maximumIntensity': serializer.toJson<int?>(maximumIntensity),
       'note': serializer.toJson<String?>(note),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -2294,6 +2471,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     int? intensity,
     Value<String?> detail = const Value.absent(),
     Value<DateTime?> endTime = const Value.absent(),
+    Value<DateTime?> startedAt = const Value.absent(),
+    Value<MigraineStartPrecision?> startPrecision = const Value.absent(),
+    Value<DateTime?> endedAt = const Value.absent(),
+    Value<int?> initialIntensity = const Value.absent(),
+    Value<int?> maximumIntensity = const Value.absent(),
     Value<String?> note = const Value.absent(),
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -2305,6 +2487,17 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     intensity: intensity ?? this.intensity,
     detail: detail.present ? detail.value : this.detail,
     endTime: endTime.present ? endTime.value : this.endTime,
+    startedAt: startedAt.present ? startedAt.value : this.startedAt,
+    startPrecision: startPrecision.present
+        ? startPrecision.value
+        : this.startPrecision,
+    endedAt: endedAt.present ? endedAt.value : this.endedAt,
+    initialIntensity: initialIntensity.present
+        ? initialIntensity.value
+        : this.initialIntensity,
+    maximumIntensity: maximumIntensity.present
+        ? maximumIntensity.value
+        : this.maximumIntensity,
     note: note.present ? note.value : this.note,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -2318,6 +2511,17 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       intensity: data.intensity.present ? data.intensity.value : this.intensity,
       detail: data.detail.present ? data.detail.value : this.detail,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      startPrecision: data.startPrecision.present
+          ? data.startPrecision.value
+          : this.startPrecision,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      initialIntensity: data.initialIntensity.present
+          ? data.initialIntensity.value
+          : this.initialIntensity,
+      maximumIntensity: data.maximumIntensity.present
+          ? data.maximumIntensity.value
+          : this.maximumIntensity,
       note: data.note.present ? data.note.value : this.note,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -2334,6 +2538,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
           ..write('intensity: $intensity, ')
           ..write('detail: $detail, ')
           ..write('endTime: $endTime, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('startPrecision: $startPrecision, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('initialIntensity: $initialIntensity, ')
+          ..write('maximumIntensity: $maximumIntensity, ')
           ..write('note: $note, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -2350,6 +2559,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     intensity,
     detail,
     endTime,
+    startedAt,
+    startPrecision,
+    endedAt,
+    initialIntensity,
+    maximumIntensity,
     note,
     createdAt,
     updatedAt,
@@ -2365,6 +2579,11 @@ class Symptom extends DataClass implements Insertable<Symptom> {
           other.intensity == this.intensity &&
           other.detail == this.detail &&
           other.endTime == this.endTime &&
+          other.startedAt == this.startedAt &&
+          other.startPrecision == this.startPrecision &&
+          other.endedAt == this.endedAt &&
+          other.initialIntensity == this.initialIntensity &&
+          other.maximumIntensity == this.maximumIntensity &&
           other.note == this.note &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -2378,6 +2597,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
   final Value<int> intensity;
   final Value<String?> detail;
   final Value<DateTime?> endTime;
+  final Value<DateTime?> startedAt;
+  final Value<MigraineStartPrecision?> startPrecision;
+  final Value<DateTime?> endedAt;
+  final Value<int?> initialIntensity;
+  final Value<int?> maximumIntensity;
   final Value<String?> note;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -2390,6 +2614,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     this.intensity = const Value.absent(),
     this.detail = const Value.absent(),
     this.endTime = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.startPrecision = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.initialIntensity = const Value.absent(),
+    this.maximumIntensity = const Value.absent(),
     this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -2403,6 +2632,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     required int intensity,
     this.detail = const Value.absent(),
     this.endTime = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.startPrecision = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.initialIntensity = const Value.absent(),
+    this.maximumIntensity = const Value.absent(),
     this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -2419,6 +2653,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     Expression<int>? intensity,
     Expression<String>? detail,
     Expression<DateTime>? endTime,
+    Expression<DateTime>? startedAt,
+    Expression<int>? startPrecision,
+    Expression<DateTime>? endedAt,
+    Expression<int>? initialIntensity,
+    Expression<int>? maximumIntensity,
     Expression<String>? note,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -2432,6 +2671,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
       if (intensity != null) 'intensity': intensity,
       if (detail != null) 'detail': detail,
       if (endTime != null) 'end_time': endTime,
+      if (startedAt != null) 'started_at': startedAt,
+      if (startPrecision != null) 'start_precision': startPrecision,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (initialIntensity != null) 'initial_intensity': initialIntensity,
+      if (maximumIntensity != null) 'maximum_intensity': maximumIntensity,
       if (note != null) 'note': note,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -2447,6 +2691,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     Value<int>? intensity,
     Value<String?>? detail,
     Value<DateTime?>? endTime,
+    Value<DateTime?>? startedAt,
+    Value<MigraineStartPrecision?>? startPrecision,
+    Value<DateTime?>? endedAt,
+    Value<int?>? initialIntensity,
+    Value<int?>? maximumIntensity,
     Value<String?>? note,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -2460,6 +2709,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
       intensity: intensity ?? this.intensity,
       detail: detail ?? this.detail,
       endTime: endTime ?? this.endTime,
+      startedAt: startedAt ?? this.startedAt,
+      startPrecision: startPrecision ?? this.startPrecision,
+      endedAt: endedAt ?? this.endedAt,
+      initialIntensity: initialIntensity ?? this.initialIntensity,
+      maximumIntensity: maximumIntensity ?? this.maximumIntensity,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -2491,6 +2745,23 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     if (endTime.present) {
       map['end_time'] = Variable<DateTime>(endTime.value);
     }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (startPrecision.present) {
+      map['start_precision'] = Variable<int>(
+        $SymptomsTable.$converterstartPrecisionn.toSql(startPrecision.value),
+      );
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (initialIntensity.present) {
+      map['initial_intensity'] = Variable<int>(initialIntensity.value);
+    }
+    if (maximumIntensity.present) {
+      map['maximum_intensity'] = Variable<int>(maximumIntensity.value);
+    }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
     }
@@ -2518,6 +2789,11 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
           ..write('intensity: $intensity, ')
           ..write('detail: $detail, ')
           ..write('endTime: $endTime, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('startPrecision: $startPrecision, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('initialIntensity: $initialIntensity, ')
+          ..write('maximumIntensity: $maximumIntensity, ')
           ..write('note: $note, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -7221,6 +7497,11 @@ typedef $$SymptomsTableCreateCompanionBuilder =
       required int intensity,
       Value<String?> detail,
       Value<DateTime?> endTime,
+      Value<DateTime?> startedAt,
+      Value<MigraineStartPrecision?> startPrecision,
+      Value<DateTime?> endedAt,
+      Value<int?> initialIntensity,
+      Value<int?> maximumIntensity,
       Value<String?> note,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -7235,6 +7516,11 @@ typedef $$SymptomsTableUpdateCompanionBuilder =
       Value<int> intensity,
       Value<String?> detail,
       Value<DateTime?> endTime,
+      Value<DateTime?> startedAt,
+      Value<MigraineStartPrecision?> startPrecision,
+      Value<DateTime?> endedAt,
+      Value<int?> initialIntensity,
+      Value<int?> maximumIntensity,
       Value<String?> note,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -7308,6 +7594,36 @@ class $$SymptomsTableFilterComposer
 
   ColumnFilters<DateTime> get endTime => $composableBuilder(
     column: $table.endTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    MigraineStartPrecision?,
+    MigraineStartPrecision,
+    int
+  >
+  get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7396,6 +7712,31 @@ class $$SymptomsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get note => $composableBuilder(
     column: $table.note,
     builder: (column) => ColumnOrderings(column),
@@ -7443,6 +7784,28 @@ class $$SymptomsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<MigraineStartPrecision?, int>
+  get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get note =>
       $composableBuilder(column: $table.note, builder: (column) => column);
@@ -7517,6 +7880,12 @@ class $$SymptomsTableTableManager
                 Value<int> intensity = const Value.absent(),
                 Value<String?> detail = const Value.absent(),
                 Value<DateTime?> endTime = const Value.absent(),
+                Value<DateTime?> startedAt = const Value.absent(),
+                Value<MigraineStartPrecision?> startPrecision =
+                    const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<int?> initialIntensity = const Value.absent(),
+                Value<int?> maximumIntensity = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -7529,6 +7898,11 @@ class $$SymptomsTableTableManager
                 intensity: intensity,
                 detail: detail,
                 endTime: endTime,
+                startedAt: startedAt,
+                startPrecision: startPrecision,
+                endedAt: endedAt,
+                initialIntensity: initialIntensity,
+                maximumIntensity: maximumIntensity,
                 note: note,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -7543,6 +7917,12 @@ class $$SymptomsTableTableManager
                 required int intensity,
                 Value<String?> detail = const Value.absent(),
                 Value<DateTime?> endTime = const Value.absent(),
+                Value<DateTime?> startedAt = const Value.absent(),
+                Value<MigraineStartPrecision?> startPrecision =
+                    const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<int?> initialIntensity = const Value.absent(),
+                Value<int?> maximumIntensity = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -7555,6 +7935,11 @@ class $$SymptomsTableTableManager
                 intensity: intensity,
                 detail: detail,
                 endTime: endTime,
+                startedAt: startedAt,
+                startPrecision: startPrecision,
+                endedAt: endedAt,
+                initialIntensity: initialIntensity,
+                maximumIntensity: maximumIntensity,
                 note: note,
                 createdAt: createdAt,
                 updatedAt: updatedAt,

@@ -1,4 +1,5 @@
 import 'package:assiette/data/db/database_provider.dart';
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/symptom_entry/data/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
@@ -16,6 +17,11 @@ abstract class SymptomEntryRepository {
     required int intensity,
     String? detail,
     DateTime? endTime,
+    DateTime? startedAt,
+    MigraineStartPrecision? startPrecision,
+    DateTime? endedAt,
+    int? initialIntensity,
+    int? maximumIntensity,
     String? note,
   });
 
@@ -30,6 +36,11 @@ abstract class SymptomEntryRepository {
     required int intensity,
     String? detail,
     DateTime? endTime,
+    DateTime? startedAt,
+    MigraineStartPrecision? startPrecision,
+    DateTime? endedAt,
+    int? initialIntensity,
+    int? maximumIntensity,
     String? note,
   });
 

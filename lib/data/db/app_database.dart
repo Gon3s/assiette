@@ -8,6 +8,7 @@ import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/daos/tags_dao.dart';
 import 'package:assiette/data/daos/templates_dao.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/data/db/tables/app_settings_table.dart';
 import 'package:assiette/data/db/tables/cloud_backup_state_table.dart';
@@ -57,7 +58,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -133,6 +134,25 @@ class AppDatabase extends _$AppDatabase {
       }
       if (from < 8) {
         await m.createTable(cloudBackupStates);
+      }
+      if (from < 9) {
+        await m.addColumn(symptoms, symptoms.startedAt);
+        await m.addColumn(symptoms, symptoms.startPrecision);
+        await m.addColumn(symptoms, symptoms.endedAt);
+        await m.addColumn(symptoms, symptoms.initialIntensity);
+        await m.addColumn(symptoms, symptoms.maximumIntensity);
+        await customStatement(
+          'UPDATE symptoms '
+          'SET started_at = timestamp, '
+          'start_precision = ?, '
+          'ended_at = end_time, '
+          'initial_intensity = intensity '
+          'WHERE type = ?',
+          [
+            MigraineStartPrecision.approximate.index,
+            SymptomType.migraine.index,
+          ],
+        );
       }
     },
   );

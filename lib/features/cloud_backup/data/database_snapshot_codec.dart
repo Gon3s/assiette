@@ -10,7 +10,7 @@ class DatabaseSnapshotCodec {
   const DatabaseSnapshotCodec();
 
   /// Snapshot format version, bumped if the shape below ever changes.
-  static const formatVersion = 1;
+  static const formatVersion = 2;
 
   /// Dumps every row of every table as JSON-safe maps, keyed by table name.
   Future<Map<String, dynamic>> export(AppDatabase db) async {
@@ -22,8 +22,7 @@ class DatabaseSnapshotCodec {
     final symptoms = await db.select(db.symptoms).get();
     final medicationIntakes = await db.select(db.medicationIntakes).get();
     final sleepEntries = await db.select(db.sleepEntries).get();
-    final environmentSnapshots =
-        await db.select(db.environmentSnapshots).get();
+    final environmentSnapshots = await db.select(db.environmentSnapshots).get();
     final appSettings = await db.select(db.appSettings).get();
 
     return {
@@ -49,7 +48,8 @@ class DatabaseSnapshotCodec {
   /// templates — both point into the same `meal_photos/` directory.
   Set<String> photoFileNamesIn(Map<String, dynamic> snapshot) {
     final names = <String>{};
-    for (final row in (snapshot['meals'] as List).cast<Map<String, dynamic>>()) {
+    for (final row
+        in (snapshot['meals'] as List).cast<Map<String, dynamic>>()) {
       final path = row['photoPath'] as String?;
       if (path != null) names.add(p.basename(path));
     }
@@ -90,9 +90,11 @@ class DatabaseSnapshotCodec {
           in (snapshot['tags'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.tags).insert(Tag.fromJson(row));
       }
-      for (final row in (snapshot['mealTemplates'] as List)
-          .cast<Map<String, dynamic>>()) {
-        await db.into(db.mealTemplates).insert(
+      for (final row
+          in (snapshot['mealTemplates'] as List).cast<Map<String, dynamic>>()) {
+        await db
+            .into(db.mealTemplates)
+            .insert(
               MealTemplate.fromJson(
                 _rewritePhoto(row, 'defaultPhotoPath', photosDirPath),
               ),
@@ -100,7 +102,9 @@ class DatabaseSnapshotCodec {
       }
       for (final row
           in (snapshot['meals'] as List).cast<Map<String, dynamic>>()) {
-        await db.into(db.meals).insert(
+        await db
+            .into(db.meals)
+            .insert(
               Meal.fromJson(_rewritePhoto(row, 'photoPath', photosDirPath)),
             );
       }
@@ -108,32 +112,38 @@ class DatabaseSnapshotCodec {
           in (snapshot['mealTags'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.mealTags).insert(MealTag.fromJson(row));
       }
-      for (final row in (snapshot['templateTags'] as List)
-          .cast<Map<String, dynamic>>()) {
+      for (final row
+          in (snapshot['templateTags'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.templateTags).insert(TemplateTag.fromJson(row));
       }
       for (final row
           in (snapshot['symptoms'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.symptoms).insert(Symptom.fromJson(row));
       }
-      for (final row in (snapshot['medicationIntakes'] as List)
-          .cast<Map<String, dynamic>>()) {
-        await db.into(db.medicationIntakes).insert(
+      for (final row
+          in (snapshot['medicationIntakes'] as List)
+              .cast<Map<String, dynamic>>()) {
+        await db
+            .into(db.medicationIntakes)
+            .insert(
               MedicationIntake.fromJson(row),
             );
       }
-      for (final row in (snapshot['sleepEntries'] as List)
-          .cast<Map<String, dynamic>>()) {
+      for (final row
+          in (snapshot['sleepEntries'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.sleepEntries).insert(SleepEntry.fromJson(row));
       }
-      for (final row in (snapshot['environmentSnapshots'] as List)
-          .cast<Map<String, dynamic>>()) {
-        await db.into(db.environmentSnapshots).insert(
+      for (final row
+          in (snapshot['environmentSnapshots'] as List)
+              .cast<Map<String, dynamic>>()) {
+        await db
+            .into(db.environmentSnapshots)
+            .insert(
               EnvironmentSnapshot.fromJson(row),
             );
       }
-      for (final row in (snapshot['appSettings'] as List)
-          .cast<Map<String, dynamic>>()) {
+      for (final row
+          in (snapshot['appSettings'] as List).cast<Map<String, dynamic>>()) {
         await db.into(db.appSettings).insert(AppSetting.fromJson(row));
       }
     });

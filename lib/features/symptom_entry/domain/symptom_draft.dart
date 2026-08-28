@@ -1,3 +1,4 @@
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -14,6 +15,11 @@ abstract class SymptomDraft with _$SymptomDraft {
     required int intensity,
     String? detail,
     DateTime? endTime,
+    DateTime? startedAt,
+    MigraineStartPrecision? startPrecision,
+    DateTime? endedAt,
+    int? initialIntensity,
+    int? maximumIntensity,
     String? note,
   }) = _SymptomDraft;
 }

@@ -1,3 +1,4 @@
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:drift/drift.dart';
 
@@ -10,11 +11,15 @@ class Symptoms extends Table {
   IntColumn get intensity => integer()();
   TextColumn get detail => text().nullable()();
   DateTimeColumn get endTime => dateTime().nullable()();
+  DateTimeColumn get startedAt => dateTime().nullable()();
+  IntColumn get startPrecision =>
+      intEnum<MigraineStartPrecision>().nullable()();
+  DateTimeColumn get endedAt => dateTime().nullable()();
+  IntColumn get initialIntensity => integer().nullable()();
+  IntColumn get maximumIntensity => integer().nullable()();
   TextColumn get note => text().nullable()();
-  DateTimeColumn get createdAt =>
-      dateTime().withDefault(currentDateAndTime)();
-  DateTimeColumn get updatedAt =>
-      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
   @override

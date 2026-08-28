@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SymptomDraft {
 
- String get id; DateTime get timestamp; SymptomType get type; int get intensity; String? get detail; DateTime? get endTime; String? get note;
+ String get id; DateTime get timestamp; SymptomType get type; int get intensity; String? get detail; DateTime? get endTime; DateTime? get startedAt; MigraineStartPrecision? get startPrecision; DateTime? get endedAt; int? get initialIntensity; int? get maximumIntensity; String? get note;
 /// Create a copy of SymptomDraft
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SymptomDraftCopyWith<SymptomDraft> get copyWith => _$SymptomDraftCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.initialIntensity, initialIntensity) || other.initialIntensity == initialIntensity)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.note, note) || other.note == note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,note);
+int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,startedAt,startPrecision,endedAt,initialIntensity,maximumIntensity,note);
 
 @override
 String toString() {
-  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, note: $note)';
+  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, startedAt: $startedAt, startPrecision: $startPrecision, endedAt: $endedAt, initialIntensity: $initialIntensity, maximumIntensity: $maximumIntensity, note: $note)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SymptomDraftCopyWith<$Res>  {
   factory $SymptomDraftCopyWith(SymptomDraft value, $Res Function(SymptomDraft) _then) = _$SymptomDraftCopyWithImpl;
 @useResult
 $Res call({
- String id, DateTime timestamp, SymptomType type, int intensity, String? detail, DateTime? endTime, String? note
+ String id, DateTime timestamp, SymptomType type, int intensity, String? detail, DateTime? endTime, DateTime? startedAt, MigraineStartPrecision? startPrecision, DateTime? endedAt, int? initialIntensity, int? maximumIntensity, String? note
 });
 
 
@@ -62,7 +62,7 @@ class _$SymptomDraftCopyWithImpl<$Res>
 
 /// Create a copy of SymptomDraft
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? timestamp = null,Object? type = null,Object? intensity = null,Object? detail = freezed,Object? endTime = freezed,Object? note = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? timestamp = null,Object? type = null,Object? intensity = null,Object? detail = freezed,Object? endTime = freezed,Object? startedAt = freezed,Object? startPrecision = freezed,Object? endedAt = freezed,Object? initialIntensity = freezed,Object? maximumIntensity = freezed,Object? note = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,12 @@ as DateTime,type: null == type ? _self.type : type // ignore: cast_nullable_to_n
 as SymptomType,intensity: null == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
 as int,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as String?,endTime: freezed == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as DateTime?,startedAt: freezed == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,startPrecision: freezed == startPrecision ? _self.startPrecision : startPrecision // ignore: cast_nullable_to_non_nullable
+as MigraineStartPrecision?,endedAt: freezed == endedAt ? _self.endedAt : endedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,initialIntensity: freezed == initialIntensity ? _self.initialIntensity : initialIntensity // ignore: cast_nullable_to_non_nullable
+as int?,maximumIntensity: freezed == maximumIntensity ? _self.maximumIntensity : maximumIntensity // ignore: cast_nullable_to_non_nullable
+as int?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -156,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  String? note)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  DateTime? startedAt,  MigraineStartPrecision? startPrecision,  DateTime? endedAt,  int? initialIntensity,  int? maximumIntensity,  String? note)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SymptomDraft() when $default != null:
-return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.note);case _:
+return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.startedAt,_that.startPrecision,_that.endedAt,_that.initialIntensity,_that.maximumIntensity,_that.note);case _:
   return orElse();
 
 }
@@ -177,10 +182,10 @@ return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  String? note)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  DateTime? startedAt,  MigraineStartPrecision? startPrecision,  DateTime? endedAt,  int? initialIntensity,  int? maximumIntensity,  String? note)  $default,) {final _that = this;
 switch (_that) {
 case _SymptomDraft():
-return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.note);case _:
+return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.startedAt,_that.startPrecision,_that.endedAt,_that.initialIntensity,_that.maximumIntensity,_that.note);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +202,10 @@ return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  String? note)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  DateTime timestamp,  SymptomType type,  int intensity,  String? detail,  DateTime? endTime,  DateTime? startedAt,  MigraineStartPrecision? startPrecision,  DateTime? endedAt,  int? initialIntensity,  int? maximumIntensity,  String? note)?  $default,) {final _that = this;
 switch (_that) {
 case _SymptomDraft() when $default != null:
-return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.note);case _:
+return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail,_that.endTime,_that.startedAt,_that.startPrecision,_that.endedAt,_that.initialIntensity,_that.maximumIntensity,_that.note);case _:
   return null;
 
 }
@@ -212,7 +217,7 @@ return $default(_that.id,_that.timestamp,_that.type,_that.intensity,_that.detail
 
 
 class _SymptomDraft implements SymptomDraft {
-  const _SymptomDraft({required this.id, required this.timestamp, required this.type, required this.intensity, this.detail, this.endTime, this.note});
+  const _SymptomDraft({required this.id, required this.timestamp, required this.type, required this.intensity, this.detail, this.endTime, this.startedAt, this.startPrecision, this.endedAt, this.initialIntensity, this.maximumIntensity, this.note});
   
 
 @override final  String id;
@@ -221,6 +226,11 @@ class _SymptomDraft implements SymptomDraft {
 @override final  int intensity;
 @override final  String? detail;
 @override final  DateTime? endTime;
+@override final  DateTime? startedAt;
+@override final  MigraineStartPrecision? startPrecision;
+@override final  DateTime? endedAt;
+@override final  int? initialIntensity;
+@override final  int? maximumIntensity;
 @override final  String? note;
 
 /// Create a copy of SymptomDraft
@@ -233,16 +243,16 @@ _$SymptomDraftCopyWith<_SymptomDraft> get copyWith => __$SymptomDraftCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.initialIntensity, initialIntensity) || other.initialIntensity == initialIntensity)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.note, note) || other.note == note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,note);
+int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,startedAt,startPrecision,endedAt,initialIntensity,maximumIntensity,note);
 
 @override
 String toString() {
-  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, note: $note)';
+  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, startedAt: $startedAt, startPrecision: $startPrecision, endedAt: $endedAt, initialIntensity: $initialIntensity, maximumIntensity: $maximumIntensity, note: $note)';
 }
 
 
@@ -253,7 +263,7 @@ abstract mixin class _$SymptomDraftCopyWith<$Res> implements $SymptomDraftCopyWi
   factory _$SymptomDraftCopyWith(_SymptomDraft value, $Res Function(_SymptomDraft) _then) = __$SymptomDraftCopyWithImpl;
 @override @useResult
 $Res call({
- String id, DateTime timestamp, SymptomType type, int intensity, String? detail, DateTime? endTime, String? note
+ String id, DateTime timestamp, SymptomType type, int intensity, String? detail, DateTime? endTime, DateTime? startedAt, MigraineStartPrecision? startPrecision, DateTime? endedAt, int? initialIntensity, int? maximumIntensity, String? note
 });
 
 
@@ -270,7 +280,7 @@ class __$SymptomDraftCopyWithImpl<$Res>
 
 /// Create a copy of SymptomDraft
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? timestamp = null,Object? type = null,Object? intensity = null,Object? detail = freezed,Object? endTime = freezed,Object? note = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? timestamp = null,Object? type = null,Object? intensity = null,Object? detail = freezed,Object? endTime = freezed,Object? startedAt = freezed,Object? startPrecision = freezed,Object? endedAt = freezed,Object? initialIntensity = freezed,Object? maximumIntensity = freezed,Object? note = freezed,}) {
   return _then(_SymptomDraft(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
@@ -278,7 +288,12 @@ as DateTime,type: null == type ? _self.type : type // ignore: cast_nullable_to_n
 as SymptomType,intensity: null == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
 as int,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as String?,endTime: freezed == endTime ? _self.endTime : endTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as DateTime?,startedAt: freezed == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,startPrecision: freezed == startPrecision ? _self.startPrecision : startPrecision // ignore: cast_nullable_to_non_nullable
+as MigraineStartPrecision?,endedAt: freezed == endedAt ? _self.endedAt : endedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,initialIntensity: freezed == initialIntensity ? _self.initialIntensity : initialIntensity // ignore: cast_nullable_to_non_nullable
+as int?,maximumIntensity: freezed == maximumIntensity ? _self.maximumIntensity : maximumIntensity // ignore: cast_nullable_to_non_nullable
+as int?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
