@@ -278,7 +278,10 @@ void main() {
         matching: find.byType(Card),
       ),
     );
-    expect(feelingsCard.margin?.bottom, 8);
+    expect(
+      feelingsCard.margin,
+      const EdgeInsets.fromLTRB(16, 0, 16, 8),
+    );
   });
 
   testWidgets('scrolls the whole day instead of only the timeline', (

@@ -20,14 +20,28 @@ if ! command -v flutter >/dev/null 2>&1; then
   exit 0
 fi
 
+flutter_executable="$(command -v flutter)"
+flutter_command=("$flutter_executable")
+
+# A Flutter SDK shared with Windows contains dart.exe, while the Unix wrapper
+# expects a Linux `dart` binary. Under WSL, invoke the matching batch wrapper
+# through cmd.exe instead of letting the Unix wrapper corrupt or rebuild the
+# shared cache for the wrong host platform.
+if grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null \
+  && [ -f "${flutter_executable}.bat" ] \
+  && command -v cmd.exe >/dev/null 2>&1; then
+  flutter_windows="$(wslpath -w "${flutter_executable}.bat")"
+  flutter_command=(cmd.exe /D /C "$flutter_windows")
+fi
+
 echo "pre-commit: flutter analyze --no-pub"
-if ! flutter analyze --no-pub; then
+if ! "${flutter_command[@]}" analyze --no-pub; then
   echo "pre-commit: analyze failed. Fix the errors above, or SKIP_GATE=1 git commit for deliberate WIP." >&2
   exit 1
 fi
 
 echo "pre-commit: flutter test"
-if ! flutter test; then
+if ! "${flutter_command[@]}" test; then
   echo "pre-commit: tests failed. Fix them, or SKIP_GATE=1 git commit for deliberate WIP." >&2
   exit 1
 fi

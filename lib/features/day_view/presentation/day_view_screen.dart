@@ -202,9 +202,9 @@ class _DayViewBody extends ConsumerWidget {
         const SliverToBoxAdapter(child: _ActiveMigraineCard()),
         const SliverToBoxAdapter(child: _DailyFeelingsCard()),
         const SliverToBoxAdapter(child: SleepCard()),
-        SliverToBoxAdapter(child: gapH8),
+        const SliverToBoxAdapter(child: gapH8),
         const SliverToBoxAdapter(child: FavoritesRow()),
-        SliverToBoxAdapter(child: gapH8),
+        const SliverToBoxAdapter(child: gapH8),
         ...switch (timeline) {
           AsyncData(:final value) when value.isEmpty => [
             SliverFillRemaining(
