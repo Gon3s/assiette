@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/medication_intakes_dao.dart';
+import 'package:assiette/data/daos/migraine_intensity_measurements_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/db/app_database.dart';
+import 'package:assiette/features/day_view/domain/active_migraine.dart';
+import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
@@ -21,17 +24,20 @@ class DriftDayViewRepository implements DayViewRepository {
   DriftDayViewRepository({
     required MealsDao mealsDao,
     required SymptomsDao symptomsDao,
+    required MigraineIntensityMeasurementsDao migraineMeasurementsDao,
     required MedicationIntakesDao medicationIntakesDao,
     required SleepEntriesDao sleepEntriesDao,
     required EnvironmentDao environmentDao,
-  })  : _mealsDao = mealsDao,
-        _symptomsDao = symptomsDao,
-        _medicationIntakesDao = medicationIntakesDao,
-        _sleepEntriesDao = sleepEntriesDao,
-        _environmentDao = environmentDao;
+  }) : _mealsDao = mealsDao,
+       _symptomsDao = symptomsDao,
+       _migraineMeasurementsDao = migraineMeasurementsDao,
+       _medicationIntakesDao = medicationIntakesDao,
+       _sleepEntriesDao = sleepEntriesDao,
+       _environmentDao = environmentDao;
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;
+  final MigraineIntensityMeasurementsDao _migraineMeasurementsDao;
   final MedicationIntakesDao _medicationIntakesDao;
   final SleepEntriesDao _sleepEntriesDao;
   final EnvironmentDao _environmentDao;
@@ -44,7 +50,7 @@ class DriftDayViewRepository implements DayViewRepository {
         .watchByDayWithTags(day)
         .map((rows) => rows.map(_mealToTimelineItem).toList());
     final symptoms = _symptomsDao
-        .watchByDay(day)
+        .watchTimelineByDay(day)
         .map((rows) => rows.map(_symptomToTimelineItem).toList());
     final medications = _medicationIntakesDao
         .watchByDay(day)
@@ -53,8 +59,89 @@ class DriftDayViewRepository implements DayViewRepository {
   }
 
   @override
+  Stream<List<DailyFeeling>> watchDailyFeelings(DateTime day) => _symptomsDao
+      .watchDailyNotes(day)
+      .map(
+        (rows) => [
+          for (final row in rows)
+            DailyFeeling(
+              id: row.id,
+              type: row.type,
+              text: row.note ?? row.detail ?? '',
+              previousIntensity: row.isDailyNote ? null : row.intensity,
+            ),
+        ],
+      );
+
+  @override
+  Stream<ActiveMigraine?> watchActiveMigraine() =>
+      _symptomsDao.watchActiveMigraine().asyncMap((symptom) async {
+        if (symptom == null) return null;
+        final measurements = await _migraineMeasurementsDao
+            .watchForMigraine(symptom.id)
+            .first;
+        return ActiveMigraine(
+          id: symptom.id,
+          startedAt: symptom.startedAt,
+          lastIntensity: measurements.isEmpty
+              ? symptom.initialIntensity ?? symptom.intensity ?? 1
+              : measurements.last.intensity,
+        );
+      });
+
+  @override
+  Future<void> addMigraineIntensity(String migraineId, int intensity) async {
+    if (intensity < 1 || intensity > 10) {
+      throw ArgumentError.value(intensity, 'intensity', 'must be 1 to 10');
+    }
+    final now = DateTime.now().toUtc();
+    await _migraineMeasurementsDao.insertMeasurement(
+      MigraineIntensityMeasurementsCompanion.insert(
+        id: _uuid.v4(),
+        symptomId: migraineId,
+        timestamp: now,
+        intensity: intensity,
+        createdAt: Value(now),
+      ),
+    );
+    final symptom = await _symptomsDao.getSymptomById(migraineId);
+    final maximum = [
+      symptom?.maximumIntensity,
+      symptom?.initialIntensity,
+      symptom?.intensity,
+      intensity,
+    ].whereType<int>().reduce((a, b) => a > b ? a : b);
+    await _symptomsDao.updateSymptom(
+      migraineId,
+      SymptomsCompanion(
+        maximumIntensity: Value(maximum),
+        updatedAt: Value(now),
+      ),
+    );
+  }
+
+  @override
+  Future<void> endMigraine(String migraineId, DateTime endedAt) async {
+    final symptom = await _symptomsDao.getSymptomById(migraineId);
+    final end = endedAt.toUtc();
+    if (symptom?.startedAt case final start? when end.isBefore(start)) {
+      throw ArgumentError.value(endedAt, 'endedAt', 'must follow start');
+    }
+    await _symptomsDao.updateSymptom(
+      migraineId,
+      SymptomsCompanion(
+        endedAt: Value(end),
+        endTime: Value(end),
+        updatedAt: Value(DateTime.now().toUtc()),
+      ),
+    );
+  }
+
+  @override
   Stream<SleepSummary?> watchSleepForNight(DateTime day) {
-    return _sleepEntriesDao.watchByDate(day).map(
+    return _sleepEntriesDao
+        .watchByDate(day)
+        .map(
           (entry) => entry == null
               ? null
               : SleepSummary(
@@ -68,7 +155,9 @@ class DriftDayViewRepository implements DayViewRepository {
 
   @override
   Stream<WeatherSummary?> watchLatestWeather(DateTime day) {
-    return _environmentDao.watchByDay(day).map(
+    return _environmentDao
+        .watchByDay(day)
+        .map(
           (snapshots) =>
               snapshots.isEmpty ? null : _toWeatherSummary(snapshots.last),
         );
@@ -76,7 +165,9 @@ class DriftDayViewRepository implements DayViewRepository {
 
   @override
   Stream<List<WeatherPoint>> watchWeatherSeries(DateTime day) {
-    return _environmentDao.watchByDay(day).map(
+    return _environmentDao
+        .watchByDay(day)
+        .map(
           (snapshots) => [
             for (final snapshot in snapshots)
               WeatherPoint(
@@ -131,7 +222,7 @@ class DriftDayViewRepository implements DayViewRepository {
         id: symptom.id,
         timestamp: symptom.timestamp,
         symptomType: symptom.type,
-        intensity: symptom.intensity,
+        intensity: symptom.intensity ?? symptom.initialIntensity ?? 1,
         detail: symptom.detail,
       );
 

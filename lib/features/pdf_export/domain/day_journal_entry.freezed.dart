@@ -286,7 +286,7 @@ as String?,
 /// @nodoc
 mixin _$JournalSymptomEntry {
 
- DateTime get timestamp; SymptomType get symptomType; int get intensity; String? get detail; String? get note;
+ DateTime get timestamp; SymptomType get symptomType; int? get intensity; String? get detail; String? get note; bool get isDailyNote;
 /// Create a copy of JournalSymptomEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -297,16 +297,16 @@ $JournalSymptomEntryCopyWith<JournalSymptomEntry> get copyWith => _$JournalSympt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note);
+int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note,isDailyNote);
 
 @override
 String toString() {
-  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note)';
+  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note, isDailyNote: $isDailyNote)';
 }
 
 
@@ -317,7 +317,7 @@ abstract mixin class $JournalSymptomEntryCopyWith<$Res>  {
   factory $JournalSymptomEntryCopyWith(JournalSymptomEntry value, $Res Function(JournalSymptomEntry) _then) = _$JournalSymptomEntryCopyWithImpl;
 @useResult
 $Res call({
- DateTime timestamp, SymptomType symptomType, int intensity, String? detail, String? note
+ DateTime timestamp, SymptomType symptomType, int? intensity, String? detail, String? note, bool isDailyNote
 });
 
 
@@ -334,14 +334,15 @@ class _$JournalSymptomEntryCopyWithImpl<$Res>
 
 /// Create a copy of JournalSymptomEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? symptomType = null,Object? intensity = null,Object? detail = freezed,Object? note = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? symptomType = null,Object? intensity = freezed,Object? detail = freezed,Object? note = freezed,Object? isDailyNote = null,}) {
   return _then(_self.copyWith(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,symptomType: null == symptomType ? _self.symptomType : symptomType // ignore: cast_nullable_to_non_nullable
-as SymptomType,intensity: null == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
-as int,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
+as SymptomType,intensity: freezed == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
+as int?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as String?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isDailyNote: null == isDailyNote ? _self.isDailyNote : isDailyNote // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -426,10 +427,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail,  String? note)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime timestamp,  SymptomType symptomType,  int? intensity,  String? detail,  String? note,  bool isDailyNote)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _JournalSymptomEntry() when $default != null:
-return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note);case _:
+return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note,_that.isDailyNote);case _:
   return orElse();
 
 }
@@ -447,10 +448,10 @@ return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail,  String? note)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime timestamp,  SymptomType symptomType,  int? intensity,  String? detail,  String? note,  bool isDailyNote)  $default,) {final _that = this;
 switch (_that) {
 case _JournalSymptomEntry():
-return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note);case _:
+return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note,_that.isDailyNote);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -467,10 +468,10 @@ return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail,  String? note)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime timestamp,  SymptomType symptomType,  int? intensity,  String? detail,  String? note,  bool isDailyNote)?  $default,) {final _that = this;
 switch (_that) {
 case _JournalSymptomEntry() when $default != null:
-return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note);case _:
+return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_that.note,_that.isDailyNote);case _:
   return null;
 
 }
@@ -482,14 +483,15 @@ return $default(_that.timestamp,_that.symptomType,_that.intensity,_that.detail,_
 
 
 class _JournalSymptomEntry implements JournalSymptomEntry {
-  const _JournalSymptomEntry({required this.timestamp, required this.symptomType, required this.intensity, this.detail, this.note});
+  const _JournalSymptomEntry({required this.timestamp, required this.symptomType, this.intensity, this.detail, this.note, this.isDailyNote = false});
   
 
 @override final  DateTime timestamp;
 @override final  SymptomType symptomType;
-@override final  int intensity;
+@override final  int? intensity;
 @override final  String? detail;
 @override final  String? note;
+@override@JsonKey() final  bool isDailyNote;
 
 /// Create a copy of JournalSymptomEntry
 /// with the given fields replaced by the non-null parameter values.
@@ -501,16 +503,16 @@ _$JournalSymptomEntryCopyWith<_JournalSymptomEntry> get copyWith => __$JournalSy
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note);
+int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note,isDailyNote);
 
 @override
 String toString() {
-  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note)';
+  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note, isDailyNote: $isDailyNote)';
 }
 
 
@@ -521,7 +523,7 @@ abstract mixin class _$JournalSymptomEntryCopyWith<$Res> implements $JournalSymp
   factory _$JournalSymptomEntryCopyWith(_JournalSymptomEntry value, $Res Function(_JournalSymptomEntry) _then) = __$JournalSymptomEntryCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime timestamp, SymptomType symptomType, int intensity, String? detail, String? note
+ DateTime timestamp, SymptomType symptomType, int? intensity, String? detail, String? note, bool isDailyNote
 });
 
 
@@ -538,14 +540,15 @@ class __$JournalSymptomEntryCopyWithImpl<$Res>
 
 /// Create a copy of JournalSymptomEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? timestamp = null,Object? symptomType = null,Object? intensity = null,Object? detail = freezed,Object? note = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? timestamp = null,Object? symptomType = null,Object? intensity = freezed,Object? detail = freezed,Object? note = freezed,Object? isDailyNote = null,}) {
   return _then(_JournalSymptomEntry(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,symptomType: null == symptomType ? _self.symptomType : symptomType // ignore: cast_nullable_to_non_nullable
-as SymptomType,intensity: null == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
-as int,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
+as SymptomType,intensity: freezed == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
+as int?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
 as String?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,isDailyNote: null == isDailyNote ? _self.isDailyNote : isDailyNote // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

@@ -12,7 +12,7 @@ abstract class SymptomDraft with _$SymptomDraft {
     required String id,
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    int? intensity,
     String? detail,
     DateTime? endTime,
     DateTime? startedAt,
@@ -21,5 +21,7 @@ abstract class SymptomDraft with _$SymptomDraft {
     int? initialIntensity,
     int? maximumIntensity,
     String? note,
+    DateTime? dailyDate,
+    @Default(false) bool isDailyNote,
   }) = _SymptomDraft;
 }

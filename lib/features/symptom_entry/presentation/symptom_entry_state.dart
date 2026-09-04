@@ -1,3 +1,4 @@
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -15,9 +16,14 @@ abstract class SymptomEntryState with _$SymptomEntryState {
     String? detail,
     @Default('') String note,
     DateTime? endTime,
-    @Default(false) bool isSaving,
-    String? id,
+    DateTime? dailyDate,
+    @Default(MigraineStartPrecision.exact)
+    MigraineStartPrecision startPrecision,
+    @Default(false) bool isDailyNote,
+    int? previousIntensity,
     @Default(<MedicationIntakeDraft>[]) List<MedicationIntakeDraft> intakes,
     @Default(<String>[]) List<String> removedIntakeIds,
+    @Default(false) bool isSaving,
+    String? id,
   }) = _SymptomEntryState;
 }

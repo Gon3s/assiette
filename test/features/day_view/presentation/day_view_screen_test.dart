@@ -4,6 +4,8 @@ library;
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
+import 'package:assiette/features/day_view/domain/active_migraine.dart';
+import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
@@ -50,6 +52,12 @@ void main() {
     ).thenAnswer((_) => Stream.value([]));
     when(
       () => repository.watchSleepForNight(any()),
+    ).thenAnswer((_) => Stream.value(null));
+    when(
+      () => repository.watchDailyFeelings(any()),
+    ).thenAnswer((_) => Stream.value([]));
+    when(
+      () => repository.watchActiveMigraine(),
     ).thenAnswer((_) => Stream.value(null));
     when(
       () => repository.watchLatestWeather(any()),
@@ -145,7 +153,19 @@ void main() {
     await pumpScreen(tester);
 
     expect(find.text('Meal photo'), findsOneWidget);
-    expect(find.text('Symptom'), findsOneWidget);
+    expect(find.text('Add'), findsOneWidget);
+  });
+
+  testWidgets('Add menu offers the four health entry paths', (tester) async {
+    await pumpScreen(tester);
+
+    await tester.tap(find.text('Add'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Migraine'), findsOneWidget);
+    expect(find.text('Feeling'), findsOneWidget);
+    expect(find.text('Mood of the day'), findsOneWidget);
+    expect(find.text('Medication'), findsOneWidget);
   });
 
   testWidgets('swiping left moves to the next day', (tester) async {
@@ -211,6 +231,47 @@ void main() {
     expect(find.text('gluten'), findsOneWidget);
     expect(find.text('café'), findsOneWidget);
     expect(find.text('Nothing logged this day.'), findsNothing);
+  });
+
+  testWidgets('shows the active migraine card with quick actions', (
+    tester,
+  ) async {
+    when(() => repository.watchActiveMigraine()).thenAnswer(
+      (_) => Stream.value(
+        ActiveMigraine(
+          id: 'migraine',
+          startedAt: DateTime.now().subtract(const Duration(hours: 2)),
+          lastIntensity: 8,
+        ),
+      ),
+    );
+
+    await pumpScreen(tester);
+
+    expect(find.text('Active migraine'), findsOneWidget);
+    expect(find.text('Update intensity'), findsOneWidget);
+    expect(find.text('End'), findsOneWidget);
+    expect(find.textContaining('8/10'), findsOneWidget);
+  });
+
+  testWidgets('shows daily feelings outside the timeline', (tester) async {
+    when(() => repository.watchDailyFeelings(any())).thenAnswer(
+      (_) => Stream.value(
+        const [
+          DailyFeeling(
+            id: 'feeling',
+            type: SymptomType.eczema,
+            text: 'itchy arm',
+          ),
+        ],
+      ),
+    );
+
+    await pumpScreen(tester);
+
+    expect(find.text("Today's feelings"), findsOneWidget);
+    expect(find.text('Eczema'), findsOneWidget);
+    expect(find.text('itchy arm'), findsOneWidget);
   });
 
   testWidgets('shows sleep quality and weather when available', (tester) async {

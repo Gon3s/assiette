@@ -23,6 +23,7 @@ void main() {
     repository = DriftDayViewRepository(
       mealsDao: db.mealsDao,
       symptomsDao: db.symptomsDao,
+      migraineMeasurementsDao: db.migraineIntensityMeasurementsDao,
       medicationIntakesDao: db.medicationIntakesDao,
       sleepEntriesDao: db.sleepEntriesDao,
       environmentDao: db.environmentDao,
@@ -56,7 +57,7 @@ void main() {
           id: id,
           timestamp: timestamp,
           type: SymptomType.migraine,
-          intensity: 7,
+          intensity: const Value(7),
         ),
       );
 
@@ -85,7 +86,10 @@ void main() {
     test('excludes soft-deleted entries and other days', () async {
       await insertMeal('meal-deleted', at(12));
       await db.mealsDao.softDeleteMeal('meal-deleted');
-      await insertSymptom('symptom-other-day', at(12).add(const Duration(days: 2)));
+      await insertSymptom(
+        'symptom-other-day',
+        at(12).add(const Duration(days: 2)),
+      );
 
       final items = await repository.watchTimeline(day).first;
 
@@ -105,6 +109,47 @@ void main() {
       expect(emissions.last, hasLength(1));
     });
   });
+
+  test('daily feelings are outside the timed timeline', () async {
+    await db.symptomsDao.insertSymptom(
+      SymptomsCompanion.insert(
+        id: 'feeling',
+        timestamp: at(0),
+        type: SymptomType.eczema,
+        intensity: const Value(null),
+        note: const Value('bras'),
+        dailyDate: Value(DateTime(2026, 7, 6).toUtc()),
+        isDailyNote: const Value(true),
+      ),
+    );
+
+    expect(await repository.watchTimeline(day).first, isEmpty);
+    final feelings = await repository.watchDailyFeelings(day).first;
+    expect(feelings.single.text, 'bras');
+    expect(feelings.single.previousIntensity, isNull);
+  });
+
+  test(
+    'active migraine appends intensities and ends without another one',
+    () async {
+      await insertSymptom('migraine', at(9));
+      expect(
+        (await repository.watchActiveMigraine().first)?.lastIntensity,
+        7,
+      );
+
+      await repository.addMigraineIntensity('migraine', 4);
+      final measurements = await db
+          .select(db.migraineIntensityMeasurements)
+          .get();
+      expect(measurements.map((row) => row.intensity), [4]);
+      final symptom = await db.symptomsDao.getSymptomById('migraine');
+      expect(symptom?.maximumIntensity, 7);
+
+      await repository.endMigraine('migraine', at(12));
+      expect(await repository.watchActiveMigraine().first, isNull);
+    },
+  );
 
   group('logSleepQuality', () {
     test('inserts then updates the same night (upsert)', () async {

@@ -4,6 +4,7 @@ import 'package:assiette/data/daos/medication_intakes_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/db/app_database.dart';
+import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:assiette/features/pdf_export/domain/day_journal_entry.dart';
@@ -19,11 +20,11 @@ class DriftJournalExportRepository implements JournalExportRepository {
     required MedicationIntakesDao medicationIntakesDao,
     required SleepEntriesDao sleepEntriesDao,
     required EnvironmentDao environmentDao,
-  })  : _mealsDao = mealsDao,
-        _symptomsDao = symptomsDao,
-        _medicationIntakesDao = medicationIntakesDao,
-        _sleepEntriesDao = sleepEntriesDao,
-        _environmentDao = environmentDao;
+  }) : _mealsDao = mealsDao,
+       _symptomsDao = symptomsDao,
+       _medicationIntakesDao = medicationIntakesDao,
+       _sleepEntriesDao = sleepEntriesDao,
+       _environmentDao = environmentDao;
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;
@@ -38,8 +39,7 @@ class DriftJournalExportRepository implements JournalExportRepository {
 
     final meals = await _mealsDao.getRangeWithTags(rangeStart, rangeEnd);
     final symptoms = await _symptomsDao.getRange(rangeStart, rangeEnd);
-    final intakes =
-        await _medicationIntakesDao.getRange(rangeStart, rangeEnd);
+    final intakes = await _medicationIntakesDao.getRange(rangeStart, rangeEnd);
     final sleepEntries = await _sleepEntriesDao.getRange(
       rangeStart,
       rangeEnd,
@@ -65,13 +65,14 @@ class DriftJournalExportRepository implements JournalExportRepository {
       ];
       final daySymptoms = [
         for (final symptom in symptoms)
-          if (_inRange(symptom.timestamp, day, dayEnd))
+          if (_inRange(symptom.dailyDate ?? symptom.timestamp, day, dayEnd))
             JournalSymptomEntry(
-              timestamp: symptom.timestamp,
+              timestamp: symptom.dailyDate ?? symptom.timestamp,
               symptomType: symptom.type,
               intensity: symptom.intensity,
               detail: symptom.detail,
               note: symptom.note,
+              isDailyNote: symptom.type != SymptomType.migraine,
             ),
       ];
       final dayMedications = [

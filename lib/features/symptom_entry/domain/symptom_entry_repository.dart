@@ -14,7 +14,7 @@ abstract class SymptomEntryRepository {
   Future<String> saveSymptom({
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    int? intensity,
     String? detail,
     DateTime? endTime,
     DateTime? startedAt,
@@ -23,17 +23,22 @@ abstract class SymptomEntryRepository {
     int? initialIntensity,
     int? maximumIntensity,
     String? note,
+    DateTime? dailyDate,
+    bool isDailyNote = false,
   });
 
   /// Loads the symptom for editing, or `null` if it doesn't exist.
   Future<SymptomDraft?> loadSymptom(String id);
+
+  /// Loads the new-style mood attached to [day], if one exists.
+  Future<SymptomDraft?> loadDailyMood(DateTime day);
 
   /// Replaces the symptom's fields.
   Future<void> updateSymptom({
     required String id,
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    int? intensity,
     String? detail,
     DateTime? endTime,
     DateTime? startedAt,
@@ -42,13 +47,25 @@ abstract class SymptomEntryRepository {
     int? initialIntensity,
     int? maximumIntensity,
     String? note,
+    DateTime? dailyDate,
+    bool isDailyNote = false,
   });
 
-  /// Soft-deletes the symptom and the medication intakes linked to it.
+  /// Soft-deletes the symptom. Linked medication intakes are preserved.
   Future<void> deleteSymptom(String id);
 
-  /// Undoes [deleteSymptom], restoring the linked medication intakes too.
+  /// Undoes [deleteSymptom].
   Future<void> undoDeleteSymptom(String id);
+}
+
+/// Raised when attempting to create a second unfinished migraine.
+class ActiveMigraineExistsException implements Exception {}
+
+/// Raised when attempting to create a second new-style mood for one day.
+class DailyMoodExistsException implements Exception {
+  DailyMoodExistsException(this.existingId);
+
+  final String existingId;
 }
 
 /// Provides the [SymptomEntryRepository] implementation.

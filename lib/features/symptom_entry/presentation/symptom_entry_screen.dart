@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
-import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
-import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
+import 'package:assiette/features/day_view/domain/day_view_repository.dart';
+import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_controller.dart';
@@ -14,175 +15,157 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-/// Symptom entry form: type, intensity, optional detail/note, editable
-/// timestamp. The default path (type + save) takes two taps.
-///
-/// When [draft] is provided, the form is seeded from that existing symptom
-/// (edit path of US-12) and a delete action is offered.
+/// Entry form adapted to either a timed migraine or an untimed daily note.
 class SymptomEntryScreen extends ConsumerStatefulWidget {
-  /// Creates a [SymptomEntryScreen].
-  const SymptomEntryScreen({this.draft, super.key});
+  const SymptomEntryScreen({
+    this.draft,
+    this.initialType = SymptomType.migraine,
+    this.initialDate,
+    super.key,
+  });
 
-  /// The symptom being edited, or `null` when creating a new one.
   final SymptomDraft? draft;
+  final SymptomType initialType;
+  final DateTime? initialDate;
 
   @override
-  ConsumerState<SymptomEntryScreen> createState() =>
-      _SymptomEntryScreenState();
+  ConsumerState<SymptomEntryScreen> createState() => _SymptomEntryScreenState();
 }
 
 class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
   @override
   void initState() {
     super.initState();
-    final draft = widget.draft;
-    if (draft != null) {
-      // Riverpod forbids mutating a provider from initState; defer to the
-      // next microtask, before the first frame is presented.
-      unawaited(
-        Future.microtask(
-          () => ref
-              .read(symptomEntryControllerProvider.notifier)
-              .loadForEdit(draft),
+    unawaited(
+      Future.microtask(() {
+        final notifier = ref.read(symptomEntryControllerProvider.notifier);
+        final draft = widget.draft;
+        if (draft != null) return notifier.loadForEdit(draft);
+        notifier.initialize(
+          widget.initialType,
+          widget.initialDate ?? DateTime.now(),
+        );
+      }),
+    );
+  }
+
+  Future<void> _pickStart(DateTime current, {required bool date}) async {
+    final notifier = ref.read(symptomEntryControllerProvider.notifier);
+    if (date) {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: current,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now().add(const Duration(days: 1)),
+      );
+      if (picked == null) return;
+      notifier.setTimestamp(
+        DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          current.hour,
+          current.minute,
+        ),
+      );
+      return;
+    }
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(current),
+    );
+    if (picked != null) {
+      notifier.setTimestamp(
+        DateTime(
+          current.year,
+          current.month,
+          current.day,
+          picked.hour,
+          picked.minute,
         ),
       );
     }
   }
 
-  Future<void> _pickDate(
-    BuildContext context,
-    WidgetRef ref,
-    DateTime current,
-  ) async {
-    final picked = await showDatePicker(
+  Future<bool> _offerToEndActiveMigraine(AppStrings s) async {
+    final active = await ref.read(activeMigraineProvider.future);
+    if (active == null || !mounted) return false;
+    final confirmed = await showDialog<bool>(
       context: context,
-      initialDate: current,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now().add(const Duration(days: 1)),
+      builder: (context) => AlertDialog(
+        title: Text(s.activeMigraineExistsTitle),
+        content: Text(s.activeMigraineExistsBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(s.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(s.endMigraineAction),
+          ),
+        ],
+      ),
     );
-    if (picked == null) return;
-    ref
-        .read(symptomEntryControllerProvider.notifier)
-        .setTimestamp(
+    if (confirmed != true) return false;
+    final now = DateTime.now();
+    if (!mounted) return false;
+    final endTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now),
+    );
+    if (endTime == null) return false;
+    await ref
+        .read(dayViewRepositoryProvider)
+        .endMigraine(
+          active.id,
           DateTime(
-            picked.year,
-            picked.month,
-            picked.day,
-            current.hour,
-            current.minute,
+            now.year,
+            now.month,
+            now.day,
+            endTime.hour,
+            endTime.minute,
           ),
         );
+    return true;
   }
 
-  Future<void> _pickTime(
-    BuildContext context,
-    WidgetRef ref,
-    DateTime current,
-  ) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(current),
-    );
-    if (picked == null) return;
-    ref
-        .read(symptomEntryControllerProvider.notifier)
-        .setTimestamp(
-          DateTime(
-            current.year,
-            current.month,
-            current.day,
-            picked.hour,
-            picked.minute,
-          ),
-        );
-  }
-
-  Future<void> _pickEndTime(
-    BuildContext context,
-    WidgetRef ref,
-    DateTime timestamp,
-  ) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(timestamp),
-    );
-    if (picked == null) return;
-    ref
-        .read(symptomEntryControllerProvider.notifier)
-        .setEndTime(
-          DateTime(
-            timestamp.year,
-            timestamp.month,
-            timestamp.day,
-            picked.hour,
-            picked.minute,
-          ),
-        );
-  }
-
-  Future<void> _addIntake(
-    BuildContext context,
-    WidgetRef ref,
-    DateTime defaultTime,
-  ) async {
-    final intake = await showDialog<MedicationIntakeDraft>(
-      context: context,
-      builder: (context) => _MedicationIntakeDialog(initialTime: defaultTime),
-    );
-    if (intake == null) return;
-    ref.read(symptomEntryControllerProvider.notifier).addIntake(intake);
-  }
-
-  Future<void> _save(BuildContext context, WidgetRef ref) async {
-    final s = AppStrings.of(context);
+  Future<void> _save(AppStrings s) async {
     final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
     try {
-      final saved =
-          await ref.read(symptomEntryControllerProvider.notifier).save();
-      if (!saved) return;
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(s.symptomSaved)));
-      router.pop();
+      final saved = await ref
+          .read(symptomEntryControllerProvider.notifier)
+          .save();
+      if (!saved || !mounted) return;
+      messenger.showSnackBar(SnackBar(content: Text(s.symptomSaved)));
+      context.pop();
+    } on ActiveMigraineExistsException {
+      if (await _offerToEndActiveMigraine(s) && mounted) await _save(s);
     } on Exception {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+      messenger.showSnackBar(SnackBar(content: Text(s.errorGeneric)));
     }
   }
 
-  Future<void> _delete(BuildContext context, WidgetRef ref) async {
-    final s = AppStrings.of(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final router = GoRouter.of(context);
-    final id = ref.read(symptomEntryControllerProvider).id;
+  Future<void> _delete(AppStrings s) async {
+    final state = ref.read(symptomEntryControllerProvider);
+    final id = state.id;
     if (id == null) return;
-    // The screen pops after deleting, so capture the repository now rather
-    // than reading `ref` again from the Undo action (the widget will
-    // already be unmounted by then).
     final repository = ref.read(symptomEntryRepositoryProvider);
-    try {
-      final deleted =
-          await ref.read(symptomEntryControllerProvider.notifier).delete();
-      if (!deleted) return;
-      router.pop();
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(s.entryDeleted),
-            action: SnackBarAction(
-              label: s.undoAction,
-              onPressed: () => repository.undoDeleteSymptom(id),
-            ),
-          ),
-        );
-    } on Exception {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    final messenger = ScaffoldMessenger.of(context);
+    if (!await ref.read(symptomEntryControllerProvider.notifier).delete()) {
+      return;
     }
+    if (!mounted) return;
+    context.pop();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(s.entryDeleted),
+        action: SnackBarAction(
+          label: s.undoAction,
+          onPressed: () => repository.undoDeleteSymptom(id),
+        ),
+      ),
+    );
   }
 
   @override
@@ -190,343 +173,146 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
     final s = AppStrings.of(context);
     final state = ref.watch(symptomEntryControllerProvider);
     final notifier = ref.read(symptomEntryControllerProvider.notifier);
+    final isMigraine = state.type == SymptomType.migraine;
+    final isMood = state.type == SymptomType.mood;
     final locale = Localizations.maybeLocaleOf(context)?.toString();
-    final dateLabel = DateFormat.yMMMd(locale).format(state.timestamp);
-    final timeLabel = DateFormat.Hm(locale).format(state.timestamp);
-    final detailSuggestions = symptomDetailSuggestions(s, state.type);
-    final isEditing = state.id != null;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? s.editSymptomTitle : s.symptomEntryTitle),
+        title: Text(
+          state.id != null
+              ? s.editSymptomTitle
+              : isMigraine
+              ? s.migraineEntryTitle
+              : isMood
+              ? s.dailyMoodTitle
+              : s.dailyFeelingTitle,
+        ),
         actions: [
-          if (isEditing)
+          if (state.id != null)
             IconButton(
-              icon: const Icon(Icons.delete_outline),
+              onPressed: () => _delete(s),
               tooltip: s.deleteAction,
-              onPressed: () => _delete(context, ref),
+              icon: const Icon(Icons.delete_outline),
             ),
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [
-          Text(
-            s.symptomEntryTypeLabel,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          gapH8,
-          SegmentedButton<SymptomType>(
-            segments: [
-              for (final type in SymptomType.values)
-                ButtonSegment(
-                  value: type,
-                  label: Text(
-                    symptomTypeLabel(s, type),
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-            ],
-            selected: {state.type},
-            onSelectionChanged: (selection) =>
-                notifier.setType(selection.first),
-          ),
-          gapH16,
-          Text(
-            '${s.intensityLabel}: ${state.intensity}',
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          Slider(
-            value: state.intensity.toDouble(),
-            max: 10,
-            divisions: 10,
-            label: '${state.intensity}',
-            onChanged: (value) => notifier.setIntensity(value.round()),
-          ),
-          if (detailSuggestions.isNotEmpty) ...[
+          if (isMigraine) ...[
+            Text(s.migraineStartLabel),
             gapH8,
-            Text(s.detailLabel, style: Theme.of(context).textTheme.labelLarge),
+            SegmentedButton<MigraineStartPrecision>(
+              segments: [
+                ButtonSegment(
+                  value: MigraineStartPrecision.exact,
+                  label: Text(s.migraineStartExact),
+                ),
+                ButtonSegment(
+                  value: MigraineStartPrecision.approximate,
+                  label: Text(s.migraineStartApproximate),
+                ),
+                ButtonSegment(
+                  value: MigraineStartPrecision.unknown,
+                  label: Text(s.migraineStartUnknown),
+                ),
+              ],
+              selected: {state.startPrecision},
+              onSelectionChanged: (value) =>
+                  notifier.setStartPrecision(value.first),
+            ),
+            if (state.startPrecision != MigraineStartPrecision.unknown) ...[
+              gapH16,
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _pickStart(state.timestamp, date: true),
+                      icon: const Icon(Icons.calendar_today),
+                      label: Text(
+                        DateFormat.yMMMd(locale).format(state.timestamp),
+                      ),
+                    ),
+                  ),
+                  gapW8,
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _pickStart(state.timestamp, date: false),
+                      icon: const Icon(Icons.schedule),
+                      label: Text(
+                        DateFormat.Hm(locale).format(state.timestamp),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            gapH24,
+            Text(s.intensityLabel),
             gapH8,
             Wrap(
               spacing: Sizes.p8,
               runSpacing: Sizes.p8,
               children: [
-                for (final suggestion in detailSuggestions)
+                for (var intensity = 1; intensity <= 10; intensity++)
                   ChoiceChip(
-                    label: Text(suggestion),
-                    selected: state.detail == suggestion,
-                    onSelected: (_) => notifier.toggleDetail(suggestion),
+                    label: Text('$intensity'),
+                    selected: state.intensity == intensity,
+                    onSelected: (_) => notifier.setIntensity(intensity),
                   ),
               ],
             ),
+          ] else ...[
+            if (!isMood) ...[
+              Text(s.feelingCategoryLabel),
+              gapH8,
+              SegmentedButton<SymptomType>(
+                segments: [
+                  for (final type in const [
+                    SymptomType.digestive,
+                    SymptomType.pain,
+                    SymptomType.eczema,
+                  ])
+                    ButtonSegment(
+                      value: type,
+                      label: Text(symptomTypeLabel(s, type)),
+                    ),
+                ],
+                selected: {state.type},
+                onSelectionChanged: (value) => notifier.setType(value.first),
+              ),
+              gapH16,
+            ],
+            if (state.previousIntensity case final intensity?) ...[
+              Text(s.previousIntensity(intensity)),
+              gapH16,
+            ],
           ],
           gapH16,
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => _pickDate(context, ref, state.timestamp),
-                  icon: const Icon(Icons.calendar_today, size: Sizes.p16),
-                  label: Text(dateLabel),
-                ),
-              ),
-              gapW8,
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => _pickTime(context, ref, state.timestamp),
-                  icon: const Icon(Icons.schedule, size: Sizes.p16),
-                  label: Text(timeLabel),
-                ),
-              ),
-            ],
-          ),
-          gapH16,
-          if (state.endTime == null)
-            OutlinedButton.icon(
-              onPressed: () => _pickEndTime(context, ref, state.timestamp),
-              icon: const Icon(Icons.timer_outlined, size: Sizes.p16),
-              label: Text(s.endTimeLabel),
-            )
-          else
-            InputChip(
-              avatar: const Icon(Icons.timer_outlined, size: Sizes.p16),
-              label: Text(
-                DateFormat.Hm(locale).format(state.endTime!),
-              ),
-              onDeleted: notifier.clearEndTime,
-              deleteButtonTooltipMessage: s.removeEndTime,
-            ),
-          gapH16,
-          Text(
-            s.medicationSectionTitle,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
-          gapH8,
-          _MedicationSection(
-            intakes: state.intakes,
-            defaultTime: state.timestamp,
-            onAdd: () => _addIntake(context, ref, state.timestamp),
-            onQuickAdd: (name) => notifier.addIntake(
-              MedicationIntakeDraft(
-                timestamp: state.timestamp,
-                name: name,
-              ),
-            ),
-            onRemove: notifier.removeIntakeAt,
-          ),
-          gapH16,
-          TextField(
+          TextFormField(
+            key: ValueKey('${state.id}-${state.type}'),
+            initialValue: state.note.isEmpty ? state.detail : state.note,
             decoration: InputDecoration(
-              hintText: s.noteHint,
+              labelText: isMigraine ? s.noteHint : s.dailyNoteHint,
               border: const OutlineInputBorder(),
             ),
-            maxLines: 2,
+            minLines: 2,
+            maxLines: 4,
             onChanged: notifier.setNote,
           ),
           gapH24,
           FilledButton(
-            onPressed: state.isSaving ? null : () => _save(context, ref),
+            onPressed: state.isSaving ? null : () => _save(s),
             child: state.isSaving
-                ? const SizedBox(
-                    height: Sizes.p20,
-                    width: Sizes.p20,
+                ? const SizedBox.square(
+                    dimension: Sizes.p20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : Text(s.save),
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Medication intakes of the crisis: chips of added intakes, one-tap
-/// suggestions from the user's history, and an "add" button for a new
-/// name/dose/time. No hardcoded drug list (US-20).
-class _MedicationSection extends ConsumerWidget {
-  const _MedicationSection({
-    required this.intakes,
-    required this.defaultTime,
-    required this.onAdd,
-    required this.onQuickAdd,
-    required this.onRemove,
-  });
-
-  final List<MedicationIntakeDraft> intakes;
-  final DateTime defaultTime;
-  final VoidCallback onAdd;
-  final ValueChanged<String> onQuickAdd;
-  final ValueChanged<int> onRemove;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = AppStrings.of(context);
-    final locale = Localizations.maybeLocaleOf(context)?.toString();
-    final recentNames =
-        ref.watch(recentMedicationNamesProvider).value ?? [];
-    final suggestions = [
-      for (final name in recentNames)
-        if (!intakes.any((intake) => intake.name == name)) name,
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (intakes.isNotEmpty) ...[
-          Wrap(
-            spacing: Sizes.p8,
-            runSpacing: Sizes.p8,
-            children: [
-              for (var i = 0; i < intakes.length; i++)
-                InputChip(
-                  avatar: const Icon(Icons.medication_outlined,
-                      size: Sizes.p16),
-                  label: Text(
-                    [
-                      intakes[i].name,
-                      if (intakes[i].dose != null) intakes[i].dose!,
-                      DateFormat.Hm(locale)
-                          .format(intakes[i].timestamp.toLocal()),
-                    ].join(' · '),
-                  ),
-                  onDeleted: () => onRemove(i),
-                  deleteButtonTooltipMessage: s.removeMedicationIntake,
-                ),
-            ],
-          ),
-          gapH8,
-        ],
-        if (suggestions.isNotEmpty) ...[
-          Wrap(
-            spacing: Sizes.p8,
-            runSpacing: Sizes.p8,
-            children: [
-              for (final name in suggestions)
-                ActionChip(
-                  avatar: const Icon(Icons.add, size: Sizes.p16),
-                  label: Text(name),
-                  onPressed: () => onQuickAdd(name),
-                ),
-            ],
-          ),
-          gapH8,
-        ],
-        OutlinedButton.icon(
-          onPressed: onAdd,
-          icon: const Icon(Icons.medication_outlined, size: Sizes.p16),
-          label: Text(s.addMedicationAction),
-        ),
-      ],
-    );
-  }
-}
-
-/// Dialog collecting a medication intake: free-text name, optional dose,
-/// intake time (defaults to the crisis time).
-class _MedicationIntakeDialog extends StatefulWidget {
-  const _MedicationIntakeDialog({required this.initialTime});
-
-  final DateTime initialTime;
-
-  @override
-  State<_MedicationIntakeDialog> createState() =>
-      _MedicationIntakeDialogState();
-}
-
-class _MedicationIntakeDialogState extends State<_MedicationIntakeDialog> {
-  final _nameController = TextEditingController();
-  final _doseController = TextEditingController();
-  late DateTime _time = widget.initialTime;
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _doseController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(_time),
-    );
-    if (picked == null) return;
-    setState(() {
-      _time = DateTime(
-        _time.year,
-        _time.month,
-        _time.day,
-        picked.hour,
-        picked.minute,
-      );
-    });
-  }
-
-  void _submit() {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) return;
-    final dose = _doseController.text.trim();
-    Navigator.of(context).pop(
-      MedicationIntakeDraft(
-        timestamp: _time,
-        name: name,
-        dose: dose.isEmpty ? null : dose,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final s = AppStrings.of(context);
-    final locale = Localizations.maybeLocaleOf(context)?.toString();
-
-    return AlertDialog(
-      title: Text(s.addMedicationAction),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _nameController,
-            autofocus: true,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              labelText: s.medicationNameLabel,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          gapH16,
-          TextField(
-            controller: _doseController,
-            decoration: InputDecoration(
-              labelText: s.medicationDoseLabel,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          gapH16,
-          Align(
-            alignment: Alignment.centerLeft,
-            child: OutlinedButton.icon(
-              onPressed: _pickTime,
-              icon: const Icon(Icons.schedule, size: Sizes.p16),
-              label: Text(
-                '${s.medicationIntakeTimeLabel} : '
-                '${DateFormat.Hm(locale).format(_time)}',
-              ),
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(s.cancel),
-        ),
-        FilledButton(
-          onPressed: _submit,
-          child: Text(s.save),
-        ),
-      ],
     );
   }
 }

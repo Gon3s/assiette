@@ -1,9 +1,11 @@
+import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_screen.dart';
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/medication_entry/presentation/medication_entry_screen.dart';
 import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
 import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
 import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart';
@@ -40,6 +42,9 @@ enum AppRouter {
 
   /// The symptom entry screen.
   symptomEntry,
+
+  /// The autonomous medication intake screen.
+  medicationEntry,
 
   /// The sleep entry detail screen.
   sleepEntry,
@@ -122,8 +127,20 @@ GoRouter goRouter(Ref ref) {
           GoRoute(
             path: 'symptom-entry',
             name: AppRouter.symptomEntry.name,
-            builder: (context, state) =>
-                SymptomEntryScreen(draft: state.extra as SymptomDraft?),
+            builder: (context, state) => SymptomEntryScreen(
+              draft: state.extra as SymptomDraft?,
+              initialType: _symptomType(state.uri.queryParameters['type']),
+              initialDate: DateTime.tryParse(
+                state.uri.queryParameters['date'] ?? '',
+              ),
+            ),
+          ),
+          GoRoute(
+            path: 'medication-entry',
+            name: AppRouter.medicationEntry.name,
+            builder: (context, state) => MedicationEntryScreen(
+              initialDate: state.extra as DateTime?,
+            ),
           ),
           GoRoute(
             path: 'sleep-entry',
@@ -138,8 +155,7 @@ GoRouter goRouter(Ref ref) {
               GoRoute(
                 path: 'notifications',
                 name: AppRouter.notificationSettings.name,
-                builder: (context, state) =>
-                    const NotificationSettingsScreen(),
+                builder: (context, state) => const NotificationSettingsScreen(),
               ),
               GoRoute(
                 path: 'pdf-export',
@@ -174,3 +190,8 @@ GoRouter goRouter(Ref ref) {
         const NoTransitionPage(child: NotFoundScreen()),
   );
 }
+
+SymptomType _symptomType(String? name) => SymptomType.values.firstWhere(
+  (value) => value.name == name,
+  orElse: () => SymptomType.migraine,
+);

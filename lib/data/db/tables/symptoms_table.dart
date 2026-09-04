@@ -8,7 +8,7 @@ class Symptoms extends Table {
   TextColumn get id => text()();
   DateTimeColumn get timestamp => dateTime()();
   IntColumn get type => intEnum<SymptomType>()();
-  IntColumn get intensity => integer()();
+  IntColumn get intensity => integer().nullable()();
   TextColumn get detail => text().nullable()();
   DateTimeColumn get endTime => dateTime().nullable()();
   DateTimeColumn get startedAt => dateTime().nullable()();
@@ -18,6 +18,8 @@ class Symptoms extends Table {
   IntColumn get initialIntensity => integer().nullable()();
   IntColumn get maximumIntensity => integer().nullable()();
   TextColumn get note => text().nullable()();
+  DateTimeColumn get dailyDate => dateTime().nullable()();
+  BoolColumn get isDailyNote => boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();

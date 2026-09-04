@@ -5,6 +5,8 @@ import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/symptom_entry/data/symptom_entry_repository.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -126,6 +128,75 @@ void main() {
         expect(saved.note, isNull);
       },
     );
+
+    test('stores daily feelings without intensity or medical time', () async {
+      final day = DateTime(2026, 7, 7);
+      await repository.saveSymptom(
+        timestamp: day,
+        type: SymptomType.eczema,
+        note: 'plaques sur le bras',
+        dailyDate: day,
+        isDailyNote: true,
+      );
+      await repository.saveSymptom(
+        timestamp: day,
+        type: SymptomType.eczema,
+        note: 'démangeaisons',
+        dailyDate: day,
+        isDailyNote: true,
+      );
+
+      final rows = await db.symptomsDao.watchDailyNotes(day).first;
+      expect(rows, hasLength(2));
+      expect(rows.every((row) => row.intensity == null), isTrue);
+      expect(rows.every((row) => row.dailyDate != null), isTrue);
+    });
+
+    test('allows only one new mood per day', () async {
+      final day = DateTime(2026, 7, 7);
+      await repository.saveSymptom(
+        timestamp: day,
+        type: SymptomType.mood,
+        note: 'calme',
+        dailyDate: day,
+        isDailyNote: true,
+      );
+
+      await expectLater(
+        repository.saveSymptom(
+          timestamp: day,
+          type: SymptomType.mood,
+          note: 'fatigué',
+          dailyDate: day,
+          isDailyNote: true,
+        ),
+        throwsA(isA<DailyMoodExistsException>()),
+      );
+    });
+
+    test(
+      'creates one first measurement and rejects a second active migraine',
+      () async {
+        await repository.saveSymptom(
+          timestamp: DateTime(2026, 7, 7, 9),
+          type: SymptomType.migraine,
+          intensity: 6,
+        );
+        final measurements = await db
+            .select(db.migraineIntensityMeasurements)
+            .get();
+        expect(measurements.single.intensity, 6);
+
+        await expectLater(
+          repository.saveSymptom(
+            timestamp: DateTime(2026, 7, 7, 10),
+            type: SymptomType.migraine,
+            intensity: 4,
+          ),
+          throwsA(isA<ActiveMigraineExistsException>()),
+        );
+      },
+    );
   });
 
   group('loadSymptom', () {
@@ -204,6 +275,30 @@ void main() {
         await db.symptomsDao.watchByDay(DateTime(2026, 7, 7)).first,
         hasLength(1),
       );
+    });
+
+    test('does not delete a medication linked to the migraine', () async {
+      final symptomId = await repository.saveSymptom(
+        timestamp: DateTime(2026, 7, 7, 9),
+        type: SymptomType.migraine,
+        intensity: 7,
+      );
+      await db.medicationIntakesDao.insertIntake(
+        MedicationIntakesCompanion.insert(
+          id: 'medication',
+          timestamp: DateTime.utc(2026, 7, 7, 9, 30),
+          name: 'Sumatriptan',
+          symptomId: Value(symptomId),
+        ),
+      );
+
+      await repository.deleteSymptom(symptomId);
+
+      final medication = await db.medicationIntakesDao.getIntakeById(
+        'medication',
+      );
+      expect(medication?.deletedAt, isNull);
+      expect(medication?.symptomId, symptomId);
     });
   });
 }

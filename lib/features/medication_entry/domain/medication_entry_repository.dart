@@ -11,7 +11,7 @@ part 'medication_entry_repository.g.dart';
 /// optional link to the symptom (crisis) they were taken for.
 abstract class MedicationEntryRepository {
   /// Inserts an intake, optionally linked to a symptom.
-  Future<void> saveIntake({
+  Future<String> saveIntake({
     required DateTime timestamp,
     required String name,
     String? dose,
@@ -31,6 +31,9 @@ abstract class MedicationEntryRepository {
   /// Distinct medication names already used, most recent first, for
   /// suggestion chips. Empty until the user logs a first intake.
   Future<List<String>> recentNames();
+
+  /// Removes the migraine association while preserving the intake.
+  Future<void> detachFromMigraine(String id);
 }
 
 /// Provides the [MedicationEntryRepository] implementation.

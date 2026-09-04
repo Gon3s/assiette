@@ -62,7 +62,7 @@ void main() {
             id: 'symptom-1',
             timestamp: DateTime.utc(2026, 7, 1, 9),
             type: SymptomType.migraine,
-            intensity: 3,
+            intensity: const Value(3),
             startedAt: Value(DateTime.utc(2026, 7, 1, 9)),
             startPrecision: const Value(MigraineStartPrecision.exact),
             endedAt: Value(DateTime.utc(2026, 7, 1, 11)),
@@ -119,12 +119,13 @@ void main() {
             (snapshot[name]! as List).cast<Map<String, dynamic>>();
 
         final tags = table('tags');
-        expect(snapshot['formatVersion'], 2);
+        expect(snapshot['formatVersion'], 3);
         expect(tags.length, greaterThan(1)); // 25 seeded + the custom one
         expect(tags.any((row) => row['id'] == 'tag-1'), isTrue);
         expect(table('meals').single['id'], 'meal-1');
         expect(table('mealTags').single['tagId'], 'tag-1');
         expect(table('symptoms').single['id'], 'symptom-1');
+        expect(table('migraineIntensityMeasurements'), isEmpty);
         expect(table('medicationIntakes').single['symptomId'], 'symptom-1');
         expect(table('sleepEntries').single['id'], 'sleep-1');
         expect(table('environmentSnapshots').single['id'], 'env-1');
@@ -190,13 +191,16 @@ void main() {
     test('restores a version 1 symptom without episode fields', () async {
       await seedSource();
       final snapshot = await codec.export(source)
-        ..['formatVersion'] = 1;
+        ..['formatVersion'] = 1
+        ..remove('migraineIntensityMeasurements');
       ((snapshot['symptoms'] as List).single as Map<String, dynamic>)
         ..remove('startedAt')
         ..remove('startPrecision')
         ..remove('endedAt')
         ..remove('initialIntensity')
-        ..remove('maximumIntensity');
+        ..remove('maximumIntensity')
+        ..remove('dailyDate')
+        ..remove('isDailyNote');
 
       final target = AppDatabase(NativeDatabase.memory());
       addTearDown(target.close);
@@ -206,6 +210,10 @@ void main() {
       expect(restored.id, 'symptom-1');
       expect(restored.startedAt, isNull);
       expect(restored.initialIntensity, isNull);
+      final measurement =
+          (await target.select(target.migraineIntensityMeasurements).get())
+              .single;
+      expect(measurement.intensity, 3);
     });
 
     test('wipes pre-existing local rows not present in the snapshot', () async {

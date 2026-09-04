@@ -88,8 +88,9 @@ void main() {
         name: 'Doliprane',
         symptomId: 'symptom-1',
       );
-      final intake =
-          (await repository.loadIntakesForSymptom('symptom-1')).single;
+      final intake = (await repository.loadIntakesForSymptom(
+        'symptom-1',
+      )).single;
       await repository.deleteIntake(intake.id!);
 
       expect(await repository.recentNames(), isEmpty);
@@ -103,8 +104,9 @@ void main() {
         name: 'Bi-Profenid',
         symptomId: 'symptom-1',
       );
-      final intake =
-          (await repository.loadIntakesForSymptom('symptom-1')).single;
+      final intake = (await repository.loadIntakesForSymptom(
+        'symptom-1',
+      )).single;
 
       await repository.deleteIntake(intake.id!);
       expect(await repository.loadIntakesForSymptom('symptom-1'), isEmpty);
@@ -117,9 +119,8 @@ void main() {
     });
   });
 
-  group('symptom delete cascade', () {
-    test('deleting a symptom hides its intakes; undo restores them',
-        () async {
+  group('symptom deletion', () {
+    test('deleting a symptom always preserves its linked intakes', () async {
       final symptomRepository = DriftSymptomEntryRepository(db: db);
       final symptomId = await symptomRepository.saveSymptom(
         timestamp: DateTime.utc(2026, 7, 19, 9),
@@ -133,13 +134,13 @@ void main() {
       );
 
       await symptomRepository.deleteSymptom(symptomId);
-      expect(await repository.loadIntakesForSymptom(symptomId), isEmpty);
-
-      await symptomRepository.undoDeleteSymptom(symptomId);
       expect(
         await repository.loadIntakesForSymptom(symptomId),
         hasLength(1),
       );
+
+      await symptomRepository.undoDeleteSymptom(symptomId);
+      expect(await repository.loadIntakesForSymptom(symptomId), hasLength(1));
     });
   });
 }

@@ -17,9 +17,18 @@ import 'package:go_router/go_router.dart';
 /// fires; the tap is then silently dropped and the app opens on the home
 /// screen instead of the meal entry form.
 void handleForegroundNotificationResponse(NotificationResponse response) {
-  if (response.actionId != NotificationActionIds.mealPhoto) return;
-
   final context = rootNavigatorKey.currentContext;
   if (context == null) return;
-  unawaited(GoRouter.of(context).pushNamed(AppRouter.mealEntry.name));
+  if (response.id == NotificationIds.symptomsReminder) {
+    unawaited(
+      GoRouter.of(context).pushNamed(
+        AppRouter.symptomEntry.name,
+        queryParameters: {'type': 'mood'},
+      ),
+    );
+    return;
+  }
+  if (response.actionId == NotificationActionIds.mealPhoto) {
+    unawaited(GoRouter.of(context).pushNamed(AppRouter.mealEntry.name));
+  }
 }

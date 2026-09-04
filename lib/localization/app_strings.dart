@@ -28,6 +28,12 @@ abstract class AppStrings {
   String get emptyDayMessage;
   String get logMealAction;
   String get logSymptomAction;
+  String get addHealthAction;
+  String get dailyFeelingsCardTitle;
+  String get activeMigraineTitle;
+  String migraineDuration(String duration);
+  String get updateIntensityAction;
+  String get endMigraineAction;
   String get sleepCardTitle;
   String get sleepQualityBad;
   String get sleepQualityMedium;
@@ -59,6 +65,7 @@ abstract class AppStrings {
   String get symptomTypeDigestive;
   String get symptomTypeMood;
   String get symptomTypePain;
+  String get symptomTypeEczema;
 
   // Meal entry
   String get mealEntryTitle;
@@ -112,6 +119,18 @@ abstract class AppStrings {
   String get symptomDetailBack;
   String get symptomDetailJoint;
   String get symptomDetailMuscle;
+  String get migraineEntryTitle;
+  String get dailyFeelingTitle;
+  String get dailyMoodTitle;
+  String get feelingCategoryLabel;
+  String get dailyNoteHint;
+  String get migraineStartLabel;
+  String get migraineStartExact;
+  String get migraineStartApproximate;
+  String get migraineStartUnknown;
+  String get activeMigraineExistsTitle;
+  String get activeMigraineExistsBody;
+  String previousIntensity(int intensity);
 
   // Medication intakes (US-20)
   String get medicationSectionTitle;
@@ -121,6 +140,11 @@ abstract class AppStrings {
   String get medicationIntakeTimeLabel;
   String get removeMedicationIntake;
   String get pdfSectionMedications;
+  String get medicationEntryTitle;
+  String get newMedicationAction;
+  String get recentMedicationsTitle;
+  String get medicationSaved;
+  String get linkToActiveMigraine;
 
   // Sleep entry
   String get sleepQualityLabel;

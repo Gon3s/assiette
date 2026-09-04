@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 /// (migraine=alert red, digestive=warm yellow, mood=primary blue,
 /// pain=turquoise).
 Color symptomTypeColor(SymptomType type) => switch (type) {
-      SymptomType.migraine => AppColors.alert,
-      SymptomType.digestive => AppColors.warning,
-      SymptomType.mood => AppColors.primary,
-      SymptomType.pain => AppColors.turquoise,
-    };
+  SymptomType.migraine => AppColors.alert,
+  SymptomType.digestive => AppColors.warning,
+  SymptomType.mood => AppColors.primary,
+  SymptomType.pain => AppColors.turquoise,
+  SymptomType.eczema => AppColors.warning,
+};

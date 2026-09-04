@@ -19,7 +19,7 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
   Future<String> saveSymptom({
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    int? intensity,
     String? detail,
     DateTime? endTime,
     DateTime? startedAt,
@@ -28,7 +28,17 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
     int? initialIntensity,
     int? maximumIntensity,
     String? note,
+    DateTime? dailyDate,
+    bool isDailyNote = false,
   }) async {
+    if (type == SymptomType.migraine &&
+        await _db.symptomsDao.getActiveMigraine() != null) {
+      throw ActiveMigraineExistsException();
+    }
+    if (type == SymptomType.mood && isDailyNote && dailyDate != null) {
+      final existing = await _db.symptomsDao.getDailyMood(dailyDate);
+      if (existing != null) throw DailyMoodExistsException(existing.id);
+    }
     final episode = _migraineEpisodeFields(
       timestamp: timestamp,
       type: type,
@@ -42,24 +52,39 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
     );
     final now = DateTime.now().toUtc();
     final id = _uuid.v4();
-    await _db.symptomsDao.insertSymptom(
-      SymptomsCompanion.insert(
-        id: id,
-        timestamp: episode?.startedAt ?? timestamp.toUtc(),
-        type: type,
-        intensity: episode?.initialIntensity ?? intensity,
-        detail: Value((detail?.isEmpty ?? true) ? null : detail),
-        endTime: Value(episode?.endedAt ?? endTime?.toUtc()),
-        startedAt: Value(episode?.startedAt),
-        startPrecision: Value(episode?.startPrecision),
-        endedAt: Value(episode?.endedAt),
-        initialIntensity: Value(episode?.initialIntensity),
-        maximumIntensity: Value(episode?.maximumIntensity),
-        note: Value((note?.isEmpty ?? true) ? null : note),
-        createdAt: Value(now),
-        updatedAt: Value(now),
-      ),
-    );
+    await _db.transaction(() async {
+      await _db.symptomsDao.insertSymptom(
+        SymptomsCompanion.insert(
+          id: id,
+          timestamp: episode?.startedAt ?? timestamp.toUtc(),
+          type: type,
+          intensity: Value(episode?.initialIntensity ?? intensity),
+          detail: Value((detail?.isEmpty ?? true) ? null : detail),
+          endTime: Value(episode?.endedAt ?? endTime?.toUtc()),
+          startedAt: Value(episode?.startedAt),
+          startPrecision: Value(episode?.startPrecision),
+          endedAt: Value(episode?.endedAt),
+          initialIntensity: Value(episode?.initialIntensity),
+          maximumIntensity: Value(episode?.maximumIntensity),
+          note: Value((note?.isEmpty ?? true) ? null : note),
+          dailyDate: Value(dailyDate == null ? null : _dayKey(dailyDate)),
+          isDailyNote: Value(isDailyNote),
+          createdAt: Value(now),
+          updatedAt: Value(now),
+        ),
+      );
+      if (episode != null) {
+        await _db.migraineIntensityMeasurementsDao.insertMeasurement(
+          MigraineIntensityMeasurementsCompanion.insert(
+            id: _uuid.v4(),
+            symptomId: id,
+            timestamp: episode.startedAt ?? now,
+            intensity: episode.initialIntensity,
+            createdAt: Value(now),
+          ),
+        );
+      }
+    });
     return id;
   }
 
@@ -67,28 +92,38 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
   Future<SymptomDraft?> loadSymptom(String id) async {
     final symptom = await _db.symptomsDao.getSymptomById(id);
     if (symptom == null) return null;
-    return SymptomDraft(
-      id: symptom.id,
-      timestamp: symptom.timestamp,
-      type: symptom.type,
-      intensity: symptom.intensity,
-      detail: symptom.detail,
-      endTime: symptom.endTime,
-      startedAt: symptom.startedAt,
-      startPrecision: symptom.startPrecision,
-      endedAt: symptom.endedAt,
-      initialIntensity: symptom.initialIntensity,
-      maximumIntensity: symptom.maximumIntensity,
-      note: symptom.note,
-    );
+    return _toDraft(symptom);
   }
+
+  @override
+  Future<SymptomDraft?> loadDailyMood(DateTime day) async {
+    final symptom = await _db.symptomsDao.getDailyMood(day);
+    return symptom == null ? null : _toDraft(symptom);
+  }
+
+  SymptomDraft _toDraft(Symptom symptom) => SymptomDraft(
+    id: symptom.id,
+    timestamp: symptom.timestamp,
+    type: symptom.type,
+    intensity: symptom.intensity,
+    detail: symptom.detail,
+    endTime: symptom.endTime,
+    startedAt: symptom.startedAt,
+    startPrecision: symptom.startPrecision,
+    endedAt: symptom.endedAt,
+    initialIntensity: symptom.initialIntensity,
+    maximumIntensity: symptom.maximumIntensity,
+    note: symptom.note,
+    dailyDate: symptom.dailyDate,
+    isDailyNote: symptom.isDailyNote,
+  );
 
   @override
   Future<void> updateSymptom({
     required String id,
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    int? intensity,
     String? detail,
     DateTime? endTime,
     DateTime? startedAt,
@@ -97,6 +132,8 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
     int? initialIntensity,
     int? maximumIntensity,
     String? note,
+    DateTime? dailyDate,
+    bool isDailyNote = false,
   }) {
     final episode = _migraineEpisodeFields(
       timestamp: timestamp,
@@ -123,6 +160,8 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
         initialIntensity: Value(episode?.initialIntensity),
         maximumIntensity: Value(episode?.maximumIntensity),
         note: Value((note?.isEmpty ?? true) ? null : note),
+        dailyDate: Value(dailyDate == null ? null : _dayKey(dailyDate)),
+        isDailyNote: Value(isDailyNote),
         updatedAt: Value(DateTime.now().toUtc()),
       ),
     );
@@ -131,20 +170,18 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
   @override
   Future<void> deleteSymptom(String id) async {
     await _db.symptomsDao.softDeleteSymptom(id);
-    await _db.medicationIntakesDao.softDeleteBySymptomId(id);
   }
 
   @override
   Future<void> undoDeleteSymptom(String id) async {
     await _db.symptomsDao.restoreSymptom(id);
-    await _db.medicationIntakesDao.restoreBySymptomId(id);
   }
 }
 
 _MigraineEpisodeFields? _migraineEpisodeFields({
   required DateTime timestamp,
   required SymptomType type,
-  required int intensity,
+  required int? intensity,
   required DateTime? endTime,
   required DateTime? startedAt,
   required MigraineStartPrecision? startPrecision,
@@ -161,11 +198,15 @@ _MigraineEpisodeFields? _migraineEpisodeFields({
   final end = (endedAt ?? endTime)?.toUtc();
   final initial = initialIntensity ?? intensity;
 
-  if (initial < 0 || initial > 10) {
+  if (initial == null) {
+    throw ArgumentError.notNull('intensity');
+  }
+
+  if (initial < 1 || initial > 10) {
     throw ArgumentError.value(
       initial,
       'initialIntensity',
-      'must be between 0 and 10',
+      'must be between 1 and 10',
     );
   }
   if (maximumIntensity != null &&
@@ -192,6 +233,9 @@ _MigraineEpisodeFields? _migraineEpisodeFields({
     maximumIntensity: maximumIntensity,
   );
 }
+
+DateTime _dayKey(DateTime date) =>
+    DateTime(date.year, date.month, date.day).toUtc();
 
 class _MigraineEpisodeFields {
   const _MigraineEpisodeFields({

@@ -1,16 +1,20 @@
 import 'dart:async';
 
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_controller.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_state.dart';
+import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/day_view/presentation/widgets/day_header.dart';
 import 'package:assiette/features/day_view/presentation/widgets/sleep_card.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_tile.dart';
 import 'package:assiette/features/favorites/presentation/widgets/favorites_row.dart';
+import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/localization/enum_labels.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -194,6 +198,8 @@ class _DayViewBody extends ConsumerWidget {
     return Column(
       children: [
         const DayHeader(),
+        const _ActiveMigraineCard(),
+        const _DailyFeelingsCard(),
         const SleepCard(),
         gapH8,
         const FavoritesRow(),
@@ -208,8 +214,7 @@ class _DayViewBody extends ConsumerWidget {
             ),
             AsyncData(:final value) => ListView.builder(
               itemCount: value.length,
-              itemBuilder: (context, index) =>
-                  TimelineTile(item: value[index]),
+              itemBuilder: (context, index) => TimelineTile(item: value[index]),
             ),
             AsyncError() => Center(child: Text(s.emptyDayMessage)),
             _ => const Center(child: CircularProgressIndicator()),
@@ -221,13 +226,13 @@ class _DayViewBody extends ConsumerWidget {
   }
 }
 
-class _ActionBar extends StatelessWidget {
+class _ActionBar extends ConsumerWidget {
   const _ActionBar({required this.s});
 
   final AppStrings s;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(Sizes.p16),
@@ -243,14 +248,229 @@ class _ActionBar extends StatelessWidget {
             gapW16,
             Expanded(
               child: FilledButton.tonalIcon(
-                onPressed: () => context.pushNamed(AppRouter.symptomEntry.name),
-                icon: const Icon(Icons.healing),
-                label: Text(s.logSymptomAction),
+                onPressed: () => _showAddMenu(context, ref),
+                icon: const Icon(Icons.add),
+                label: Text(s.addHealthAction),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _showAddMenu(BuildContext context, WidgetRef ref) async {
+    final date = ref.read(selectedDateProvider);
+    final choice = await showModalBottomSheet<_AddChoice>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.bolt),
+              title: Text(s.symptomTypeMigraine),
+              onTap: () => Navigator.pop(context, _AddChoice.migraine),
+            ),
+            ListTile(
+              leading: const Icon(Icons.favorite_outline),
+              title: Text(s.dailyFeelingTitle),
+              onTap: () => Navigator.pop(context, _AddChoice.feeling),
+            ),
+            ListTile(
+              leading: const Icon(Icons.mood),
+              title: Text(s.dailyMoodTitle),
+              onTap: () => Navigator.pop(context, _AddChoice.mood),
+            ),
+            ListTile(
+              leading: const Icon(Icons.medication_outlined),
+              title: Text(s.medicationEntryTitle),
+              onTap: () => Navigator.pop(context, _AddChoice.medication),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (choice == null || !context.mounted) return;
+    if (choice == _AddChoice.medication) {
+      await context.pushNamed(AppRouter.medicationEntry.name, extra: date);
+      return;
+    }
+    if (choice == _AddChoice.mood) {
+      final existing = await ref
+          .read(symptomEntryRepositoryProvider)
+          .loadDailyMood(date);
+      if (!context.mounted) return;
+      await context.pushNamed(
+        AppRouter.symptomEntry.name,
+        extra: existing,
+        queryParameters: {
+          'type': SymptomType.mood.name,
+          'date': date.toIso8601String(),
+        },
+      );
+      return;
+    }
+    final type = choice == _AddChoice.migraine
+        ? SymptomType.migraine
+        : SymptomType.digestive;
+    await context.pushNamed(
+      AppRouter.symptomEntry.name,
+      queryParameters: {
+        'type': type.name,
+        'date': date.toIso8601String(),
+      },
+    );
+  }
+}
+
+enum _AddChoice { migraine, feeling, mood, medication }
+
+class _DailyFeelingsCard extends ConsumerWidget {
+  const _DailyFeelingsCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = AppStrings.of(context);
+    final feelings = ref.watch(dayFeelingsProvider).value ?? const [];
+    if (feelings.isEmpty) return const SizedBox.shrink();
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: Sizes.p16),
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.p16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              s.dailyFeelingsCardTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            for (final feeling in feelings)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(symptomTypeLabel(s, feeling.type)),
+                subtitle: feeling.text.isEmpty ? null : Text(feeling.text),
+                onTap: () async {
+                  final draft = await ref
+                      .read(symptomEntryRepositoryProvider)
+                      .loadSymptom(feeling.id);
+                  if (draft != null && context.mounted) {
+                    await context.pushNamed(
+                      AppRouter.symptomEntry.name,
+                      extra: draft,
+                    );
+                  }
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActiveMigraineCard extends ConsumerWidget {
+  const _ActiveMigraineCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = AppStrings.of(context);
+    final active = ref.watch(activeMigraineProvider).value;
+    if (active == null) return const SizedBox.shrink();
+    final duration = active.startedAt == null
+        ? s.migraineStartUnknown
+        : s.migraineDuration(
+            _formatDuration(
+              DateTime.now().difference(
+                active.startedAt!.toLocal(),
+              ),
+            ),
+          );
+    return Card(
+      margin: const EdgeInsets.fromLTRB(
+        Sizes.p16,
+        Sizes.p8,
+        Sizes.p16,
+        Sizes.p8,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.p16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              s.activeMigraineTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            gapH8,
+            Text('$duration · ${s.intensityLabel} ${active.lastIntensity}/10'),
+            gapH8,
+            Wrap(
+              spacing: Sizes.p8,
+              children: [
+                OutlinedButton(
+                  onPressed: () => _updateIntensity(context, ref, active.id),
+                  child: Text(s.updateIntensityAction),
+                ),
+                FilledButton.tonal(
+                  onPressed: () => _end(context, ref, active.id),
+                  child: Text(s.endMigraineAction),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _updateIntensity(
+    BuildContext context,
+    WidgetRef ref,
+    String id,
+  ) async {
+    final intensity = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppStrings.of(context).updateIntensityAction),
+        content: Wrap(
+          spacing: Sizes.p8,
+          runSpacing: Sizes.p8,
+          children: [
+            for (var value = 1; value <= 10; value++)
+              ActionChip(
+                label: Text('$value'),
+                onPressed: () => Navigator.pop(context, value),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (intensity != null) {
+      await ref
+          .read(dayViewRepositoryProvider)
+          .addMigraineIntensity(id, intensity);
+    }
+  }
+
+  Future<void> _end(BuildContext context, WidgetRef ref, String id) async {
+    final now = DateTime.now();
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now),
+    );
+    if (time == null) return;
+    await ref
+        .read(dayViewRepositoryProvider)
+        .endMigraine(
+          id,
+          DateTime(now.year, now.month, now.day, time.hour, time.minute),
+        );
+  }
+
+  String _formatDuration(Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes.remainder(60);
+    return hours == 0 ? '${minutes}m' : '${hours}h ${minutes}m';
   }
 }

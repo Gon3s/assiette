@@ -40,7 +40,7 @@ final class CloudBackupControllerProvider
 }
 
 String _$cloudBackupControllerHash() =>
-    r'a6208ceee12815fe2b482d3b6cda3c812b6df87b';
+    r'790c45146eebbf00f2018b3fc8b4d58c26970f81';
 
 /// Drives Google sign-in/out and the backup/restore actions for the cloud
 /// backup screen (US-26).

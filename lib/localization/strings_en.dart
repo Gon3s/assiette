@@ -18,6 +18,18 @@ class AppStringsEn implements AppStrings {
   @override
   String get logSymptomAction => 'Symptom';
   @override
+  String get addHealthAction => 'Add';
+  @override
+  String get dailyFeelingsCardTitle => "Today's feelings";
+  @override
+  String get activeMigraineTitle => 'Active migraine';
+  @override
+  String migraineDuration(String duration) => 'For $duration';
+  @override
+  String get updateIntensityAction => 'Update intensity';
+  @override
+  String get endMigraineAction => 'End';
+  @override
   String get sleepCardTitle => 'Sleep';
   @override
   String get sleepQualityBad => 'Bad';
@@ -54,8 +66,7 @@ class AppStringsEn implements AppStrings {
   @override
   String get weatherUpdatedJustNow => 'Updated just now';
   @override
-  String weatherUpdatedMinutesAgo(int minutes) =>
-      'Updated $minutes min ago';
+  String weatherUpdatedMinutesAgo(int minutes) => 'Updated $minutes min ago';
   @override
   String weatherUpdatedHoursAgo(int hours) => 'Updated ${hours}h ago';
   @override
@@ -80,6 +91,8 @@ class AppStringsEn implements AppStrings {
   String get symptomTypeMood => 'Mood';
   @override
   String get symptomTypePain => 'Pain';
+  @override
+  String get symptomTypeEczema => 'Eczema';
 
   @override
   String get mealEntryTitle => 'New meal';
@@ -177,6 +190,31 @@ class AppStringsEn implements AppStrings {
   String get symptomDetailJoint => 'Joint';
   @override
   String get symptomDetailMuscle => 'Muscle';
+  @override
+  String get migraineEntryTitle => 'New migraine';
+  @override
+  String get dailyFeelingTitle => 'Feeling';
+  @override
+  String get dailyMoodTitle => 'Mood of the day';
+  @override
+  String get feelingCategoryLabel => 'Category';
+  @override
+  String get dailyNoteHint => 'What are you feeling?';
+  @override
+  String get migraineStartLabel => 'Start';
+  @override
+  String get migraineStartExact => 'Exact';
+  @override
+  String get migraineStartApproximate => 'Approximate';
+  @override
+  String get migraineStartUnknown => 'Unknown';
+  @override
+  String get activeMigraineExistsTitle => 'A migraine is already active';
+  @override
+  String get activeMigraineExistsBody => 'End the previous migraine now?';
+  @override
+  String previousIntensity(int intensity) =>
+      'Previously recorded intensity: $intensity/10';
 
   @override
   String get medicationSectionTitle => 'Medications';
@@ -192,6 +230,16 @@ class AppStringsEn implements AppStrings {
   String get removeMedicationIntake => 'Remove intake';
   @override
   String get pdfSectionMedications => 'Medications';
+  @override
+  String get medicationEntryTitle => 'Medication';
+  @override
+  String get newMedicationAction => 'New medication';
+  @override
+  String get recentMedicationsTitle => 'Recent medications';
+  @override
+  String get medicationSaved => 'Intake saved';
+  @override
+  String get linkToActiveMigraine => 'Link to active migraine';
 
   @override
   String get sleepQualityLabel => 'Quality';
@@ -225,8 +273,7 @@ class AppStringsEn implements AppStrings {
   @override
   String get notificationChannelMealsName => 'Meals';
   @override
-  String get notificationChannelMealsDescription =>
-      'Reminders to log a meal';
+  String get notificationChannelMealsDescription => 'Reminders to log a meal';
   @override
   String get notificationChannelSleepName => 'Sleep';
   @override
@@ -238,10 +285,10 @@ class AppStringsEn implements AppStrings {
   String get notificationChannelWeatherDescription =>
       'Alerts related to weather and pressure';
   @override
-  String get notificationChannelSymptomsName => 'Symptom check-in';
+  String get notificationChannelSymptomsName => 'Mood of the day';
   @override
   String get notificationChannelSymptomsDescription =>
-      'Reminder to log your symptoms';
+      'Reminder to log your mood of the day';
   @override
   String get mealReminderTitle => 'Did you eat?';
   @override
@@ -255,7 +302,7 @@ class AppStringsEn implements AppStrings {
       'A pressure drop is expected in the next 24h — a common trigger '
       'for some people.';
   @override
-  String get symptomsReminderTitle => 'How are you feeling?';
+  String get symptomsReminderTitle => "What's your mood today?";
 
   @override
   String get notificationSettingsTitle => 'Notification settings';
