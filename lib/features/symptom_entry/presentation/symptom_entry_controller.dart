@@ -1,3 +1,4 @@
+import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
 import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
@@ -19,14 +20,35 @@ class SymptomEntryController extends _$SymptomEntryController {
     );
   }
 
+  /// Starts a fresh form for the requested day and kind.
+  void initialize(SymptomType type, DateTime date) {
+    final now = DateTime.now();
+    final timestamp = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      now.hour,
+      now.minute,
+    );
+    state = SymptomEntryState(
+      type: type,
+      timestamp: timestamp,
+      dailyDate: type == SymptomType.migraine ? null : date,
+      isDailyNote: type != SymptomType.migraine,
+    );
+  }
+
   /// Changes the symptom type. The detail is cleared since suggestions
   /// differ per type.
   void setType(SymptomType type) =>
       state = state.copyWith(type: type, detail: null);
 
-  /// Changes the intensity (0-10).
+  /// Changes the migraine intensity (1-10).
   void setIntensity(int intensity) =>
       state = state.copyWith(intensity: intensity);
+
+  void setStartPrecision(MigraineStartPrecision precision) =>
+      state = state.copyWith(startPrecision: precision);
 
   /// Selects or clears a suggested detail (tapping the selected one again
   /// clears it).
@@ -42,18 +64,15 @@ class SymptomEntryController extends _$SymptomEntryController {
       state = state.copyWith(timestamp: timestamp);
 
   /// Sets the optional end time (kept local; converted to UTC on save).
-  void setEndTime(DateTime endTime) =>
-      state = state.copyWith(endTime: endTime);
+  void setEndTime(DateTime endTime) => state = state.copyWith(endTime: endTime);
 
   /// Clears the optional end time.
   void clearEndTime() => state = state.copyWith(endTime: null);
 
-  /// Adds a medication intake to the form (persisted on save).
+  /// Retained for legacy edit flows. New medication entry is autonomous.
   void addIntake(MedicationIntakeDraft intake) =>
       state = state.copyWith(intakes: [...state.intakes, intake]);
 
-  /// Removes an intake from the form. Already-persisted intakes are
-  /// remembered so save() can soft-delete them.
   void removeIntakeAt(int index) {
     final intake = state.intakes[index];
     state = state.copyWith(
@@ -65,29 +84,29 @@ class SymptomEntryController extends _$SymptomEntryController {
     );
   }
 
-  /// Seeds the form from a previously logged symptom for editing, then
-  /// loads its medication intakes.
+  /// Seeds the form from a previously logged symptom for editing.
   Future<void> loadForEdit(SymptomDraft draft) async {
     state = SymptomEntryState(
       id: draft.id,
       type: draft.type,
       timestamp: draft.timestamp,
-      intensity: draft.intensity,
+      intensity: draft.intensity ?? 5,
       detail: draft.detail,
       endTime: draft.endTime,
       note: draft.note ?? '',
+      dailyDate: draft.dailyDate,
+      isDailyNote: draft.isDailyNote,
+      startPrecision:
+          draft.startPrecision ?? MigraineStartPrecision.approximate,
+      previousIntensity: draft.isDailyNote ? null : draft.intensity,
     );
     final intakes = await ref
         .read(medicationEntryRepositoryProvider)
         .loadIntakesForSymptom(draft.id);
-    // The user may have started a fresh form meanwhile; only attach the
-    // intakes when the edited symptom is still the one on screen.
-    if (state.id == draft.id) {
-      state = state.copyWith(intakes: intakes);
-    }
+    if (state.id == draft.id) state = state.copyWith(intakes: intakes);
   }
 
-  /// Persists the symptom (create or update) and its medication intakes.
+  /// Persists the migraine or daily note (create or update).
   /// Returns true on success.
   Future<bool> save() async {
     if (state.isSaving) return false;
@@ -95,42 +114,64 @@ class SymptomEntryController extends _$SymptomEntryController {
     try {
       final repository = ref.read(symptomEntryRepositoryProvider);
       final id = state.id;
-      final String symptomId;
+      var symptomId = id;
       if (id == null) {
         symptomId = await repository.saveSymptom(
           timestamp: state.timestamp,
           type: state.type,
-          intensity: state.intensity,
+          intensity: state.type == SymptomType.migraine
+              ? state.intensity
+              : null,
           detail: state.detail,
           endTime: state.endTime,
           note: state.note,
+          startedAt: state.startPrecision == MigraineStartPrecision.unknown
+              ? null
+              : state.timestamp,
+          startPrecision: state.type == SymptomType.migraine
+              ? state.startPrecision
+              : null,
+          initialIntensity: state.type == SymptomType.migraine
+              ? state.intensity
+              : null,
+          dailyDate: state.dailyDate,
+          isDailyNote: state.isDailyNote,
         );
       } else {
         await repository.updateSymptom(
           id: id,
           timestamp: state.timestamp,
           type: state.type,
-          intensity: state.intensity,
+          intensity: state.type == SymptomType.migraine
+              ? state.intensity
+              : null,
           detail: state.detail,
           endTime: state.endTime,
           note: state.note,
+          startedAt: state.startPrecision == MigraineStartPrecision.unknown
+              ? null
+              : state.timestamp,
+          startPrecision: state.type == SymptomType.migraine
+              ? state.startPrecision
+              : null,
+          initialIntensity: state.type == SymptomType.migraine
+              ? state.intensity
+              : null,
+          dailyDate: state.dailyDate,
+          isDailyNote: state.isDailyNote,
         );
-        symptomId = id;
       }
-      final medicationRepository =
-          ref.read(medicationEntryRepositoryProvider);
-      for (final intake in state.intakes) {
-        if (intake.id == null) {
-          await medicationRepository.saveIntake(
-            timestamp: intake.timestamp,
-            name: intake.name,
-            dose: intake.dose,
-            symptomId: symptomId,
-          );
-        }
+      final medications = ref.read(medicationEntryRepositoryProvider);
+      for (final intake in state.intakes.where((value) => value.id == null)) {
+        await medications.saveIntake(
+          timestamp: intake.timestamp,
+          name: intake.name,
+          dose: intake.dose,
+          symptomId: symptomId,
+        );
       }
       for (final removedId in state.removedIntakeIds) {
-        await medicationRepository.deleteIntake(removedId);
+        await medications.deleteIntake(removedId);
       }
       return true;
     } finally {

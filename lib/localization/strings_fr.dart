@@ -18,6 +18,18 @@ class AppStringsFr implements AppStrings {
   @override
   String get logSymptomAction => 'Symptôme';
   @override
+  String get addHealthAction => 'Ajouter';
+  @override
+  String get dailyFeelingsCardTitle => 'Ressentis du jour';
+  @override
+  String get activeMigraineTitle => 'Migraine en cours';
+  @override
+  String migraineDuration(String duration) => 'Depuis $duration';
+  @override
+  String get updateIntensityAction => 'Mettre à jour l’intensité';
+  @override
+  String get endMigraineAction => 'Terminer';
+  @override
   String get sleepCardTitle => 'Sommeil';
   @override
   String get sleepQualityBad => 'Mauvais';
@@ -80,6 +92,8 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeMood => 'Humeur';
   @override
   String get symptomTypePain => 'Douleur';
+  @override
+  String get symptomTypeEczema => 'Eczéma';
 
   @override
   String get mealEntryTitle => 'Nouveau repas';
@@ -177,6 +191,32 @@ class AppStringsFr implements AppStrings {
   String get symptomDetailJoint => 'Articulaire';
   @override
   String get symptomDetailMuscle => 'Musculaire';
+  @override
+  String get migraineEntryTitle => 'Nouvelle migraine';
+  @override
+  String get dailyFeelingTitle => 'Ressenti';
+  @override
+  String get dailyMoodTitle => 'Humeur du jour';
+  @override
+  String get feelingCategoryLabel => 'Catégorie';
+  @override
+  String get dailyNoteHint => 'Que ressens-tu ?';
+  @override
+  String get migraineStartLabel => 'Début';
+  @override
+  String get migraineStartExact => 'Exact';
+  @override
+  String get migraineStartApproximate => 'Approximatif';
+  @override
+  String get migraineStartUnknown => 'Inconnu';
+  @override
+  String get activeMigraineExistsTitle => 'Une migraine est déjà en cours';
+  @override
+  String get activeMigraineExistsBody =>
+      'Terminer la migraine précédente maintenant ?';
+  @override
+  String previousIntensity(int intensity) =>
+      'Intensité précédemment enregistrée : $intensity/10';
 
   @override
   String get medicationSectionTitle => 'Médicaments';
@@ -192,6 +232,16 @@ class AppStringsFr implements AppStrings {
   String get removeMedicationIntake => 'Supprimer la prise';
   @override
   String get pdfSectionMedications => 'Médicaments';
+  @override
+  String get medicationEntryTitle => 'Médicament';
+  @override
+  String get newMedicationAction => 'Nouveau médicament';
+  @override
+  String get recentMedicationsTitle => 'Médicaments récents';
+  @override
+  String get medicationSaved => 'Prise enregistrée';
+  @override
+  String get linkToActiveMigraine => 'Associer à la migraine en cours';
 
   @override
   String get sleepQualityLabel => 'Qualité';
@@ -239,10 +289,10 @@ class AppStringsFr implements AppStrings {
   String get notificationChannelWeatherDescription =>
       'Alertes liées à la météo et à la pression';
   @override
-  String get notificationChannelSymptomsName => 'Check-in symptômes';
+  String get notificationChannelSymptomsName => 'Humeur du jour';
   @override
   String get notificationChannelSymptomsDescription =>
-      'Rappel pour noter tes symptômes';
+      'Rappel pour noter ton humeur du jour';
   @override
   String get mealReminderTitle => 'As-tu mangé ?';
   @override
@@ -256,7 +306,7 @@ class AppStringsFr implements AppStrings {
       'Une baisse de pression est prévue dans les prochaines 24h — '
       'déclencheur fréquent pour certaines personnes.';
   @override
-  String get symptomsReminderTitle => 'Comment te sens-tu ?';
+  String get symptomsReminderTitle => 'Quelle est ton humeur du jour ?';
 
   @override
   String get notificationSettingsTitle => 'Réglages notifications';

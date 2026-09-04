@@ -106,10 +106,15 @@ class JournalPdfBuilder {
       for (final symptom in symptoms)
         pw.Bullet(
           text: [
-            timeFormat.format(symptom.timestamp.toLocal()),
+            if (!symptom.isDailyNote)
+              timeFormat.format(symptom.timestamp.toLocal()),
             symptomTypeLabel(s, symptom.symptomType),
-            '${s.intensityLabel} ${symptom.intensity}/10',
+            if (symptom.intensity case final intensity?)
+              symptom.isDailyNote
+                  ? s.previousIntensity(intensity)
+                  : '${s.intensityLabel} $intensity/10',
             if (symptom.detail != null) symptom.detail!,
+            if (symptom.note != null) symptom.note!,
           ].join(' - '),
         ),
     ];

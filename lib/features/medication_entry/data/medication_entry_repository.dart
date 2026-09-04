@@ -14,17 +14,18 @@ class DriftMedicationEntryRepository implements MedicationEntryRepository {
   static const _uuid = Uuid();
 
   @override
-  Future<void> saveIntake({
+  Future<String> saveIntake({
     required DateTime timestamp,
     required String name,
     String? dose,
     String? symptomId,
     String? note,
-  }) {
+  }) async {
     final now = DateTime.now().toUtc();
-    return _db.medicationIntakesDao.insertIntake(
+    final id = _uuid.v4();
+    await _db.medicationIntakesDao.insertIntake(
       MedicationIntakesCompanion.insert(
-        id: _uuid.v4(),
+        id: id,
         timestamp: timestamp.toUtc(),
         name: name.trim(),
         dose: Value((dose?.trim().isEmpty ?? true) ? null : dose!.trim()),
@@ -34,14 +35,14 @@ class DriftMedicationEntryRepository implements MedicationEntryRepository {
         updatedAt: Value(now),
       ),
     );
+    return id;
   }
 
   @override
   Future<List<MedicationIntakeDraft>> loadIntakesForSymptom(
     String symptomId,
   ) async {
-    final intakes =
-        await _db.medicationIntakesDao.getBySymptomId(symptomId);
+    final intakes = await _db.medicationIntakesDao.getBySymptomId(symptomId);
     return [
       for (final intake in intakes)
         MedicationIntakeDraft(
@@ -65,4 +66,14 @@ class DriftMedicationEntryRepository implements MedicationEntryRepository {
   @override
   Future<List<String>> recentNames() =>
       _db.medicationIntakesDao.getDistinctNames();
+
+  @override
+  Future<void> detachFromMigraine(String id) =>
+      _db.medicationIntakesDao.updateIntake(
+        id,
+        MedicationIntakesCompanion(
+          symptomId: const Value(null),
+          updatedAt: Value(DateTime.now().toUtc()),
+        ),
+      );
 }

@@ -1965,9 +1965,9 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
   late final GeneratedColumn<int> intensity = GeneratedColumn<int>(
     'intensity',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _detailMeta = const VerificationMeta('detail');
   @override
@@ -1989,6 +1989,62 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<MigraineStartPrecision?, int>
+  startPrecision =
+      GeneratedColumn<int>(
+        'start_precision',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<MigraineStartPrecision?>(
+        $SymptomsTable.$converterstartPrecisionn,
+      );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _initialIntensityMeta = const VerificationMeta(
+    'initialIntensity',
+  );
+  @override
+  late final GeneratedColumn<int> initialIntensity = GeneratedColumn<int>(
+    'initial_intensity',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _maximumIntensityMeta = const VerificationMeta(
+    'maximumIntensity',
+  );
+  @override
+  late final GeneratedColumn<int> maximumIntensity = GeneratedColumn<int>(
+    'maximum_intensity',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
   late final GeneratedColumn<String> note = GeneratedColumn<String>(
@@ -1997,6 +2053,32 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
     true,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dailyDateMeta = const VerificationMeta(
+    'dailyDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> dailyDate = GeneratedColumn<DateTime>(
+    'daily_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isDailyNoteMeta = const VerificationMeta(
+    'isDailyNote',
+  );
+  @override
+  late final GeneratedColumn<bool> isDailyNote = GeneratedColumn<bool>(
+    'is_daily_note',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_daily_note" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
@@ -2041,7 +2123,14 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
     intensity,
     detail,
     endTime,
+    startedAt,
+    startPrecision,
+    endedAt,
+    initialIntensity,
+    maximumIntensity,
     note,
+    dailyDate,
+    isDailyNote,
     createdAt,
     updatedAt,
     deletedAt,
@@ -2076,8 +2165,6 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
         _intensityMeta,
         intensity.isAcceptableOrUnknown(data['intensity']!, _intensityMeta),
       );
-    } else if (isInserting) {
-      context.missing(_intensityMeta);
     }
     if (data.containsKey('detail')) {
       context.handle(
@@ -2091,10 +2178,55 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
         endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta),
       );
     }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    }
+    if (data.containsKey('initial_intensity')) {
+      context.handle(
+        _initialIntensityMeta,
+        initialIntensity.isAcceptableOrUnknown(
+          data['initial_intensity']!,
+          _initialIntensityMeta,
+        ),
+      );
+    }
+    if (data.containsKey('maximum_intensity')) {
+      context.handle(
+        _maximumIntensityMeta,
+        maximumIntensity.isAcceptableOrUnknown(
+          data['maximum_intensity']!,
+          _maximumIntensityMeta,
+        ),
+      );
+    }
     if (data.containsKey('note')) {
       context.handle(
         _noteMeta,
         note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('daily_date')) {
+      context.handle(
+        _dailyDateMeta,
+        dailyDate.isAcceptableOrUnknown(data['daily_date']!, _dailyDateMeta),
+      );
+    }
+    if (data.containsKey('is_daily_note')) {
+      context.handle(
+        _isDailyNoteMeta,
+        isDailyNote.isAcceptableOrUnknown(
+          data['is_daily_note']!,
+          _isDailyNoteMeta,
+        ),
       );
     }
     if (data.containsKey('created_at')) {
@@ -2141,7 +2273,7 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
       intensity: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}intensity'],
-      )!,
+      ),
       detail: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}detail'],
@@ -2150,10 +2282,40 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}end_time'],
       ),
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      ),
+      startPrecision: $SymptomsTable.$converterstartPrecisionn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}start_precision'],
+        ),
+      ),
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      ),
+      initialIntensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}initial_intensity'],
+      ),
+      maximumIntensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}maximum_intensity'],
+      ),
       note: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note'],
       ),
+      dailyDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}daily_date'],
+      ),
+      isDailyNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_daily_note'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -2176,16 +2338,31 @@ class $SymptomsTable extends Symptoms with TableInfo<$SymptomsTable, Symptom> {
 
   static JsonTypeConverter2<SymptomType, int, int> $convertertype =
       const EnumIndexConverter<SymptomType>(SymptomType.values);
+  static JsonTypeConverter2<MigraineStartPrecision, int, int>
+  $converterstartPrecision = const EnumIndexConverter<MigraineStartPrecision>(
+    MigraineStartPrecision.values,
+  );
+  static JsonTypeConverter2<MigraineStartPrecision?, int?, int?>
+  $converterstartPrecisionn = JsonTypeConverter2.asNullable(
+    $converterstartPrecision,
+  );
 }
 
 class Symptom extends DataClass implements Insertable<Symptom> {
   final String id;
   final DateTime timestamp;
   final SymptomType type;
-  final int intensity;
+  final int? intensity;
   final String? detail;
   final DateTime? endTime;
+  final DateTime? startedAt;
+  final MigraineStartPrecision? startPrecision;
+  final DateTime? endedAt;
+  final int? initialIntensity;
+  final int? maximumIntensity;
   final String? note;
+  final DateTime? dailyDate;
+  final bool isDailyNote;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
@@ -2193,10 +2370,17 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     required this.id,
     required this.timestamp,
     required this.type,
-    required this.intensity,
+    this.intensity,
     this.detail,
     this.endTime,
+    this.startedAt,
+    this.startPrecision,
+    this.endedAt,
+    this.initialIntensity,
+    this.maximumIntensity,
     this.note,
+    this.dailyDate,
+    required this.isDailyNote,
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
@@ -2209,16 +2393,39 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     {
       map['type'] = Variable<int>($SymptomsTable.$convertertype.toSql(type));
     }
-    map['intensity'] = Variable<int>(intensity);
+    if (!nullToAbsent || intensity != null) {
+      map['intensity'] = Variable<int>(intensity);
+    }
     if (!nullToAbsent || detail != null) {
       map['detail'] = Variable<String>(detail);
     }
     if (!nullToAbsent || endTime != null) {
       map['end_time'] = Variable<DateTime>(endTime);
     }
+    if (!nullToAbsent || startedAt != null) {
+      map['started_at'] = Variable<DateTime>(startedAt);
+    }
+    if (!nullToAbsent || startPrecision != null) {
+      map['start_precision'] = Variable<int>(
+        $SymptomsTable.$converterstartPrecisionn.toSql(startPrecision),
+      );
+    }
+    if (!nullToAbsent || endedAt != null) {
+      map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    if (!nullToAbsent || initialIntensity != null) {
+      map['initial_intensity'] = Variable<int>(initialIntensity);
+    }
+    if (!nullToAbsent || maximumIntensity != null) {
+      map['maximum_intensity'] = Variable<int>(maximumIntensity);
+    }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
     }
+    if (!nullToAbsent || dailyDate != null) {
+      map['daily_date'] = Variable<DateTime>(dailyDate);
+    }
+    map['is_daily_note'] = Variable<bool>(isDailyNote);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     if (!nullToAbsent || deletedAt != null) {
@@ -2232,14 +2439,35 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       id: Value(id),
       timestamp: Value(timestamp),
       type: Value(type),
-      intensity: Value(intensity),
+      intensity: intensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(intensity),
       detail: detail == null && nullToAbsent
           ? const Value.absent()
           : Value(detail),
       endTime: endTime == null && nullToAbsent
           ? const Value.absent()
           : Value(endTime),
+      startedAt: startedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startedAt),
+      startPrecision: startPrecision == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startPrecision),
+      endedAt: endedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endedAt),
+      initialIntensity: initialIntensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(initialIntensity),
+      maximumIntensity: maximumIntensity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maximumIntensity),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      dailyDate: dailyDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dailyDate),
+      isDailyNote: Value(isDailyNote),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
       deletedAt: deletedAt == null && nullToAbsent
@@ -2259,10 +2487,19 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       type: $SymptomsTable.$convertertype.fromJson(
         serializer.fromJson<int>(json['type']),
       ),
-      intensity: serializer.fromJson<int>(json['intensity']),
+      intensity: serializer.fromJson<int?>(json['intensity']),
       detail: serializer.fromJson<String?>(json['detail']),
       endTime: serializer.fromJson<DateTime?>(json['endTime']),
+      startedAt: serializer.fromJson<DateTime?>(json['startedAt']),
+      startPrecision: $SymptomsTable.$converterstartPrecisionn.fromJson(
+        serializer.fromJson<int?>(json['startPrecision']),
+      ),
+      endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+      initialIntensity: serializer.fromJson<int?>(json['initialIntensity']),
+      maximumIntensity: serializer.fromJson<int?>(json['maximumIntensity']),
       note: serializer.fromJson<String?>(json['note']),
+      dailyDate: serializer.fromJson<DateTime?>(json['dailyDate']),
+      isDailyNote: serializer.fromJson<bool>(json['isDailyNote']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -2277,10 +2514,19 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       'type': serializer.toJson<int>(
         $SymptomsTable.$convertertype.toJson(type),
       ),
-      'intensity': serializer.toJson<int>(intensity),
+      'intensity': serializer.toJson<int?>(intensity),
       'detail': serializer.toJson<String?>(detail),
       'endTime': serializer.toJson<DateTime?>(endTime),
+      'startedAt': serializer.toJson<DateTime?>(startedAt),
+      'startPrecision': serializer.toJson<int?>(
+        $SymptomsTable.$converterstartPrecisionn.toJson(startPrecision),
+      ),
+      'endedAt': serializer.toJson<DateTime?>(endedAt),
+      'initialIntensity': serializer.toJson<int?>(initialIntensity),
+      'maximumIntensity': serializer.toJson<int?>(maximumIntensity),
       'note': serializer.toJson<String?>(note),
+      'dailyDate': serializer.toJson<DateTime?>(dailyDate),
+      'isDailyNote': serializer.toJson<bool>(isDailyNote),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
@@ -2291,10 +2537,17 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     String? id,
     DateTime? timestamp,
     SymptomType? type,
-    int? intensity,
+    Value<int?> intensity = const Value.absent(),
     Value<String?> detail = const Value.absent(),
     Value<DateTime?> endTime = const Value.absent(),
+    Value<DateTime?> startedAt = const Value.absent(),
+    Value<MigraineStartPrecision?> startPrecision = const Value.absent(),
+    Value<DateTime?> endedAt = const Value.absent(),
+    Value<int?> initialIntensity = const Value.absent(),
+    Value<int?> maximumIntensity = const Value.absent(),
     Value<String?> note = const Value.absent(),
+    Value<DateTime?> dailyDate = const Value.absent(),
+    bool? isDailyNote,
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
@@ -2302,10 +2555,23 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     id: id ?? this.id,
     timestamp: timestamp ?? this.timestamp,
     type: type ?? this.type,
-    intensity: intensity ?? this.intensity,
+    intensity: intensity.present ? intensity.value : this.intensity,
     detail: detail.present ? detail.value : this.detail,
     endTime: endTime.present ? endTime.value : this.endTime,
+    startedAt: startedAt.present ? startedAt.value : this.startedAt,
+    startPrecision: startPrecision.present
+        ? startPrecision.value
+        : this.startPrecision,
+    endedAt: endedAt.present ? endedAt.value : this.endedAt,
+    initialIntensity: initialIntensity.present
+        ? initialIntensity.value
+        : this.initialIntensity,
+    maximumIntensity: maximumIntensity.present
+        ? maximumIntensity.value
+        : this.maximumIntensity,
     note: note.present ? note.value : this.note,
+    dailyDate: dailyDate.present ? dailyDate.value : this.dailyDate,
+    isDailyNote: isDailyNote ?? this.isDailyNote,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -2318,7 +2584,22 @@ class Symptom extends DataClass implements Insertable<Symptom> {
       intensity: data.intensity.present ? data.intensity.value : this.intensity,
       detail: data.detail.present ? data.detail.value : this.detail,
       endTime: data.endTime.present ? data.endTime.value : this.endTime,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      startPrecision: data.startPrecision.present
+          ? data.startPrecision.value
+          : this.startPrecision,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      initialIntensity: data.initialIntensity.present
+          ? data.initialIntensity.value
+          : this.initialIntensity,
+      maximumIntensity: data.maximumIntensity.present
+          ? data.maximumIntensity.value
+          : this.maximumIntensity,
       note: data.note.present ? data.note.value : this.note,
+      dailyDate: data.dailyDate.present ? data.dailyDate.value : this.dailyDate,
+      isDailyNote: data.isDailyNote.present
+          ? data.isDailyNote.value
+          : this.isDailyNote,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
@@ -2334,7 +2615,14 @@ class Symptom extends DataClass implements Insertable<Symptom> {
           ..write('intensity: $intensity, ')
           ..write('detail: $detail, ')
           ..write('endTime: $endTime, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('startPrecision: $startPrecision, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('initialIntensity: $initialIntensity, ')
+          ..write('maximumIntensity: $maximumIntensity, ')
           ..write('note: $note, ')
+          ..write('dailyDate: $dailyDate, ')
+          ..write('isDailyNote: $isDailyNote, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt')
@@ -2350,7 +2638,14 @@ class Symptom extends DataClass implements Insertable<Symptom> {
     intensity,
     detail,
     endTime,
+    startedAt,
+    startPrecision,
+    endedAt,
+    initialIntensity,
+    maximumIntensity,
     note,
+    dailyDate,
+    isDailyNote,
     createdAt,
     updatedAt,
     deletedAt,
@@ -2365,7 +2660,14 @@ class Symptom extends DataClass implements Insertable<Symptom> {
           other.intensity == this.intensity &&
           other.detail == this.detail &&
           other.endTime == this.endTime &&
+          other.startedAt == this.startedAt &&
+          other.startPrecision == this.startPrecision &&
+          other.endedAt == this.endedAt &&
+          other.initialIntensity == this.initialIntensity &&
+          other.maximumIntensity == this.maximumIntensity &&
           other.note == this.note &&
+          other.dailyDate == this.dailyDate &&
+          other.isDailyNote == this.isDailyNote &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt);
@@ -2375,10 +2677,17 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
   final Value<String> id;
   final Value<DateTime> timestamp;
   final Value<SymptomType> type;
-  final Value<int> intensity;
+  final Value<int?> intensity;
   final Value<String?> detail;
   final Value<DateTime?> endTime;
+  final Value<DateTime?> startedAt;
+  final Value<MigraineStartPrecision?> startPrecision;
+  final Value<DateTime?> endedAt;
+  final Value<int?> initialIntensity;
+  final Value<int?> maximumIntensity;
   final Value<String?> note;
+  final Value<DateTime?> dailyDate;
+  final Value<bool> isDailyNote;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
@@ -2390,7 +2699,14 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     this.intensity = const Value.absent(),
     this.detail = const Value.absent(),
     this.endTime = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.startPrecision = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.initialIntensity = const Value.absent(),
+    this.maximumIntensity = const Value.absent(),
     this.note = const Value.absent(),
+    this.dailyDate = const Value.absent(),
+    this.isDailyNote = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
@@ -2400,18 +2716,24 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     required String id,
     required DateTime timestamp,
     required SymptomType type,
-    required int intensity,
+    this.intensity = const Value.absent(),
     this.detail = const Value.absent(),
     this.endTime = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.startPrecision = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.initialIntensity = const Value.absent(),
+    this.maximumIntensity = const Value.absent(),
     this.note = const Value.absent(),
+    this.dailyDate = const Value.absent(),
+    this.isDailyNote = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        timestamp = Value(timestamp),
-       type = Value(type),
-       intensity = Value(intensity);
+       type = Value(type);
   static Insertable<Symptom> custom({
     Expression<String>? id,
     Expression<DateTime>? timestamp,
@@ -2419,7 +2741,14 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     Expression<int>? intensity,
     Expression<String>? detail,
     Expression<DateTime>? endTime,
+    Expression<DateTime>? startedAt,
+    Expression<int>? startPrecision,
+    Expression<DateTime>? endedAt,
+    Expression<int>? initialIntensity,
+    Expression<int>? maximumIntensity,
     Expression<String>? note,
+    Expression<DateTime>? dailyDate,
+    Expression<bool>? isDailyNote,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
@@ -2432,7 +2761,14 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
       if (intensity != null) 'intensity': intensity,
       if (detail != null) 'detail': detail,
       if (endTime != null) 'end_time': endTime,
+      if (startedAt != null) 'started_at': startedAt,
+      if (startPrecision != null) 'start_precision': startPrecision,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (initialIntensity != null) 'initial_intensity': initialIntensity,
+      if (maximumIntensity != null) 'maximum_intensity': maximumIntensity,
       if (note != null) 'note': note,
+      if (dailyDate != null) 'daily_date': dailyDate,
+      if (isDailyNote != null) 'is_daily_note': isDailyNote,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
@@ -2444,10 +2780,17 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     Value<String>? id,
     Value<DateTime>? timestamp,
     Value<SymptomType>? type,
-    Value<int>? intensity,
+    Value<int?>? intensity,
     Value<String?>? detail,
     Value<DateTime?>? endTime,
+    Value<DateTime?>? startedAt,
+    Value<MigraineStartPrecision?>? startPrecision,
+    Value<DateTime?>? endedAt,
+    Value<int?>? initialIntensity,
+    Value<int?>? maximumIntensity,
     Value<String?>? note,
+    Value<DateTime?>? dailyDate,
+    Value<bool>? isDailyNote,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<DateTime?>? deletedAt,
@@ -2460,7 +2803,14 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
       intensity: intensity ?? this.intensity,
       detail: detail ?? this.detail,
       endTime: endTime ?? this.endTime,
+      startedAt: startedAt ?? this.startedAt,
+      startPrecision: startPrecision ?? this.startPrecision,
+      endedAt: endedAt ?? this.endedAt,
+      initialIntensity: initialIntensity ?? this.initialIntensity,
+      maximumIntensity: maximumIntensity ?? this.maximumIntensity,
       note: note ?? this.note,
+      dailyDate: dailyDate ?? this.dailyDate,
+      isDailyNote: isDailyNote ?? this.isDailyNote,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
@@ -2491,8 +2841,31 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
     if (endTime.present) {
       map['end_time'] = Variable<DateTime>(endTime.value);
     }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (startPrecision.present) {
+      map['start_precision'] = Variable<int>(
+        $SymptomsTable.$converterstartPrecisionn.toSql(startPrecision.value),
+      );
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (initialIntensity.present) {
+      map['initial_intensity'] = Variable<int>(initialIntensity.value);
+    }
+    if (maximumIntensity.present) {
+      map['maximum_intensity'] = Variable<int>(maximumIntensity.value);
+    }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
+    }
+    if (dailyDate.present) {
+      map['daily_date'] = Variable<DateTime>(dailyDate.value);
+    }
+    if (isDailyNote.present) {
+      map['is_daily_note'] = Variable<bool>(isDailyNote.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -2518,10 +2891,392 @@ class SymptomsCompanion extends UpdateCompanion<Symptom> {
           ..write('intensity: $intensity, ')
           ..write('detail: $detail, ')
           ..write('endTime: $endTime, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('startPrecision: $startPrecision, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('initialIntensity: $initialIntensity, ')
+          ..write('maximumIntensity: $maximumIntensity, ')
           ..write('note: $note, ')
+          ..write('dailyDate: $dailyDate, ')
+          ..write('isDailyNote: $isDailyNote, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
+    with
+        TableInfo<
+          $MigraineIntensityMeasurementsTable,
+          MigraineIntensityMeasurement
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MigraineIntensityMeasurementsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _symptomIdMeta = const VerificationMeta(
+    'symptomId',
+  );
+  @override
+  late final GeneratedColumn<String> symptomId = GeneratedColumn<String>(
+    'symptom_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES symptoms (id)',
+    ),
+  );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
+  @override
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _intensityMeta = const VerificationMeta(
+    'intensity',
+  );
+  @override
+  late final GeneratedColumn<int> intensity = GeneratedColumn<int>(
+    'intensity',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symptomId,
+    timestamp,
+    intensity,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'migraine_intensity_measurements';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MigraineIntensityMeasurement> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('symptom_id')) {
+      context.handle(
+        _symptomIdMeta,
+        symptomId.isAcceptableOrUnknown(data['symptom_id']!, _symptomIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symptomIdMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    if (data.containsKey('intensity')) {
+      context.handle(
+        _intensityMeta,
+        intensity.isAcceptableOrUnknown(data['intensity']!, _intensityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_intensityMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MigraineIntensityMeasurement map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MigraineIntensityMeasurement(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      symptomId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symptom_id'],
+      )!,
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+      intensity: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}intensity'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $MigraineIntensityMeasurementsTable createAlias(String alias) {
+    return $MigraineIntensityMeasurementsTable(attachedDatabase, alias);
+  }
+}
+
+class MigraineIntensityMeasurement extends DataClass
+    implements Insertable<MigraineIntensityMeasurement> {
+  final String id;
+  final String symptomId;
+  final DateTime timestamp;
+  final int intensity;
+  final DateTime createdAt;
+  const MigraineIntensityMeasurement({
+    required this.id,
+    required this.symptomId,
+    required this.timestamp,
+    required this.intensity,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['symptom_id'] = Variable<String>(symptomId);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['intensity'] = Variable<int>(intensity);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  MigraineIntensityMeasurementsCompanion toCompanion(bool nullToAbsent) {
+    return MigraineIntensityMeasurementsCompanion(
+      id: Value(id),
+      symptomId: Value(symptomId),
+      timestamp: Value(timestamp),
+      intensity: Value(intensity),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory MigraineIntensityMeasurement.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MigraineIntensityMeasurement(
+      id: serializer.fromJson<String>(json['id']),
+      symptomId: serializer.fromJson<String>(json['symptomId']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      intensity: serializer.fromJson<int>(json['intensity']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'symptomId': serializer.toJson<String>(symptomId),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'intensity': serializer.toJson<int>(intensity),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  MigraineIntensityMeasurement copyWith({
+    String? id,
+    String? symptomId,
+    DateTime? timestamp,
+    int? intensity,
+    DateTime? createdAt,
+  }) => MigraineIntensityMeasurement(
+    id: id ?? this.id,
+    symptomId: symptomId ?? this.symptomId,
+    timestamp: timestamp ?? this.timestamp,
+    intensity: intensity ?? this.intensity,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  MigraineIntensityMeasurement copyWithCompanion(
+    MigraineIntensityMeasurementsCompanion data,
+  ) {
+    return MigraineIntensityMeasurement(
+      id: data.id.present ? data.id.value : this.id,
+      symptomId: data.symptomId.present ? data.symptomId.value : this.symptomId,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+      intensity: data.intensity.present ? data.intensity.value : this.intensity,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MigraineIntensityMeasurement(')
+          ..write('id: $id, ')
+          ..write('symptomId: $symptomId, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('intensity: $intensity, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, symptomId, timestamp, intensity, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MigraineIntensityMeasurement &&
+          other.id == this.id &&
+          other.symptomId == this.symptomId &&
+          other.timestamp == this.timestamp &&
+          other.intensity == this.intensity &&
+          other.createdAt == this.createdAt);
+}
+
+class MigraineIntensityMeasurementsCompanion
+    extends UpdateCompanion<MigraineIntensityMeasurement> {
+  final Value<String> id;
+  final Value<String> symptomId;
+  final Value<DateTime> timestamp;
+  final Value<int> intensity;
+  final Value<DateTime> createdAt;
+  final Value<int> rowid;
+  const MigraineIntensityMeasurementsCompanion({
+    this.id = const Value.absent(),
+    this.symptomId = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.intensity = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MigraineIntensityMeasurementsCompanion.insert({
+    required String id,
+    required String symptomId,
+    required DateTime timestamp,
+    required int intensity,
+    this.createdAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       symptomId = Value(symptomId),
+       timestamp = Value(timestamp),
+       intensity = Value(intensity);
+  static Insertable<MigraineIntensityMeasurement> custom({
+    Expression<String>? id,
+    Expression<String>? symptomId,
+    Expression<DateTime>? timestamp,
+    Expression<int>? intensity,
+    Expression<DateTime>? createdAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symptomId != null) 'symptom_id': symptomId,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (intensity != null) 'intensity': intensity,
+      if (createdAt != null) 'created_at': createdAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MigraineIntensityMeasurementsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? symptomId,
+    Value<DateTime>? timestamp,
+    Value<int>? intensity,
+    Value<DateTime>? createdAt,
+    Value<int>? rowid,
+  }) {
+    return MigraineIntensityMeasurementsCompanion(
+      id: id ?? this.id,
+      symptomId: symptomId ?? this.symptomId,
+      timestamp: timestamp ?? this.timestamp,
+      intensity: intensity ?? this.intensity,
+      createdAt: createdAt ?? this.createdAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (symptomId.present) {
+      map['symptom_id'] = Variable<String>(symptomId.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (intensity.present) {
+      map['intensity'] = Variable<int>(intensity.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MigraineIntensityMeasurementsCompanion(')
+          ..write('id: $id, ')
+          ..write('symptomId: $symptomId, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('intensity: $intensity, ')
+          ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6124,6 +6879,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $MealTemplatesTable mealTemplates = $MealTemplatesTable(this);
   late final $TemplateTagsTable templateTags = $TemplateTagsTable(this);
   late final $SymptomsTable symptoms = $SymptomsTable(this);
+  late final $MigraineIntensityMeasurementsTable migraineIntensityMeasurements =
+      $MigraineIntensityMeasurementsTable(this);
   late final $MedicationIntakesTable medicationIntakes =
       $MedicationIntakesTable(this);
   late final $SleepEntriesTable sleepEntries = $SleepEntriesTable(this);
@@ -6140,6 +6897,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_symptoms_timestamp',
     'CREATE INDEX idx_symptoms_timestamp ON symptoms (timestamp)',
   );
+  late final Index idxMigraineMeasurementsSymptomTimestamp = Index(
+    'idx_migraine_measurements_symptom_timestamp',
+    'CREATE INDEX idx_migraine_measurements_symptom_timestamp ON migraine_intensity_measurements (symptom_id, timestamp)',
+  );
   late final Index idxMedicationIntakesTimestamp = Index(
     'idx_medication_intakes_timestamp',
     'CREATE INDEX idx_medication_intakes_timestamp ON medication_intakes (timestamp)',
@@ -6152,6 +6913,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final MealsDao mealsDao = MealsDao(this as AppDatabase);
   late final TemplatesDao templatesDao = TemplatesDao(this as AppDatabase);
   late final SymptomsDao symptomsDao = SymptomsDao(this as AppDatabase);
+  late final MigraineIntensityMeasurementsDao migraineIntensityMeasurementsDao =
+      MigraineIntensityMeasurementsDao(this as AppDatabase);
   late final MedicationIntakesDao medicationIntakesDao = MedicationIntakesDao(
     this as AppDatabase,
   );
@@ -6178,6 +6941,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     mealTemplates,
     templateTags,
     symptoms,
+    migraineIntensityMeasurements,
     medicationIntakes,
     sleepEntries,
     environmentSnapshots,
@@ -6185,6 +6949,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     cloudBackupStates,
     idxMealsTimestamp,
     idxSymptomsTimestamp,
+    idxMigraineMeasurementsSymptomTimestamp,
     idxMedicationIntakesTimestamp,
     idxEnvTimestamp,
   ];
@@ -7218,10 +7983,17 @@ typedef $$SymptomsTableCreateCompanionBuilder =
       required String id,
       required DateTime timestamp,
       required SymptomType type,
-      required int intensity,
+      Value<int?> intensity,
       Value<String?> detail,
       Value<DateTime?> endTime,
+      Value<DateTime?> startedAt,
+      Value<MigraineStartPrecision?> startPrecision,
+      Value<DateTime?> endedAt,
+      Value<int?> initialIntensity,
+      Value<int?> maximumIntensity,
       Value<String?> note,
+      Value<DateTime?> dailyDate,
+      Value<bool> isDailyNote,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
@@ -7232,10 +8004,17 @@ typedef $$SymptomsTableUpdateCompanionBuilder =
       Value<String> id,
       Value<DateTime> timestamp,
       Value<SymptomType> type,
-      Value<int> intensity,
+      Value<int?> intensity,
       Value<String?> detail,
       Value<DateTime?> endTime,
+      Value<DateTime?> startedAt,
+      Value<MigraineStartPrecision?> startPrecision,
+      Value<DateTime?> endedAt,
+      Value<int?> initialIntensity,
+      Value<int?> maximumIntensity,
       Value<String?> note,
+      Value<DateTime?> dailyDate,
+      Value<bool> isDailyNote,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
@@ -7245,6 +8024,34 @@ typedef $$SymptomsTableUpdateCompanionBuilder =
 final class $$SymptomsTableReferences
     extends BaseReferences<_$AppDatabase, $SymptomsTable, Symptom> {
   $$SymptomsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<
+    $MigraineIntensityMeasurementsTable,
+    List<MigraineIntensityMeasurement>
+  >
+  _migraineIntensityMeasurementsRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.migraineIntensityMeasurements,
+        aliasName: $_aliasNameGenerator(
+          db.symptoms.id,
+          db.migraineIntensityMeasurements.symptomId,
+        ),
+      );
+
+  $$MigraineIntensityMeasurementsTableProcessedTableManager
+  get migraineIntensityMeasurementsRefs {
+    final manager = $$MigraineIntensityMeasurementsTableTableManager(
+      $_db,
+      $_db.migraineIntensityMeasurements,
+    ).filter((f) => f.symptomId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _migraineIntensityMeasurementsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 
   static MultiTypedResultKey<$MedicationIntakesTable, List<MedicationIntake>>
   _medicationIntakesRefsTable(_$AppDatabase db) =>
@@ -7311,8 +8118,48 @@ class $$SymptomsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    MigraineStartPrecision?,
+    MigraineStartPrecision,
+    int
+  >
+  get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get note => $composableBuilder(
     column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get dailyDate => $composableBuilder(
+    column: $table.dailyDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDailyNote => $composableBuilder(
+    column: $table.isDailyNote,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -7330,6 +8177,35 @@ class $$SymptomsTableFilterComposer
     column: $table.deletedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> migraineIntensityMeasurementsRefs(
+    Expression<bool> Function(
+      $$MigraineIntensityMeasurementsTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$MigraineIntensityMeasurementsTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.migraineIntensityMeasurements,
+          getReferencedColumn: (t) => t.symptomId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$MigraineIntensityMeasurementsTableFilterComposer(
+                $db: $db,
+                $table: $db.migraineIntensityMeasurements,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 
   Expression<bool> medicationIntakesRefs(
     Expression<bool> Function($$MedicationIntakesTableFilterComposer f) f,
@@ -7396,8 +8272,43 @@ class $$SymptomsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get note => $composableBuilder(
     column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dailyDate => $composableBuilder(
+    column: $table.dailyDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDailyNote => $composableBuilder(
+    column: $table.isDailyNote,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -7444,8 +8355,38 @@ class $$SymptomsTableAnnotationComposer
   GeneratedColumn<DateTime> get endTime =>
       $composableBuilder(column: $table.endTime, builder: (column) => column);
 
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<MigraineStartPrecision?, int>
+  get startPrecision => $composableBuilder(
+    column: $table.startPrecision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get initialIntensity => $composableBuilder(
+    column: $table.initialIntensity,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get maximumIntensity => $composableBuilder(
+    column: $table.maximumIntensity,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get note =>
       $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get dailyDate =>
+      $composableBuilder(column: $table.dailyDate, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDailyNote => $composableBuilder(
+    column: $table.isDailyNote,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -7455,6 +8396,35 @@ class $$SymptomsTableAnnotationComposer
 
   GeneratedColumn<DateTime> get deletedAt =>
       $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  Expression<T> migraineIntensityMeasurementsRefs<T extends Object>(
+    Expression<T> Function(
+      $$MigraineIntensityMeasurementsTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$MigraineIntensityMeasurementsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.migraineIntensityMeasurements,
+          getReferencedColumn: (t) => t.symptomId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$MigraineIntensityMeasurementsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.migraineIntensityMeasurements,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 
   Expression<T> medicationIntakesRefs<T extends Object>(
     Expression<T> Function($$MedicationIntakesTableAnnotationComposer a) f,
@@ -7496,7 +8466,10 @@ class $$SymptomsTableTableManager
           $$SymptomsTableUpdateCompanionBuilder,
           (Symptom, $$SymptomsTableReferences),
           Symptom,
-          PrefetchHooks Function({bool medicationIntakesRefs})
+          PrefetchHooks Function({
+            bool migraineIntensityMeasurementsRefs,
+            bool medicationIntakesRefs,
+          })
         > {
   $$SymptomsTableTableManager(_$AppDatabase db, $SymptomsTable table)
     : super(
@@ -7514,10 +8487,18 @@ class $$SymptomsTableTableManager
                 Value<String> id = const Value.absent(),
                 Value<DateTime> timestamp = const Value.absent(),
                 Value<SymptomType> type = const Value.absent(),
-                Value<int> intensity = const Value.absent(),
+                Value<int?> intensity = const Value.absent(),
                 Value<String?> detail = const Value.absent(),
                 Value<DateTime?> endTime = const Value.absent(),
+                Value<DateTime?> startedAt = const Value.absent(),
+                Value<MigraineStartPrecision?> startPrecision =
+                    const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<int?> initialIntensity = const Value.absent(),
+                Value<int?> maximumIntensity = const Value.absent(),
                 Value<String?> note = const Value.absent(),
+                Value<DateTime?> dailyDate = const Value.absent(),
+                Value<bool> isDailyNote = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
@@ -7529,7 +8510,14 @@ class $$SymptomsTableTableManager
                 intensity: intensity,
                 detail: detail,
                 endTime: endTime,
+                startedAt: startedAt,
+                startPrecision: startPrecision,
+                endedAt: endedAt,
+                initialIntensity: initialIntensity,
+                maximumIntensity: maximumIntensity,
                 note: note,
+                dailyDate: dailyDate,
+                isDailyNote: isDailyNote,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
@@ -7540,10 +8528,18 @@ class $$SymptomsTableTableManager
                 required String id,
                 required DateTime timestamp,
                 required SymptomType type,
-                required int intensity,
+                Value<int?> intensity = const Value.absent(),
                 Value<String?> detail = const Value.absent(),
                 Value<DateTime?> endTime = const Value.absent(),
+                Value<DateTime?> startedAt = const Value.absent(),
+                Value<MigraineStartPrecision?> startPrecision =
+                    const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<int?> initialIntensity = const Value.absent(),
+                Value<int?> maximumIntensity = const Value.absent(),
                 Value<String?> note = const Value.absent(),
+                Value<DateTime?> dailyDate = const Value.absent(),
+                Value<bool> isDailyNote = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
@@ -7555,7 +8551,14 @@ class $$SymptomsTableTableManager
                 intensity: intensity,
                 detail: detail,
                 endTime: endTime,
+                startedAt: startedAt,
+                startPrecision: startPrecision,
+                endedAt: endedAt,
+                initialIntensity: initialIntensity,
+                maximumIntensity: maximumIntensity,
                 note: note,
+                dailyDate: dailyDate,
+                isDailyNote: isDailyNote,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
@@ -7569,37 +8572,67 @@ class $$SymptomsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({medicationIntakesRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (medicationIntakesRefs) db.medicationIntakes,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (medicationIntakesRefs)
-                    await $_getPrefetchedData<
-                      Symptom,
-                      $SymptomsTable,
-                      MedicationIntake
-                    >(
-                      currentTable: table,
-                      referencedTable: $$SymptomsTableReferences
-                          ._medicationIntakesRefsTable(db),
-                      managerFromTypedResult: (p0) => $$SymptomsTableReferences(
-                        db,
-                        table,
-                        p0,
-                      ).medicationIntakesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.symptomId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                migraineIntensityMeasurementsRefs = false,
+                medicationIntakesRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (migraineIntensityMeasurementsRefs)
+                      db.migraineIntensityMeasurements,
+                    if (medicationIntakesRefs) db.medicationIntakes,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (migraineIntensityMeasurementsRefs)
+                        await $_getPrefetchedData<
+                          Symptom,
+                          $SymptomsTable,
+                          MigraineIntensityMeasurement
+                        >(
+                          currentTable: table,
+                          referencedTable: $$SymptomsTableReferences
+                              ._migraineIntensityMeasurementsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SymptomsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).migraineIntensityMeasurementsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.symptomId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (medicationIntakesRefs)
+                        await $_getPrefetchedData<
+                          Symptom,
+                          $SymptomsTable,
+                          MedicationIntake
+                        >(
+                          currentTable: table,
+                          referencedTable: $$SymptomsTableReferences
+                              ._medicationIntakesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$SymptomsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).medicationIntakesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.symptomId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -7616,7 +8649,360 @@ typedef $$SymptomsTableProcessedTableManager =
       $$SymptomsTableUpdateCompanionBuilder,
       (Symptom, $$SymptomsTableReferences),
       Symptom,
-      PrefetchHooks Function({bool medicationIntakesRefs})
+      PrefetchHooks Function({
+        bool migraineIntensityMeasurementsRefs,
+        bool medicationIntakesRefs,
+      })
+    >;
+typedef $$MigraineIntensityMeasurementsTableCreateCompanionBuilder =
+    MigraineIntensityMeasurementsCompanion Function({
+      required String id,
+      required String symptomId,
+      required DateTime timestamp,
+      required int intensity,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+typedef $$MigraineIntensityMeasurementsTableUpdateCompanionBuilder =
+    MigraineIntensityMeasurementsCompanion Function({
+      Value<String> id,
+      Value<String> symptomId,
+      Value<DateTime> timestamp,
+      Value<int> intensity,
+      Value<DateTime> createdAt,
+      Value<int> rowid,
+    });
+
+final class $$MigraineIntensityMeasurementsTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $MigraineIntensityMeasurementsTable,
+          MigraineIntensityMeasurement
+        > {
+  $$MigraineIntensityMeasurementsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $SymptomsTable _symptomIdTable(_$AppDatabase db) =>
+      db.symptoms.createAlias(
+        $_aliasNameGenerator(
+          db.migraineIntensityMeasurements.symptomId,
+          db.symptoms.id,
+        ),
+      );
+
+  $$SymptomsTableProcessedTableManager get symptomId {
+    final $_column = $_itemColumn<String>('symptom_id')!;
+
+    final manager = $$SymptomsTableTableManager(
+      $_db,
+      $_db.symptoms,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_symptomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$MigraineIntensityMeasurementsTableFilterComposer
+    extends Composer<_$AppDatabase, $MigraineIntensityMeasurementsTable> {
+  $$MigraineIntensityMeasurementsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get intensity => $composableBuilder(
+    column: $table.intensity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$SymptomsTableFilterComposer get symptomId {
+    final $$SymptomsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.symptomId,
+      referencedTable: $db.symptoms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SymptomsTableFilterComposer(
+            $db: $db,
+            $table: $db.symptoms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MigraineIntensityMeasurementsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MigraineIntensityMeasurementsTable> {
+  $$MigraineIntensityMeasurementsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get intensity => $composableBuilder(
+    column: $table.intensity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$SymptomsTableOrderingComposer get symptomId {
+    final $$SymptomsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.symptomId,
+      referencedTable: $db.symptoms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SymptomsTableOrderingComposer(
+            $db: $db,
+            $table: $db.symptoms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MigraineIntensityMeasurementsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MigraineIntensityMeasurementsTable> {
+  $$MigraineIntensityMeasurementsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+
+  GeneratedColumn<int> get intensity =>
+      $composableBuilder(column: $table.intensity, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$SymptomsTableAnnotationComposer get symptomId {
+    final $$SymptomsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.symptomId,
+      referencedTable: $db.symptoms,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$SymptomsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.symptoms,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$MigraineIntensityMeasurementsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MigraineIntensityMeasurementsTable,
+          MigraineIntensityMeasurement,
+          $$MigraineIntensityMeasurementsTableFilterComposer,
+          $$MigraineIntensityMeasurementsTableOrderingComposer,
+          $$MigraineIntensityMeasurementsTableAnnotationComposer,
+          $$MigraineIntensityMeasurementsTableCreateCompanionBuilder,
+          $$MigraineIntensityMeasurementsTableUpdateCompanionBuilder,
+          (
+            MigraineIntensityMeasurement,
+            $$MigraineIntensityMeasurementsTableReferences,
+          ),
+          MigraineIntensityMeasurement,
+          PrefetchHooks Function({bool symptomId})
+        > {
+  $$MigraineIntensityMeasurementsTableTableManager(
+    _$AppDatabase db,
+    $MigraineIntensityMeasurementsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MigraineIntensityMeasurementsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$MigraineIntensityMeasurementsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$MigraineIntensityMeasurementsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> symptomId = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<int> intensity = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MigraineIntensityMeasurementsCompanion(
+                id: id,
+                symptomId: symptomId,
+                timestamp: timestamp,
+                intensity: intensity,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String symptomId,
+                required DateTime timestamp,
+                required int intensity,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MigraineIntensityMeasurementsCompanion.insert(
+                id: id,
+                symptomId: symptomId,
+                timestamp: timestamp,
+                intensity: intensity,
+                createdAt: createdAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$MigraineIntensityMeasurementsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({symptomId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (symptomId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.symptomId,
+                                referencedTable:
+                                    $$MigraineIntensityMeasurementsTableReferences
+                                        ._symptomIdTable(db),
+                                referencedColumn:
+                                    $$MigraineIntensityMeasurementsTableReferences
+                                        ._symptomIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$MigraineIntensityMeasurementsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MigraineIntensityMeasurementsTable,
+      MigraineIntensityMeasurement,
+      $$MigraineIntensityMeasurementsTableFilterComposer,
+      $$MigraineIntensityMeasurementsTableOrderingComposer,
+      $$MigraineIntensityMeasurementsTableAnnotationComposer,
+      $$MigraineIntensityMeasurementsTableCreateCompanionBuilder,
+      $$MigraineIntensityMeasurementsTableUpdateCompanionBuilder,
+      (
+        MigraineIntensityMeasurement,
+        $$MigraineIntensityMeasurementsTableReferences,
+      ),
+      MigraineIntensityMeasurement,
+      PrefetchHooks Function({bool symptomId})
     >;
 typedef $$MedicationIntakesTableCreateCompanionBuilder =
     MedicationIntakesCompanion Function({
@@ -9464,6 +10850,12 @@ class $AppDatabaseManager {
       $$TemplateTagsTableTableManager(_db, _db.templateTags);
   $$SymptomsTableTableManager get symptoms =>
       $$SymptomsTableTableManager(_db, _db.symptoms);
+  $$MigraineIntensityMeasurementsTableTableManager
+  get migraineIntensityMeasurements =>
+      $$MigraineIntensityMeasurementsTableTableManager(
+        _db,
+        _db.migraineIntensityMeasurements,
+      );
   $$MedicationIntakesTableTableManager get medicationIntakes =>
       $$MedicationIntakesTableTableManager(_db, _db.medicationIntakes);
   $$SleepEntriesTableTableManager get sleepEntries =>

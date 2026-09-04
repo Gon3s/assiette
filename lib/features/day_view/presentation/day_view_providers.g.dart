@@ -54,6 +54,96 @@ final class DayTimelineProvider
 
 String _$dayTimelineHash() => r'12e8ffb99dc444d37bcd1037977032aa77466eeb';
 
+/// Non-timed physical feelings and mood for the selected day.
+
+@ProviderFor(dayFeelings)
+final dayFeelingsProvider = DayFeelingsProvider._();
+
+/// Non-timed physical feelings and mood for the selected day.
+
+final class DayFeelingsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DailyFeeling>>,
+          List<DailyFeeling>,
+          Stream<List<DailyFeeling>>
+        >
+    with
+        $FutureModifier<List<DailyFeeling>>,
+        $StreamProvider<List<DailyFeeling>> {
+  /// Non-timed physical feelings and mood for the selected day.
+  DayFeelingsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dayFeelingsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dayFeelingsHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<DailyFeeling>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<DailyFeeling>> create(Ref ref) {
+    return dayFeelings(ref);
+  }
+}
+
+String _$dayFeelingsHash() => r'5690c08da6e5e87c631b1bd2030798e5a385101f';
+
+/// The currently unfinished migraine, independently of the selected day.
+
+@ProviderFor(activeMigraine)
+final activeMigraineProvider = ActiveMigraineProvider._();
+
+/// The currently unfinished migraine, independently of the selected day.
+
+final class ActiveMigraineProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ActiveMigraine?>,
+          ActiveMigraine?,
+          Stream<ActiveMigraine?>
+        >
+    with $FutureModifier<ActiveMigraine?>, $StreamProvider<ActiveMigraine?> {
+  /// The currently unfinished migraine, independently of the selected day.
+  ActiveMigraineProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'activeMigraineProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$activeMigraineHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<ActiveMigraine?> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<ActiveMigraine?> create(Ref ref) {
+    return activeMigraine(ref);
+  }
+}
+
+String _$activeMigraineHash() => r'3804a2abbe635cc3e7594cbd4836aa86b0fa0722';
+
 /// The sleep entry for the selected day's night, if logged.
 
 @ProviderFor(daySleep)

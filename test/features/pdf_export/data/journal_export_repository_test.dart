@@ -48,7 +48,7 @@ void main() {
           id: 'symptom-1',
           timestamp: at(day1, 9),
           type: SymptomType.migraine,
-          intensity: 7,
+          intensity: const Value(7),
         ),
       );
       await db.sleepEntriesDao.upsertSleepEntry(
@@ -82,14 +82,17 @@ void main() {
           id: 'symptom-1',
           timestamp: at(day1, 9),
           type: SymptomType.mood,
-          intensity: 3,
+          intensity: const Value(3),
         ),
       );
 
       final entries = await repository.loadRange(day1, day3);
 
       expect(entries, hasLength(1));
-      expect(entries.single.date, DateTime(day1.year, day1.month, day1.day).toUtc());
+      expect(
+        entries.single.date,
+        DateTime(day1.year, day1.month, day1.day).toUtc(),
+      );
     });
 
     test('excludes soft-deleted entries', () async {
@@ -113,7 +116,7 @@ void main() {
           id: 'symptom-1',
           timestamp: at(day2, 9),
           type: SymptomType.digestive,
-          intensity: 5,
+          intensity: const Value(5),
         ),
       );
 

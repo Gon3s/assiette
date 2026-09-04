@@ -25,9 +25,10 @@ abstract class JournalSymptomEntry with _$JournalSymptomEntry {
   const factory JournalSymptomEntry({
     required DateTime timestamp,
     required SymptomType symptomType,
-    required int intensity,
+    int? intensity,
     String? detail,
     String? note,
+    @Default(false) bool isDailyNote,
   }) = _JournalSymptomEntry;
 }
 
@@ -60,6 +61,9 @@ abstract class DayJournalEntry with _$DayJournalEntry {
 
   /// Whether anything was logged this day.
   bool get hasData =>
-      meals.isNotEmpty || symptoms.isNotEmpty || medications.isNotEmpty ||
-      sleep != null || weather != null;
+      meals.isNotEmpty ||
+      symptoms.isNotEmpty ||
+      medications.isNotEmpty ||
+      sleep != null ||
+      weather != null;
 }

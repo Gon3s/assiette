@@ -1,3 +1,5 @@
+import 'package:assiette/features/day_view/domain/active_migraine.dart';
+import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
@@ -17,6 +19,18 @@ Stream<List<TimelineItem>> dayTimeline(Ref ref) {
   final date = ref.watch(selectedDateProvider);
   return ref.watch(dayViewRepositoryProvider).watchTimeline(date);
 }
+
+/// Non-timed physical feelings and mood for the selected day.
+@riverpod
+Stream<List<DailyFeeling>> dayFeelings(Ref ref) {
+  final date = ref.watch(selectedDateProvider);
+  return ref.watch(dayViewRepositoryProvider).watchDailyFeelings(date);
+}
+
+/// The currently unfinished migraine, independently of the selected day.
+@riverpod
+Stream<ActiveMigraine?> activeMigraine(Ref ref) =>
+    ref.watch(dayViewRepositoryProvider).watchActiveMigraine();
 
 /// The sleep entry for the selected day's night, if logged.
 @riverpod

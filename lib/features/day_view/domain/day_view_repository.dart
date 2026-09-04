@@ -1,5 +1,7 @@
 import 'package:assiette/data/db/database_provider.dart';
 import 'package:assiette/features/day_view/data/day_view_repository.dart';
+import 'package:assiette/features/day_view/domain/active_migraine.dart';
+import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/domain/weather_point.dart';
@@ -12,6 +14,18 @@ part 'day_view_repository.g.dart';
 abstract class DayViewRepository {
   /// Watches the merged, time-sorted meals and symptoms for [day].
   Stream<List<TimelineItem>> watchTimeline(DateTime day);
+
+  /// Watches non-timed physical feelings and the day's mood.
+  Stream<List<DailyFeeling>> watchDailyFeelings(DateTime day);
+
+  /// Watches the single unfinished migraine, if any.
+  Stream<ActiveMigraine?> watchActiveMigraine();
+
+  /// Appends an intensity measurement without replacing history.
+  Future<void> addMigraineIntensity(String migraineId, int intensity);
+
+  /// Ends an active migraine without recording another intensity.
+  Future<void> endMigraine(String migraineId, DateTime endedAt);
 
   /// Watches the sleep entry logged for the night of [day], if any.
   Stream<SleepSummary?> watchSleepForNight(DateTime day);
@@ -40,6 +54,7 @@ DayViewRepository dayViewRepository(Ref ref) {
   return DriftDayViewRepository(
     mealsDao: db.mealsDao,
     symptomsDao: db.symptomsDao,
+    migraineMeasurementsDao: db.migraineIntensityMeasurementsDao,
     medicationIntakesDao: db.medicationIntakesDao,
     sleepEntriesDao: db.sleepEntriesDao,
     environmentDao: db.environmentDao,
