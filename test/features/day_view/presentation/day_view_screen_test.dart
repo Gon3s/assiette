@@ -272,6 +272,42 @@ void main() {
     expect(find.text("Today's feelings"), findsOneWidget);
     expect(find.text('Eczema'), findsOneWidget);
     expect(find.text('itchy arm'), findsOneWidget);
+    final feelingsCard = tester.widget<Card>(
+      find.ancestor(
+        of: find.text("Today's feelings"),
+        matching: find.byType(Card),
+      ),
+    );
+    expect(feelingsCard.margin?.bottom, 8);
+  });
+
+  testWidgets('scrolls the whole day instead of only the timeline', (
+    tester,
+  ) async {
+    when(() => repository.watchTimeline(any())).thenAnswer(
+      (_) => Stream.value([
+        for (var index = 0; index < 10; index++)
+          TimelineItem.meal(
+            id: 'meal-$index',
+            timestamp: DateTime.utc(2026, 7, 6, 12, index),
+            mealType: MealType.lunch,
+            tagLabels: const ['gluten'],
+          ),
+      ]),
+    );
+
+    await pumpScreen(tester);
+
+    final header = find.text('Weather unavailable');
+    final initialHeaderTop = tester.getTopLeft(header).dy;
+
+    await tester.drag(
+      find.byKey(const Key('day-view-scroll')),
+      const Offset(0, -40),
+    );
+    await tester.pump();
+
+    expect(tester.getTopLeft(header).dy, lessThan(initialHeaderTop));
   });
 
   testWidgets('shows sleep quality and weather when available', (tester) async {

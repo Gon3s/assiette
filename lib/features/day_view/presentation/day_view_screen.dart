@@ -195,32 +195,75 @@ class _DayViewBody extends ConsumerWidget {
     final s = AppStrings.of(context);
     final timeline = ref.watch(dayTimelineProvider);
 
-    return Column(
-      children: [
-        const DayHeader(),
-        const _ActiveMigraineCard(),
-        const _DailyFeelingsCard(),
-        const SleepCard(),
-        gapH8,
-        const FavoritesRow(),
-        gapH8,
-        Expanded(
-          child: switch (timeline) {
-            AsyncData(:final value) when value.isEmpty => Center(
-              child: Text(
-                s.emptyDayMessage,
-                style: Theme.of(context).textTheme.bodyLarge,
+    return CustomScrollView(
+      key: const Key('day-view-scroll'),
+      slivers: [
+        const SliverToBoxAdapter(child: DayHeader()),
+        const SliverToBoxAdapter(child: _ActiveMigraineCard()),
+        const SliverToBoxAdapter(child: _DailyFeelingsCard()),
+        const SliverToBoxAdapter(child: SleepCard()),
+        SliverToBoxAdapter(child: gapH8),
+        const SliverToBoxAdapter(child: FavoritesRow()),
+        SliverToBoxAdapter(child: gapH8),
+        ...switch (timeline) {
+          AsyncData(:final value) when value.isEmpty => [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        s.emptyDayMessage,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ),
+                  _ActionBar(s: s),
+                ],
               ),
             ),
-            AsyncData(:final value) => ListView.builder(
-              itemCount: value.length,
-              itemBuilder: (context, index) => TimelineTile(item: value[index]),
+          ],
+          AsyncData(:final value) => [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => TimelineTile(item: value[index]),
+                childCount: value.length,
+              ),
             ),
-            AsyncError() => Center(child: Text(s.emptyDayMessage)),
-            _ => const Center(child: CircularProgressIndicator()),
-          },
-        ),
-        _ActionBar(s: s),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _ActionBar(s: s),
+              ),
+            ),
+          ],
+          AsyncError() => [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  Expanded(child: Center(child: Text(s.emptyDayMessage))),
+                  _ActionBar(s: s),
+                ],
+              ),
+            ),
+          ],
+          _ => [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                children: [
+                  const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  _ActionBar(s: s),
+                ],
+              ),
+            ),
+          ],
+        },
       ],
     );
   }
@@ -335,7 +378,12 @@ class _DailyFeelingsCard extends ConsumerWidget {
     final feelings = ref.watch(dayFeelingsProvider).value ?? const [];
     if (feelings.isEmpty) return const SizedBox.shrink();
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: Sizes.p16),
+      margin: const EdgeInsets.fromLTRB(
+        Sizes.p16,
+        0,
+        Sizes.p16,
+        Sizes.p8,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(Sizes.p16),
         child: Column(
