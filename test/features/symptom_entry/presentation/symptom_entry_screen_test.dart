@@ -53,6 +53,40 @@ void main() {
     expect(find.text('Dose (optional)'), findsNothing);
   });
 
+  testWidgets('existing migraine exposes end and maximum intensity', (
+    tester,
+  ) async {
+    await pump(
+      tester,
+      draft: SymptomDraft(
+        id: 'migraine',
+        timestamp: DateTime(2026, 9, 3, 9),
+        type: SymptomType.migraine,
+        startedAt: DateTime(2026, 9, 3, 9),
+        startPrecision: MigraineStartPrecision.exact,
+        endedAt: DateTime(2026, 9, 3, 12, 45),
+        initialIntensity: 4,
+        maximumIntensity: 8,
+      ),
+    );
+
+    await tester.drag(find.byType(ListView), const Offset(0, -400));
+    await tester.pumpAndSettle();
+
+    expect(find.text('End'), findsOneWidget);
+    expect(find.text('Maximum intensity'), findsOneWidget);
+    expect(find.text('12:45'), findsOneWidget);
+    final maximumChip = tester.widget<ChoiceChip>(
+      find
+          .ancestor(
+            of: find.text('8'),
+            matching: find.byType(ChoiceChip),
+          )
+          .last,
+    );
+    expect(maximumChip.selected, isTrue);
+  });
+
   testWidgets('physical feeling has categories without intensity or time', (
     tester,
   ) async {

@@ -128,6 +128,8 @@ abstract class AppStrings {
   String get migraineStartExact;
   String get migraineStartApproximate;
   String get migraineStartUnknown;
+  String get migraineEndLabel;
+  String get maximumIntensityLabel;
   String get activeMigraineExistsTitle;
   String get activeMigraineExistsBody;
   String previousIntensity(int intensity);

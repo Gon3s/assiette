@@ -251,6 +251,31 @@ void main() {
       expect(draft.intensity, 4);
       expect(draft.detail, 'abattu');
     });
+
+    test('completes a migraine with its end and maximum intensity', () async {
+      final id = await repository.saveSymptom(
+        timestamp: DateTime(2026, 7, 7, 9),
+        type: SymptomType.migraine,
+        intensity: 4,
+      );
+      final endedAt = DateTime(2026, 7, 7, 13, 30);
+
+      await repository.updateSymptom(
+        id: id,
+        timestamp: DateTime(2026, 7, 7, 9),
+        type: SymptomType.migraine,
+        startedAt: DateTime(2026, 7, 7, 9),
+        startPrecision: MigraineStartPrecision.exact,
+        endedAt: endedAt,
+        initialIntensity: 4,
+        maximumIntensity: 9,
+      );
+
+      final draft = await repository.loadSymptom(id);
+      expect(draft?.endedAt?.toUtc(), endedAt.toUtc());
+      expect(draft?.endTime?.toUtc(), endedAt.toUtc());
+      expect(draft?.maximumIntensity, 9);
+    });
   });
 
   group('deleteSymptom / undoDeleteSymptom', () {

@@ -45,7 +45,7 @@ final class SymptomEntryControllerProvider
 }
 
 String _$symptomEntryControllerHash() =>
-    r'b9e86bea2dcf8210bc9bde258b1b8173ba5d9126';
+    r'34590be514a23f0209a5b90286ced69f4d69d9dd';
 
 /// Holds and mutates the symptom entry form, and performs the final save.
 

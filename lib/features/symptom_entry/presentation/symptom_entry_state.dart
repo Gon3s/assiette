@@ -16,6 +16,7 @@ abstract class SymptomEntryState with _$SymptomEntryState {
     String? detail,
     @Default('') String note,
     DateTime? endTime,
+    int? maximumIntensity,
     DateTime? dailyDate,
     @Default(MigraineStartPrecision.exact)
     MigraineStartPrecision startPrecision,

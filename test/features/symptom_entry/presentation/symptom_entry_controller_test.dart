@@ -70,6 +70,57 @@ void main() {
     expect(repository.savedIsDailyNote, isFalse);
   });
 
+  test('existing migraine restores and saves completion fields', () async {
+    final endedAt = DateTime(2026, 9, 3, 18, 30);
+    final controller = container.read(
+      symptomEntryControllerProvider.notifier,
+    );
+    await controller.loadForEdit(
+      SymptomDraft(
+        id: 'migraine',
+        timestamp: DateTime(2026, 9, 3, 14),
+        type: SymptomType.migraine,
+        intensity: 7,
+        startedAt: DateTime(2026, 9, 3, 13, 45),
+        startPrecision: MigraineStartPrecision.exact,
+        endedAt: endedAt,
+        initialIntensity: 4,
+        maximumIntensity: 8,
+      ),
+    );
+
+    final state = container.read(symptomEntryControllerProvider);
+    expect(state.timestamp, DateTime(2026, 9, 3, 14));
+    expect(state.intensity, 4);
+    expect(state.endTime, endedAt);
+    expect(state.maximumIntensity, 8);
+
+    expect(await controller.save(), isTrue);
+    expect(repository.updatedEndTime, endedAt);
+    expect(repository.updatedMaximumIntensity, 8);
+  });
+
+  test('raising initial intensity keeps maximum intensity valid', () async {
+    final controller = container.read(
+      symptomEntryControllerProvider.notifier,
+    );
+    await controller.loadForEdit(
+      SymptomDraft(
+        id: 'migraine',
+        timestamp: DateTime(2026, 9, 3, 14),
+        type: SymptomType.migraine,
+        initialIntensity: 4,
+        maximumIntensity: 6,
+      ),
+    );
+
+    controller.setIntensity(8);
+
+    final state = container.read(symptomEntryControllerProvider);
+    expect(state.intensity, 8);
+    expect(state.maximumIntensity, 8);
+  });
+
   test('legacy daily edit exposes its previous intensity', () async {
     await container
         .read(symptomEntryControllerProvider.notifier)
@@ -96,6 +147,8 @@ class _FakeSymptomRepository implements SymptomEntryRepository {
   bool? savedIsDailyNote;
   int? savedInitialIntensity;
   MigraineStartPrecision? savedStartPrecision;
+  DateTime? updatedEndTime;
+  int? updatedMaximumIntensity;
 
   @override
   Future<String> saveSymptom({
@@ -138,7 +191,10 @@ class _FakeSymptomRepository implements SymptomEntryRepository {
     String? note,
     DateTime? dailyDate,
     bool isDailyNote = false,
-  }) async {}
+  }) async {
+    updatedEndTime = endTime;
+    updatedMaximumIntensity = maximumIntensity;
+  }
 
   @override
   Future<void> deleteSymptom(String id) async {}

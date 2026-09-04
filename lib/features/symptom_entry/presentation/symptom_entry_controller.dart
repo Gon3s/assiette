@@ -44,8 +44,19 @@ class SymptomEntryController extends _$SymptomEntryController {
       state = state.copyWith(type: type, detail: null);
 
   /// Changes the migraine intensity (1-10).
-  void setIntensity(int intensity) =>
-      state = state.copyWith(intensity: intensity);
+  void setIntensity(int intensity) {
+    final maximum = state.maximumIntensity;
+    state = state.copyWith(
+      intensity: intensity,
+      maximumIntensity: maximum != null && maximum < intensity
+          ? intensity
+          : maximum,
+    );
+  }
+
+  /// Changes the highest intensity reached during the migraine.
+  void setMaximumIntensity(int? intensity) =>
+      state = state.copyWith(maximumIntensity: intensity);
 
   void setStartPrecision(MigraineStartPrecision precision) =>
       state = state.copyWith(startPrecision: precision);
@@ -90,9 +101,10 @@ class SymptomEntryController extends _$SymptomEntryController {
       id: draft.id,
       type: draft.type,
       timestamp: draft.timestamp,
-      intensity: draft.intensity ?? 5,
+      intensity: draft.initialIntensity ?? draft.intensity ?? 5,
       detail: draft.detail,
-      endTime: draft.endTime,
+      endTime: draft.endedAt ?? draft.endTime,
+      maximumIntensity: draft.maximumIntensity,
       note: draft.note ?? '',
       dailyDate: draft.dailyDate,
       isDailyNote: draft.isDailyNote,
@@ -134,6 +146,9 @@ class SymptomEntryController extends _$SymptomEntryController {
           initialIntensity: state.type == SymptomType.migraine
               ? state.intensity
               : null,
+          maximumIntensity: state.type == SymptomType.migraine
+              ? state.maximumIntensity
+              : null,
           dailyDate: state.dailyDate,
           isDailyNote: state.isDailyNote,
         );
@@ -156,6 +171,9 @@ class SymptomEntryController extends _$SymptomEntryController {
               : null,
           initialIntensity: state.type == SymptomType.migraine
               ? state.intensity
+              : null,
+          maximumIntensity: state.type == SymptomType.migraine
+              ? state.maximumIntensity
               : null,
           dailyDate: state.dailyDate,
           isDailyNote: state.isDailyNote,

@@ -87,6 +87,66 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
     }
   }
 
+  Future<void> _pickEnd(DateTime current, {required bool date}) async {
+    final notifier = ref.read(symptomEntryControllerProvider.notifier);
+    if (date) {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: current,
+        firstDate: DateTime(2020),
+        lastDate: DateTime.now().add(const Duration(days: 1)),
+      );
+      if (picked == null) return;
+      notifier.setEndTime(
+        DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          current.hour,
+          current.minute,
+        ),
+      );
+      return;
+    }
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(current),
+    );
+    if (picked != null) {
+      notifier.setEndTime(
+        DateTime(
+          current.year,
+          current.month,
+          current.day,
+          picked.hour,
+          picked.minute,
+        ),
+      );
+    }
+  }
+
+  Future<void> _addEndTime(DateTime start) async {
+    final now = DateTime.now();
+    final initial = now.isBefore(start) ? start : now;
+    final date = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(start.year, start.month, start.day),
+      lastDate: now.add(const Duration(days: 1)),
+    );
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (time == null) return;
+    ref
+        .read(symptomEntryControllerProvider.notifier)
+        .setEndTime(
+          DateTime(date.year, date.month, date.day, time.hour, time.minute),
+        );
+  }
+
   Future<bool> _offerToEndActiveMigraine(AppStrings s) async {
     final active = await ref.read(activeMigraineProvider.future);
     if (active == null || !mounted) return false;
@@ -263,6 +323,66 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
                   ),
               ],
             ),
+            if (state.id != null) ...[
+              gapH24,
+              Text(s.migraineEndLabel),
+              gapH8,
+              if (state.endTime case final end?)
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => _pickEnd(end, date: true),
+                        icon: const Icon(Icons.calendar_today),
+                        label: Text(DateFormat.yMMMd(locale).format(end)),
+                      ),
+                    ),
+                    gapW8,
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => _pickEnd(end, date: false),
+                        icon: const Icon(Icons.schedule),
+                        label: Text(DateFormat.Hm(locale).format(end)),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: notifier.clearEndTime,
+                      tooltip: s.removeEndTime,
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                )
+              else
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _addEndTime(state.timestamp),
+                    icon: const Icon(Icons.schedule),
+                    label: Text(s.endTimeLabel),
+                  ),
+                ),
+              gapH24,
+              Text(s.maximumIntensityLabel),
+              gapH8,
+              Wrap(
+                spacing: Sizes.p8,
+                runSpacing: Sizes.p8,
+                children: [
+                  for (
+                    var intensity = state.intensity;
+                    intensity <= 10;
+                    intensity++
+                  )
+                    ChoiceChip(
+                      label: Text('$intensity'),
+                      selected: state.maximumIntensity == intensity,
+                      onSelected: (selected) => notifier.setMaximumIntensity(
+                        selected ? intensity : null,
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ] else ...[
             if (!isMood) ...[
               Text(s.feelingCategoryLabel),

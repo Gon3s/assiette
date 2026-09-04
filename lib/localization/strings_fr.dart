@@ -210,6 +210,10 @@ class AppStringsFr implements AppStrings {
   @override
   String get migraineStartUnknown => 'Inconnu';
   @override
+  String get migraineEndLabel => 'Fin';
+  @override
+  String get maximumIntensityLabel => 'Intensité maximale';
+  @override
   String get activeMigraineExistsTitle => 'Une migraine est déjà en cours';
   @override
   String get activeMigraineExistsBody =>
