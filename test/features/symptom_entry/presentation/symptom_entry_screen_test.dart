@@ -5,6 +5,8 @@ import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
 import 'package:assiette/features/medication_entry/domain/medication_intake_draft.dart';
+import 'package:assiette/features/symptom_entry/domain/migraine_observation.dart';
+import 'package:assiette/features/symptom_entry/domain/migraine_observation_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
@@ -24,6 +26,9 @@ void main() {
           symptomEntryRepositoryProvider.overrideWithValue(
             _FakeSymptomRepository(),
           ),
+          migraineObservationRepositoryProvider.overrideWithValue(
+            _FakeMigraineObservationRepository(),
+          ),
           medicationEntryRepositoryProvider.overrideWithValue(
             _FakeMedicationRepository(),
           ),
@@ -40,13 +45,13 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('migraine uses ten numbered buttons and no end field', (
+  testWidgets('migraine uses intensity 0 through 10 and no end field', (
     tester,
   ) async {
     await pump(tester);
 
     expect(find.text('New migraine'), findsOneWidget);
-    for (var value = 1; value <= 10; value++) {
+    for (var value = 0; value <= 10; value++) {
       expect(find.text('$value'), findsOneWidget);
     }
     expect(find.text('Add an end time'), findsNothing);
@@ -75,6 +80,8 @@ void main() {
 
     expect(find.text('End'), findsOneWidget);
     expect(find.text('Maximum intensity'), findsOneWidget);
+    expect(find.text('Migraine evolution'), findsOneWidget);
+    expect(find.text('Add an observation'), findsOneWidget);
     expect(find.text('12:45'), findsOneWidget);
     final maximumChip = tester.widget<ChoiceChip>(
       find
@@ -126,6 +133,31 @@ void main() {
     expect(find.text('Previously recorded intensity: 7/10'), findsOneWidget);
     expect(find.text('dos'), findsOneWidget);
   });
+}
+
+class _FakeMigraineObservationRepository
+    implements MigraineObservationRepository {
+  @override
+  Future<String> addObservation(
+    String migraineId,
+    MigraineObservationInput input,
+  ) async => 'observation';
+
+  @override
+  Future<void> deleteObservation(String id) async {}
+
+  @override
+  Future<void> undoDeleteObservation(String id) async {}
+
+  @override
+  Future<void> updateObservation(
+    String id,
+    MigraineObservationInput input,
+  ) async {}
+
+  @override
+  Stream<List<MigraineObservation>> watchObservations(String migraineId) =>
+      Stream.value(const []);
 }
 
 class _FakeSymptomRepository implements SymptomEntryRepository {

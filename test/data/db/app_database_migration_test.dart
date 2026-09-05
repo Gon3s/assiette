@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'v8 migration preserves every legacy health entry through v10',
+    'v8 migration preserves every legacy health entry through v11',
     () async {
       final executor = NativeDatabase.memory(
         setup: (database) {
@@ -149,13 +149,53 @@ INSERT INTO medication_intakes (
       expect(measurements, hasLength(1));
       expect(measurements.single.symptomId, 'legacy-migraine');
       expect(measurements.single.intensity, 7);
+      expect(measurements.single.aura, isNull);
+      expect(measurements.single.deletedAt, isNull);
 
       final medication = (await db.select(db.medicationIntakes).get()).single;
       expect(medication.symptomId, 'legacy-migraine');
       expect(medication.dose, '50 mg');
 
       final version = await db.customSelect('PRAGMA user_version').getSingle();
-      expect(version.read<int>('user_version'), 10);
+      expect(version.read<int>('user_version'), 11);
     },
   );
+
+  test('v10 migration preserves existing intensity measurements', () async {
+    final executor = NativeDatabase.memory(
+      setup: (database) {
+        database
+          ..execute('''
+CREATE TABLE migraine_intensity_measurements (
+  id TEXT NOT NULL PRIMARY KEY,
+  symptom_id TEXT NOT NULL,
+  timestamp INTEGER NOT NULL,
+  intensity INTEGER NOT NULL,
+  created_at INTEGER NOT NULL
+)
+''')
+          ..execute('''
+INSERT INTO migraine_intensity_measurements (
+  id, symptom_id, timestamp, intensity, created_at
+) VALUES (
+  'measurement-1', 'migraine-1', unixepoch('2026-09-05 09:00:00'), 6,
+  unixepoch('2026-09-05 09:01:00')
+)
+''')
+          ..execute('PRAGMA user_version = 10');
+      },
+    );
+    final db = AppDatabase(executor);
+    addTearDown(db.close);
+
+    final measurement =
+        (await db.select(db.migraineIntensityMeasurements).get()).single;
+
+    expect(measurement.id, 'measurement-1');
+    expect(measurement.intensity, 6);
+    expect(measurement.laterality, isNull);
+    expect(measurement.aura, isNull);
+    expect(measurement.updatedAt, isNotNull);
+    expect(measurement.deletedAt, isNull);
+  });
 }

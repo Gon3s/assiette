@@ -2963,6 +2963,90 @@ class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  @override
+  late final GeneratedColumnWithTypeConverter<MigraineLaterality?, int>
+  laterality =
+      GeneratedColumn<int>(
+        'laterality',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<MigraineLaterality?>(
+        $MigraineIntensityMeasurementsTable.$converterlateralityn,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<MigraineLocation?, int> location =
+      GeneratedColumn<int>(
+        'location',
+        aliasedName,
+        true,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+      ).withConverter<MigraineLocation?>(
+        $MigraineIntensityMeasurementsTable.$converterlocationn,
+      );
+  static const VerificationMeta _auraMeta = const VerificationMeta('aura');
+  @override
+  late final GeneratedColumn<bool> aura = GeneratedColumn<bool>(
+    'aura',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("aura" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _nauseaMeta = const VerificationMeta('nausea');
+  @override
+  late final GeneratedColumn<bool> nausea = GeneratedColumn<bool>(
+    'nausea',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("nausea" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _photophobiaMeta = const VerificationMeta(
+    'photophobia',
+  );
+  @override
+  late final GeneratedColumn<bool> photophobia = GeneratedColumn<bool>(
+    'photophobia',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("photophobia" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _phonophobiaMeta = const VerificationMeta(
+    'phonophobia',
+  );
+  @override
+  late final GeneratedColumn<bool> phonophobia = GeneratedColumn<bool>(
+    'phonophobia',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("phonophobia" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -2975,13 +3059,45 @@ class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
     requiredDuringInsert: false,
     defaultValue: currentDateAndTime,
   );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
     symptomId,
     timestamp,
     intensity,
+    laterality,
+    location,
+    aura,
+    nausea,
+    photophobia,
+    phonophobia,
+    note,
     createdAt,
+    updatedAt,
+    deletedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -3024,10 +3140,58 @@ class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
     } else if (isInserting) {
       context.missing(_intensityMeta);
     }
+    if (data.containsKey('aura')) {
+      context.handle(
+        _auraMeta,
+        aura.isAcceptableOrUnknown(data['aura']!, _auraMeta),
+      );
+    }
+    if (data.containsKey('nausea')) {
+      context.handle(
+        _nauseaMeta,
+        nausea.isAcceptableOrUnknown(data['nausea']!, _nauseaMeta),
+      );
+    }
+    if (data.containsKey('photophobia')) {
+      context.handle(
+        _photophobiaMeta,
+        photophobia.isAcceptableOrUnknown(
+          data['photophobia']!,
+          _photophobiaMeta,
+        ),
+      );
+    }
+    if (data.containsKey('phonophobia')) {
+      context.handle(
+        _phonophobiaMeta,
+        phonophobia.isAcceptableOrUnknown(
+          data['phonophobia']!,
+          _phonophobiaMeta,
+        ),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
         createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
       );
     }
     return context;
@@ -3058,10 +3222,51 @@ class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
         DriftSqlType.int,
         data['${effectivePrefix}intensity'],
       )!,
+      laterality: $MigraineIntensityMeasurementsTable.$converterlateralityn
+          .fromSql(
+            attachedDatabase.typeMapping.read(
+              DriftSqlType.int,
+              data['${effectivePrefix}laterality'],
+            ),
+          ),
+      location: $MigraineIntensityMeasurementsTable.$converterlocationn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}location'],
+        ),
+      ),
+      aura: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}aura'],
+      ),
+      nausea: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}nausea'],
+      ),
+      photophobia: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}photophobia'],
+      ),
+      phonophobia: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}phonophobia'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
       )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
     );
   }
 
@@ -3069,6 +3274,15 @@ class $MigraineIntensityMeasurementsTable extends MigraineIntensityMeasurements
   $MigraineIntensityMeasurementsTable createAlias(String alias) {
     return $MigraineIntensityMeasurementsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<MigraineLaterality, int, int> $converterlaterality =
+      const EnumIndexConverter<MigraineLaterality>(MigraineLaterality.values);
+  static JsonTypeConverter2<MigraineLaterality?, int?, int?>
+  $converterlateralityn = JsonTypeConverter2.asNullable($converterlaterality);
+  static JsonTypeConverter2<MigraineLocation, int, int> $converterlocation =
+      const EnumIndexConverter<MigraineLocation>(MigraineLocation.values);
+  static JsonTypeConverter2<MigraineLocation?, int?, int?> $converterlocationn =
+      JsonTypeConverter2.asNullable($converterlocation);
 }
 
 class MigraineIntensityMeasurement extends DataClass
@@ -3077,13 +3291,31 @@ class MigraineIntensityMeasurement extends DataClass
   final String symptomId;
   final DateTime timestamp;
   final int intensity;
+  final MigraineLaterality? laterality;
+  final MigraineLocation? location;
+  final bool? aura;
+  final bool? nausea;
+  final bool? photophobia;
+  final bool? phonophobia;
+  final String? note;
   final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
   const MigraineIntensityMeasurement({
     required this.id,
     required this.symptomId,
     required this.timestamp,
     required this.intensity,
+    this.laterality,
+    this.location,
+    this.aura,
+    this.nausea,
+    this.photophobia,
+    this.phonophobia,
+    this.note,
     required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3092,7 +3324,38 @@ class MigraineIntensityMeasurement extends DataClass
     map['symptom_id'] = Variable<String>(symptomId);
     map['timestamp'] = Variable<DateTime>(timestamp);
     map['intensity'] = Variable<int>(intensity);
+    if (!nullToAbsent || laterality != null) {
+      map['laterality'] = Variable<int>(
+        $MigraineIntensityMeasurementsTable.$converterlateralityn.toSql(
+          laterality,
+        ),
+      );
+    }
+    if (!nullToAbsent || location != null) {
+      map['location'] = Variable<int>(
+        $MigraineIntensityMeasurementsTable.$converterlocationn.toSql(location),
+      );
+    }
+    if (!nullToAbsent || aura != null) {
+      map['aura'] = Variable<bool>(aura);
+    }
+    if (!nullToAbsent || nausea != null) {
+      map['nausea'] = Variable<bool>(nausea);
+    }
+    if (!nullToAbsent || photophobia != null) {
+      map['photophobia'] = Variable<bool>(photophobia);
+    }
+    if (!nullToAbsent || phonophobia != null) {
+      map['phonophobia'] = Variable<bool>(phonophobia);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
     return map;
   }
 
@@ -3102,7 +3365,28 @@ class MigraineIntensityMeasurement extends DataClass
       symptomId: Value(symptomId),
       timestamp: Value(timestamp),
       intensity: Value(intensity),
+      laterality: laterality == null && nullToAbsent
+          ? const Value.absent()
+          : Value(laterality),
+      location: location == null && nullToAbsent
+          ? const Value.absent()
+          : Value(location),
+      aura: aura == null && nullToAbsent ? const Value.absent() : Value(aura),
+      nausea: nausea == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nausea),
+      photophobia: photophobia == null && nullToAbsent
+          ? const Value.absent()
+          : Value(photophobia),
+      phonophobia: phonophobia == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phonophobia),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
     );
   }
 
@@ -3116,7 +3400,18 @@ class MigraineIntensityMeasurement extends DataClass
       symptomId: serializer.fromJson<String>(json['symptomId']),
       timestamp: serializer.fromJson<DateTime>(json['timestamp']),
       intensity: serializer.fromJson<int>(json['intensity']),
+      laterality: $MigraineIntensityMeasurementsTable.$converterlateralityn
+          .fromJson(serializer.fromJson<int?>(json['laterality'])),
+      location: $MigraineIntensityMeasurementsTable.$converterlocationn
+          .fromJson(serializer.fromJson<int?>(json['location'])),
+      aura: serializer.fromJson<bool?>(json['aura']),
+      nausea: serializer.fromJson<bool?>(json['nausea']),
+      photophobia: serializer.fromJson<bool?>(json['photophobia']),
+      phonophobia: serializer.fromJson<bool?>(json['phonophobia']),
+      note: serializer.fromJson<String?>(json['note']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
     );
   }
   @override
@@ -3127,7 +3422,24 @@ class MigraineIntensityMeasurement extends DataClass
       'symptomId': serializer.toJson<String>(symptomId),
       'timestamp': serializer.toJson<DateTime>(timestamp),
       'intensity': serializer.toJson<int>(intensity),
+      'laterality': serializer.toJson<int?>(
+        $MigraineIntensityMeasurementsTable.$converterlateralityn.toJson(
+          laterality,
+        ),
+      ),
+      'location': serializer.toJson<int?>(
+        $MigraineIntensityMeasurementsTable.$converterlocationn.toJson(
+          location,
+        ),
+      ),
+      'aura': serializer.toJson<bool?>(aura),
+      'nausea': serializer.toJson<bool?>(nausea),
+      'photophobia': serializer.toJson<bool?>(photophobia),
+      'phonophobia': serializer.toJson<bool?>(phonophobia),
+      'note': serializer.toJson<String?>(note),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
     };
   }
 
@@ -3136,13 +3448,31 @@ class MigraineIntensityMeasurement extends DataClass
     String? symptomId,
     DateTime? timestamp,
     int? intensity,
+    Value<MigraineLaterality?> laterality = const Value.absent(),
+    Value<MigraineLocation?> location = const Value.absent(),
+    Value<bool?> aura = const Value.absent(),
+    Value<bool?> nausea = const Value.absent(),
+    Value<bool?> photophobia = const Value.absent(),
+    Value<bool?> phonophobia = const Value.absent(),
+    Value<String?> note = const Value.absent(),
     DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
   }) => MigraineIntensityMeasurement(
     id: id ?? this.id,
     symptomId: symptomId ?? this.symptomId,
     timestamp: timestamp ?? this.timestamp,
     intensity: intensity ?? this.intensity,
+    laterality: laterality.present ? laterality.value : this.laterality,
+    location: location.present ? location.value : this.location,
+    aura: aura.present ? aura.value : this.aura,
+    nausea: nausea.present ? nausea.value : this.nausea,
+    photophobia: photophobia.present ? photophobia.value : this.photophobia,
+    phonophobia: phonophobia.present ? phonophobia.value : this.phonophobia,
+    note: note.present ? note.value : this.note,
     createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
   );
   MigraineIntensityMeasurement copyWithCompanion(
     MigraineIntensityMeasurementsCompanion data,
@@ -3152,7 +3482,22 @@ class MigraineIntensityMeasurement extends DataClass
       symptomId: data.symptomId.present ? data.symptomId.value : this.symptomId,
       timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
       intensity: data.intensity.present ? data.intensity.value : this.intensity,
+      laterality: data.laterality.present
+          ? data.laterality.value
+          : this.laterality,
+      location: data.location.present ? data.location.value : this.location,
+      aura: data.aura.present ? data.aura.value : this.aura,
+      nausea: data.nausea.present ? data.nausea.value : this.nausea,
+      photophobia: data.photophobia.present
+          ? data.photophobia.value
+          : this.photophobia,
+      phonophobia: data.phonophobia.present
+          ? data.phonophobia.value
+          : this.phonophobia,
+      note: data.note.present ? data.note.value : this.note,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
     );
   }
 
@@ -3163,14 +3508,37 @@ class MigraineIntensityMeasurement extends DataClass
           ..write('symptomId: $symptomId, ')
           ..write('timestamp: $timestamp, ')
           ..write('intensity: $intensity, ')
-          ..write('createdAt: $createdAt')
+          ..write('laterality: $laterality, ')
+          ..write('location: $location, ')
+          ..write('aura: $aura, ')
+          ..write('nausea: $nausea, ')
+          ..write('photophobia: $photophobia, ')
+          ..write('phonophobia: $phonophobia, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, symptomId, timestamp, intensity, createdAt);
+  int get hashCode => Object.hash(
+    id,
+    symptomId,
+    timestamp,
+    intensity,
+    laterality,
+    location,
+    aura,
+    nausea,
+    photophobia,
+    phonophobia,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3179,7 +3547,16 @@ class MigraineIntensityMeasurement extends DataClass
           other.symptomId == this.symptomId &&
           other.timestamp == this.timestamp &&
           other.intensity == this.intensity &&
-          other.createdAt == this.createdAt);
+          other.laterality == this.laterality &&
+          other.location == this.location &&
+          other.aura == this.aura &&
+          other.nausea == this.nausea &&
+          other.photophobia == this.photophobia &&
+          other.phonophobia == this.phonophobia &&
+          other.note == this.note &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
 }
 
 class MigraineIntensityMeasurementsCompanion
@@ -3188,14 +3565,32 @@ class MigraineIntensityMeasurementsCompanion
   final Value<String> symptomId;
   final Value<DateTime> timestamp;
   final Value<int> intensity;
+  final Value<MigraineLaterality?> laterality;
+  final Value<MigraineLocation?> location;
+  final Value<bool?> aura;
+  final Value<bool?> nausea;
+  final Value<bool?> photophobia;
+  final Value<bool?> phonophobia;
+  final Value<String?> note;
   final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
   final Value<int> rowid;
   const MigraineIntensityMeasurementsCompanion({
     this.id = const Value.absent(),
     this.symptomId = const Value.absent(),
     this.timestamp = const Value.absent(),
     this.intensity = const Value.absent(),
+    this.laterality = const Value.absent(),
+    this.location = const Value.absent(),
+    this.aura = const Value.absent(),
+    this.nausea = const Value.absent(),
+    this.photophobia = const Value.absent(),
+    this.phonophobia = const Value.absent(),
+    this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   MigraineIntensityMeasurementsCompanion.insert({
@@ -3203,7 +3598,16 @@ class MigraineIntensityMeasurementsCompanion
     required String symptomId,
     required DateTime timestamp,
     required int intensity,
+    this.laterality = const Value.absent(),
+    this.location = const Value.absent(),
+    this.aura = const Value.absent(),
+    this.nausea = const Value.absent(),
+    this.photophobia = const Value.absent(),
+    this.phonophobia = const Value.absent(),
+    this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        symptomId = Value(symptomId),
@@ -3214,7 +3618,16 @@ class MigraineIntensityMeasurementsCompanion
     Expression<String>? symptomId,
     Expression<DateTime>? timestamp,
     Expression<int>? intensity,
+    Expression<int>? laterality,
+    Expression<int>? location,
+    Expression<bool>? aura,
+    Expression<bool>? nausea,
+    Expression<bool>? photophobia,
+    Expression<bool>? phonophobia,
+    Expression<String>? note,
     Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -3222,7 +3635,16 @@ class MigraineIntensityMeasurementsCompanion
       if (symptomId != null) 'symptom_id': symptomId,
       if (timestamp != null) 'timestamp': timestamp,
       if (intensity != null) 'intensity': intensity,
+      if (laterality != null) 'laterality': laterality,
+      if (location != null) 'location': location,
+      if (aura != null) 'aura': aura,
+      if (nausea != null) 'nausea': nausea,
+      if (photophobia != null) 'photophobia': photophobia,
+      if (phonophobia != null) 'phonophobia': phonophobia,
+      if (note != null) 'note': note,
       if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -3232,7 +3654,16 @@ class MigraineIntensityMeasurementsCompanion
     Value<String>? symptomId,
     Value<DateTime>? timestamp,
     Value<int>? intensity,
+    Value<MigraineLaterality?>? laterality,
+    Value<MigraineLocation?>? location,
+    Value<bool?>? aura,
+    Value<bool?>? nausea,
+    Value<bool?>? photophobia,
+    Value<bool?>? phonophobia,
+    Value<String?>? note,
     Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
     Value<int>? rowid,
   }) {
     return MigraineIntensityMeasurementsCompanion(
@@ -3240,7 +3671,16 @@ class MigraineIntensityMeasurementsCompanion
       symptomId: symptomId ?? this.symptomId,
       timestamp: timestamp ?? this.timestamp,
       intensity: intensity ?? this.intensity,
+      laterality: laterality ?? this.laterality,
+      location: location ?? this.location,
+      aura: aura ?? this.aura,
+      nausea: nausea ?? this.nausea,
+      photophobia: photophobia ?? this.photophobia,
+      phonophobia: phonophobia ?? this.phonophobia,
+      note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3260,8 +3700,43 @@ class MigraineIntensityMeasurementsCompanion
     if (intensity.present) {
       map['intensity'] = Variable<int>(intensity.value);
     }
+    if (laterality.present) {
+      map['laterality'] = Variable<int>(
+        $MigraineIntensityMeasurementsTable.$converterlateralityn.toSql(
+          laterality.value,
+        ),
+      );
+    }
+    if (location.present) {
+      map['location'] = Variable<int>(
+        $MigraineIntensityMeasurementsTable.$converterlocationn.toSql(
+          location.value,
+        ),
+      );
+    }
+    if (aura.present) {
+      map['aura'] = Variable<bool>(aura.value);
+    }
+    if (nausea.present) {
+      map['nausea'] = Variable<bool>(nausea.value);
+    }
+    if (photophobia.present) {
+      map['photophobia'] = Variable<bool>(photophobia.value);
+    }
+    if (phonophobia.present) {
+      map['phonophobia'] = Variable<bool>(phonophobia.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -3276,7 +3751,16 @@ class MigraineIntensityMeasurementsCompanion
           ..write('symptomId: $symptomId, ')
           ..write('timestamp: $timestamp, ')
           ..write('intensity: $intensity, ')
+          ..write('laterality: $laterality, ')
+          ..write('location: $location, ')
+          ..write('aura: $aura, ')
+          ..write('nausea: $nausea, ')
+          ..write('photophobia: $photophobia, ')
+          ..write('phonophobia: $phonophobia, ')
+          ..write('note: $note, ')
           ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -8660,7 +9144,16 @@ typedef $$MigraineIntensityMeasurementsTableCreateCompanionBuilder =
       required String symptomId,
       required DateTime timestamp,
       required int intensity,
+      Value<MigraineLaterality?> laterality,
+      Value<MigraineLocation?> location,
+      Value<bool?> aura,
+      Value<bool?> nausea,
+      Value<bool?> photophobia,
+      Value<bool?> phonophobia,
+      Value<String?> note,
       Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
       Value<int> rowid,
     });
 typedef $$MigraineIntensityMeasurementsTableUpdateCompanionBuilder =
@@ -8669,7 +9162,16 @@ typedef $$MigraineIntensityMeasurementsTableUpdateCompanionBuilder =
       Value<String> symptomId,
       Value<DateTime> timestamp,
       Value<int> intensity,
+      Value<MigraineLaterality?> laterality,
+      Value<MigraineLocation?> location,
+      Value<bool?> aura,
+      Value<bool?> nausea,
+      Value<bool?> photophobia,
+      Value<bool?> phonophobia,
+      Value<String?> note,
       Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
       Value<int> rowid,
     });
 
@@ -8733,8 +9235,55 @@ class $$MigraineIntensityMeasurementsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnWithTypeConverterFilters<MigraineLaterality?, MigraineLaterality, int>
+  get laterality => $composableBuilder(
+    column: $table.laterality,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<MigraineLocation?, MigraineLocation, int>
+  get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get aura => $composableBuilder(
+    column: $table.aura,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get nausea => $composableBuilder(
+    column: $table.nausea,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get photophobia => $composableBuilder(
+    column: $table.photophobia,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get phonophobia => $composableBuilder(
+    column: $table.phonophobia,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8786,8 +9335,53 @@ class $$MigraineIntensityMeasurementsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get laterality => $composableBuilder(
+    column: $table.laterality,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get aura => $composableBuilder(
+    column: $table.aura,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get nausea => $composableBuilder(
+    column: $table.nausea,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get photophobia => $composableBuilder(
+    column: $table.photophobia,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get phonophobia => $composableBuilder(
+    column: $table.phonophobia,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -8833,8 +9427,42 @@ class $$MigraineIntensityMeasurementsTableAnnotationComposer
   GeneratedColumn<int> get intensity =>
       $composableBuilder(column: $table.intensity, builder: (column) => column);
 
+  GeneratedColumnWithTypeConverter<MigraineLaterality?, int> get laterality =>
+      $composableBuilder(
+        column: $table.laterality,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<MigraineLocation?, int> get location =>
+      $composableBuilder(column: $table.location, builder: (column) => column);
+
+  GeneratedColumn<bool> get aura =>
+      $composableBuilder(column: $table.aura, builder: (column) => column);
+
+  GeneratedColumn<bool> get nausea =>
+      $composableBuilder(column: $table.nausea, builder: (column) => column);
+
+  GeneratedColumn<bool> get photophobia => $composableBuilder(
+    column: $table.photophobia,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get phonophobia => $composableBuilder(
+    column: $table.phonophobia,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
 
   $$SymptomsTableAnnotationComposer get symptomId {
     final $$SymptomsTableAnnotationComposer composer = $composerBuilder(
@@ -8906,14 +9534,32 @@ class $$MigraineIntensityMeasurementsTableTableManager
                 Value<String> symptomId = const Value.absent(),
                 Value<DateTime> timestamp = const Value.absent(),
                 Value<int> intensity = const Value.absent(),
+                Value<MigraineLaterality?> laterality = const Value.absent(),
+                Value<MigraineLocation?> location = const Value.absent(),
+                Value<bool?> aura = const Value.absent(),
+                Value<bool?> nausea = const Value.absent(),
+                Value<bool?> photophobia = const Value.absent(),
+                Value<bool?> phonophobia = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MigraineIntensityMeasurementsCompanion(
                 id: id,
                 symptomId: symptomId,
                 timestamp: timestamp,
                 intensity: intensity,
+                laterality: laterality,
+                location: location,
+                aura: aura,
+                nausea: nausea,
+                photophobia: photophobia,
+                phonophobia: phonophobia,
+                note: note,
                 createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -8922,14 +9568,32 @@ class $$MigraineIntensityMeasurementsTableTableManager
                 required String symptomId,
                 required DateTime timestamp,
                 required int intensity,
+                Value<MigraineLaterality?> laterality = const Value.absent(),
+                Value<MigraineLocation?> location = const Value.absent(),
+                Value<bool?> aura = const Value.absent(),
+                Value<bool?> nausea = const Value.absent(),
+                Value<bool?> photophobia = const Value.absent(),
+                Value<bool?> phonophobia = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MigraineIntensityMeasurementsCompanion.insert(
                 id: id,
                 symptomId: symptomId,
                 timestamp: timestamp,
                 intensity: intensity,
+                laterality: laterality,
+                location: location,
+                aura: aura,
+                nausea: nausea,
+                photophobia: photophobia,
+                phonophobia: phonophobia,
+                note: note,
                 createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

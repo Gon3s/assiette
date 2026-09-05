@@ -29,7 +29,7 @@ void main() {
 
   tearDown(() => container.dispose());
 
-  test('starts with a migraine intensity between 1 and 10', () {
+  test('starts with a migraine intensity between 0 and 10', () {
     final state = container.read(symptomEntryControllerProvider);
     expect(state.type, SymptomType.migraine);
     expect(state.intensity, 5);

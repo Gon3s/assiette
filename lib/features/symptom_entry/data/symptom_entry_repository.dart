@@ -81,6 +81,7 @@ class DriftSymptomEntryRepository implements SymptomEntryRepository {
             timestamp: episode.startedAt ?? now,
             intensity: episode.initialIntensity,
             createdAt: Value(now),
+            updatedAt: Value(now),
           ),
         );
       }
@@ -202,11 +203,11 @@ _MigraineEpisodeFields? _migraineEpisodeFields({
     throw ArgumentError.notNull('intensity');
   }
 
-  if (initial < 1 || initial > 10) {
+  if (initial < 0 || initial > 10) {
     throw ArgumentError.value(
       initial,
       'initialIntensity',
-      'must be between 1 and 10',
+      'must be between 0 and 10',
     );
   }
   if (maximumIntensity != null &&

@@ -18,6 +18,7 @@ import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
+import 'package:assiette/features/symptom_entry/domain/migraine_observation_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
@@ -36,17 +37,22 @@ class MockMealEntryRepository extends Mock implements MealEntryRepository {}
 class MockSymptomEntryRepository extends Mock
     implements SymptomEntryRepository {}
 
+class MockMigraineObservationRepository extends Mock
+    implements MigraineObservationRepository {}
+
 void main() {
   late MockDayViewRepository repository;
   late MockFavoritesRepository favoritesRepository;
   late MockMealEntryRepository mealEntryRepository;
   late MockSymptomEntryRepository symptomEntryRepository;
+  late MockMigraineObservationRepository migraineObservationRepository;
 
   setUp(() {
     repository = MockDayViewRepository();
     favoritesRepository = MockFavoritesRepository();
     mealEntryRepository = MockMealEntryRepository();
     symptomEntryRepository = MockSymptomEntryRepository();
+    migraineObservationRepository = MockMigraineObservationRepository();
     when(
       () => repository.watchTimeline(any()),
     ).thenAnswer((_) => Stream.value([]));
@@ -64,6 +70,9 @@ void main() {
     ).thenAnswer((_) => Stream.value(null));
     when(
       favoritesRepository.watchFavorites,
+    ).thenAnswer((_) => Stream.value([]));
+    when(
+      () => migraineObservationRepository.watchObservations(any()),
     ).thenAnswer((_) => Stream.value([]));
   });
 
@@ -99,6 +108,9 @@ void main() {
           mealEntryRepositoryProvider.overrideWithValue(mealEntryRepository),
           symptomEntryRepositoryProvider.overrideWithValue(
             symptomEntryRepository,
+          ),
+          migraineObservationRepositoryProvider.overrideWithValue(
+            migraineObservationRepository,
           ),
           // Avoids touching Google Sign-In / the real DB for the US-26
           // startup restore-offer check, which this screen now watches.
@@ -249,9 +261,17 @@ void main() {
     await pumpScreen(tester);
 
     expect(find.text('Active migraine'), findsOneWidget);
-    expect(find.text('Update intensity'), findsOneWidget);
+    expect(find.text('Add an observation'), findsOneWidget);
     expect(find.text('End'), findsOneWidget);
     expect(find.textContaining('8/10'), findsOneWidget);
+
+    await tester.tap(find.text('Add an observation'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Observation time'), findsOneWidget);
+    expect(find.text('Laterality'), findsOneWidget);
+    expect(find.text('Aura'), findsOneWidget);
+    expect(find.text('Photophobia'), findsOneWidget);
   });
 
   testWidgets('shows daily feelings outside the timeline', (tester) async {

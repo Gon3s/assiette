@@ -9,6 +9,8 @@ import 'package:assiette/data/daos/symptoms_dao.dart';
 import 'package:assiette/data/daos/tags_dao.dart';
 import 'package:assiette/data/daos/templates_dao.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/data/db/enums/migraine_laterality.dart';
+import 'package:assiette/data/db/enums/migraine_location.dart';
 import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/data/db/tables/app_settings_table.dart';
@@ -62,7 +64,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -179,6 +181,25 @@ class AppDatabase extends _$AppDatabase {
           'FROM symptoms '
           'WHERE type = ? AND COALESCE(initial_intensity, intensity) IS NOT NULL',
           [SymptomType.migraine.index],
+        );
+      }
+      if (from < 11) {
+        await m.alterTable(
+          TableMigration(
+            migraineIntensityMeasurements,
+            columnTransformer: {
+              migraineIntensityMeasurements.laterality: const Constant(null),
+              migraineIntensityMeasurements.location: const Constant(null),
+              migraineIntensityMeasurements.aura: const Constant(null),
+              migraineIntensityMeasurements.nausea: const Constant(null),
+              migraineIntensityMeasurements.photophobia: const Constant(null),
+              migraineIntensityMeasurements.phonophobia: const Constant(null),
+              migraineIntensityMeasurements.note: const Constant(null),
+              migraineIntensityMeasurements.updatedAt:
+                  migraineIntensityMeasurements.createdAt,
+              migraineIntensityMeasurements.deletedAt: const Constant(null),
+            },
+          ),
         );
       }
     },

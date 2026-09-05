@@ -3,6 +3,8 @@ library;
 
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
+import 'package:assiette/data/db/enums/migraine_laterality.dart';
+import 'package:assiette/data/db/enums/migraine_location.dart';
 import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/data/database_snapshot_codec.dart';
@@ -71,6 +73,21 @@ void main() {
           ),
         );
     await source
+        .into(source.migraineIntensityMeasurements)
+        .insert(
+          MigraineIntensityMeasurementsCompanion.insert(
+            id: 'observation-1',
+            symptomId: 'symptom-1',
+            timestamp: DateTime.utc(2026, 7, 1, 10),
+            intensity: 8,
+            laterality: const Value(MigraineLaterality.left),
+            location: const Value(MigraineLocation.temple),
+            aura: const Value(false),
+            nausea: const Value(true),
+            note: const Value('structured observation'),
+          ),
+        );
+    await source
         .into(source.medicationIntakes)
         .insert(
           MedicationIntakesCompanion.insert(
@@ -119,13 +136,15 @@ void main() {
             (snapshot[name]! as List).cast<Map<String, dynamic>>();
 
         final tags = table('tags');
-        expect(snapshot['formatVersion'], 3);
+        expect(snapshot['formatVersion'], 4);
         expect(tags.length, greaterThan(1)); // 25 seeded + the custom one
         expect(tags.any((row) => row['id'] == 'tag-1'), isTrue);
         expect(table('meals').single['id'], 'meal-1');
         expect(table('mealTags').single['tagId'], 'tag-1');
         expect(table('symptoms').single['id'], 'symptom-1');
-        expect(table('migraineIntensityMeasurements'), isEmpty);
+        final observation = table('migraineIntensityMeasurements').single;
+        expect(observation['laterality'], MigraineLaterality.left.index);
+        expect(observation['aura'], isFalse);
         expect(table('medicationIntakes').single['symptomId'], 'symptom-1');
         expect(table('sleepEntries').single['id'], 'sleep-1');
         expect(table('environmentSnapshots').single['id'], 'env-1');
@@ -186,6 +205,12 @@ void main() {
       expect(symptom.endedAt?.toUtc(), DateTime.utc(2026, 7, 1, 11));
       expect(symptom.initialIntensity, 3);
       expect(symptom.maximumIntensity, 8);
+      final observation =
+          (await target.select(target.migraineIntensityMeasurements).get())
+              .single;
+      expect(observation.location, MigraineLocation.temple);
+      expect(observation.aura, isFalse);
+      expect(observation.nausea, isTrue);
     });
 
     test('restores a version 1 symptom without episode fields', () async {

@@ -12,7 +12,10 @@ import 'package:assiette/features/day_view/presentation/widgets/day_header.dart'
 import 'package:assiette/features/day_view/presentation/widgets/sleep_card.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_tile.dart';
 import 'package:assiette/features/favorites/presentation/widgets/favorites_row.dart';
+import 'package:assiette/features/symptom_entry/domain/migraine_observation.dart';
+import 'package:assiette/features/symptom_entry/domain/migraine_observation_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
+import 'package:assiette/features/symptom_entry/presentation/widgets/migraine_observation_dialog.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
 import 'package:assiette/routing/app_router.dart';
@@ -457,8 +460,13 @@ class _ActiveMigraineCard extends ConsumerWidget {
               spacing: Sizes.p8,
               children: [
                 OutlinedButton(
-                  onPressed: () => _updateIntensity(context, ref, active.id),
-                  child: Text(s.updateIntensityAction),
+                  onPressed: () => _updateIntensity(
+                    context,
+                    ref,
+                    active.id,
+                    active.lastIntensity,
+                  ),
+                  child: Text(s.addMigraineObservationAction),
                 ),
                 FilledButton.tonal(
                   onPressed: () => _end(context, ref, active.id),
@@ -476,28 +484,18 @@ class _ActiveMigraineCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     String id,
+    int initialIntensity,
   ) async {
-    final intensity = await showDialog<int>(
+    final input = await showDialog<MigraineObservationInput>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppStrings.of(context).updateIntensityAction),
-        content: Wrap(
-          spacing: Sizes.p8,
-          runSpacing: Sizes.p8,
-          children: [
-            for (var value = 1; value <= 10; value++)
-              ActionChip(
-                label: Text('$value'),
-                onPressed: () => Navigator.pop(context, value),
-              ),
-          ],
-        ),
+      builder: (context) => MigraineObservationDialog(
+        initialIntensity: initialIntensity,
       ),
     );
-    if (intensity != null) {
+    if (input != null) {
       await ref
-          .read(dayViewRepositoryProvider)
-          .addMigraineIntensity(id, intensity);
+          .read(migraineObservationRepositoryProvider)
+          .addObservation(id, input);
     }
   }
 

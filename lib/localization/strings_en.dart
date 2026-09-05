@@ -213,6 +213,52 @@ class AppStringsEn implements AppStrings {
   @override
   String get maximumIntensityLabel => 'Maximum intensity';
   @override
+  String get migraineObservationsTitle => 'Migraine evolution';
+  @override
+  String get addMigraineObservationAction => 'Add an observation';
+  @override
+  String get editMigraineObservationTitle => 'Edit observation';
+  @override
+  String get observationTimeLabel => 'Observation time';
+  @override
+  String get migraineLateralityLabel => 'Laterality';
+  @override
+  String get migraineLateralityLeft => 'Left';
+  @override
+  String get migraineLateralityRight => 'Right';
+  @override
+  String get migraineLateralityBilateral => 'Bilateral';
+  @override
+  String get migraineLocationLabel => 'Location';
+  @override
+  String get migraineLocationForehead => 'Forehead';
+  @override
+  String get migraineLocationTemple => 'Temple';
+  @override
+  String get migraineLocationEye => 'Eye';
+  @override
+  String get migraineLocationBackOfHead => 'Back of head';
+  @override
+  String get migraineLocationNeck => 'Neck';
+  @override
+  String get migraineLocationDiffuse => 'Diffuse';
+  @override
+  String get auraLabel => 'Aura';
+  @override
+  String get nauseaLabel => 'Nausea';
+  @override
+  String get photophobiaLabel => 'Photophobia';
+  @override
+  String get phonophobiaLabel => 'Phonophobia';
+  @override
+  String get presenceUnknown => 'Unknown';
+  @override
+  String get presenceAbsent => 'Absent';
+  @override
+  String get presencePresent => 'Present';
+  @override
+  String get observationDeleted => 'Observation deleted';
+  @override
   String get activeMigraineExistsTitle => 'A migraine is already active';
   @override
   String get activeMigraineExistsBody => 'End the previous migraine now?';

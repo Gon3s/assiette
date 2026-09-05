@@ -8,6 +8,7 @@ import 'package:assiette/features/day_view/presentation/day_view_providers.dart'
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_controller.dart';
+import 'package:assiette/features/symptom_entry/presentation/widgets/migraine_observations_section.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
 import 'package:flutter/material.dart';
@@ -315,7 +316,7 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
               spacing: Sizes.p8,
               runSpacing: Sizes.p8,
               children: [
-                for (var intensity = 1; intensity <= 10; intensity++)
+                for (var intensity = 0; intensity <= 10; intensity++)
                   ChoiceChip(
                     label: Text('$intensity'),
                     selected: state.intensity == intensity,
@@ -382,6 +383,8 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
                     ),
                 ],
               ),
+              gapH24,
+              MigraineObservationsSection(migraineId: state.id!),
             ],
           ] else ...[
             if (!isMood) ...[

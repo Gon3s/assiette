@@ -91,8 +91,8 @@ class DriftDayViewRepository implements DayViewRepository {
 
   @override
   Future<void> addMigraineIntensity(String migraineId, int intensity) async {
-    if (intensity < 1 || intensity > 10) {
-      throw ArgumentError.value(intensity, 'intensity', 'must be 1 to 10');
+    if (intensity < 0 || intensity > 10) {
+      throw ArgumentError.value(intensity, 'intensity', 'must be 0 to 10');
     }
     final now = DateTime.now().toUtc();
     await _migraineMeasurementsDao.insertMeasurement(
@@ -102,6 +102,7 @@ class DriftDayViewRepository implements DayViewRepository {
         timestamp: now,
         intensity: intensity,
         createdAt: Value(now),
+        updatedAt: Value(now),
       ),
     );
     final symptom = await _symptomsDao.getSymptomById(migraineId);

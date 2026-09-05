@@ -214,6 +214,52 @@ class AppStringsFr implements AppStrings {
   @override
   String get maximumIntensityLabel => 'Intensité maximale';
   @override
+  String get migraineObservationsTitle => 'Évolution de la migraine';
+  @override
+  String get addMigraineObservationAction => 'Ajouter une observation';
+  @override
+  String get editMigraineObservationTitle => 'Modifier l’observation';
+  @override
+  String get observationTimeLabel => 'Heure de l’observation';
+  @override
+  String get migraineLateralityLabel => 'Latéralité';
+  @override
+  String get migraineLateralityLeft => 'Gauche';
+  @override
+  String get migraineLateralityRight => 'Droite';
+  @override
+  String get migraineLateralityBilateral => 'Bilatérale';
+  @override
+  String get migraineLocationLabel => 'Localisation';
+  @override
+  String get migraineLocationForehead => 'Front';
+  @override
+  String get migraineLocationTemple => 'Tempe';
+  @override
+  String get migraineLocationEye => 'Œil';
+  @override
+  String get migraineLocationBackOfHead => 'Arrière du crâne';
+  @override
+  String get migraineLocationNeck => 'Nuque';
+  @override
+  String get migraineLocationDiffuse => 'Diffuse';
+  @override
+  String get auraLabel => 'Aura';
+  @override
+  String get nauseaLabel => 'Nausée';
+  @override
+  String get photophobiaLabel => 'Photophobie';
+  @override
+  String get phonophobiaLabel => 'Phonophobie';
+  @override
+  String get presenceUnknown => 'Inconnu';
+  @override
+  String get presenceAbsent => 'Absent';
+  @override
+  String get presencePresent => 'Présent';
+  @override
+  String get observationDeleted => 'Observation supprimée';
+  @override
   String get activeMigraineExistsTitle => 'Une migraine est déjà en cours';
   @override
   String get activeMigraineExistsBody =>

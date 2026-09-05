@@ -12,7 +12,7 @@ class DatabaseSnapshotCodec {
   const DatabaseSnapshotCodec();
 
   /// Snapshot format version, bumped if the shape below ever changes.
-  static const formatVersion = 3;
+  static const formatVersion = 4;
 
   /// Dumps every row of every table as JSON-safe maps, keyed by table name.
   Future<Map<String, dynamic>> export(AppDatabase db) async {
@@ -144,7 +144,20 @@ class DatabaseSnapshotCodec {
         for (final row in measurementRows) {
           await db
               .into(db.migraineIntensityMeasurements)
-              .insert(MigraineIntensityMeasurement.fromJson(row));
+              .insert(
+                MigraineIntensityMeasurement.fromJson({
+                  'laterality': null,
+                  'location': null,
+                  'aura': null,
+                  'nausea': null,
+                  'photophobia': null,
+                  'phonophobia': null,
+                  'note': null,
+                  'updatedAt': row['createdAt'],
+                  'deletedAt': null,
+                  ...row,
+                }),
+              );
         }
       } else {
         final migraines = await (db.select(
@@ -162,6 +175,7 @@ class DatabaseSnapshotCodec {
                   timestamp: migraine.startedAt ?? migraine.timestamp,
                   intensity: intensity,
                   createdAt: Value(migraine.createdAt),
+                  updatedAt: Value(migraine.updatedAt),
                 ),
               );
         }
