@@ -4,6 +4,7 @@ library;
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
+import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +26,9 @@ void main() {
   setUp(() {
     dayViewRepository = MockDayViewRepository();
     sleepEntryRepository = MockSleepEntryRepository();
-    when(() => dayViewRepository.watchSleepForNight(any()))
-        .thenAnswer((_) => Stream.value(null));
+    when(
+      () => dayViewRepository.watchSleepForNight(any()),
+    ).thenAnswer((_) => Stream.value(null));
   });
 
   Future<ProviderContainer> makeContainer() async {
@@ -40,22 +42,25 @@ void main() {
     // Keep daySleepProvider alive (it's auto-dispose) and resolve it before
     // the controller reads it, mirroring the real navigation path where the
     // card already shows the resolved sleep.
-    container.listen(daySleepProvider, (_, _) {});
-    await container.read(daySleepProvider.future);
+    final day = container.read(selectedDateProvider);
+    container.listen(daySleepProvider(day), (_, _) {});
+    await container.read(daySleepProvider(day).future);
     return container;
   }
 
   group('SleepEntryController', () {
-    test('initial state defaults to quality 2 when no sleep is logged',
-        () async {
-      final container = await makeContainer();
-      final state = container.read(sleepEntryControllerProvider);
+    test(
+      'initial state defaults to quality 2 when no sleep is logged',
+      () async {
+        final container = await makeContainer();
+        final state = container.read(sleepEntryControllerProvider);
 
-      expect(state.quality, 2);
-      expect(state.bedTime, isNull);
-      expect(state.wakeTime, isNull);
-      expect(state.isSaving, isFalse);
-    });
+        expect(state.quality, 2);
+        expect(state.bedTime, isNull);
+        expect(state.wakeTime, isNull);
+        expect(state.isSaving, isFalse);
+      },
+    );
 
     test('initial state is seeded from the logged sleep', () async {
       when(() => dayViewRepository.watchSleepForNight(any())).thenAnswer(
@@ -85,9 +90,8 @@ void main() {
 
     test('setBedTime sets it, clearBedTime resets it', () async {
       final container = await makeContainer();
-      final controller =
-          container.read(sleepEntryControllerProvider.notifier)
-            ..setBedTime(DateTime(2026, 1, 1, 23));
+      final controller = container.read(sleepEntryControllerProvider.notifier)
+        ..setBedTime(DateTime(2026, 1, 1, 23));
 
       expect(
         container.read(sleepEntryControllerProvider).bedTime,
@@ -100,9 +104,8 @@ void main() {
 
     test('setWakeTime sets it, clearWakeTime resets it', () async {
       final container = await makeContainer();
-      final controller =
-          container.read(sleepEntryControllerProvider.notifier)
-            ..setWakeTime(DateTime(2026, 1, 1, 7));
+      final controller = container.read(sleepEntryControllerProvider.notifier)
+        ..setWakeTime(DateTime(2026, 1, 1, 7));
 
       expect(
         container.read(sleepEntryControllerProvider).wakeTime,
@@ -113,35 +116,36 @@ void main() {
       expect(container.read(sleepEntryControllerProvider).wakeTime, isNull);
     });
 
-    test('save passes the form to the repository and reports success',
-        () async {
-      when(
-        () => sleepEntryRepository.saveSleepEntry(
-          day: any(named: 'day'),
-          quality: any(named: 'quality'),
-          bedTime: any(named: 'bedTime'),
-          wakeTime: any(named: 'wakeTime'),
-        ),
-      ).thenAnswer((_) async {});
+    test(
+      'save passes the form to the repository and reports success',
+      () async {
+        when(
+          () => sleepEntryRepository.saveSleepEntry(
+            day: any(named: 'day'),
+            quality: any(named: 'quality'),
+            bedTime: any(named: 'bedTime'),
+            wakeTime: any(named: 'wakeTime'),
+          ),
+        ).thenAnswer((_) async {});
 
-      final container = await makeContainer();
-      final controller =
-          container.read(sleepEntryControllerProvider.notifier)
-            ..setQuality(3)
-            ..setBedTime(DateTime(2026, 1, 1, 23));
+        final container = await makeContainer();
+        final controller = container.read(sleepEntryControllerProvider.notifier)
+          ..setQuality(3)
+          ..setBedTime(DateTime(2026, 1, 1, 23));
 
-      final saved = await controller.save();
+        final saved = await controller.save();
 
-      expect(saved, isTrue);
-      expect(container.read(sleepEntryControllerProvider).isSaving, isFalse);
-      verify(
-        () => sleepEntryRepository.saveSleepEntry(
-          day: any(named: 'day'),
-          quality: 3,
-          bedTime: DateTime(2026, 1, 1, 23),
-        ),
-      ).called(1);
-    });
+        expect(saved, isTrue);
+        expect(container.read(sleepEntryControllerProvider).isSaving, isFalse);
+        verify(
+          () => sleepEntryRepository.saveSleepEntry(
+            day: any(named: 'day'),
+            quality: 3,
+            bedTime: DateTime(2026, 1, 1, 23),
+          ),
+        ).called(1);
+      },
+    );
 
     test('save resets isSaving and rethrows on failure', () async {
       when(
@@ -171,8 +175,9 @@ void main() {
       ).thenAnswer((_) async {});
 
       final container = await makeContainer();
-      final deleted =
-          await container.read(sleepEntryControllerProvider.notifier).delete();
+      final deleted = await container
+          .read(sleepEntryControllerProvider.notifier)
+          .delete();
 
       expect(deleted, isTrue);
       verify(() => dayViewRepository.deleteSleepEntry('sleep-1')).called(1);
@@ -180,8 +185,9 @@ void main() {
 
     test('delete is a no-op when nothing is logged (no id)', () async {
       final container = await makeContainer();
-      final deleted =
-          await container.read(sleepEntryControllerProvider.notifier).delete();
+      final deleted = await container
+          .read(sleepEntryControllerProvider.notifier)
+          .delete();
 
       expect(deleted, isFalse);
       verifyNever(() => dayViewRepository.deleteSleepEntry(any()));

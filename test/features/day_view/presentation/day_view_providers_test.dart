@@ -31,6 +31,8 @@ void main() {
   }
 
   group('dayTimelineProvider', () {
+    final date = DateTime(2026, 7, 6);
+
     test('goes from loading to data with the repository stream', () async {
       final item = TimelineItem.symptom(
         id: 'symptom-1',
@@ -38,48 +40,51 @@ void main() {
         symptomType: SymptomType.migraine,
         intensity: 7,
       );
-      when(() => repository.watchTimeline(any()))
-          .thenAnswer((_) => Stream.value([item]));
+      when(
+        () => repository.watchTimeline(any()),
+      ).thenAnswer((_) => Stream.value([item]));
 
       final container = makeContainer();
       final states = <AsyncValue<List<TimelineItem>>>[];
       container.listen(
-        dayTimelineProvider,
+        dayTimelineProvider(date),
         (_, next) => states.add(next),
         fireImmediately: true,
       );
 
       expect(states.single, isA<AsyncLoading<List<TimelineItem>>>());
-      await container.read(dayTimelineProvider.future);
+      await container.read(dayTimelineProvider(date).future);
       expect(states.last.requireValue, [item]);
     });
 
     test('exposes stream errors as AsyncError', () async {
-      when(() => repository.watchTimeline(any()))
-          .thenAnswer((_) => Stream.error(StateError('db unavailable')));
+      when(
+        () => repository.watchTimeline(any()),
+      ).thenAnswer((_) => Stream.error(StateError('db unavailable')));
 
       final container = makeContainer()
-        ..listen(dayTimelineProvider, (_, _) {});
+        ..listen(dayTimelineProvider(date), (_, _) {});
 
       await expectLater(
-        container.read(dayTimelineProvider.future),
+        container.read(dayTimelineProvider(date).future),
         throwsStateError,
       );
-      expect(container.read(dayTimelineProvider).hasError, isTrue);
+      expect(container.read(dayTimelineProvider(date)).hasError, isTrue);
     });
 
     test('re-emits when the repository stream emits again', () async {
       final controller = StreamController<List<TimelineItem>>();
       addTearDown(controller.close);
-      when(() => repository.watchTimeline(any()))
-          .thenAnswer((_) => controller.stream);
+      when(
+        () => repository.watchTimeline(any()),
+      ).thenAnswer((_) => controller.stream);
 
       final container = makeContainer()
-        ..listen(dayTimelineProvider, (_, _) {});
+        ..listen(dayTimelineProvider(date), (_, _) {});
 
       controller.add([]);
-      await container.read(dayTimelineProvider.future);
-      expect(container.read(dayTimelineProvider).requireValue, isEmpty);
+      await container.read(dayTimelineProvider(date).future);
+      expect(container.read(dayTimelineProvider(date)).requireValue, isEmpty);
 
       final item = TimelineItem.symptom(
         id: 'symptom-1',
@@ -89,7 +94,7 @@ void main() {
       );
       controller.add([item]);
       await pumpEventQueue();
-      expect(container.read(dayTimelineProvider).requireValue, [item]);
+      expect(container.read(dayTimelineProvider(date)).requireValue, [item]);
     });
   });
 }

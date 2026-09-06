@@ -9,6 +9,7 @@ import 'package:assiette/features/environment_capture/data/environment_capture_r
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/environment_capture/domain/environment_capture_policy.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:workmanager/workmanager.dart';
@@ -18,10 +19,6 @@ const environmentCaptureUniqueName = 'environment-capture';
 
 /// Task name passed to the background handler for the periodic capture.
 const environmentCaptureTaskName = 'environment-capture-task';
-
-/// How often the background capture runs. WorkManager enforces an Android
-/// minimum of 15 minutes; this sits within the 1-3h window from the spec.
-const environmentCaptureFrequency = Duration(hours: 1);
 
 /// Entry point invoked by the OS in a separate background isolate.
 ///
@@ -39,18 +36,26 @@ void environmentCaptureCallbackDispatcher() {
         locationReader: locationReader,
         openMeteoClient: openMeteoClient,
       );
-      await repository.captureSnapshot();
+      final location = await locationReader.readPosition();
+      if (location != null) {
+        await repository.captureSnapshot(location: location);
 
-      final strings = AppStrings.ofLocale(PlatformDispatcher.instance.locale);
-      final notificationsService = LocalNotificationsService();
-      await notificationsService.init(strings: strings);
-      final pressureAlertRepository = DriftPressureAlertRepository(
-        appSettingsDao: db.appSettingsDao,
-        locationReader: locationReader,
-        openMeteoClient: openMeteoClient,
-        notificationsService: notificationsService,
-      );
-      await pressureAlertRepository.checkAndNotify(strings);
+        final strings = AppStrings.ofLocale(
+          PlatformDispatcher.instance.locale,
+        );
+        final notificationsService = LocalNotificationsService();
+        await notificationsService.init(strings: strings);
+        final pressureAlertRepository = DriftPressureAlertRepository(
+          appSettingsDao: db.appSettingsDao,
+          locationReader: locationReader,
+          openMeteoClient: openMeteoClient,
+          notificationsService: notificationsService,
+        );
+        await pressureAlertRepository.checkAndNotify(
+          strings,
+          location: location,
+        );
+      }
     } finally {
       await db.close();
     }
@@ -60,29 +65,35 @@ void environmentCaptureCallbackDispatcher() {
 
 /// Registers the periodic background weather/pressure capture.
 ///
-/// Safe to call on every app start: [ExistingPeriodicWorkPolicy.keep] leaves
-/// an already-scheduled task untouched.
+/// Safe to call on every app start: [ExistingPeriodicWorkPolicy.update]
+/// migrates existing installations from earlier frequencies and constraints.
 Future<void> registerEnvironmentCaptureTask() async {
   await Workmanager().initialize(environmentCaptureCallbackDispatcher);
   await Workmanager().registerPeriodicTask(
     environmentCaptureUniqueName,
     environmentCaptureTaskName,
-    frequency: environmentCaptureFrequency,
-    constraints: Constraints(networkType: NetworkType.connected),
-    existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
+    frequency: environmentCaptureInterval,
+    constraints: Constraints(
+      networkType: NetworkType.connected,
+      requiresBatteryNotLow: true,
+    ),
+    existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
   );
 }
 
 /// Runs a one-off capture right away instead of waiting for the next
-/// periodic tick (up to [environmentCaptureFrequency] away).
+/// periodic tick (up to [environmentCaptureInterval] away).
 ///
 /// Call once location permission has just been granted, so the user sees a
-/// weather reading without waiting up to an hour for the first one.
+/// weather reading without waiting up to three hours for the first one.
 Future<void> registerImmediateEnvironmentCaptureTask() async {
   await Workmanager().registerOneOffTask(
     '$environmentCaptureUniqueName-immediate',
     environmentCaptureTaskName,
-    constraints: Constraints(networkType: NetworkType.connected),
+    constraints: Constraints(
+      networkType: NetworkType.connected,
+      requiresBatteryNotLow: true,
+    ),
     existingWorkPolicy: ExistingWorkPolicy.replace,
   );
 }

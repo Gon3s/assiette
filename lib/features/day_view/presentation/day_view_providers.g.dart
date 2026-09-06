@@ -8,12 +8,12 @@ part of 'day_view_providers.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The merged, time-sorted timeline (meals + symptoms) for the selected day.
+/// The merged, time-sorted timeline (meals + symptoms) for [date].
 
 @ProviderFor(dayTimeline)
-final dayTimelineProvider = DayTimelineProvider._();
+final dayTimelineProvider = DayTimelineFamily._();
 
-/// The merged, time-sorted timeline (meals + symptoms) for the selected day.
+/// The merged, time-sorted timeline (meals + symptoms) for [date].
 
 final class DayTimelineProvider
     extends
@@ -25,20 +25,27 @@ final class DayTimelineProvider
     with
         $FutureModifier<List<TimelineItem>>,
         $StreamProvider<List<TimelineItem>> {
-  /// The merged, time-sorted timeline (meals + symptoms) for the selected day.
-  DayTimelineProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayTimelineProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// The merged, time-sorted timeline (meals + symptoms) for [date].
+  DayTimelineProvider._({
+    required DayTimelineFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayTimelineProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayTimelineHash();
+
+  @override
+  String toString() {
+    return r'dayTimelineProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -48,18 +55,51 @@ final class DayTimelineProvider
 
   @override
   Stream<List<TimelineItem>> create(Ref ref) {
-    return dayTimeline(ref);
+    final argument = this.argument as DateTime;
+    return dayTimeline(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayTimelineProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$dayTimelineHash() => r'12e8ffb99dc444d37bcd1037977032aa77466eeb';
+String _$dayTimelineHash() => r'506897155db85e319cabd0cd2ae6900256e4ddb4';
 
-/// Non-timed physical feelings and mood for the selected day.
+/// The merged, time-sorted timeline (meals + symptoms) for [date].
+
+final class DayTimelineFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<TimelineItem>>, DateTime> {
+  DayTimelineFamily._()
+    : super(
+        retry: null,
+        name: r'dayTimelineProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The merged, time-sorted timeline (meals + symptoms) for [date].
+
+  DayTimelineProvider call(DateTime date) =>
+      DayTimelineProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayTimelineProvider';
+}
+
+/// Non-timed physical feelings and mood for [date].
 
 @ProviderFor(dayFeelings)
-final dayFeelingsProvider = DayFeelingsProvider._();
+final dayFeelingsProvider = DayFeelingsFamily._();
 
-/// Non-timed physical feelings and mood for the selected day.
+/// Non-timed physical feelings and mood for [date].
 
 final class DayFeelingsProvider
     extends
@@ -71,20 +111,27 @@ final class DayFeelingsProvider
     with
         $FutureModifier<List<DailyFeeling>>,
         $StreamProvider<List<DailyFeeling>> {
-  /// Non-timed physical feelings and mood for the selected day.
-  DayFeelingsProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayFeelingsProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// Non-timed physical feelings and mood for [date].
+  DayFeelingsProvider._({
+    required DayFeelingsFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayFeelingsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayFeelingsHash();
+
+  @override
+  String toString() {
+    return r'dayFeelingsProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -94,11 +141,44 @@ final class DayFeelingsProvider
 
   @override
   Stream<List<DailyFeeling>> create(Ref ref) {
-    return dayFeelings(ref);
+    final argument = this.argument as DateTime;
+    return dayFeelings(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayFeelingsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$dayFeelingsHash() => r'5690c08da6e5e87c631b1bd2030798e5a385101f';
+String _$dayFeelingsHash() => r'bb4b267f4322228505a34503d0c7cad94fd8ec7f';
+
+/// Non-timed physical feelings and mood for [date].
+
+final class DayFeelingsFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<DailyFeeling>>, DateTime> {
+  DayFeelingsFamily._()
+    : super(
+        retry: null,
+        name: r'dayFeelingsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Non-timed physical feelings and mood for [date].
+
+  DayFeelingsProvider call(DateTime date) =>
+      DayFeelingsProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayFeelingsProvider';
+}
 
 /// The currently unfinished migraine, independently of the selected day.
 
@@ -144,12 +224,12 @@ final class ActiveMigraineProvider
 
 String _$activeMigraineHash() => r'3804a2abbe635cc3e7594cbd4836aa86b0fa0722';
 
-/// The sleep entry for the selected day's night, if logged.
+/// The sleep entry for [date]'s night, if logged.
 
 @ProviderFor(daySleep)
-final daySleepProvider = DaySleepProvider._();
+final daySleepProvider = DaySleepFamily._();
 
-/// The sleep entry for the selected day's night, if logged.
+/// The sleep entry for [date]'s night, if logged.
 
 final class DaySleepProvider
     extends
@@ -159,20 +239,27 @@ final class DaySleepProvider
           Stream<SleepSummary?>
         >
     with $FutureModifier<SleepSummary?>, $StreamProvider<SleepSummary?> {
-  /// The sleep entry for the selected day's night, if logged.
-  DaySleepProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'daySleepProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// The sleep entry for [date]'s night, if logged.
+  DaySleepProvider._({
+    required DaySleepFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'daySleepProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$daySleepHash();
+
+  @override
+  String toString() {
+    return r'daySleepProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -182,18 +269,51 @@ final class DaySleepProvider
 
   @override
   Stream<SleepSummary?> create(Ref ref) {
-    return daySleep(ref);
+    final argument = this.argument as DateTime;
+    return daySleep(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DaySleepProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$daySleepHash() => r'1d103d8297e541b56e1860697e4e3d632293cca2';
+String _$daySleepHash() => r'95f606e7ec80171a1b6d257f144240774266c033';
 
-/// The latest weather/pressure snapshot captured on the selected day.
+/// The sleep entry for [date]'s night, if logged.
+
+final class DaySleepFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<SleepSummary?>, DateTime> {
+  DaySleepFamily._()
+    : super(
+        retry: null,
+        name: r'daySleepProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The sleep entry for [date]'s night, if logged.
+
+  DaySleepProvider call(DateTime date) =>
+      DaySleepProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'daySleepProvider';
+}
+
+/// The latest weather/pressure snapshot captured on [date].
 
 @ProviderFor(dayWeather)
-final dayWeatherProvider = DayWeatherProvider._();
+final dayWeatherProvider = DayWeatherFamily._();
 
-/// The latest weather/pressure snapshot captured on the selected day.
+/// The latest weather/pressure snapshot captured on [date].
 
 final class DayWeatherProvider
     extends
@@ -203,20 +323,27 @@ final class DayWeatherProvider
           Stream<WeatherSummary?>
         >
     with $FutureModifier<WeatherSummary?>, $StreamProvider<WeatherSummary?> {
-  /// The latest weather/pressure snapshot captured on the selected day.
-  DayWeatherProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayWeatherProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// The latest weather/pressure snapshot captured on [date].
+  DayWeatherProvider._({
+    required DayWeatherFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayWeatherProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayWeatherHash();
+
+  @override
+  String toString() {
+    return r'dayWeatherProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -226,18 +353,51 @@ final class DayWeatherProvider
 
   @override
   Stream<WeatherSummary?> create(Ref ref) {
-    return dayWeather(ref);
+    final argument = this.argument as DateTime;
+    return dayWeather(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayWeatherProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$dayWeatherHash() => r'618d127c563f0477e638422b21013886924618a4';
+String _$dayWeatherHash() => r'61facda0cb5c3704b0f3d2868b690b081d4e718e';
 
-/// The full measured weather series for the selected day (charts).
+/// The latest weather/pressure snapshot captured on [date].
+
+final class DayWeatherFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<WeatherSummary?>, DateTime> {
+  DayWeatherFamily._()
+    : super(
+        retry: null,
+        name: r'dayWeatherProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The latest weather/pressure snapshot captured on [date].
+
+  DayWeatherProvider call(DateTime date) =>
+      DayWeatherProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayWeatherProvider';
+}
+
+/// The full measured weather series for [date] (charts).
 
 @ProviderFor(dayWeatherSeries)
-final dayWeatherSeriesProvider = DayWeatherSeriesProvider._();
+final dayWeatherSeriesProvider = DayWeatherSeriesFamily._();
 
-/// The full measured weather series for the selected day (charts).
+/// The full measured weather series for [date] (charts).
 
 final class DayWeatherSeriesProvider
     extends
@@ -249,20 +409,27 @@ final class DayWeatherSeriesProvider
     with
         $FutureModifier<List<WeatherPoint>>,
         $StreamProvider<List<WeatherPoint>> {
-  /// The full measured weather series for the selected day (charts).
-  DayWeatherSeriesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayWeatherSeriesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  /// The full measured weather series for [date] (charts).
+  DayWeatherSeriesProvider._({
+    required DayWeatherSeriesFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayWeatherSeriesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayWeatherSeriesHash();
+
+  @override
+  String toString() {
+    return r'dayWeatherSeriesProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -272,11 +439,44 @@ final class DayWeatherSeriesProvider
 
   @override
   Stream<List<WeatherPoint>> create(Ref ref) {
-    return dayWeatherSeries(ref);
+    final argument = this.argument as DateTime;
+    return dayWeatherSeries(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayWeatherSeriesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$dayWeatherSeriesHash() => r'f9b04575caa7e799b7c90d74b6698e5dfe968fc7';
+String _$dayWeatherSeriesHash() => r'72657c42e9c9274e76dce41f72c1b216a48ddcae';
+
+/// The full measured weather series for [date] (charts).
+
+final class DayWeatherSeriesFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<WeatherPoint>>, DateTime> {
+  DayWeatherSeriesFamily._()
+    : super(
+        retry: null,
+        name: r'dayWeatherSeriesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The full measured weather series for [date] (charts).
+
+  DayWeatherSeriesProvider call(DateTime date) =>
+      DayWeatherSeriesProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayWeatherSeriesProvider';
+}
 
 /// Resolves place names from coordinates; kept alive so its per-location
 /// memoization survives day changes.
@@ -336,7 +536,7 @@ String _$localityResolverHash() => r'2429b8aeef4f68c904b6253b2dd0143ad0843de1';
 /// when unknown.
 
 @ProviderFor(dayLocality)
-final dayLocalityProvider = DayLocalityProvider._();
+final dayLocalityProvider = DayLocalityFamily._();
 
 /// The place name (city) of the selected day's latest snapshot, or `null`
 /// when unknown.
@@ -346,19 +546,26 @@ final class DayLocalityProvider
     with $FutureModifier<String?>, $FutureProvider<String?> {
   /// The place name (city) of the selected day's latest snapshot, or `null`
   /// when unknown.
-  DayLocalityProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayLocalityProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  DayLocalityProvider._({
+    required DayLocalityFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayLocalityProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayLocalityHash();
+
+  @override
+  String toString() {
+    return r'dayLocalityProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -367,17 +574,52 @@ final class DayLocalityProvider
 
   @override
   FutureOr<String?> create(Ref ref) {
-    return dayLocality(ref);
+    final argument = this.argument as DateTime;
+    return dayLocality(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayLocalityProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$dayLocalityHash() => r'99e44b415e2ad2a708132eb3bd33b0ac77631f50';
+String _$dayLocalityHash() => r'9569a78c39139962fbd817ab32d8d01dfb852b9f';
+
+/// The place name (city) of the selected day's latest snapshot, or `null`
+/// when unknown.
+
+final class DayLocalityFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<String?>, DateTime> {
+  DayLocalityFamily._()
+    : super(
+        retry: null,
+        name: r'dayLocalityProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The place name (city) of the selected day's latest snapshot, or `null`
+  /// when unknown.
+
+  DayLocalityProvider call(DateTime date) =>
+      DayLocalityProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayLocalityProvider';
+}
 
 /// Hourly pressure forecast (today + tomorrow) at the selected day's
 /// snapshot location; empty when no coordinates are known.
 
 @ProviderFor(dayPressureForecast)
-final dayPressureForecastProvider = DayPressureForecastProvider._();
+final dayPressureForecastProvider = DayPressureForecastFamily._();
 
 /// Hourly pressure forecast (today + tomorrow) at the selected day's
 /// snapshot location; empty when no coordinates are known.
@@ -394,19 +636,26 @@ final class DayPressureForecastProvider
         $FutureProvider<List<HourlyMeasure>> {
   /// Hourly pressure forecast (today + tomorrow) at the selected day's
   /// snapshot location; empty when no coordinates are known.
-  DayPressureForecastProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'dayPressureForecastProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  DayPressureForecastProvider._({
+    required DayPressureForecastFamily super.from,
+    required DateTime super.argument,
+  }) : super(
+         retry: null,
+         name: r'dayPressureForecastProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$dayPressureForecastHash();
+
+  @override
+  String toString() {
+    return r'dayPressureForecastProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -416,9 +665,44 @@ final class DayPressureForecastProvider
 
   @override
   FutureOr<List<HourlyMeasure>> create(Ref ref) {
-    return dayPressureForecast(ref);
+    final argument = this.argument as DateTime;
+    return dayPressureForecast(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DayPressureForecastProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
 String _$dayPressureForecastHash() =>
-    r'ce6f00a6cf6e9de9331534309bc89e2d2130f20d';
+    r'a7a410e8fa1dd69bfb11e7101deea07b84264cef';
+
+/// Hourly pressure forecast (today + tomorrow) at the selected day's
+/// snapshot location; empty when no coordinates are known.
+
+final class DayPressureForecastFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<HourlyMeasure>>, DateTime> {
+  DayPressureForecastFamily._()
+    : super(
+        retry: null,
+        name: r'dayPressureForecastProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Hourly pressure forecast (today + tomorrow) at the selected day's
+  /// snapshot location; empty when no coordinates are known.
+
+  DayPressureForecastProvider call(DateTime date) =>
+      DayPressureForecastProvider._(argument: date, from: this);
+
+  @override
+  String toString() => r'dayPressureForecastProvider';
+}

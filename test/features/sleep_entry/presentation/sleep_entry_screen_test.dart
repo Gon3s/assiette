@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
+import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:flutter/material.dart';
@@ -68,8 +69,9 @@ void main() {
     addTearDown(container.dispose);
     // Keep daySleepProvider alive (it's auto-dispose) and resolve the sleep
     // before pushing, so the form seeds from it.
-    container.listen(daySleepProvider, (_, _) {});
-    await container.read(daySleepProvider.future);
+    final day = container.read(selectedDateProvider);
+    container.listen(daySleepProvider(day), (_, _) {});
+    await container.read(daySleepProvider(day).future);
 
     await tester.pumpWidget(
       UncontrolledProviderScope(

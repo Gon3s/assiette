@@ -184,27 +184,35 @@ class _DayViewScreenState extends ConsumerState<DayViewScreen> {
         controller: _pageController,
         itemCount: _pageCount,
         onPageChanged: _onPageChanged,
-        itemBuilder: (context, page) => const _DayViewBody(),
+        itemBuilder: (context, page) {
+          final pageDate = _dateForPage(page);
+          return _DayViewBody(
+            key: ValueKey(pageDate),
+            date: pageDate,
+          );
+        },
       ),
     );
   }
 }
 
 class _DayViewBody extends ConsumerWidget {
-  const _DayViewBody();
+  const _DayViewBody({required this.date, super.key});
+
+  final DateTime date;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
-    final timeline = ref.watch(dayTimelineProvider);
+    final timeline = ref.watch(dayTimelineProvider(date));
 
     return CustomScrollView(
       key: const Key('day-view-scroll'),
       slivers: [
-        const SliverToBoxAdapter(child: DayHeader()),
+        SliverToBoxAdapter(child: DayHeader(date: date)),
         const SliverToBoxAdapter(child: _ActiveMigraineCard()),
-        const SliverToBoxAdapter(child: _DailyFeelingsCard()),
-        const SliverToBoxAdapter(child: SleepCard()),
+        SliverToBoxAdapter(child: _DailyFeelingsCard(date: date)),
+        SliverToBoxAdapter(child: SleepCard(date: date)),
         const SliverToBoxAdapter(child: gapH8),
         const SliverToBoxAdapter(child: FavoritesRow()),
         const SliverToBoxAdapter(child: gapH8),
@@ -222,7 +230,7 @@ class _DayViewBody extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  _ActionBar(s: s),
+                  _ActionBar(s: s, date: date),
                 ],
               ),
             ),
@@ -238,7 +246,7 @@ class _DayViewBody extends ConsumerWidget {
               hasScrollBody: false,
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: _ActionBar(s: s),
+                child: _ActionBar(s: s, date: date),
               ),
             ),
           ],
@@ -248,7 +256,7 @@ class _DayViewBody extends ConsumerWidget {
               child: Column(
                 children: [
                   Expanded(child: Center(child: Text(s.emptyDayMessage))),
-                  _ActionBar(s: s),
+                  _ActionBar(s: s, date: date),
                 ],
               ),
             ),
@@ -261,7 +269,7 @@ class _DayViewBody extends ConsumerWidget {
                   const Expanded(
                     child: Center(child: CircularProgressIndicator()),
                   ),
-                  _ActionBar(s: s),
+                  _ActionBar(s: s, date: date),
                 ],
               ),
             ),
@@ -273,9 +281,10 @@ class _DayViewBody extends ConsumerWidget {
 }
 
 class _ActionBar extends ConsumerWidget {
-  const _ActionBar({required this.s});
+  const _ActionBar({required this.s, required this.date});
 
   final AppStrings s;
+  final DateTime date;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -306,7 +315,6 @@ class _ActionBar extends ConsumerWidget {
   }
 
   Future<void> _showAddMenu(BuildContext context, WidgetRef ref) async {
-    final date = ref.read(selectedDateProvider);
     final choice = await showModalBottomSheet<_AddChoice>(
       context: context,
       builder: (context) => SafeArea(
@@ -373,12 +381,14 @@ class _ActionBar extends ConsumerWidget {
 enum _AddChoice { migraine, feeling, mood, medication }
 
 class _DailyFeelingsCard extends ConsumerWidget {
-  const _DailyFeelingsCard();
+  const _DailyFeelingsCard({required this.date});
+
+  final DateTime date;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
-    final feelings = ref.watch(dayFeelingsProvider).value ?? const [];
+    final feelings = ref.watch(dayFeelingsProvider(date)).value ?? const [];
     if (feelings.isEmpty) return const SizedBox.shrink();
     return Card(
       margin: const EdgeInsets.fromLTRB(

@@ -1,7 +1,6 @@
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
-import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,10 @@ import 'package:go_router/go_router.dart';
 /// edit the quality and the optional bed/wake time.
 class SleepCard extends ConsumerWidget {
   /// Creates a [SleepCard].
-  const SleepCard({super.key});
+  const SleepCard({required this.date, super.key});
+
+  /// Day whose night is displayed and edited.
+  final DateTime date;
 
   Future<void> _logQuality(
     BuildContext context,
@@ -25,8 +27,7 @@ class SleepCard extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final s = AppStrings.of(context);
     try {
-      final day = ref.read(selectedDateProvider);
-      await ref.read(dayViewRepositoryProvider).logSleepQuality(day, quality);
+      await ref.read(dayViewRepositoryProvider).logSleepQuality(date, quality);
     } on Exception {
       messenger
         ..hideCurrentSnackBar()
@@ -37,7 +38,7 @@ class SleepCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
-    final sleep = ref.watch(daySleepProvider).value;
+    final sleep = ref.watch(daySleepProvider(date)).value;
 
     if (sleep == null) {
       return Card(

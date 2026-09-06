@@ -2,6 +2,7 @@ import 'package:assiette/data/db/database_provider.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,7 +22,10 @@ abstract class PressureAlertRepository {
   /// the last alert date.
   ///
   /// Returns `true` if an alert was sent. Never throws.
-  Future<bool> checkAndNotify(AppStrings strings);
+  Future<bool> checkAndNotify(
+    AppStrings strings, {
+    DeviceLocation? location,
+  });
 }
 
 /// Provides the [PressureAlertRepository] implementation.

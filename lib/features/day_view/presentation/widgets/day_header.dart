@@ -15,7 +15,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// pressure tiles open the day-evolution chart sheet.
 class DayHeader extends ConsumerWidget {
   /// Creates a [DayHeader].
-  const DayHeader({super.key});
+  const DayHeader({required this.date, super.key});
+
+  /// Day whose environment data is displayed.
+  final DateTime date;
 
   /// Pollen concentration (grains/m³) below which the level reads "low",
   /// and above five times which it reads "high".
@@ -25,7 +28,7 @@ class DayHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
-    final weather = ref.watch(dayWeatherProvider).value;
+    final weather = ref.watch(dayWeatherProvider(date)).value;
     final theme = Theme.of(context);
 
     if (weather == null) {
@@ -40,17 +43,18 @@ class DayHeader extends ConsumerWidget {
             gapW8,
             Text(
               s.weatherUnavailable,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.hintColor),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.hintColor,
+              ),
             ),
           ],
         ),
       );
     }
 
-    final locality = ref.watch(dayLocalityProvider).value;
+    final locality = ref.watch(dayLocalityProvider(date)).value;
     final weatherCode = weather.weatherCode;
-    final updatedLabel = _updatedLabel(s, weather.timestamp);
+    final updatedLabel = _updatedLabel(s, date, weather.timestamp);
 
     final temperature = weather.temperature;
     final pressure = weather.pressure;
@@ -66,8 +70,11 @@ class DayHeader extends ConsumerWidget {
           label: s.weatherTemperatureLabel,
           value: '${temperature.round()}°C',
           accent: AppColors.turquoise,
-          onTap: () =>
-              showWeatherChartSheet(context, WeatherChartKind.temperature),
+          onTap: () => showWeatherChartSheet(
+            context,
+            WeatherChartKind.temperature,
+            date,
+          ),
         ),
       if (pressure != null)
         StatTileCard(
@@ -78,11 +85,13 @@ class DayHeader extends ConsumerWidget {
               : Icon(
                   delta > 0 ? Icons.arrow_upward : Icons.arrow_downward,
                   size: Sizes.p16,
-                  color:
-                      delta > 0 ? AppColors.turquoise : AppColors.alert,
+                  color: delta > 0 ? AppColors.turquoise : AppColors.alert,
                 ),
-          onTap: () =>
-              showWeatherChartSheet(context, WeatherChartKind.pressure),
+          onTap: () => showWeatherChartSheet(
+            context,
+            WeatherChartKind.pressure,
+            date,
+          ),
         ),
       if (humidity != null)
         StatTileCard(
@@ -170,7 +179,17 @@ class DayHeader extends ConsumerWidget {
   }
 
   /// Freshness of the snapshot, only meaningful while looking at today.
-  static String? _updatedLabel(AppStrings s, DateTime timestamp) {
+  static String? _updatedLabel(
+    AppStrings s,
+    DateTime date,
+    DateTime timestamp,
+  ) {
+    final now = DateTime.now();
+    if (date.year != now.year ||
+        date.month != now.month ||
+        date.day != now.day) {
+      return null;
+    }
     final elapsed = DateTime.now().difference(timestamp.toUtc());
     if (elapsed > const Duration(hours: 24)) return null;
     if (elapsed < const Duration(minutes: 1)) return s.weatherUpdatedJustNow;

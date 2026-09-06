@@ -9,6 +9,7 @@ import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
+import 'package:assiette/features/day_view/domain/weather_point.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
@@ -68,6 +69,9 @@ void main() {
     when(
       () => repository.watchLatestWeather(any()),
     ).thenAnswer((_) => Stream.value(null));
+    when(
+      () => repository.watchWeatherSeries(any()),
+    ).thenAnswer((_) => Stream.value([]));
     when(
       favoritesRepository.watchFavorites,
     ).thenAnswer((_) => Stream.value([]));
@@ -190,6 +194,52 @@ void main() {
 
     expect(find.byIcon(Icons.today), findsOneWidget);
     expect(find.text('Today'), findsNothing);
+  });
+
+  testWidgets('swiping refreshes weather and charts for the new day', (
+    tester,
+  ) async {
+    final today = DateTime.now();
+    final nextDay = DateTime(today.year, today.month, today.day + 1);
+    when(() => repository.watchLatestWeather(any())).thenAnswer((invocation) {
+      final day = invocation.positionalArguments.single as DateTime;
+      final isToday =
+          day.year == today.year &&
+          day.month == today.month &&
+          day.day == today.day;
+      return Stream.value(
+        WeatherSummary(
+          timestamp: day.toUtc().add(const Duration(hours: 12)),
+          temperature: isToday ? 21 : 7,
+        ),
+      );
+    });
+    when(() => repository.watchWeatherSeries(any())).thenAnswer((invocation) {
+      final day = invocation.positionalArguments.single as DateTime;
+      return Stream.value([
+        WeatherPoint(
+          timestamp: day.toUtc().add(const Duration(hours: 9)),
+          temperature: 6,
+        ),
+        WeatherPoint(
+          timestamp: day.toUtc().add(const Duration(hours: 12)),
+          temperature: 7,
+        ),
+      ]);
+    });
+
+    await pumpScreen(tester);
+    expect(find.text('21°C'), findsOneWidget);
+
+    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.pumpAndSettle();
+
+    expect(find.text('21°C'), findsNothing);
+    expect(find.text('7°C'), findsOneWidget);
+    await tester.tap(find.text('7°C'));
+    await tester.pumpAndSettle();
+
+    verify(() => repository.watchWeatherSeries(nextDay)).called(1);
   });
 
   testWidgets('tapping the today shortcut returns to today', (tester) async {

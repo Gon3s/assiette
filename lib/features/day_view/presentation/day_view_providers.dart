@@ -5,7 +5,6 @@ import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/domain/weather_point.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
-import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/environment_capture/data/locality_resolver.dart';
 import 'package:assiette/features/environment_capture/domain/environment_capture_repository.dart';
 import 'package:assiette/features/environment_capture/domain/hourly_measure.dart';
@@ -13,17 +12,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'day_view_providers.g.dart';
 
-/// The merged, time-sorted timeline (meals + symptoms) for the selected day.
+/// The merged, time-sorted timeline (meals + symptoms) for [date].
 @riverpod
-Stream<List<TimelineItem>> dayTimeline(Ref ref) {
-  final date = ref.watch(selectedDateProvider);
+Stream<List<TimelineItem>> dayTimeline(Ref ref, DateTime date) {
   return ref.watch(dayViewRepositoryProvider).watchTimeline(date);
 }
 
-/// Non-timed physical feelings and mood for the selected day.
+/// Non-timed physical feelings and mood for [date].
 @riverpod
-Stream<List<DailyFeeling>> dayFeelings(Ref ref) {
-  final date = ref.watch(selectedDateProvider);
+Stream<List<DailyFeeling>> dayFeelings(Ref ref, DateTime date) {
   return ref.watch(dayViewRepositoryProvider).watchDailyFeelings(date);
 }
 
@@ -32,24 +29,21 @@ Stream<List<DailyFeeling>> dayFeelings(Ref ref) {
 Stream<ActiveMigraine?> activeMigraine(Ref ref) =>
     ref.watch(dayViewRepositoryProvider).watchActiveMigraine();
 
-/// The sleep entry for the selected day's night, if logged.
+/// The sleep entry for [date]'s night, if logged.
 @riverpod
-Stream<SleepSummary?> daySleep(Ref ref) {
-  final date = ref.watch(selectedDateProvider);
+Stream<SleepSummary?> daySleep(Ref ref, DateTime date) {
   return ref.watch(dayViewRepositoryProvider).watchSleepForNight(date);
 }
 
-/// The latest weather/pressure snapshot captured on the selected day.
+/// The latest weather/pressure snapshot captured on [date].
 @riverpod
-Stream<WeatherSummary?> dayWeather(Ref ref) {
-  final date = ref.watch(selectedDateProvider);
+Stream<WeatherSummary?> dayWeather(Ref ref, DateTime date) {
   return ref.watch(dayViewRepositoryProvider).watchLatestWeather(date);
 }
 
-/// The full measured weather series for the selected day (charts).
+/// The full measured weather series for [date] (charts).
 @riverpod
-Stream<List<WeatherPoint>> dayWeatherSeries(Ref ref) {
-  final date = ref.watch(selectedDateProvider);
+Stream<List<WeatherPoint>> dayWeatherSeries(Ref ref, DateTime date) {
   return ref.watch(dayViewRepositoryProvider).watchWeatherSeries(date);
 }
 
@@ -61,8 +55,8 @@ LocalityResolver localityResolver(Ref ref) => GeocodingLocalityResolver();
 /// The place name (city) of the selected day's latest snapshot, or `null`
 /// when unknown.
 @riverpod
-Future<String?> dayLocality(Ref ref) async {
-  final weather = await ref.watch(dayWeatherProvider.future);
+Future<String?> dayLocality(Ref ref, DateTime date) async {
+  final weather = await ref.watch(dayWeatherProvider(date).future);
   final lat = weather?.lat;
   final lon = weather?.lon;
   if (lat == null || lon == null) return null;
@@ -74,8 +68,8 @@ Future<String?> dayLocality(Ref ref) async {
 /// Hourly pressure forecast (today + tomorrow) at the selected day's
 /// snapshot location; empty when no coordinates are known.
 @riverpod
-Future<List<HourlyMeasure>> dayPressureForecast(Ref ref) async {
-  final weather = await ref.watch(dayWeatherProvider.future);
+Future<List<HourlyMeasure>> dayPressureForecast(Ref ref, DateTime date) async {
+  final weather = await ref.watch(dayWeatherProvider(date).future);
   final lat = weather?.lat;
   final lon = weather?.lon;
   if (lat == null || lon == null) return const [];

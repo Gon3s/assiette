@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:assiette/data/daos/app_settings_dao.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/environment_capture/domain/pressure_alert_repository.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/localization/app_strings.dart';
@@ -30,7 +31,10 @@ class DriftPressureAlertRepository implements PressureAlertRepository {
   static const _dropThresholdHpa = 6.0;
 
   @override
-  Future<bool> checkAndNotify(AppStrings strings) async {
+  Future<bool> checkAndNotify(
+    AppStrings strings, {
+    DeviceLocation? location,
+  }) async {
     try {
       final weatherEnabled = await _appSettingsDao.getRemindersWeatherEnabled();
       if (!weatherEnabled) return false;
@@ -39,12 +43,12 @@ class DriftPressureAlertRepository implements PressureAlertRepository {
       final lastAlert = await _appSettingsDao.getLastPressureAlertDate();
       if (lastAlert != null && _dateOnly(lastAlert) == today) return false;
 
-      final position = await _locationReader.readPosition();
-      if (position == null) return false;
+      final resolvedLocation = location ?? await _locationReader.readPosition();
+      if (resolvedLocation == null) return false;
 
       final hourlyPressure = await _openMeteoClient.fetchPressureForecast(
-        latitude: position.latitude,
-        longitude: position.longitude,
+        latitude: resolvedLocation.latitude,
+        longitude: resolvedLocation.longitude,
       );
       if (hourlyPressure.length < 2) return false;
 

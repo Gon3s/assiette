@@ -14,7 +14,8 @@ part 'sleep_entry_controller.g.dart';
 class SleepEntryController extends _$SleepEntryController {
   @override
   SleepEntryState build() {
-    final sleep = ref.read(daySleepProvider).value;
+    final day = ref.read(selectedDateProvider);
+    final sleep = ref.read(daySleepProvider(day)).value;
     return SleepEntryState(
       id: sleep?.id,
       quality: sleep?.quality ?? 2,

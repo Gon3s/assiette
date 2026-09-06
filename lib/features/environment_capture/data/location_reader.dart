@@ -1,3 +1,5 @@
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
+import 'package:assiette/features/environment_capture/domain/environment_capture_policy.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
@@ -8,7 +10,7 @@ import 'package:permission_handler/permission_handler.dart' as ph;
 abstract class LocationReader {
   /// Returns the device's position, or `null` if location is unavailable
   /// (services disabled, permission denied, or no fix could be obtained).
-  Future<Position?> readPosition();
+  Future<DeviceLocation?> readPosition();
 
   /// Requests the location permissions needed for background capture.
   ///
@@ -23,8 +25,8 @@ abstract class LocationReader {
 
 /// [LocationReader] backed by the `geolocator` plugin.
 ///
-/// Prefers the last known position (cheap, no GPS fix) and only falls back
-/// to a fresh low-accuracy fix when no cached position exists.
+/// Prefers a recent last known position (cheap, no GPS fix) and only falls
+/// back to a fresh low-accuracy fix when the cache is absent or stale.
 class GeolocatorLocationReader implements LocationReader {
   @override
   Future<bool> ensurePermission() async {
@@ -48,30 +50,38 @@ class GeolocatorLocationReader implements LocationReader {
   }
 
   @override
-  Future<Position?> readPosition() async {
+  Future<DeviceLocation?> readPosition() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return null;
 
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+    final permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       return null;
     }
 
     final lastKnown = await Geolocator.getLastKnownPosition();
-    if (lastKnown != null) return lastKnown;
+    if (lastKnown != null) {
+      final cached = _toDeviceLocation(lastKnown);
+      if (isEnvironmentLocationFresh(cached, DateTime.now())) return cached;
+    }
 
     try {
-      return await Geolocator.getCurrentPosition(
+      final current = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.low,
+          timeLimit: environmentLocationTimeout,
         ),
       );
+      return _toDeviceLocation(current);
     } on Exception {
       return null;
     }
   }
+
+  static DeviceLocation _toDeviceLocation(Position position) => DeviceLocation(
+    latitude: position.latitude,
+    longitude: position.longitude,
+    timestamp: position.timestamp,
+  );
 }

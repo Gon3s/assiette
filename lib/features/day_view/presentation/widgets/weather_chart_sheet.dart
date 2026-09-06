@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
-import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -23,20 +22,23 @@ enum WeatherChartKind {
 Future<void> showWeatherChartSheet(
   BuildContext context,
   WeatherChartKind kind,
-) =>
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) => WeatherChartSheet(kind: kind),
-    );
+  DateTime date,
+) => showModalBottomSheet<void>(
+  context: context,
+  builder: (context) => WeatherChartSheet(kind: kind, date: date),
+);
 
 /// Bottom sheet plotting the measured evolution of one weather measure
 /// over the selected day.
 class WeatherChartSheet extends ConsumerWidget {
   /// Creates a [WeatherChartSheet].
-  const WeatherChartSheet({required this.kind, super.key});
+  const WeatherChartSheet({required this.kind, required this.date, super.key});
 
   /// The measure to plot.
   final WeatherChartKind kind;
+
+  /// Day whose measured series is displayed.
+  final DateTime date;
 
   bool get _isTemperature => kind == WeatherChartKind.temperature;
 
@@ -47,8 +49,7 @@ class WeatherChartSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
     final theme = Theme.of(context);
-    final series = ref.watch(dayWeatherSeriesProvider).value ?? const [];
-    final selectedDate = ref.watch(selectedDateProvider);
+    final series = ref.watch(dayWeatherSeriesProvider(date)).value ?? const [];
 
     final points = <({double hour, double value})>[];
     for (final point in series) {
@@ -60,20 +61,19 @@ class WeatherChartSheet extends ConsumerWidget {
 
     // Pressure forecast for the hours still ahead, only when viewing today.
     final now = DateTime.now();
-    final isToday = selectedDate.year == now.year &&
-        selectedDate.month == now.month &&
-        selectedDate.day == now.day;
+    final isToday =
+        date.year == now.year && date.month == now.month && date.day == now.day;
     var forecastPoints = const <({double hour, double value})>[];
     if (!_isTemperature && isToday) {
-      final forecast = ref.watch(dayPressureForecastProvider).value ?? const [];
+      final forecast =
+          ref.watch(dayPressureForecastProvider(date)).value ?? const [];
       final lastMeasuredHour = points.isEmpty ? 0.0 : points.last.hour;
       forecastPoints = [
         for (final measure in forecast)
-          if (measure.time.year == selectedDate.year &&
-              measure.time.month == selectedDate.month &&
-              measure.time.day == selectedDate.day &&
-              measure.time.hour + measure.time.minute / 60 >=
-                  lastMeasuredHour)
+          if (measure.time.year == date.year &&
+              measure.time.month == date.month &&
+              measure.time.day == date.day &&
+              measure.time.hour + measure.time.minute / 60 >= lastMeasuredHour)
             (
               hour: measure.time.hour + measure.time.minute / 60,
               value: measure.value,
@@ -153,8 +153,8 @@ class _ChartLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AppColors.textSecondary,
-        );
+      color: AppColors.textSecondary,
+    );
     return Row(
       children: [
         _legendLine(lineColor, dashed: false),
@@ -169,19 +169,19 @@ class _ChartLegend extends StatelessWidget {
   }
 
   Widget _legendLine(Color color, {required bool dashed}) => SizedBox(
-        width: Sizes.p20,
-        height: 2,
-        child: dashed
-            ? Row(
-                children: [
-                  for (var i = 0; i < 3; i++) ...[
-                    Expanded(child: ColoredBox(color: color)),
-                    if (i < 2) const SizedBox(width: 3),
-                  ],
-                ],
-              )
-            : ColoredBox(color: color),
-      );
+    width: Sizes.p20,
+    height: 2,
+    child: dashed
+        ? Row(
+            children: [
+              for (var i = 0; i < 3; i++) ...[
+                Expanded(child: ColoredBox(color: color)),
+                if (i < 2) const SizedBox(width: 3),
+              ],
+            ],
+          )
+        : ColoredBox(color: color),
+  );
 }
 
 class _WeatherLineChart extends StatelessWidget {

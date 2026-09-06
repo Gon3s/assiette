@@ -4,6 +4,7 @@ import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/features/notifications/domain/notification_preferences.dart';
 import 'package:assiette/localization/app_strings.dart';
@@ -11,20 +12,19 @@ import 'package:drift/native.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 class _FakeLocationReader implements LocationReader {
   _FakeLocationReader(this._position);
 
-  final Position? _position;
+  final DeviceLocation? _position;
 
   @override
   Future<bool> ensurePermission() async => _position != null;
 
   @override
-  Future<Position?> readPosition() async => _position;
+  Future<DeviceLocation?> readPosition() async => _position;
 }
 
 class _FakeNotificationsService implements NotificationsService {
@@ -51,18 +51,12 @@ class _FakeNotificationsService implements NotificationsService {
   }
 }
 
-Position _position({double lat = 45.75, double lon = 4.85}) => Position(
-  latitude: lat,
-  longitude: lon,
-  timestamp: DateTime(2026, 7, 6),
-  accuracy: 50,
-  altitude: 0,
-  altitudeAccuracy: 0,
-  heading: 0,
-  headingAccuracy: 0,
-  speed: 0,
-  speedAccuracy: 0,
-);
+DeviceLocation _position({double lat = 45.75, double lon = 4.85}) =>
+    DeviceLocation(
+      latitude: lat,
+      longitude: lon,
+      timestamp: DateTime.utc(2026, 7, 6),
+    );
 
 OpenMeteoClient _openMeteoClientReturning(List<double?> hourlyPressure) =>
     OpenMeteoClient(
@@ -101,8 +95,7 @@ void main() {
       expect(notifications.showPressureDropAlertCalls, 0);
     });
 
-    test('returns false when the predicted drop is below threshold',
-        () async {
+    test('returns false when the predicted drop is below threshold', () async {
       final notifications = _FakeNotificationsService();
       final repository = DriftPressureAlertRepository(
         appSettingsDao: db.appSettingsDao,
@@ -121,8 +114,7 @@ void main() {
       expect(await db.appSettingsDao.getLastPressureAlertDate(), isNull);
     });
 
-    test(
-        'sends an alert and records the date when a significant drop is '
+    test('sends an alert and records the date when a significant drop is '
         'predicted', () async {
       final notifications = _FakeNotificationsService();
       final repository = DriftPressureAlertRepository(

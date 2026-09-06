@@ -2,6 +2,7 @@ import 'package:assiette/data/db/database_provider.dart';
 import 'package:assiette/features/environment_capture/data/environment_capture_repository.dart';
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/environment_capture/domain/hourly_measure.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,10 +16,10 @@ abstract class EnvironmentCaptureRepository {
   ///
   /// Returns `true` on success, `false` if the snapshot could not be
   /// captured (no location, no network, ...). Never throws.
-  Future<bool> captureSnapshot();
+  Future<bool> captureSnapshot({DeviceLocation? location});
 
-  /// Fills past days that have no snapshot at all (phone off, background
-  /// task killed...) with hourly values from the Open-Meteo history.
+  /// Fills past days that have no snapshot at all with hourly values from
+  /// Open-Meteo only when nearby snapshots confirm a stable weather zone.
   ///
   /// Looks back [days] days before today. Returns the number of days
   /// backfilled. Never throws.
