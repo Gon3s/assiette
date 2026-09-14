@@ -175,6 +175,11 @@ class _DayViewScreenState extends ConsumerState<DayViewScreen> {
             onPressed: () => _pickDate(date),
           ),
           IconButton(
+            icon: const Icon(Icons.insights_outlined),
+            tooltip: s.migraineStatsAction,
+            onPressed: () => context.pushNamed(AppRouter.migraineStats.name),
+          ),
+          IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: () => context.pushNamed(AppRouter.settings.name),
           ),

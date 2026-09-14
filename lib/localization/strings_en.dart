@@ -292,6 +292,65 @@ class AppStringsEn implements AppStrings {
   String get linkToActiveMigraine => 'Link to active migraine';
 
   @override
+  String get migraineStatsAction => 'Migraine statistics';
+  @override
+  String get migraineStatsTitle => 'Migraines and treatments';
+  @override
+  String get migraineStatsPeriod30Days => '30 days';
+  @override
+  String get migraineStatsPeriod90Days => '3 months';
+  @override
+  String get migraineStatsPeriodOneYear => '1 year';
+  @override
+  String get migraineStatsCrisesLabel => 'Episodes';
+  @override
+  String get migraineStatsDaysLabel => 'Migraine days';
+  @override
+  String get migraineStatsAverageDurationLabel => 'Average duration';
+  @override
+  String get migraineStatsAverageIntensityLabel => 'Average max. intensity';
+  @override
+  String get migraineStatsMedicationDaysLabel => 'Treatment days';
+  @override
+  String get migraineStatsFrequencyTitle => 'Episode trend';
+  @override
+  String get migraineStatsTreatmentsTitle => 'Logged treatments';
+  @override
+  String get migraineStatsEmpty =>
+      'No migraine or treatment logged in this period yet.';
+  @override
+  String get migraineStatsNoTreatments => 'No treatment logged in this period.';
+  @override
+  String get migraineStatsDisclaimer =>
+      'These trends only reflect the data you logged. '
+      'They are not a medical assessment.';
+  @override
+  String get migraineStatsNotAvailable => '—';
+  @override
+  String get migraineStatsLoadError => 'Unable to load statistics.';
+  @override
+  String get migraineStatsRetry => 'Try again';
+  @override
+  String migraineStatsIntensityValue(String value) => '$value/10';
+  @override
+  String migraineStatsIntakeCount(int count) =>
+      count == 1 ? '1 intake' : '$count intakes';
+  @override
+  String migraineStatsLinkedCrises(int count) =>
+      count == 1 ? '1 linked episode' : '$count linked episodes';
+  @override
+  String migraineStatsAverageDelay(String duration) =>
+      'taken after $duration on average';
+  @override
+  String migraineStatsDurationMinutes(int minutes) => '${minutes}min';
+  @override
+  String migraineStatsDurationHoursMinutes(int hours, int minutes) =>
+      minutes == 0 ? '${hours}h' : '${hours}h ${minutes}min';
+  @override
+  String migraineStatsFrequencyBucket(String date, int count) =>
+      count == 1 ? '$date, 1 episode' : '$date, $count episodes';
+
+  @override
   String get sleepQualityLabel => 'Quality';
   @override
   String get bedTimeLabel => 'Bed time';

@@ -171,6 +171,33 @@ abstract class AppStrings {
   String get medicationSaved;
   String get linkToActiveMigraine;
 
+  // Migraine statistics
+  String get migraineStatsAction;
+  String get migraineStatsTitle;
+  String get migraineStatsPeriod30Days;
+  String get migraineStatsPeriod90Days;
+  String get migraineStatsPeriodOneYear;
+  String get migraineStatsCrisesLabel;
+  String get migraineStatsDaysLabel;
+  String get migraineStatsAverageDurationLabel;
+  String get migraineStatsAverageIntensityLabel;
+  String get migraineStatsMedicationDaysLabel;
+  String get migraineStatsFrequencyTitle;
+  String get migraineStatsTreatmentsTitle;
+  String get migraineStatsEmpty;
+  String get migraineStatsNoTreatments;
+  String get migraineStatsDisclaimer;
+  String get migraineStatsNotAvailable;
+  String get migraineStatsLoadError;
+  String get migraineStatsRetry;
+  String migraineStatsIntensityValue(String value);
+  String migraineStatsIntakeCount(int count);
+  String migraineStatsLinkedCrises(int count);
+  String migraineStatsAverageDelay(String duration);
+  String migraineStatsDurationMinutes(int minutes);
+  String migraineStatsDurationHoursMinutes(int hours, int minutes);
+  String migraineStatsFrequencyBucket(String date, int count);
+
   // Sleep entry
   String get sleepQualityLabel;
   String get bedTimeLabel;

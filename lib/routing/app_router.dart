@@ -6,6 +6,7 @@ import 'package:assiette/features/favorites/presentation/favorites_manage_screen
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/medication_entry/presentation/medication_entry_screen.dart';
+import 'package:assiette/features/migraine_stats/presentation/migraine_stats_screen.dart';
 import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
 import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
 import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart';
@@ -48,6 +49,9 @@ enum AppRouter {
 
   /// The sleep entry detail screen.
   sleepEntry,
+
+  /// The migraine and medication statistics screen.
+  migraineStats,
 
   /// The app info / about screen.
   settings,
@@ -146,6 +150,11 @@ GoRouter goRouter(Ref ref) {
             path: 'sleep-entry',
             name: AppRouter.sleepEntry.name,
             builder: (context, state) => const SleepEntryScreen(),
+          ),
+          GoRoute(
+            path: 'migraine-stats',
+            name: AppRouter.migraineStats.name,
+            builder: (context, state) => const MigraineStatsScreen(),
           ),
           GoRoute(
             path: 'settings',

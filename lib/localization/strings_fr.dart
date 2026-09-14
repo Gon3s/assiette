@@ -294,6 +294,67 @@ class AppStringsFr implements AppStrings {
   String get linkToActiveMigraine => 'Associer à la migraine en cours';
 
   @override
+  String get migraineStatsAction => 'Statistiques migraines';
+  @override
+  String get migraineStatsTitle => 'Migraines et traitements';
+  @override
+  String get migraineStatsPeriod30Days => '30 j';
+  @override
+  String get migraineStatsPeriod90Days => '3 mois';
+  @override
+  String get migraineStatsPeriodOneYear => '1 an';
+  @override
+  String get migraineStatsCrisesLabel => 'Crises';
+  @override
+  String get migraineStatsDaysLabel => 'Jours avec migraine';
+  @override
+  String get migraineStatsAverageDurationLabel => 'Durée moyenne';
+  @override
+  String get migraineStatsAverageIntensityLabel => 'Intensité max. moyenne';
+  @override
+  String get migraineStatsMedicationDaysLabel => 'Jours avec traitement';
+  @override
+  String get migraineStatsFrequencyTitle => 'Évolution des crises';
+  @override
+  String get migraineStatsTreatmentsTitle => 'Traitements enregistrés';
+  @override
+  String get migraineStatsEmpty =>
+      'Pas encore de migraine ni de traitement sur cette période.';
+  @override
+  String get migraineStatsNoTreatments =>
+      'Aucun traitement enregistré sur cette période.';
+  @override
+  String get migraineStatsDisclaimer =>
+      'Ces tendances reflètent uniquement les données saisies. '
+      'Elles ne constituent pas une évaluation médicale.';
+  @override
+  String get migraineStatsNotAvailable => '—';
+  @override
+  String get migraineStatsLoadError =>
+      'Impossible de charger les statistiques.';
+  @override
+  String get migraineStatsRetry => 'Réessayer';
+  @override
+  String migraineStatsIntensityValue(String value) => '$value/10';
+  @override
+  String migraineStatsIntakeCount(int count) =>
+      count == 1 ? '1 prise' : '$count prises';
+  @override
+  String migraineStatsLinkedCrises(int count) =>
+      count == 1 ? '1 crise associée' : '$count crises associées';
+  @override
+  String migraineStatsAverageDelay(String duration) =>
+      'prise après $duration en moyenne';
+  @override
+  String migraineStatsDurationMinutes(int minutes) => '${minutes}min';
+  @override
+  String migraineStatsDurationHoursMinutes(int hours, int minutes) =>
+      minutes == 0 ? '${hours}h' : '${hours}h ${minutes}min';
+  @override
+  String migraineStatsFrequencyBucket(String date, int count) =>
+      count == 1 ? '$date, 1 crise' : '$date, $count crises';
+
+  @override
   String get sleepQualityLabel => 'Qualité';
   @override
   String get bedTimeLabel => 'Heure du coucher';
