@@ -5,6 +5,7 @@ import 'package:assiette/features/environment_capture/data/environment_capture_r
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/domain/device_location.dart';
+import 'package:assiette/features/environment_capture/domain/environment_capture_repository.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -80,7 +81,7 @@ void main() {
   tearDown(() => db.close());
 
   group('DriftEnvironmentCaptureRepository', () {
-    test('returns false when no location is available', () async {
+    test('returns failed when no location is available', () async {
       final repository = DriftEnvironmentCaptureRepository(
         environmentDao: db.environmentDao,
         locationReader: _FakeLocationReader(null),
@@ -89,11 +90,11 @@ void main() {
 
       final captured = await repository.captureSnapshot();
 
-      expect(captured, isFalse);
+      expect(captured, EnvironmentCaptureResult.failed);
       expect(await db.environmentDao.getLatest(), isNull);
     });
 
-    test('returns false and stores nothing when the API call fails', () async {
+    test('returns failed and stores nothing when the API call fails', () async {
       final repository = DriftEnvironmentCaptureRepository(
         environmentDao: db.environmentDao,
         locationReader: _FakeLocationReader(_position()),
@@ -106,7 +107,7 @@ void main() {
 
       final captured = await repository.captureSnapshot();
 
-      expect(captured, isFalse);
+      expect(captured, EnvironmentCaptureResult.failed);
       expect(await db.environmentDao.getLatest(), isNull);
     });
 
@@ -127,7 +128,7 @@ void main() {
 
       final captured = await repository.captureSnapshot();
 
-      expect(captured, isTrue);
+      expect(captured, EnvironmentCaptureResult.captured);
       final snapshot = await db.environmentDao.getLatest();
       expect(snapshot?.pressure, 1013);
       expect(snapshot?.pressureDelta, isNull);
@@ -162,7 +163,7 @@ void main() {
 
       final captured = await repository.captureSnapshot();
 
-      expect(captured, isTrue);
+      expect(captured, EnvironmentCaptureResult.captured);
       final snapshot = await db.environmentDao.getLatest();
       expect(snapshot?.pressure, 1013);
       expect(snapshot?.pm25, isNull);
@@ -213,8 +214,14 @@ void main() {
         now: () => now,
       );
 
-      expect(await repository.captureSnapshot(), isTrue);
-      expect(await repository.captureSnapshot(), isFalse);
+      expect(
+        await repository.captureSnapshot(),
+        EnvironmentCaptureResult.captured,
+      );
+      expect(
+        await repository.captureSnapshot(),
+        EnvironmentCaptureResult.skipped,
+      );
       expect(apiCalls, 2); // Weather + air quality for the first capture only.
     });
 
@@ -237,7 +244,10 @@ void main() {
           now: () => now.add(const Duration(minutes: 5)),
         );
 
-        expect(await moved.captureSnapshot(), isTrue);
+        expect(
+          await moved.captureSnapshot(),
+          EnvironmentCaptureResult.captured,
+        );
         final snapshot = await db.environmentDao.getLatest();
         expect(snapshot?.lat, 48.86);
         expect(snapshot?.pressureDelta, isNull);

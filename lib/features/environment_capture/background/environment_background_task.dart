@@ -9,7 +9,9 @@ import 'package:assiette/features/environment_capture/data/environment_capture_r
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/environment_capture/domain/environment_capture_policy.dart';
+import 'package:assiette/features/environment_capture/domain/environment_capture_repository.dart';
 import 'package:assiette/features/notifications/data/notifications_service.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:workmanager/workmanager.dart';
@@ -19,6 +21,29 @@ const environmentCaptureUniqueName = 'environment-capture';
 
 /// Task name passed to the background handler for the periodic capture.
 const environmentCaptureTaskName = 'environment-capture-task';
+
+/// Runs one capture cycle and maps temporary failures to a WorkManager retry.
+///
+/// Kept separate from the isolate entry point so the result contract can be
+/// tested without invoking platform channels.
+Future<bool> runEnvironmentCaptureCycle({
+  required LocationReader locationReader,
+  required EnvironmentCaptureRepository repository,
+  required Future<void> Function(DeviceLocation location) afterCapture,
+}) async {
+  try {
+    final location = await locationReader.readPosition();
+    if (location == null) return false;
+
+    final result = await repository.captureSnapshot(location: location);
+    if (result == EnvironmentCaptureResult.failed) return false;
+
+    await afterCapture(location);
+    return true;
+  } on Exception {
+    return false;
+  }
+}
 
 /// Entry point invoked by the OS in a separate background isolate.
 ///
@@ -36,30 +61,30 @@ void environmentCaptureCallbackDispatcher() {
         locationReader: locationReader,
         openMeteoClient: openMeteoClient,
       );
-      final location = await locationReader.readPosition();
-      if (location != null) {
-        await repository.captureSnapshot(location: location);
-
-        final strings = AppStrings.ofLocale(
-          PlatformDispatcher.instance.locale,
-        );
-        final notificationsService = LocalNotificationsService();
-        await notificationsService.init(strings: strings);
-        final pressureAlertRepository = DriftPressureAlertRepository(
-          appSettingsDao: db.appSettingsDao,
-          locationReader: locationReader,
-          openMeteoClient: openMeteoClient,
-          notificationsService: notificationsService,
-        );
-        await pressureAlertRepository.checkAndNotify(
-          strings,
-          location: location,
-        );
-      }
+      return await runEnvironmentCaptureCycle(
+        locationReader: locationReader,
+        repository: repository,
+        afterCapture: (location) async {
+          final strings = AppStrings.ofLocale(
+            PlatformDispatcher.instance.locale,
+          );
+          final notificationsService = LocalNotificationsService();
+          await notificationsService.init(strings: strings);
+          final pressureAlertRepository = DriftPressureAlertRepository(
+            appSettingsDao: db.appSettingsDao,
+            locationReader: locationReader,
+            openMeteoClient: openMeteoClient,
+            notificationsService: notificationsService,
+          );
+          await pressureAlertRepository.checkAndNotify(
+            strings,
+            location: location,
+          );
+        },
+      );
     } finally {
       await db.close();
     }
-    return true;
   });
 }
 

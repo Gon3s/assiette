@@ -8,15 +8,27 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'environment_capture_repository.g.dart';
 
+/// Outcome of one environment capture attempt.
+enum EnvironmentCaptureResult {
+  /// A new snapshot was fetched and stored.
+  captured,
+
+  /// A recent snapshot already covers the current weather zone.
+  skipped,
+
+  /// The attempt could not resolve a location, fetch data, or store it.
+  failed,
+}
+
 /// Captures weather/pressure/air-quality snapshots for the device's
 /// current location.
 abstract class EnvironmentCaptureRepository {
   /// Resolves the device's location, fetches current conditions from
   /// Open-Meteo and stores a new environment snapshot.
   ///
-  /// Returns `true` on success, `false` if the snapshot could not be
-  /// captured (no location, no network, ...). Never throws.
-  Future<bool> captureSnapshot({DeviceLocation? location});
+  /// Returns a result that distinguishes a successful deduplication from an
+  /// operational failure (no location, no network, ...). Never throws.
+  Future<EnvironmentCaptureResult> captureSnapshot({DeviceLocation? location});
 
   /// Fills past days that have no snapshot at all with hourly values from
   /// Open-Meteo only when nearby snapshots confirm a stable weather zone.

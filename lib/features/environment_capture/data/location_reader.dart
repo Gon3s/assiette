@@ -18,8 +18,7 @@ abstract class LocationReader {
   /// show the permission dialog otherwise): first the regular "while in
   /// use" permission, then - only if that is granted - the "always allow"
   /// permission required to read the position from the periodic background
-  /// task. Returns `true` if at least the "while in use" permission ends up
-  /// granted.
+  /// task. Returns `true` only when background location is granted.
   Future<bool> ensurePermission();
 }
 
@@ -44,9 +43,12 @@ class GeolocatorLocationReader implements LocationReader {
 
     // Requested separately from the "while in use" permission above: Android
     // 11+ silently denies "always" if it's requested in the same prompt.
-    await ph.Permission.locationAlways.request();
+    var backgroundPermission = await ph.Permission.locationAlways.status;
+    if (!backgroundPermission.isGranted) {
+      backgroundPermission = await ph.Permission.locationAlways.request();
+    }
 
-    return true;
+    return backgroundPermission.isGranted;
   }
 
   @override

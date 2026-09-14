@@ -33,10 +33,12 @@ class DriftEnvironmentCaptureRepository
   static const _uuid = Uuid();
 
   @override
-  Future<bool> captureSnapshot({DeviceLocation? location}) async {
+  Future<EnvironmentCaptureResult> captureSnapshot({
+    DeviceLocation? location,
+  }) async {
     try {
       final resolvedLocation = location ?? await _locationReader.readPosition();
-      if (resolvedLocation == null) return false;
+      if (resolvedLocation == null) return EnvironmentCaptureResult.failed;
 
       final now = _now().toUtc();
       final previous = await _environmentDao.getLatest();
@@ -48,7 +50,7 @@ class DriftEnvironmentCaptureRepository
           previous != null &&
           !now.isBefore(previous.timestamp) &&
           now.difference(previous.timestamp) < environmentCaptureInterval) {
-        return false;
+        return EnvironmentCaptureResult.skipped;
       }
 
       final reading = await _openMeteoClient.fetchCurrent(
@@ -96,9 +98,9 @@ class DriftEnvironmentCaptureRepository
           ragweedPollen: Value(airQuality.ragweedPollen),
         ),
       );
-      return true;
+      return EnvironmentCaptureResult.captured;
     } on Exception {
-      return false;
+      return EnvironmentCaptureResult.failed;
     }
   }
 
