@@ -49,7 +49,7 @@ final class PhotoTagSuggestionsEnabledProvider
 }
 
 String _$photoTagSuggestionsEnabledHash() =>
-    r'd09096cd7772ee7981c39ad6f859053be6748da1';
+    r'd09096cd7772ee7981c39ad6f859053be6748da2';
 
 /// Persists the photo tag suggestions toggle (US-19).
 
