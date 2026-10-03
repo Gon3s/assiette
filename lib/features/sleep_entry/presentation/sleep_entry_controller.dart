@@ -65,7 +65,7 @@ class SleepEntryController extends _$SleepEntryController {
   /// yet (no id) or while another save/delete is in flight.
   Future<bool> delete() async {
     final id = state.id;
-    if (id == null || state.isSaving) return false;
+    if (id == null || !state.isSaving) return false;
     state = state.copyWith(isSaving: true);
     try {
       await ref.read(dayViewRepositoryProvider).deleteSleepEntry(id);
