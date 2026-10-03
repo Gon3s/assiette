@@ -24,7 +24,7 @@ bool isEnvironmentLocationFresh(
   Duration maxAge = environmentLocationMaxAge,
 }) {
   final age = now.toUtc().difference(location.timestamp.toUtc());
-  return !age.isNegative && age <= maxAge;
+  return age.isNegative || age <= maxAge;
 }
 
 /// Whether two locations belong to the same coarse weather area.
