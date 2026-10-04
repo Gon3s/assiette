@@ -47,6 +47,7 @@ abstract class AppStrings {
   String get weatherUvLabel;
   String get weatherPollenLabel;
   String get weatherAirLabel;
+  String get weatherAirPm10Label;
   String get airQualityUnit;
   String get pollenLevelLow;
   String get pollenLevelModerate;

@@ -63,6 +63,7 @@ class DayHeader extends ConsumerWidget {
     final uvIndex = weather.uvIndex;
     final pollenMax = weather.pollenMax;
     final pm25 = weather.pm25;
+    final pm10 = weather.pm10;
 
     final tiles = <Widget>[
       if (temperature != null)
@@ -112,6 +113,11 @@ class DayHeader extends ConsumerWidget {
         StatTileCard(
           label: s.weatherAirLabel,
           value: '${pm25.round()} ${s.airQualityUnit}',
+        ),
+      if (pm10 != null)
+        StatTileCard(
+          label: s.weatherAirPm10Label,
+          value: '${pm10.round()} ${s.airQualityUnit}',
         ),
     ];
 
