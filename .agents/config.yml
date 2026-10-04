@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "review": {
+    "enabled": true,
+    "allowed_requesters": ["Gon3s"],
+    "base_branches": ["main"],
+    "trigger_label": "ai:review",
+    "trigger_command": "/ai review",
+    "timeout_seconds": 900,
+    "max_diff_bytes": 500000
+  }
+}
