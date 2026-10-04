@@ -56,6 +56,8 @@ class AppStringsFr implements AppStrings {
   @override
   String get weatherAirLabel => 'Air (PM2.5)';
   @override
+  String get weatherAirPm10Label => 'Air (PM10)';
+  @override
   String get airQualityUnit => 'µg/m³';
   @override
   String get pollenLevelLow => 'Faible';
