@@ -5,6 +5,7 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_labels.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
+import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
@@ -35,18 +36,67 @@ class TimelineTile extends ConsumerWidget {
     WidgetRef ref,
     String id,
   ) async {
-    final draft =
-        await ref.read(symptomEntryRepositoryProvider).loadSymptom(id);
+    final draft = await ref
+        .read(symptomEntryRepositoryProvider)
+        .loadSymptom(id);
     if (draft == null || !context.mounted) return;
     await context.pushNamed(AppRouter.symptomEntry.name, extra: draft);
+  }
+
+  Future<void> _deleteMedication(
+    BuildContext context,
+    WidgetRef ref,
+    String id,
+    String name,
+  ) async {
+    final s = AppStrings.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(s.removeMedicationIntake),
+        content: Text(name),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(s.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(s.deleteAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final repository = ref.read(medicationEntryRepositoryProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await repository.deleteIntake(id);
+      if (!messenger.mounted) return;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(s.entryDeleted),
+            action: SnackBarAction(
+              label: s.undoAction,
+              onPressed: () => repository.undoDeleteIntake(id),
+            ),
+          ),
+        );
+    } on Exception {
+      if (!messenger.mounted) return;
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(s.errorGeneric)));
+    }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
     final locale = Localizations.maybeLocaleOf(context)?.toString();
-    final time =
-        DateFormat.Hm(locale).format(item.timestamp.toLocal());
+    final time = DateFormat.Hm(locale).format(item.timestamp.toLocal());
 
     return switch (item) {
       MealTimelineItem(
@@ -68,8 +118,7 @@ class TimelineTile extends ConsumerWidget {
                       Chip(
                         label: Text(label),
                         visualDensity: VisualDensity.compact,
-                        materialTapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                   ],
                 ),
@@ -92,15 +141,26 @@ class TimelineTile extends ConsumerWidget {
           trailing: Text(time),
           onTap: () => _openSymptom(context, ref, id),
         ),
-      MedicationTimelineItem(:final name, :final dose) => ListTile(
-          leading: const CircleAvatar(
-            radius: Sizes.p20,
-            child: Icon(Icons.medication_outlined),
-          ),
-          title: Text(name),
-          subtitle: dose == null ? null : Text(dose),
-          trailing: Text(time),
+      MedicationTimelineItem(:final id, :final name, :final dose) => ListTile(
+        leading: const CircleAvatar(
+          radius: Sizes.p20,
+          child: Icon(Icons.medication_outlined),
         ),
+        title: Text(name),
+        subtitle: dose == null ? null : Text(dose),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(time),
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: s.removeMedicationIntake,
+              onPressed: () => _deleteMedication(context, ref, id, name),
+            ),
+          ],
+        ),
+        onTap: () => _deleteMedication(context, ref, id, name),
+      ),
     };
   }
 }
@@ -116,8 +176,8 @@ class _SymptomBadge extends StatelessWidget {
     // Dark navy text on light accents (yellow), white on dark ones.
     final onColor =
         ThemeData.estimateBrightnessForColor(color) == Brightness.light
-            ? AppColors.background
-            : Colors.white;
+        ? AppColors.background
+        : Colors.white;
     return CircleAvatar(
       radius: Sizes.p12,
       backgroundColor: color,

@@ -229,6 +229,30 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
     );
   }
 
+  Future<void> _removeIntake(int index) async {
+    final s = AppStrings.of(context);
+    final intake = ref.read(symptomEntryControllerProvider).intakes[index];
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(s.removeMedicationIntake),
+        content: Text(intake.name),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(s.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(s.deleteAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    ref.read(symptomEntryControllerProvider.notifier).removeIntakeAt(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = AppStrings.of(context);
@@ -385,6 +409,32 @@ class _SymptomEntryScreenState extends ConsumerState<SymptomEntryScreen> {
               ),
               gapH24,
               MigraineObservationsSection(migraineId: state.id!),
+            ],
+            if (state.intakes.isNotEmpty) ...[
+              gapH24,
+              Text(
+                s.medicationSectionTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              for (var index = 0; index < state.intakes.length; index++)
+                ListTile(
+                  title: Text(state.intakes[index].name),
+                  subtitle: Text(
+                    [
+                      DateFormat.Hm(
+                        locale,
+                      ).format(state.intakes[index].timestamp.toLocal()),
+                      ?state.intakes[index].dose,
+                    ].join(' · '),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: s.removeMedicationIntake,
+                    onPressed: state.isSaving
+                        ? null
+                        : () => _removeIntake(index),
+                  ),
+                ),
             ],
           ] else ...[
             if (!isMood) ...[
