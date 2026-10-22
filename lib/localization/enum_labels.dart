@@ -20,7 +20,8 @@ String symptomTypeLabel(AppStrings s, SymptomType type) => switch (type) {
 };
 
 /// Localized label for a sleep [quality] score (1-3).
-String sleepQualityLabel(AppStrings s, int quality) => switch (quality) {
+String sleepQualityLabel(AppStrings s, int? quality) => switch (quality) {
+  null => s.sleepQualityUnknown,
   1 => s.sleepQualityBad,
   2 => s.sleepQualityMedium,
   _ => s.sleepQualityGood,

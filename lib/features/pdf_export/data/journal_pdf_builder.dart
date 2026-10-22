@@ -142,7 +142,13 @@ class JournalPdfBuilder {
     return pw.Padding(
       padding: const pw.EdgeInsets.only(top: 4),
       child: pw.Text(
-        '${s.sleepCardTitle} : ${sleepQualityLabel(s, sleep.quality)}',
+        [
+        [
+          '${s.sleepCardTitle} : ${sleepQualityLabel(s, sleep.quality)}',
+          if (sleep.note != null) sleep.note!,
+        ].join(' — '),
+          if (sleep.note != null) sleep.note!,
+        ].join(' — '),
       ),
     );
   }

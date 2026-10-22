@@ -50,12 +50,12 @@ void main() {
 
   group('SleepEntryController', () {
     test(
-      'initial state defaults to quality 2 when no sleep is logged',
+      'initial state leaves quality empty when no sleep is logged',
       () async {
         final container = await makeContainer();
         final state = container.read(sleepEntryControllerProvider);
 
-        expect(state.quality, 2);
+        expect(state.quality, isNull);
         expect(state.bedTime, isNull);
         expect(state.wakeTime, isNull);
         expect(state.isSaving, isFalse);

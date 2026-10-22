@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'v8 migration preserves every legacy health entry through v11',
+    'v8 migration preserves every legacy health entry through v12',
     () async {
       final executor = NativeDatabase.memory(
         setup: (database) {
@@ -97,6 +97,7 @@ INSERT INTO medication_intakes (
   unixepoch('2026-07-07 09:45:00'), NULL
 )
 ''')
+            ..execute(_legacySleepSchema)
             ..execute('PRAGMA user_version = 8');
         },
       );
@@ -157,7 +158,7 @@ INSERT INTO medication_intakes (
       expect(medication.dose, '50 mg');
 
       final version = await db.customSelect('PRAGMA user_version').getSingle();
-      expect(version.read<int>('user_version'), 11);
+      expect(version.read<int>('user_version'), 12);
     },
   );
 
@@ -182,6 +183,7 @@ INSERT INTO migraine_intensity_measurements (
   unixepoch('2026-09-05 09:01:00')
 )
 ''')
+          ..execute(_legacySleepSchema)
           ..execute('PRAGMA user_version = 10');
       },
     );
@@ -198,4 +200,64 @@ INSERT INTO migraine_intensity_measurements (
     expect(measurement.updatedAt, isNotNull);
     expect(measurement.deletedAt, isNull);
   });
+
+  test(
+    'v12 preserves sleep entries and allows optional quality and notes',
+    () async {
+      final executor = NativeDatabase.memory(
+        setup: (database) {
+          database
+            ..execute(_legacySleepSchema)
+            ..execute('''
+INSERT INTO sleep_entries (
+  id, night_date, quality, bed_time, wake_time, source, created_at, updated_at
+) VALUES (
+  'legacy-sleep', unixepoch('2026-07-07 00:00:00'), 3,
+  unixepoch('2026-07-07 23:00:00'), unixepoch('2026-07-08 07:00:00'),
+  'manual', unixepoch('2026-07-07 23:00:00'), unixepoch('2026-07-08 07:00:00')
+)
+''')
+            ..execute('PRAGMA user_version = 11');
+        },
+      );
+      final db = AppDatabase(executor);
+      addTearDown(db.close);
+
+      final original = (await db.select(db.sleepEntries).get()).single;
+      expect(original.id, 'legacy-sleep');
+      expect(original.nightDate.toUtc(), DateTime.utc(2026, 7, 7));
+      expect(original.quality, 3);
+      expect(original.bedTime?.toUtc(), DateTime.utc(2026, 7, 7, 23));
+      expect(original.wakeTime?.toUtc(), DateTime.utc(2026, 7, 8, 7));
+      expect(original.note, isNull);
+      expect(original.source, 'manual');
+      expect(original.createdAt.toUtc(), DateTime.utc(2026, 7, 7, 23));
+      expect(original.updatedAt.toUtc(), DateTime.utc(2026, 7, 8, 7));
+      expect(original.deletedAt, isNull);
+
+      await db.customStatement(
+        'UPDATE sleep_entries SET quality = NULL, note = ? WHERE id = ?',
+        ['Restful night', original.id],
+      );
+      final updated = (await db.select(db.sleepEntries).get()).single;
+      expect(updated.quality, isNull);
+      expect(updated.note, 'Restful night');
+      expect(updated.bedTime, original.bedTime);
+      expect(updated.wakeTime, original.wakeTime);
+    },
+  );
 }
+
+const _legacySleepSchema = '''
+CREATE TABLE sleep_entries (
+  id TEXT NOT NULL PRIMARY KEY,
+  night_date INTEGER NOT NULL UNIQUE,
+  quality INTEGER NOT NULL,
+  bed_time INTEGER NULL,
+  wake_time INTEGER NULL,
+  source TEXT NOT NULL DEFAULT 'manual',
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  deleted_at INTEGER NULL
+)
+''';

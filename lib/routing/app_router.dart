@@ -13,6 +13,7 @@ import 'package:assiette/features/onboarding/presentation/onboarding_screen.dart
 import 'package:assiette/features/pdf_export/presentation/pdf_export_screen.dart';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_shortcut_screen.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
@@ -49,6 +50,10 @@ enum AppRouter {
 
   /// The sleep entry detail screen.
   sleepEntry,
+
+  sleepStart,
+
+  sleepWake,
 
   /// The migraine and medication statistics screen.
   migraineStats,
@@ -115,6 +120,16 @@ GoRouter goRouter(Ref ref) {
         name: AppRouter.onboarding.name,
         pageBuilder: (context, state) =>
             const NoTransitionPage(child: OnboardingScreen()),
+      ),
+      GoRoute(
+        path: '/${AppRouter.sleepStart.name}',
+        name: AppRouter.sleepStart.name,
+        builder: (context, state) => const SleepShortcutScreen(startNight: true),
+      ),
+      GoRoute(
+        path: '/${AppRouter.sleepWake.name}',
+        name: AppRouter.sleepWake.name,
+        builder: (context, state) => const SleepShortcutScreen(startNight: false),
       ),
       GoRoute(
         path: '/',

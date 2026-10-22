@@ -6,15 +6,19 @@ part 'sleep_entry_repository.g.dart';
 
 /// Persistence for the sleep entry detail form. A single-method contract by
 /// design, kept as a class to match this project's repository convention.
-// ignore: one_member_abstracts
 abstract class SleepEntryRepository {
   /// Upserts the sleep entry for the night of [day].
   Future<void> saveSleepEntry({
     required DateTime day,
-    required int quality,
+    int? quality,
     DateTime? bedTime,
     DateTime? wakeTime,
+    String? note,
   });
+
+  Future<DateTime> startNight(DateTime startedAt);
+
+  Future<DateTime> recordWake(DateTime wokeAt);
 }
 
 /// Provides the [SleepEntryRepository] implementation.

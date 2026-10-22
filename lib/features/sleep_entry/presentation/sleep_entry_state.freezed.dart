@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SleepEntryState {
 
- int get quality; DateTime? get bedTime; DateTime? get wakeTime; bool get isSaving; String? get id;
+ int? get quality; DateTime? get bedTime; DateTime? get wakeTime; String? get note; bool get isSaving; String? get id;
 /// Create a copy of SleepEntryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SleepEntryStateCopyWith<SleepEntryState> get copyWith => _$SleepEntryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepEntryState&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepEntryState&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.note, note) || other.note == note)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,isSaving,id);
+int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,note,isSaving,id);
 
 @override
 String toString() {
-  return 'SleepEntryState(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, isSaving: $isSaving, id: $id)';
+  return 'SleepEntryState(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, note: $note, isSaving: $isSaving, id: $id)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SleepEntryStateCopyWith<$Res>  {
   factory $SleepEntryStateCopyWith(SleepEntryState value, $Res Function(SleepEntryState) _then) = _$SleepEntryStateCopyWithImpl;
 @useResult
 $Res call({
- int quality, DateTime? bedTime, DateTime? wakeTime, bool isSaving, String? id
+ int? quality, DateTime? bedTime, DateTime? wakeTime, String? note, bool isSaving, String? id
 });
 
 
@@ -62,12 +62,13 @@ class _$SleepEntryStateCopyWithImpl<$Res>
 
 /// Create a copy of SleepEntryState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,Object? isSaving = null,Object? id = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? quality = freezed,Object? bedTime = freezed,Object? wakeTime = freezed,Object? note = freezed,Object? isSaving = null,Object? id = freezed,}) {
   return _then(_self.copyWith(
-quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
-as int,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
+quality: freezed == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as int?,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,wakeTime: freezed == wakeTime ? _self.wakeTime : wakeTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as DateTime?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
 as bool,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  bool isSaving,  String? id)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? quality,  DateTime? bedTime,  DateTime? wakeTime,  String? note,  bool isSaving,  String? id)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SleepEntryState() when $default != null:
-return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.id);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.note,_that.isSaving,_that.id);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  bool isSaving,  String? id)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? quality,  DateTime? bedTime,  DateTime? wakeTime,  String? note,  bool isSaving,  String? id)  $default,) {final _that = this;
 switch (_that) {
 case _SleepEntryState():
-return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.id);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.note,_that.isSaving,_that.id);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int quality,  DateTime? bedTime,  DateTime? wakeTime,  bool isSaving,  String? id)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? quality,  DateTime? bedTime,  DateTime? wakeTime,  String? note,  bool isSaving,  String? id)?  $default,) {final _that = this;
 switch (_that) {
 case _SleepEntryState() when $default != null:
-return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.id);case _:
+return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.note,_that.isSaving,_that.id);case _:
   return null;
 
 }
@@ -210,12 +211,13 @@ return $default(_that.quality,_that.bedTime,_that.wakeTime,_that.isSaving,_that.
 
 
 class _SleepEntryState implements SleepEntryState {
-  const _SleepEntryState({required this.quality, this.bedTime, this.wakeTime, this.isSaving = false, this.id});
+  const _SleepEntryState({this.quality, this.bedTime, this.wakeTime, this.note, this.isSaving = false, this.id});
   
 
-@override final  int quality;
+@override final  int? quality;
 @override final  DateTime? bedTime;
 @override final  DateTime? wakeTime;
+@override final  String? note;
 @override@JsonKey() final  bool isSaving;
 @override final  String? id;
 
@@ -229,16 +231,16 @@ _$SleepEntryStateCopyWith<_SleepEntryState> get copyWith => __$SleepEntryStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepEntryState&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepEntryState&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.note, note) || other.note == note)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,isSaving,id);
+int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,note,isSaving,id);
 
 @override
 String toString() {
-  return 'SleepEntryState(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, isSaving: $isSaving, id: $id)';
+  return 'SleepEntryState(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, note: $note, isSaving: $isSaving, id: $id)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$SleepEntryStateCopyWith<$Res> implements $SleepEntryState
   factory _$SleepEntryStateCopyWith(_SleepEntryState value, $Res Function(_SleepEntryState) _then) = __$SleepEntryStateCopyWithImpl;
 @override @useResult
 $Res call({
- int quality, DateTime? bedTime, DateTime? wakeTime, bool isSaving, String? id
+ int? quality, DateTime? bedTime, DateTime? wakeTime, String? note, bool isSaving, String? id
 });
 
 
@@ -266,12 +268,13 @@ class __$SleepEntryStateCopyWithImpl<$Res>
 
 /// Create a copy of SleepEntryState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? quality = null,Object? bedTime = freezed,Object? wakeTime = freezed,Object? isSaving = null,Object? id = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? quality = freezed,Object? bedTime = freezed,Object? wakeTime = freezed,Object? note = freezed,Object? isSaving = null,Object? id = freezed,}) {
   return _then(_SleepEntryState(
-quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
-as int,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
+quality: freezed == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as int?,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,wakeTime: freezed == wakeTime ? _self.wakeTime : wakeTime // ignore: cast_nullable_to_non_nullable
-as DateTime?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
+as DateTime?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String?,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
 as bool,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

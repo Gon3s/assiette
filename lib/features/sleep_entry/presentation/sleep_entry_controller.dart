@@ -18,14 +18,17 @@ class SleepEntryController extends _$SleepEntryController {
     final sleep = ref.read(daySleepProvider(day)).value;
     return SleepEntryState(
       id: sleep?.id,
-      quality: sleep?.quality ?? 2,
+      quality: sleep?.quality,
       bedTime: sleep?.bedTime,
       wakeTime: sleep?.wakeTime,
+      note: sleep?.note,
     );
   }
 
   /// Changes the sleep quality (1-3).
-  void setQuality(int quality) => state = state.copyWith(quality: quality);
+  void setQuality(int? quality) => state = state.copyWith(quality: quality);
+
+  void setNote(String note) => state = state.copyWith(note: note);
 
   /// Changes the bed time (kept local; converted to UTC on save).
   void setBedTime(DateTime bedTime) =>
@@ -54,6 +57,7 @@ class SleepEntryController extends _$SleepEntryController {
             quality: state.quality,
             bedTime: state.bedTime,
             wakeTime: state.wakeTime,
+            note: state.note,
           );
       return true;
     } finally {

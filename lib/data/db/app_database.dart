@@ -64,7 +64,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -198,6 +198,17 @@ class AppDatabase extends _$AppDatabase {
               migraineIntensityMeasurements.updatedAt:
                   migraineIntensityMeasurements.createdAt,
               migraineIntensityMeasurements.deletedAt: const Constant(null),
+            },
+          ),
+        );
+      }
+      if (from < 12) {
+        await m.alterTable(
+          TableMigration(
+            sleepEntries,
+            columnTransformer: {
+              sleepEntries.quality: sleepEntries.quality,
+              sleepEntries.note: const Constant(null),
             },
           ),
         );
