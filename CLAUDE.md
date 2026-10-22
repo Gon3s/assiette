@@ -15,6 +15,20 @@ Food · symptoms · environment. Connect the dots.
 
 
 
+## Flutter toolchain
+
+- Use the exact Flutter version pinned by the CI workflows, currently
+  **3.44.5**. The reference files are
+  `.github/workflows/android-debug-apk.yml` and
+  `.github/workflows/android-play-internal.yml`.
+- At the start of each task, read both workflow pins and check the active SDK
+  with `rtk flutter --version`. Resolve any disagreement between the pins.
+- If the active SDK differs, select or provision the pinned version before
+  code generation, analysis, tests or builds. Use the Dart SDK bundled with
+  that same Flutter installation, and ensure Git hooks resolve to it too.
+- Do not substitute another patch version and merely report the gap.
+  An exception requires an explicit user instruction.
+
 ## Golden rules
 
 1. **Never hand-write generated files.** Files ending in `.g.dart` and

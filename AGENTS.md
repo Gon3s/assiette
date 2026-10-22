@@ -24,9 +24,21 @@ Food · symptoms · environment. Connect the dots.
   configuration from a repository hook.
 - The shared Git pre-commit hook lives in `.githooks/pre-commit`; configure it
   with `git config core.hooksPath .githooks` if the session hook did not run.
-- CI is the reproducible toolchain reference and currently pins Flutter 3.44.5.
-  A different local patch version is acceptable for exploration, but delivery
-  validation should use the pinned CI version or explicitly report the gap.
+
+## Flutter toolchain
+
+- Use the exact Flutter version pinned by the CI workflows, currently
+  **3.44.5**. The reference files are
+  `.github/workflows/android-debug-apk.yml` and
+  `.github/workflows/android-play-internal.yml`.
+- At the start of each task, read both workflow pins and check the active SDK
+  with `rtk flutter --version`. Resolve any disagreement between the pins.
+- If the active SDK differs, select or provision the pinned version before
+  code generation, analysis, tests or builds. Use the Dart SDK bundled with
+  that same Flutter installation, and ensure Git hooks resolve to it too.
+- Do not substitute another patch version and merely report the gap.
+  An exception requires an explicit user instruction.
+
 
 
 
