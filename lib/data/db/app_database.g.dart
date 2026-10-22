@@ -4354,9 +4354,9 @@ class $SleepEntriesTable extends SleepEntries
   late final GeneratedColumn<int> quality = GeneratedColumn<int>(
     'quality',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _bedTimeMeta = const VerificationMeta(
     'bedTime',
@@ -4378,6 +4378,15 @@ class $SleepEntriesTable extends SleepEntries
     aliasedName,
     true,
     type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
   static const VerificationMeta _sourceMeta = const VerificationMeta('source');
@@ -4432,6 +4441,7 @@ class $SleepEntriesTable extends SleepEntries
     quality,
     bedTime,
     wakeTime,
+    note,
     source,
     createdAt,
     updatedAt,
@@ -4467,8 +4477,6 @@ class $SleepEntriesTable extends SleepEntries
         _qualityMeta,
         quality.isAcceptableOrUnknown(data['quality']!, _qualityMeta),
       );
-    } else if (isInserting) {
-      context.missing(_qualityMeta);
     }
     if (data.containsKey('bed_time')) {
       context.handle(
@@ -4480,6 +4488,12 @@ class $SleepEntriesTable extends SleepEntries
       context.handle(
         _wakeTimeMeta,
         wakeTime.isAcceptableOrUnknown(data['wake_time']!, _wakeTimeMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
       );
     }
     if (data.containsKey('source')) {
@@ -4530,7 +4544,7 @@ class $SleepEntriesTable extends SleepEntries
       quality: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}quality'],
-      )!,
+      ),
       bedTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}bed_time'],
@@ -4538,6 +4552,10 @@ class $SleepEntriesTable extends SleepEntries
       wakeTime: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}wake_time'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
       ),
       source: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -4567,9 +4585,10 @@ class $SleepEntriesTable extends SleepEntries
 class SleepEntry extends DataClass implements Insertable<SleepEntry> {
   final String id;
   final DateTime nightDate;
-  final int quality;
+  final int? quality;
   final DateTime? bedTime;
   final DateTime? wakeTime;
+  final String? note;
   final String source;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -4577,9 +4596,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
   const SleepEntry({
     required this.id,
     required this.nightDate,
-    required this.quality,
+    this.quality,
     this.bedTime,
     this.wakeTime,
+    this.note,
     required this.source,
     required this.createdAt,
     required this.updatedAt,
@@ -4590,12 +4610,17 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['night_date'] = Variable<DateTime>(nightDate);
-    map['quality'] = Variable<int>(quality);
+    if (!nullToAbsent || quality != null) {
+      map['quality'] = Variable<int>(quality);
+    }
     if (!nullToAbsent || bedTime != null) {
       map['bed_time'] = Variable<DateTime>(bedTime);
     }
     if (!nullToAbsent || wakeTime != null) {
       map['wake_time'] = Variable<DateTime>(wakeTime);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
     }
     map['source'] = Variable<String>(source);
     map['created_at'] = Variable<DateTime>(createdAt);
@@ -4610,13 +4635,16 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
     return SleepEntriesCompanion(
       id: Value(id),
       nightDate: Value(nightDate),
-      quality: Value(quality),
+      quality: quality == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quality),
       bedTime: bedTime == null && nullToAbsent
           ? const Value.absent()
           : Value(bedTime),
       wakeTime: wakeTime == null && nullToAbsent
           ? const Value.absent()
           : Value(wakeTime),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       source: Value(source),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -4634,9 +4662,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
     return SleepEntry(
       id: serializer.fromJson<String>(json['id']),
       nightDate: serializer.fromJson<DateTime>(json['nightDate']),
-      quality: serializer.fromJson<int>(json['quality']),
+      quality: serializer.fromJson<int?>(json['quality']),
       bedTime: serializer.fromJson<DateTime?>(json['bedTime']),
       wakeTime: serializer.fromJson<DateTime?>(json['wakeTime']),
+      note: serializer.fromJson<String?>(json['note']),
       source: serializer.fromJson<String>(json['source']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -4649,9 +4678,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'nightDate': serializer.toJson<DateTime>(nightDate),
-      'quality': serializer.toJson<int>(quality),
+      'quality': serializer.toJson<int?>(quality),
       'bedTime': serializer.toJson<DateTime?>(bedTime),
       'wakeTime': serializer.toJson<DateTime?>(wakeTime),
+      'note': serializer.toJson<String?>(note),
       'source': serializer.toJson<String>(source),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
@@ -4662,9 +4692,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
   SleepEntry copyWith({
     String? id,
     DateTime? nightDate,
-    int? quality,
+    Value<int?> quality = const Value.absent(),
     Value<DateTime?> bedTime = const Value.absent(),
     Value<DateTime?> wakeTime = const Value.absent(),
+    Value<String?> note = const Value.absent(),
     String? source,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -4672,9 +4703,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
   }) => SleepEntry(
     id: id ?? this.id,
     nightDate: nightDate ?? this.nightDate,
-    quality: quality ?? this.quality,
+    quality: quality.present ? quality.value : this.quality,
     bedTime: bedTime.present ? bedTime.value : this.bedTime,
     wakeTime: wakeTime.present ? wakeTime.value : this.wakeTime,
+    note: note.present ? note.value : this.note,
     source: source ?? this.source,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -4687,6 +4719,7 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
       quality: data.quality.present ? data.quality.value : this.quality,
       bedTime: data.bedTime.present ? data.bedTime.value : this.bedTime,
       wakeTime: data.wakeTime.present ? data.wakeTime.value : this.wakeTime,
+      note: data.note.present ? data.note.value : this.note,
       source: data.source.present ? data.source.value : this.source,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -4702,6 +4735,7 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
           ..write('quality: $quality, ')
           ..write('bedTime: $bedTime, ')
           ..write('wakeTime: $wakeTime, ')
+          ..write('note: $note, ')
           ..write('source: $source, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -4717,6 +4751,7 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
     quality,
     bedTime,
     wakeTime,
+    note,
     source,
     createdAt,
     updatedAt,
@@ -4731,6 +4766,7 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
           other.quality == this.quality &&
           other.bedTime == this.bedTime &&
           other.wakeTime == this.wakeTime &&
+          other.note == this.note &&
           other.source == this.source &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -4740,9 +4776,10 @@ class SleepEntry extends DataClass implements Insertable<SleepEntry> {
 class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
   final Value<String> id;
   final Value<DateTime> nightDate;
-  final Value<int> quality;
+  final Value<int?> quality;
   final Value<DateTime?> bedTime;
   final Value<DateTime?> wakeTime;
+  final Value<String?> note;
   final Value<String> source;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -4754,6 +4791,7 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
     this.quality = const Value.absent(),
     this.bedTime = const Value.absent(),
     this.wakeTime = const Value.absent(),
+    this.note = const Value.absent(),
     this.source = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -4763,23 +4801,24 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
   SleepEntriesCompanion.insert({
     required String id,
     required DateTime nightDate,
-    required int quality,
+    this.quality = const Value.absent(),
     this.bedTime = const Value.absent(),
     this.wakeTime = const Value.absent(),
+    this.note = const Value.absent(),
     this.source = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
-       nightDate = Value(nightDate),
-       quality = Value(quality);
+       nightDate = Value(nightDate);
   static Insertable<SleepEntry> custom({
     Expression<String>? id,
     Expression<DateTime>? nightDate,
     Expression<int>? quality,
     Expression<DateTime>? bedTime,
     Expression<DateTime>? wakeTime,
+    Expression<String>? note,
     Expression<String>? source,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -4792,6 +4831,7 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
       if (quality != null) 'quality': quality,
       if (bedTime != null) 'bed_time': bedTime,
       if (wakeTime != null) 'wake_time': wakeTime,
+      if (note != null) 'note': note,
       if (source != null) 'source': source,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
@@ -4803,9 +4843,10 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
   SleepEntriesCompanion copyWith({
     Value<String>? id,
     Value<DateTime>? nightDate,
-    Value<int>? quality,
+    Value<int?>? quality,
     Value<DateTime?>? bedTime,
     Value<DateTime?>? wakeTime,
+    Value<String?>? note,
     Value<String>? source,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -4818,6 +4859,7 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
       quality: quality ?? this.quality,
       bedTime: bedTime ?? this.bedTime,
       wakeTime: wakeTime ?? this.wakeTime,
+      note: note ?? this.note,
       source: source ?? this.source,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -4843,6 +4885,9 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
     }
     if (wakeTime.present) {
       map['wake_time'] = Variable<DateTime>(wakeTime.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
     }
     if (source.present) {
       map['source'] = Variable<String>(source.value);
@@ -4870,6 +4915,7 @@ class SleepEntriesCompanion extends UpdateCompanion<SleepEntry> {
           ..write('quality: $quality, ')
           ..write('bedTime: $bedTime, ')
           ..write('wakeTime: $wakeTime, ')
+          ..write('note: $note, ')
           ..write('source: $source, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -10083,9 +10129,10 @@ typedef $$SleepEntriesTableCreateCompanionBuilder =
     SleepEntriesCompanion Function({
       required String id,
       required DateTime nightDate,
-      required int quality,
+      Value<int?> quality,
       Value<DateTime?> bedTime,
       Value<DateTime?> wakeTime,
+      Value<String?> note,
       Value<String> source,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -10096,9 +10143,10 @@ typedef $$SleepEntriesTableUpdateCompanionBuilder =
     SleepEntriesCompanion Function({
       Value<String> id,
       Value<DateTime> nightDate,
-      Value<int> quality,
+      Value<int?> quality,
       Value<DateTime?> bedTime,
       Value<DateTime?> wakeTime,
+      Value<String?> note,
       Value<String> source,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -10137,6 +10185,11 @@ class $$SleepEntriesTableFilterComposer
 
   ColumnFilters<DateTime> get wakeTime => $composableBuilder(
     column: $table.wakeTime,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10195,6 +10248,11 @@ class $$SleepEntriesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get source => $composableBuilder(
     column: $table.source,
     builder: (column) => ColumnOrderings(column),
@@ -10239,6 +10297,9 @@ class $$SleepEntriesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get wakeTime =>
       $composableBuilder(column: $table.wakeTime, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
 
   GeneratedColumn<String> get source =>
       $composableBuilder(column: $table.source, builder: (column) => column);
@@ -10286,9 +10347,10 @@ class $$SleepEntriesTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<DateTime> nightDate = const Value.absent(),
-                Value<int> quality = const Value.absent(),
+                Value<int?> quality = const Value.absent(),
                 Value<DateTime?> bedTime = const Value.absent(),
                 Value<DateTime?> wakeTime = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<String> source = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -10300,6 +10362,7 @@ class $$SleepEntriesTableTableManager
                 quality: quality,
                 bedTime: bedTime,
                 wakeTime: wakeTime,
+                note: note,
                 source: source,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -10310,9 +10373,10 @@ class $$SleepEntriesTableTableManager
               ({
                 required String id,
                 required DateTime nightDate,
-                required int quality,
+                Value<int?> quality = const Value.absent(),
                 Value<DateTime?> bedTime = const Value.absent(),
                 Value<DateTime?> wakeTime = const Value.absent(),
+                Value<String?> note = const Value.absent(),
                 Value<String> source = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -10324,6 +10388,7 @@ class $$SleepEntriesTableTableManager
                 quality: quality,
                 bedTime: bedTime,
                 wakeTime: wakeTime,
+                note: note,
                 source: source,
                 createdAt: createdAt,
                 updatedAt: updatedAt,

@@ -38,6 +38,10 @@ class AppStringsFr implements AppStrings {
   @override
   String get sleepQualityGood => 'Bon';
   @override
+  String get sleepQualityUnknown => 'Qualité non renseignée';
+  @override
+  String get sleepNightInProgress => 'Nuit en cours';
+  @override
   String get sleepQuestion => 'Comment as-tu dormi ?';
   @override
   String get weatherUnavailable => 'Météo indisponible';
@@ -368,6 +372,16 @@ class AppStringsFr implements AppStrings {
   String get removeWakeTime => "Supprimer l'heure de réveil";
   @override
   String get sleepSaved => 'Sommeil enregistré';
+  @override
+  String get sleepNoteLabel => 'Note';
+  @override
+  String get sleepNoteHint => 'Note (facultatif)';
+  @override
+  String get sleepStartShortcutTitle => 'Je vais me coucher';
+  @override
+  String get sleepWakeShortcutTitle => 'Je me lève';
+  @override
+  String get retryAction => 'Réessayer';
 
   @override
   String get settingsTitle => 'À propos';

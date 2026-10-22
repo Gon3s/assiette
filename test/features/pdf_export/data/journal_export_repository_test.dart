@@ -55,7 +55,7 @@ void main() {
         SleepEntriesCompanion.insert(
           id: 'sleep-1',
           nightDate: DateTime(day1.year, day1.month, day1.day).toUtc(),
-          quality: 2,
+          quality: const Value(2),
         ),
       );
       await db.environmentDao.insertSnapshot(

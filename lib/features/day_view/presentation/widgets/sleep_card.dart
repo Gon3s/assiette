@@ -86,11 +86,14 @@ class SleepCard extends ConsumerWidget {
       );
     }
 
-    final (icon, label) = switch (sleep.quality) {
-      1 => (Icons.sentiment_dissatisfied, s.sleepQualityBad),
-      2 => (Icons.sentiment_neutral, s.sleepQualityMedium),
-      _ => (Icons.sentiment_satisfied, s.sleepQualityGood),
-    };
+    final (icon, label) = sleep.bedTime != null && sleep.wakeTime == null
+        ? (Icons.bedtime_outlined, s.sleepNightInProgress)
+        : switch (sleep.quality) {
+            1 => (Icons.sentiment_dissatisfied, s.sleepQualityBad),
+            2 => (Icons.sentiment_neutral, s.sleepQualityMedium),
+            3 => (Icons.sentiment_satisfied, s.sleepQualityGood),
+            _ => (Icons.bedtime_outlined, s.sleepQualityUnknown),
+          };
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: Sizes.p16),

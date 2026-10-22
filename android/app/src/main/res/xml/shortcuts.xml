@@ -1,0 +1,26 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="sleep_start"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_sleep_start"
+        android:shortcutShortLabel="@string/sleep_start_shortcut_short"
+        android:shortcutLongLabel="@string/sleep_start_shortcut_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.gones.assiette"
+            android:targetClass="com.gones.assiette.MainActivity"
+            android:data="assiette:/sleepStart" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="sleep_wake"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_sleep_wake"
+        android:shortcutShortLabel="@string/sleep_wake_shortcut_short"
+        android:shortcutLongLabel="@string/sleep_wake_shortcut_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.gones.assiette"
+            android:targetClass="com.gones.assiette.MainActivity"
+            android:data="assiette:/sleepWake" />
+    </shortcut>
+</shortcuts>

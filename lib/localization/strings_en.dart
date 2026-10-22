@@ -38,6 +38,10 @@ class AppStringsEn implements AppStrings {
   @override
   String get sleepQualityGood => 'Good';
   @override
+  String get sleepQualityUnknown => 'Quality not recorded';
+  @override
+  String get sleepNightInProgress => 'Night in progress';
+  @override
   String get sleepQuestion => 'How did you sleep?';
   @override
   String get weatherUnavailable => 'Weather unavailable';
@@ -364,6 +368,16 @@ class AppStringsEn implements AppStrings {
   String get removeWakeTime => 'Remove wake time';
   @override
   String get sleepSaved => 'Sleep saved';
+  @override
+  String get sleepNoteLabel => 'Note';
+  @override
+  String get sleepNoteHint => 'Note (optional)';
+  @override
+  String get sleepStartShortcutTitle => 'I’m going to bed';
+  @override
+  String get sleepWakeShortcutTitle => 'I’m getting up';
+  @override
+  String get retryAction => 'Try again';
 
   @override
   String get settingsTitle => 'About';

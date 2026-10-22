@@ -150,6 +150,7 @@ class DriftDayViewRepository implements DayViewRepository {
                   quality: entry.quality,
                   bedTime: entry.bedTime,
                   wakeTime: entry.wakeTime,
+                  note: entry.note,
                 ),
         );
   }
@@ -188,8 +189,8 @@ class DriftDayViewRepository implements DayViewRepository {
     await _sleepEntriesDao.upsertSleepEntry(
       SleepEntriesCompanion.insert(
         id: existing?.id ?? _uuid.v4(),
-        nightDate: nightDate,
-        quality: quality,
+        nightDate: existing?.nightDate ?? nightDate,
+        quality: Value(quality),
         createdAt: Value(existing?.createdAt ?? now),
         updatedAt: Value(now),
       ),
@@ -207,7 +208,7 @@ class DriftDayViewRepository implements DayViewRepository {
   /// Mirrors the normalization done by [SleepEntriesDao.watchByDate] so the
   /// inserted row matches the same night when queried back.
   static DateTime _nightDateKey(DateTime date) =>
-      DateTime(date.year, date.month, date.day).toUtc();
+      DateTime.utc(date.year, date.month, date.day);
 
   static TimelineItem _mealToTimelineItem(MealWithTags row) =>
       TimelineItem.meal(

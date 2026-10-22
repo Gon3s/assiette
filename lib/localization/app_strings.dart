@@ -38,6 +38,8 @@ abstract class AppStrings {
   String get sleepQualityBad;
   String get sleepQualityMedium;
   String get sleepQualityGood;
+  String get sleepQualityUnknown;
+  String get sleepNightInProgress;
   String get sleepQuestion;
   String get weatherUnavailable;
   String get pressureUnit;
@@ -206,6 +208,11 @@ abstract class AppStrings {
   String get removeBedTime;
   String get removeWakeTime;
   String get sleepSaved;
+  String get sleepNoteLabel;
+  String get sleepNoteHint;
+  String get sleepStartShortcutTitle;
+  String get sleepWakeShortcutTitle;
+  String get retryAction;
 
   // Settings
   String get settingsTitle;

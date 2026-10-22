@@ -7,9 +7,10 @@ part 'sleep_entry_state.freezed.dart';
 abstract class SleepEntryState with _$SleepEntryState {
   /// Creates a [SleepEntryState].
   const factory SleepEntryState({
-    required int quality,
+    int? quality,
     DateTime? bedTime,
     DateTime? wakeTime,
+    String? note,
     @Default(false) bool isSaving,
     String? id,
   }) = _SleepEntryState;

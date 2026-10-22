@@ -37,14 +37,14 @@ Future<void> _logSleepQuality(int quality) async {
   final db = AppDatabase();
   try {
     final now = DateTime.now();
-    final nightDate = DateTime(now.year, now.month, now.day).toUtc();
+    final nightDate = DateTime.utc(now.year, now.month, now.day);
     final existing = await db.sleepEntriesDao.watchByDate(now).first;
     final nowUtc = DateTime.now().toUtc();
     await db.sleepEntriesDao.upsertSleepEntry(
       SleepEntriesCompanion.insert(
         id: existing?.id ?? _uuid.v4(),
         nightDate: nightDate,
-        quality: quality,
+        quality: Value(quality),
         createdAt: Value(existing?.createdAt ?? nowUtc),
         updatedAt: Value(nowUtc),
       ),

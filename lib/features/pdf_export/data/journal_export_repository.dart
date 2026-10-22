@@ -84,8 +84,24 @@ class DriftJournalExportRepository implements JournalExportRepository {
               dose: intake.dose,
             ),
       ];
+      final localDate = day.toLocal();
+      final utcNightDate = DateTime.utc(
+        localDate.year,
+        localDate.month,
+        localDate.day,
+      );
       final sleepEntry = sleepEntries
-          .where((e) => e.nightDate.isAtSameMomentAs(day))
+          .where(
+            (entry) =>
+                entry.nightDate.isAtSameMomentAs(day) ||
+                entry.nightDate.isAtSameMomentAs(utcNightDate) ||
+                (entry.bedTime != null &&
+                    _inRange(
+                      entry.bedTime!,
+                      day,
+                      day.add(const Duration(days: 1)),
+                    )),
+          )
           .firstOrNull;
       final daySnapshots = [
         for (final snapshot in snapshots)
@@ -104,6 +120,7 @@ class DriftJournalExportRepository implements JournalExportRepository {
                 quality: sleepEntry.quality,
                 bedTime: sleepEntry.bedTime,
                 wakeTime: sleepEntry.wakeTime,
+                note: sleepEntry.note,
               ),
         weather: daySnapshots.isEmpty
             ? null

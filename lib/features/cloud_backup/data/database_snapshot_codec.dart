@@ -12,7 +12,7 @@ class DatabaseSnapshotCodec {
   const DatabaseSnapshotCodec();
 
   /// Snapshot format version, bumped if the shape below ever changes.
-  static const formatVersion = 4;
+  static const formatVersion = 5;
 
   /// Dumps every row of every table as JSON-safe maps, keyed by table name.
   Future<Map<String, dynamic>> export(AppDatabase db) async {

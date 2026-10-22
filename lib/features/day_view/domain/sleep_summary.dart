@@ -7,9 +7,10 @@ part 'sleep_summary.freezed.dart';
 abstract class SleepSummary with _$SleepSummary {
   /// Creates a [SleepSummary].
   const factory SleepSummary({
-    required int quality,
+    int? quality,
     DateTime? bedTime,
     DateTime? wakeTime,
+    String? note,
     String? id,
   }) = _SleepSummary;
 }

@@ -1,5 +1,7 @@
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
+import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
+import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +27,23 @@ class SleepEntryScreen extends ConsumerWidget {
           : TimeOfDay.now(),
     );
     if (picked == null) return;
-    final now = DateTime.now();
+    final day = ref.read(selectedDateProvider);
+    var date = current?.toLocal() ?? day;
+    final wakeTime = ref.read(sleepEntryControllerProvider).wakeTime?.toLocal();
+    final selectedTimeIsAfterWake =
+        wakeTime != null &&
+        wakeTime.year == day.year &&
+        wakeTime.month == day.month &&
+        wakeTime.day == day.day &&
+        (picked.hour > wakeTime.hour ||
+            (picked.hour == wakeTime.hour && picked.minute > wakeTime.minute));
+    if (current == null && selectedTimeIsAfterWake) {
+      date = DateTime(day.year, day.month, day.day - 1);
+    }
     ref
         .read(sleepEntryControllerProvider.notifier)
         .setBedTime(
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute),
+          DateTime(date.year, date.month, date.day, picked.hour, picked.minute),
         );
   }
 
@@ -45,11 +59,27 @@ class SleepEntryScreen extends ConsumerWidget {
           : TimeOfDay.now(),
     );
     if (picked == null) return;
-    final now = DateTime.now();
+    final day = ref.read(selectedDateProvider);
+    final date = current?.toLocal() ?? day;
+    var year = date.year;
+    var month = date.month;
+    var dayOfMonth = date.day;
+    final bedTime = ref.read(sleepEntryControllerProvider).bedTime?.toLocal();
+    final bedtimeIsAfterWake =
+        bedTime != null &&
+        (TimeOfDay.fromDateTime(bedTime).hour > picked.hour ||
+            (TimeOfDay.fromDateTime(bedTime).hour == picked.hour &&
+                TimeOfDay.fromDateTime(bedTime).minute > picked.minute));
+    if (current == null && bedtimeIsAfterWake) {
+      final nextDay = DateTime(year, month, dayOfMonth + 1);
+      year = nextDay.year;
+      month = nextDay.month;
+      dayOfMonth = nextDay.day;
+    }
     ref
         .read(sleepEntryControllerProvider.notifier)
         .setWakeTime(
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute),
+          DateTime(year, month, dayOfMonth, picked.hour, picked.minute),
         );
   }
 
@@ -58,8 +88,9 @@ class SleepEntryScreen extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final router = GoRouter.of(context);
     try {
-      final saved =
-          await ref.read(sleepEntryControllerProvider.notifier).save();
+      final saved = await ref
+          .read(sleepEntryControllerProvider.notifier)
+          .save();
       if (!saved) return;
       messenger
         ..hideCurrentSnackBar()
@@ -83,8 +114,9 @@ class SleepEntryScreen extends ConsumerWidget {
     // already be unmounted by then).
     final repository = ref.read(dayViewRepositoryProvider);
     try {
-      final deleted =
-          await ref.read(sleepEntryControllerProvider.notifier).delete();
+      final deleted = await ref
+          .read(sleepEntryControllerProvider.notifier)
+          .delete();
       if (!deleted) return;
       router.pop();
       messenger
@@ -108,6 +140,28 @@ class SleepEntryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
+    final day = ref.watch(selectedDateProvider);
+    final sleepProvider = daySleepProvider(day);
+    final sleep = ref.watch(sleepProvider);
+    if (!sleep.hasValue) {
+      return Scaffold(
+        appBar: AppBar(title: Text(s.sleepCardTitle)),
+        body: Center(
+          child: sleep.hasError
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(s.errorGeneric),
+                    FilledButton(
+                      onPressed: () => ref.invalidate(sleepProvider),
+                      child: Text(s.retryAction),
+                    ),
+                  ],
+                )
+              : const CircularProgressIndicator(),
+        ),
+      );
+    }
     final state = ref.watch(sleepEntryControllerProvider);
     final notifier = ref.read(sleepEntryControllerProvider.notifier);
     final locale = Localizations.maybeLocaleOf(context)?.toString();
@@ -127,7 +181,10 @@ class SleepEntryScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [
-          Text(s.sleepQualityLabel, style: Theme.of(context).textTheme.labelLarge),
+          Text(
+            s.sleepQualityLabel,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
           gapH8,
           SegmentedButton<int>(
             segments: [
@@ -135,9 +192,23 @@ class SleepEntryScreen extends ConsumerWidget {
               ButtonSegment(value: 2, label: Text(s.sleepQualityMedium)),
               ButtonSegment(value: 3, label: Text(s.sleepQualityGood)),
             ],
-            selected: {state.quality},
-            onSelectionChanged: (selection) =>
-                notifier.setQuality(selection.first),
+            emptySelectionAllowed: true,
+            selected: state.quality == null ? const <int>{} : {state.quality!},
+            onSelectionChanged: (selection) => notifier.setQuality(
+              selection.isEmpty ? null : selection.first,
+            ),
+          ),
+          gapH16,
+          TextFormField(
+            initialValue: state.note,
+            minLines: 2,
+            maxLines: 4,
+            maxLength: 500,
+            decoration: InputDecoration(
+              labelText: s.sleepNoteLabel,
+              hintText: s.sleepNoteHint,
+            ),
+            onChanged: notifier.setNote,
           ),
           gapH16,
           Row(
@@ -147,7 +218,10 @@ class SleepEntryScreen extends ConsumerWidget {
                     ? OutlinedButton.icon(
                         onPressed: () =>
                             _pickBedTime(context, ref, state.bedTime),
-                        icon: const Icon(Icons.bedtime_outlined, size: Sizes.p16),
+                        icon: const Icon(
+                          Icons.bedtime_outlined,
+                          size: Sizes.p16,
+                        ),
                         label: Text(s.bedTimeLabel),
                       )
                     : InputChip(
@@ -156,7 +230,9 @@ class SleepEntryScreen extends ConsumerWidget {
                           size: Sizes.p16,
                         ),
                         label: Text(
-                          DateFormat.Hm(locale).format(state.bedTime!),
+                          DateFormat.Hm(
+                            locale,
+                          ).format(state.bedTime!.toLocal()),
                         ),
                         onDeleted: notifier.clearBedTime,
                         deleteButtonTooltipMessage: s.removeBedTime,
@@ -180,7 +256,9 @@ class SleepEntryScreen extends ConsumerWidget {
                           size: Sizes.p16,
                         ),
                         label: Text(
-                          DateFormat.Hm(locale).format(state.wakeTime!),
+                          DateFormat.Hm(
+                            locale,
+                          ).format(state.wakeTime!.toLocal()),
                         ),
                         onDeleted: notifier.clearWakeTime,
                         deleteButtonTooltipMessage: s.removeWakeTime,

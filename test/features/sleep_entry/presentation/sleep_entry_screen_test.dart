@@ -49,7 +49,10 @@ void main() {
     ).thenAnswer((_) async {});
   });
 
-  Future<GoRouter> pumpScreen(WidgetTester tester) async {
+  Future<GoRouter> pumpScreen(
+    WidgetTester tester, {
+    bool preload = true,
+  }) async {
     final router = GoRouter(
       initialLocation: '/',
       routes: [
@@ -70,8 +73,10 @@ void main() {
     // Keep daySleepProvider alive (it's auto-dispose) and resolve the sleep
     // before pushing, so the form seeds from it.
     final day = container.read(selectedDateProvider);
-    container.listen(daySleepProvider(day), (_, _) {});
-    await container.read(daySleepProvider(day).future);
+    if (preload) {
+      container.listen(daySleepProvider(day), (_, _) {});
+      await container.read(daySleepProvider(day).future);
+    }
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -98,6 +103,29 @@ void main() {
     expect(find.byIcon(Icons.bedtime_outlined), findsOneWidget);
     expect(find.byIcon(Icons.wb_sunny_outlined), findsOneWidget);
     expect(find.text('Save'), findsOneWidget);
+  });
+
+  testWidgets('loads the saved night when opened without a cached provider', (
+    tester,
+  ) async {
+    when(() => dayViewRepository.watchSleepForNight(any())).thenAnswer(
+      (_) => Stream.value(
+        SleepSummary(
+          id: 'cold-night',
+          bedTime: DateTime(2026, 7, 7, 23),
+          wakeTime: DateTime(2026, 7, 8, 7),
+          note: 'Woke up once',
+        ),
+      ),
+    );
+
+    await pumpScreen(tester, preload: false);
+
+    expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+    expect(find.text('Bed time'), findsNothing);
+    expect(find.text('Wake time'), findsNothing);
+    expect(find.text('Woke up once'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets('removing the bed time shows the picker button again', (
