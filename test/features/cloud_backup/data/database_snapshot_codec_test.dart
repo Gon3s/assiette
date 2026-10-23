@@ -8,6 +8,7 @@ import 'package:assiette/data/db/enums/migraine_location.dart';
 import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/data/database_snapshot_codec.dart';
+import 'package:assiette/features/cloud_backup/domain/cloud_backup_exception.dart';
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -161,6 +162,155 @@ void main() {
       expect(
         codec.photoFileNamesIn(snapshot),
         equals({'meal.jpg', 'fav.jpg'}),
+      );
+    });
+  });
+
+  group('validation', () {
+    test('rejects more than 100000 rows before deserializing them', () async {
+      final snapshot = await codec.export(source)
+        ..['tags'] = List.filled(100001, <String, dynamic>{});
+      await expectLater(
+        codec.validate(snapshot),
+        throwsA(isA<CloudBackupException>()),
+      );
+    });
+
+    for (final version in [null, 0, -1, 6, 1.0, '5']) {
+      test('rejects unsupported format version $version', () async {
+        final snapshot = await codec.export(source)
+          ..['formatVersion'] = version;
+        await expectLater(
+          codec.validate(snapshot),
+          throwsA(isA<CloudBackupException>()),
+        );
+      });
+    }
+
+    test('requires tables, object rows and version-specific fields', () async {
+      for (final mutate in <void Function(Map<String, dynamic>)>[
+        (snapshot) => snapshot.remove('meals'),
+        (snapshot) => snapshot['tags'] = <String, dynamic>{},
+        (snapshot) => snapshot['tags'] = [null],
+        (snapshot) => snapshot['unexpected'] = <Object>[],
+        (snapshot) => snapshot.remove('migraineIntensityMeasurements'),
+      ]) {
+        final snapshot = await codec.export(source);
+        mutate(snapshot);
+        await expectLater(
+          codec.validate(snapshot),
+          throwsA(isA<CloudBackupException>()),
+        );
+      }
+    });
+
+    test(
+      'rejects invalid typed rows, enums and duplicate primary keys',
+      () async {
+        await seedSource();
+        for (final mutate in <void Function(Map<String, dynamic>)>[
+          (snapshot) =>
+              ((snapshot['meals'] as List).single
+                      as Map<String, dynamic>)['photoPath'] =
+                  42,
+          (snapshot) =>
+              ((snapshot['meals'] as List).single
+                      as Map<String, dynamic>)['mealType'] =
+                  99,
+          (snapshot) => (snapshot['meals'] as List).add(
+            (snapshot['meals'] as List).first,
+          ),
+          (snapshot) =>
+              ((snapshot['meals'] as List).single as Map<String, dynamic>)
+                  .remove('timestamp'),
+          (snapshot) =>
+              ((snapshot['meals'] as List).single
+                      as Map<String, dynamic>)['photoPath'] =
+                  '/old/CON.jpg',
+        ]) {
+          final snapshot = await codec.export(source);
+          mutate(snapshot);
+          await expectLater(
+            codec.validate(snapshot),
+            throwsA(isA<CloudBackupException>()),
+          );
+        }
+      },
+    );
+
+    for (final reference in [
+      ('meals', 'templateId'),
+      ('mealTags', 'mealId'),
+      ('mealTags', 'tagId'),
+      ('medicationIntakes', 'symptomId'),
+      ('migraineIntensityMeasurements', 'symptomId'),
+    ]) {
+      test('rejects a dangling ${reference.$1}.${reference.$2}', () async {
+        await seedSource();
+        final snapshot = await codec.export(source);
+        ((snapshot[reference.$1] as List).single
+                as Map<String, dynamic>)[reference.$2] =
+            'missing';
+        await expectLater(
+          codec.validate(snapshot),
+          throwsA(isA<CloudBackupException>()),
+        );
+      });
+    }
+
+    test('checks template-tag references and migraine parent type', () async {
+      await seedSource();
+      final snapshot = await codec.export(source)
+        ..['templateTags'] = [
+          {'templateId': 'missing', 'tagId': 'tag-1'},
+        ];
+      await expectLater(
+        codec.validate(snapshot),
+        throwsA(isA<CloudBackupException>()),
+      );
+      snapshot['templateTags'] = [
+        {'templateId': 'template-1', 'tagId': 'missing'},
+      ];
+      await expectLater(
+        codec.validate(snapshot),
+        throwsA(isA<CloudBackupException>()),
+      );
+      snapshot['templateTags'] = <Object>[];
+      ((snapshot['symptoms'] as List).single as Map<String, dynamic>)['type'] =
+          SymptomType.pain.index;
+      await expectLater(
+        codec.validate(snapshot),
+        throwsA(isA<CloudBackupException>()),
+      );
+    });
+
+    test('invalid snapshots leave existing rows unchanged', () async {
+      await seedSource();
+      final before = await codec.export(source);
+      final invalid = await codec.export(source)
+        ..['formatVersion'] = 999;
+      await expectLater(
+        codec.restore(source, invalid, '/new/photos'),
+        throwsA(isA<CloudBackupException>()),
+      );
+      expect(await codec.export(source), before);
+    });
+
+    test('uses portable basenames and rejects ambiguous photo collisions', () {
+      expect(
+        DatabaseSnapshotCodec.photoFileName(r'C:\old\device\meal.jpg'),
+        'meal.jpg',
+      );
+      expect(
+        () => codec.photoFileNamesIn({
+          'meals': [
+            {'photoPath': '/first/meal.jpg'},
+          ],
+          'mealTemplates': [
+            {'defaultPhotoPath': '/second/meal.jpg'},
+          ],
+        }),
+        throwsA(isA<CloudBackupException>()),
       );
     });
   });

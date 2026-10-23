@@ -12,9 +12,15 @@ plugins {
 // debug signing locally so `flutter run --release` still works out of the box.
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+if (keystorePropertiesFile.isFile) {
+    try {
+        FileInputStream(keystorePropertiesFile).use { keystoreProperties.load(it) }
+    } catch (_: Exception) {
+        // The release guard reports invalid configuration without blocking debug.
+    }
 }
+
+apply(from = rootProject.file("release-signing.gradle.kts"))
 
 android {
     namespace = "com.gones.assiette"
@@ -40,23 +46,18 @@ android {
     }
 
     signingConfigs {
-        if (keystorePropertiesFile.exists()) {
-            create("release") {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-            }
+        create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = keystoreProperties.getProperty("storeFile")
+                ?.takeIf { it.isNotBlank() }?.let { file(it) }
+            storePassword = keystoreProperties.getProperty("storePassword")
         }
     }
 
     buildTypes {
         release {
-            signingConfig = if (keystorePropertiesFile.exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.getByName("release")
             // Explicit: R8 shrinking strips WorkManager's reflectively-
             // instantiated WorkDatabase_Impl on some AGP 9 toolchains,
             // crashing at startup with NoSuchMethodException. Not needed
