@@ -253,6 +253,7 @@ abstract class AppStrings {
   // Cloud backup (US-26)
   String get cloudBackupAction;
   String get cloudBackupScreenTitle;
+  String get cloudBackupPrivacyNotice;
   String get cloudBackupSignInAction;
   String get cloudBackupSignOutAction;
   String cloudBackupSignedInAs(String email);

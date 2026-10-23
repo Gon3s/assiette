@@ -93,6 +93,13 @@ class CloudBackupScreen extends ConsumerWidget {
         data: (state) => ListView(
           padding: const EdgeInsets.all(Sizes.p16),
           children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(Sizes.p16),
+                child: Text(s.cloudBackupPrivacyNotice),
+              ),
+            ),
+            gapH8,
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.account_circle_outlined),

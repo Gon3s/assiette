@@ -451,6 +451,11 @@ class AppStringsEn implements AppStrings {
   @override
   String get cloudBackupScreenTitle => 'Cloud backup';
   @override
+  String get cloudBackupPrivacyNotice =>
+      'A backup includes your journal data and saved meal photos. It is uploaded '
+      'as a ZIP to this Google account’s app data folder and is not encrypted '
+      'by Assiette. Signing out does not delete it.';
+  @override
   String get cloudBackupSignInAction => 'Sign in with Google';
   @override
   String get cloudBackupSignOutAction => 'Sign out';

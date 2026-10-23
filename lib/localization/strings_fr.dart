@@ -456,6 +456,12 @@ class AppStringsFr implements AppStrings {
   @override
   String get cloudBackupScreenTitle => 'Sauvegarde cloud';
   @override
+  String get cloudBackupPrivacyNotice =>
+      'La sauvegarde contient les données de votre journal et les photos de '
+      'repas enregistrées. Elle est envoyée en ZIP dans l’espace applicatif de '
+      'ce compte Google, sans chiffrement par Assiette. Se déconnecter ne la '
+      'supprime pas.';
+  @override
   String get cloudBackupSignInAction => 'Se connecter avec Google';
   @override
   String get cloudBackupSignOutAction => 'Se déconnecter';
