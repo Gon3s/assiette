@@ -73,14 +73,10 @@ abstract class AppStrings {
   // Meal entry
   String get mealEntryTitle;
   String get editMealTitle;
-  String get takePhoto;
-  String get retakePhoto;
-  String get removePhoto;
   String get mealTypeLabel;
   String get tagsLabel;
   String get tagSearchHint;
   String createTagLabel(String label);
-  String get suggestedTagsLabel;
   String get noteHint;
   String get saveAsFavorite;
   String get favoriteNameTitle;
@@ -219,8 +215,6 @@ abstract class AppStrings {
   String get aboutSectionTitle;
   String get openMeteoAttribution;
   String get manageNotificationsAction;
-  String get photoTagSuggestionsSettingTitle;
-  String get photoTagSuggestionsSettingSubtitle;
 
   // Notifications
   String get notificationChannelMealsName;
@@ -232,7 +226,7 @@ abstract class AppStrings {
   String get notificationChannelSymptomsName;
   String get notificationChannelSymptomsDescription;
   String get mealReminderTitle;
-  String get mealReminderPhotoAction;
+  String get mealReminderAddAction;
   String get mealReminderFavoriteAction;
   String get pressureDropAlertTitle;
   String get pressureDropAlertBody;
@@ -240,6 +234,7 @@ abstract class AppStrings {
 
   // Notification settings (US-16)
   String get notificationSettingsTitle;
+  String get reminderTimingHint;
   String get notificationSettingsSaved;
 
   // PDF export (US-17)

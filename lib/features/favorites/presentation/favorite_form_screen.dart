@@ -1,7 +1,6 @@
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_controller.dart';
-import 'package:assiette/features/favorites/presentation/widgets/favorite_photo_section.dart';
 import 'package:assiette/features/favorites/presentation/widgets/favorite_tag_selector.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Favorite create/edit form: name, default meal type, tags and photo.
+/// Favorite create/edit form: name, default meal type, tags.
 class FavoriteFormScreen extends ConsumerWidget {
   /// Creates a [FavoriteFormScreen]. [templateId] is null when creating a
   /// new favorite.
@@ -69,8 +68,6 @@ class FavoriteFormScreen extends ConsumerWidget {
             ),
             onChanged: notifier.setName,
           ),
-          gapH16,
-          FavoritePhotoSection(templateId: templateId),
           gapH16,
           Text(s.mealTypeLabel, style: Theme.of(context).textTheme.labelLarge),
           gapH8,

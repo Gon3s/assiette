@@ -1,5 +1,4 @@
 import 'package:assiette/constants/app_sizes.dart';
-import 'package:assiette/features/settings/domain/photo_tag_suggestions_setting.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,6 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = AppStrings.of(context);
     final theme = Theme.of(context);
-    final photoTagSuggestionsEnabled = ref.watch(
-      photoTagSuggestionsEnabledProvider,
-    );
 
     return Scaffold(
       appBar: AppBar(title: Text(s.settingsTitle)),
@@ -36,8 +32,7 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.notifications_outlined),
             title: Text(s.manageNotificationsAction),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () =>
-                context.pushNamed(AppRouter.notificationSettings.name),
+            onTap: () => context.pushNamed(AppRouter.notificationSettings.name),
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,
@@ -52,20 +47,6 @@ class SettingsScreen extends ConsumerWidget {
             title: Text(s.cloudBackupAction),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(AppRouter.cloudBackup.name),
-          ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            secondary: const Icon(Icons.auto_awesome_outlined),
-            title: Text(s.photoTagSuggestionsSettingTitle),
-            subtitle: Text(s.photoTagSuggestionsSettingSubtitle),
-            value: photoTagSuggestionsEnabled.value ?? true,
-            onChanged: photoTagSuggestionsEnabled.isLoading
-                ? null
-                : (value) => ref
-                    .read(
-                      photoTagSuggestionsSettingControllerProvider.notifier,
-                    )
-                    .setEnabled(enabled: value),
           ),
           gapH16,
           Text(s.aboutSectionTitle, style: theme.textTheme.titleMedium),

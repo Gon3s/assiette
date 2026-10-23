@@ -59,7 +59,7 @@ void main() {
   });
 
   group('updateFavorite', () {
-    test('replaces the name, tags and defaults', () async {
+    test('updates manual fields while preserving the legacy photo', () async {
       final tags = await db.tagsDao.watchAll().first;
       final tagA = tags[0];
       final tagB = tags[1];
@@ -77,18 +77,17 @@ void main() {
         name: 'Salade César v2',
         tagIds: [tagB.id],
         defaultMealType: MealType.dinner,
-        defaultPhotoPath: '/photos/salad2.jpg',
       );
 
       final favorites = await repository.watchFavorites().first;
       final favorite = favorites.single;
       expect(favorite.name, 'Salade César v2');
       expect(favorite.defaultMealType, MealType.dinner);
-      expect(favorite.defaultPhotoPath, '/photos/salad2.jpg');
+      expect(favorite.defaultPhotoPath, '/photos/salad.jpg');
       expect(favorite.tags.single.id, tagB.id);
     });
 
-    test('clears defaults when set to null', () async {
+    test('clears the meal type while retaining the legacy photo', () async {
       await repository.createFavorite(
         name: 'Café',
         tagIds: [],
@@ -105,7 +104,7 @@ void main() {
 
       final favorite = (await repository.watchFavorites().first).single;
       expect(favorite.defaultMealType, isNull);
-      expect(favorite.defaultPhotoPath, isNull);
+      expect(favorite.defaultPhotoPath, '/photos/coffee.jpg');
     });
   });
 

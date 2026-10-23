@@ -5,8 +5,6 @@ import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
-import 'package:assiette/features/meal_entry/presentation/widgets/photo_section.dart';
-import 'package:assiette/features/meal_entry/presentation/widgets/suggested_tags_row.dart';
 import 'package:assiette/features/meal_entry/presentation/widgets/tag_selector.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
@@ -15,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-/// Meal entry form: photo, meal type, tags, note, editable timestamp.
+/// Meal entry form: meal type, tags, note, editable timestamp.
 ///
 /// When [draft] is provided, the form is seeded from that existing meal
 /// (edit path of US-12) and a delete action is offered.
@@ -175,7 +173,9 @@ class _MealEntryScreenState extends ConsumerState<MealEntryScreen> {
     // already be unmounted by then).
     final repository = ref.read(mealEntryRepositoryProvider);
     try {
-      final deleted = await ref.read(mealEntryControllerProvider.notifier).delete();
+      final deleted = await ref
+          .read(mealEntryControllerProvider.notifier)
+          .delete();
       if (!deleted) return;
       router.pop();
       messenger
@@ -220,9 +220,6 @@ class _MealEntryScreenState extends ConsumerState<MealEntryScreen> {
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [
-          const PhotoSection(),
-          const SuggestedTagsRow(),
-          gapH16,
           Text(s.mealTypeLabel, style: Theme.of(context).textTheme.labelLarge),
           gapH8,
           SegmentedButton<MealType>(

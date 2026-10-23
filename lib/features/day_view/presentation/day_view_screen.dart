@@ -301,7 +301,7 @@ class _ActionBar extends ConsumerWidget {
             Expanded(
               child: FilledButton.icon(
                 onPressed: () => context.pushNamed(AppRouter.mealEntry.name),
-                icon: const Icon(Icons.photo_camera),
+                icon: const Icon(Icons.restaurant),
                 label: Text(s.logMealAction),
               ),
             ),

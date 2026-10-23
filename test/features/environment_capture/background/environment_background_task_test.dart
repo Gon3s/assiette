@@ -50,7 +50,7 @@ void main() {
     timestamp: DateTime.utc(2026, 9, 14),
   );
 
-  test('returns false without a position so WorkManager retries', () async {
+  test('skips without consent or a stored place instead of retrying', () async {
     final repository = _FakeEnvironmentCaptureRepository(
       EnvironmentCaptureResult.captured,
     );
@@ -61,7 +61,7 @@ void main() {
       afterCapture: (_) async {},
     );
 
-    expect(succeeded, isFalse);
+    expect(succeeded, isTrue);
     expect(repository.capturedLocation, isNull);
   });
 

@@ -44,8 +44,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Future<void> _finish({required bool requestLocation}) async {
     if (requestLocation && Platform.isAndroid) {
       try {
-        final hasPermission =
-            await GeolocatorLocationReader().ensurePermission();
+        final hasPermission = await GeolocatorLocationReader()
+            .ensurePermission();
         if (hasPermission) {
           await registerEnvironmentCaptureTask();
           await registerImmediateEnvironmentCaptureTask();
@@ -68,7 +68,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         body: s.onboardingValueBody,
       ),
       _OnboardingPage(
-        icon: Icons.photo_camera,
+        icon: Icons.restaurant,
         title: s.onboardingLoggingTitle,
         body: s.onboardingLoggingBody,
       ),
@@ -181,7 +181,11 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: Sizes.p64, color: Theme.of(context).colorScheme.primary),
+          Icon(
+            icon,
+            size: Sizes.p64,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           gapH24,
           Text(
             title,

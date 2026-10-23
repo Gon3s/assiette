@@ -9,6 +9,7 @@ import 'package:assiette/features/environment_capture/data/environment_capture_r
 import 'package:assiette/features/environment_capture/data/location_reader.dart';
 import 'package:assiette/features/environment_capture/data/open_meteo_client.dart';
 import 'package:assiette/features/environment_capture/data/pressure_alert_repository.dart';
+import 'package:assiette/features/environment_capture/data/stored_environment_location_reader.dart';
 import 'package:assiette/features/environment_capture/domain/device_location.dart';
 import 'package:assiette/features/environment_capture/domain/environment_capture_policy.dart';
 import 'package:assiette/features/environment_capture/domain/environment_capture_repository.dart';
@@ -33,7 +34,8 @@ Future<bool> runEnvironmentCaptureCycle({
 }) async {
   try {
     final location = await locationReader.readPosition();
-    if (location == null) return false;
+    // Missing consent or a first location is not a transient network failure.
+    if (location == null) return true;
 
     final result = await repository.captureSnapshot(location: location);
     if (result == EnvironmentCaptureResult.failed) return false;
@@ -54,7 +56,10 @@ void environmentCaptureCallbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     final db = AppDatabase();
     try {
-      final locationReader = GeolocatorLocationReader();
+      final locationReader = StoredEnvironmentLocationReader(
+        environmentDao: db.environmentDao,
+        canUseLocation: GeolocatorLocationReader().hasPermission,
+      );
       final openMeteoClient = OpenMeteoClient();
       final repository = DriftEnvironmentCaptureRepository(
         environmentDao: db.environmentDao,
@@ -109,8 +114,8 @@ Future<void> registerEnvironmentCaptureTask() async {
 /// Runs a one-off capture right away instead of waiting for the next
 /// periodic tick (up to [environmentCaptureInterval] away).
 ///
-/// Call once location permission has just been granted, so the user sees a
-/// weather reading without waiting up to three hours for the first one.
+/// Refreshes weather and pressure alerts for the last saved place. The first
+/// place is acquired separately while the application is visible.
 Future<void> registerImmediateEnvironmentCaptureTask() async {
   await Workmanager().registerOneOffTask(
     '$environmentCaptureUniqueName-immediate',

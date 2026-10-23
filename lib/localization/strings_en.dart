@@ -14,7 +14,7 @@ class AppStringsEn implements AppStrings {
   @override
   String get emptyDayMessage => 'Nothing logged this day.';
   @override
-  String get logMealAction => 'Meal photo';
+  String get logMealAction => 'Add a meal';
   @override
   String get logSymptomAction => 'Symptom';
   @override
@@ -101,15 +101,9 @@ class AppStringsEn implements AppStrings {
   String get symptomTypeEczema => 'Eczema';
 
   @override
-  String get mealEntryTitle => 'New meal';
+  String get mealEntryTitle => 'Add a meal';
   @override
   String get editMealTitle => 'Edit meal';
-  @override
-  String get takePhoto => 'Take a photo';
-  @override
-  String get retakePhoto => 'Retake';
-  @override
-  String get removePhoto => 'Remove photo';
   @override
   String get mealTypeLabel => 'Meal type';
   @override
@@ -118,8 +112,6 @@ class AppStringsEn implements AppStrings {
   String get tagSearchHint => 'Search or create a tag';
   @override
   String createTagLabel(String label) => 'Create "$label"';
-  @override
-  String get suggestedTagsLabel => 'Suggestions';
   @override
   String get noteHint => 'Note (optional)';
   @override
@@ -388,12 +380,6 @@ class AppStringsEn implements AppStrings {
       'Weather and pressure data provided by Open-Meteo.com (CC BY 4.0).';
   @override
   String get manageNotificationsAction => 'Notification settings';
-  @override
-  String get photoTagSuggestionsSettingTitle => 'Suggest tags from photo';
-  @override
-  String get photoTagSuggestionsSettingSubtitle =>
-      'Analyzes the photo on-device to suggest tags to confirm. Never sent '
-      'anywhere, never applied automatically.';
 
   @override
   String get notificationChannelMealsName => 'Meals';
@@ -417,7 +403,7 @@ class AppStringsEn implements AppStrings {
   @override
   String get mealReminderTitle => 'Did you eat?';
   @override
-  String get mealReminderPhotoAction => 'Photo';
+  String get mealReminderAddAction => 'Add a meal';
   @override
   String get mealReminderFavoriteAction => 'Favorite';
   @override
@@ -431,6 +417,9 @@ class AppStringsEn implements AppStrings {
 
   @override
   String get notificationSettingsTitle => 'Notification settings';
+  @override
+  String get reminderTimingHint =>
+      'Reminders may arrive after the selected time, depending on Android battery-saving restrictions.';
   @override
   String get notificationSettingsSaved => 'Preferences saved';
 
@@ -518,22 +507,20 @@ class AppStringsEn implements AppStrings {
       'Assiette helps you connect what you eat, how you feel, and the '
       'weather.';
   @override
-  String get onboardingLoggingTitle => 'A photo, a few tags';
+  String get onboardingLoggingTitle => 'A meal, a few tags';
   @override
   String get onboardingLoggingBody =>
-      'Snap a photo of your meal and add tags in seconds.';
+      'Log your meal manually and add tags in seconds.';
   @override
   String get onboardingWeatherTitle => 'Automatic weather and pressure';
   @override
   String get onboardingWeatherBody =>
-      'Weather and atmospheric pressure are logged for you, in the '
-      'background.';
+      'Weather and pressure are refreshed for the last saved place. Your location is updated only while the app is visible.';
   @override
   String get onboardingPermissionTitle => 'Allow location';
   @override
   String get onboardingPermissionBody =>
-      'Atmospheric pressure can be linked to migraines. Allow location so '
-      'we can track it automatically near you.';
+      'Allow approximate location while using the app to check weather and pressure for the saved place. You can continue without allowing it.';
   @override
   String get onboardingEnableLocation => 'Allow location';
   @override

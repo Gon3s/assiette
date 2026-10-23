@@ -28,13 +28,12 @@ abstract class MealEntryRepository {
   /// Loads the meal and its tags for editing, or `null` if it doesn't exist.
   Future<MealDraft?> loadMeal(String id);
 
-  /// Replaces the meal's fields and tag links in a single transaction.
+  /// Updates fields and tags while preserving any legacy photo.
   Future<void> updateMeal({
     required String id,
     required DateTime timestamp,
     required MealType mealType,
     required List<String> tagIds,
-    String? photoPath,
     String? note,
   });
 
@@ -43,9 +42,6 @@ abstract class MealEntryRepository {
 
   /// Undoes [deleteMeal].
   Future<void> undoDeleteMeal(String id);
-
-  /// Whether photo-based tag suggestions (US-19) are enabled in settings.
-  Future<bool> photoTagSuggestionsEnabled();
 }
 
 /// Provides the [MealEntryRepository] implementation.

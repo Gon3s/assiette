@@ -14,7 +14,7 @@ class AppStringsFr implements AppStrings {
   @override
   String get emptyDayMessage => 'Rien pour ce jour.';
   @override
-  String get logMealAction => 'Photo repas';
+  String get logMealAction => 'Ajouter un repas';
   @override
   String get logSymptomAction => 'Symptôme';
   @override
@@ -102,15 +102,9 @@ class AppStringsFr implements AppStrings {
   String get symptomTypeEczema => 'Eczéma';
 
   @override
-  String get mealEntryTitle => 'Nouveau repas';
+  String get mealEntryTitle => 'Ajouter un repas';
   @override
   String get editMealTitle => 'Modifier le repas';
-  @override
-  String get takePhoto => 'Prendre une photo';
-  @override
-  String get retakePhoto => 'Reprendre';
-  @override
-  String get removePhoto => 'Supprimer la photo';
   @override
   String get mealTypeLabel => 'Type de repas';
   @override
@@ -119,8 +113,6 @@ class AppStringsFr implements AppStrings {
   String get tagSearchHint => 'Rechercher ou créer un tag';
   @override
   String createTagLabel(String label) => 'Créer « $label »';
-  @override
-  String get suggestedTagsLabel => 'Suggestions';
   @override
   String get noteHint => 'Note (optionnel)';
   @override
@@ -392,13 +384,6 @@ class AppStringsFr implements AppStrings {
       'Météo et pression fournies par Open-Meteo.com (CC BY 4.0).';
   @override
   String get manageNotificationsAction => 'Réglages notifications';
-  @override
-  String get photoTagSuggestionsSettingTitle =>
-      'Suggestion de tags depuis la photo';
-  @override
-  String get photoTagSuggestionsSettingSubtitle =>
-      "Analyse la photo sur l'appareil pour proposer des tags à confirmer. "
-      'Jamais envoyée, jamais appliquée automatiquement.';
 
   @override
   String get notificationChannelMealsName => 'Repas';
@@ -423,7 +408,7 @@ class AppStringsFr implements AppStrings {
   @override
   String get mealReminderTitle => 'As-tu mangé ?';
   @override
-  String get mealReminderPhotoAction => 'Photo';
+  String get mealReminderAddAction => 'Ajouter un repas';
   @override
   String get mealReminderFavoriteAction => 'Favori';
   @override
@@ -437,6 +422,9 @@ class AppStringsFr implements AppStrings {
 
   @override
   String get notificationSettingsTitle => 'Réglages notifications';
+  @override
+  String get reminderTimingHint =>
+      'Les rappels peuvent arriver après l’heure choisie, selon les restrictions d’économie d’énergie d’Android.';
   @override
   String get notificationSettingsSaved => 'Préférences enregistrées';
 
@@ -526,22 +514,20 @@ class AppStringsFr implements AppStrings {
       "Assiette t'aide à relier ce que tu manges, comment tu te sens et "
       'la météo du jour.';
   @override
-  String get onboardingLoggingTitle => 'Une photo, quelques tags';
+  String get onboardingLoggingTitle => 'Un repas, quelques tags';
   @override
   String get onboardingLoggingBody =>
-      'Prends en photo ton repas et ajoute des tags en quelques secondes.';
+      'Saisis ton repas et ajoute des tags en quelques secondes.';
   @override
   String get onboardingWeatherTitle => 'Météo et pression automatiques';
   @override
   String get onboardingWeatherBody =>
-      'La météo et la pression atmosphérique sont enregistrées pour toi, '
-      'en arrière-plan.';
+      'La météo et la pression sont actualisées pour le dernier lieu enregistré. La position est mise à jour uniquement quand l’application est visible.';
   @override
   String get onboardingPermissionTitle => 'Autoriser la localisation';
   @override
   String get onboardingPermissionBody =>
-      'La pression atmosphérique peut être liée aux migraines. Autorise '
-      'la localisation pour la suivre automatiquement près de chez toi.';
+      'Autorise ta position approximative pendant l’utilisation pour consulter la météo et la pression du lieu enregistré. Tu peux continuer sans l’autoriser.';
   @override
   String get onboardingEnableLocation => 'Autoriser la localisation';
   @override

@@ -53,8 +53,9 @@ void main() {
         note: 'très bon',
       );
 
-      final meals =
-          await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first;
+      final meals = await db.mealsDao
+          .watchByDayWithTags(DateTime(2026, 7, 7))
+          .first;
       final saved = meals.single;
       expect(saved.meal.mealType, MealType.lunch);
       // Drift reads datetimes back as local; compare the instant.
@@ -64,21 +65,24 @@ void main() {
       expect([for (final t in saved.tags) t.label], ['pizza']);
     });
 
-    test('saves without photo, tags or note (empty note stored as null)',
-        () async {
-      await repository.saveMeal(
-        timestamp: DateTime(2026, 7, 7, 8),
-        mealType: MealType.breakfast,
-        tagIds: [],
-        note: '',
-      );
+    test(
+      'saves without photo, tags or note (empty note stored as null)',
+      () async {
+        await repository.saveMeal(
+          timestamp: DateTime(2026, 7, 7, 8),
+          mealType: MealType.breakfast,
+          tagIds: [],
+          note: '',
+        );
 
-      final meals =
-          await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first;
-      final saved = meals.single;
-      expect(saved.meal.note, isNull);
-      expect(saved.tags, isEmpty);
-    });
+        final meals = await db.mealsDao
+            .watchByDayWithTags(DateTime(2026, 7, 7))
+            .first;
+        final saved = meals.single;
+        expect(saved.meal.note, isNull);
+        expect(saved.tags, isEmpty);
+      },
+    );
   });
 
   group('loadMeal', () {
@@ -138,6 +142,30 @@ void main() {
   });
 
   group('deleteMeal / undoDeleteMeal', () {
+    test('editing manual fields preserves a legacy photo', () async {
+      await repository.saveMeal(
+        timestamp: DateTime(2026, 7, 7, 12),
+        mealType: MealType.lunch,
+        tagIds: [],
+        photoPath: '/photos/legacy.jpg',
+      );
+      final id =
+          (await db.mealsDao.watchByDayWithTags(DateTime(2026, 7, 7)).first)
+              .single
+              .meal
+              .id;
+      await repository.updateMeal(
+        id: id,
+        timestamp: DateTime(2026, 7, 7, 13),
+        mealType: MealType.dinner,
+        tagIds: [],
+        note: 'edited',
+      );
+      final draft = await repository.loadMeal(id);
+      expect(draft?.note, 'edited');
+      expect(draft?.photoPath, '/photos/legacy.jpg');
+    });
+
     test('soft-deletes then restores the meal', () async {
       await repository.saveMeal(
         timestamp: DateTime(2026, 7, 7, 12),

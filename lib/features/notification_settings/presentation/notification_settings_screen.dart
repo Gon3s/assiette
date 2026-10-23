@@ -56,7 +56,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
       leading: const SizedBox(width: Sizes.p24),
       title: Text(label),
       trailing: Text(_formatTime(hour, minute)),
-      onTap: () => _pickTime(context, hour: hour, minute: minute, onPicked: onPicked),
+      onTap: () =>
+          _pickTime(context, hour: hour, minute: minute, onPicked: onPicked),
     );
   }
 
@@ -75,6 +76,8 @@ class NotificationSettingsScreen extends ConsumerWidget {
         data: (prefs) => ListView(
           padding: const EdgeInsets.all(Sizes.p16),
           children: [
+            Text(s.reminderTimingHint),
+            gapH8,
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(s.notificationChannelMealsName),

@@ -69,7 +69,7 @@ final class FavoriteFormControllerProvider
 }
 
 String _$favoriteFormControllerHash() =>
-    r'637a83650126ae93403a94798380d49581c4ddec';
+    r'bb3d0e312be75aa1917140514060b99805c3aa64';
 
 /// Holds and mutates the favorite create/edit form, seeded from the
 /// existing favorite when [templateId] is not null, and performs the

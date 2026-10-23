@@ -3,7 +3,6 @@ import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_state.dart';
 import 'package:assiette/features/favorites/presentation/favorites_providers.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
-import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -58,19 +57,6 @@ class FavoriteFormController extends _$FavoriteFormController {
     addTag(tag);
   }
 
-  /// Opens the camera and stores the shot; no-op if the user cancels.
-  Future<void> takePhoto() async {
-    final path = await ref.read(mealPhotoServiceProvider).captureFromCamera();
-    if (path != null) {
-      state = state.copyWith(photoPath: path);
-    }
-  }
-
-  /// Discards the current photo.
-  void removePhoto() => state = state.copyWith(photoPath: null);
-
-  /// Persists the favorite (create or update). Returns false for a blank
-  /// name.
   Future<bool> save() async {
     final trimmed = state.name.trim();
     if (trimmed.isEmpty || state.isSaving) return false;
@@ -91,7 +77,6 @@ class FavoriteFormController extends _$FavoriteFormController {
           name: trimmed,
           tagIds: tagIds,
           defaultMealType: state.mealType,
-          defaultPhotoPath: state.photoPath,
         );
       }
       return true;

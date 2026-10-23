@@ -7,7 +7,6 @@ import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
-import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +17,10 @@ import 'package:mocktail/mocktail.dart';
 
 class MockMealEntryRepository extends Mock implements MealEntryRepository {}
 
-class MockMealPhotoService extends Mock implements MealPhotoService {}
-
 class MockFavoritesRepository extends Mock implements FavoritesRepository {}
 
 void main() {
   late MockMealEntryRepository repository;
-  late MockMealPhotoService photoService;
   late MockFavoritesRepository favoritesRepository;
 
   const seededTags = [
@@ -39,7 +35,6 @@ void main() {
 
   setUp(() {
     repository = MockMealEntryRepository();
-    photoService = MockMealPhotoService();
     favoritesRepository = MockFavoritesRepository();
     when(repository.watchTags).thenAnswer((_) => Stream.value(seededTags));
     when(
@@ -77,7 +72,7 @@ void main() {
       ProviderScope(
         overrides: [
           mealEntryRepositoryProvider.overrideWithValue(repository),
-          mealPhotoServiceProvider.overrideWithValue(photoService),
+
           favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
         ],
         child: MaterialApp.router(routerConfig: router),
@@ -89,21 +84,25 @@ void main() {
     return router;
   }
 
-  testWidgets('shows the form with a photo button and meal types', (
-    tester,
-  ) async {
-    await pumpScreen(tester);
+  testWidgets(
+    'shows manual meal entry without camera or recognition controls',
+    (
+      tester,
+    ) async {
+      await pumpScreen(tester);
 
-    // English fallback since no localization ancestor.
-    expect(find.text('New meal'), findsOneWidget);
-    expect(find.text('Take a photo'), findsOneWidget);
-    expect(find.text('Breakfast'), findsOneWidget);
-    expect(find.text('Lunch'), findsOneWidget);
-    expect(find.text('Dinner'), findsOneWidget);
-    expect(find.text('Snack'), findsOneWidget);
-    expect(find.text('Save'), findsOneWidget);
-    expect(find.text('Save as favorite'), findsOneWidget);
-  });
+      // English fallback since no localization ancestor.
+      expect(find.text('Add a meal'), findsOneWidget);
+      expect(find.text('Take a photo'), findsNothing);
+      expect(find.byIcon(Icons.photo_camera), findsNothing);
+      expect(find.text('Breakfast'), findsOneWidget);
+      expect(find.text('Lunch'), findsOneWidget);
+      expect(find.text('Dinner'), findsOneWidget);
+      expect(find.text('Snack'), findsOneWidget);
+      expect(find.text('Save'), findsOneWidget);
+      expect(find.text('Save as favorite'), findsOneWidget);
+    },
+  );
 
   testWidgets('searching a tag suggests it and selects it on tap', (
     tester,
@@ -258,7 +257,7 @@ void main() {
           timestamp: any(named: 'timestamp'),
           mealType: any(named: 'mealType'),
           tagIds: any(named: 'tagIds'),
-          photoPath: any(named: 'photoPath'),
+
           note: any(named: 'note'),
         ),
       ).thenAnswer((_) async {});
@@ -274,7 +273,7 @@ void main() {
           timestamp: any(named: 'timestamp'),
           mealType: MealType.lunch,
           tagIds: any(named: 'tagIds'),
-          photoPath: any(named: 'photoPath'),
+
           note: 'miam',
         ),
       ).called(1);

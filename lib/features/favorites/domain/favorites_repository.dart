@@ -25,7 +25,6 @@ abstract class FavoritesRepository {
     required String name,
     required List<String> tagIds,
     MealType? defaultMealType,
-    String? defaultPhotoPath,
   });
 
   /// Soft-deletes the favorite [id].
