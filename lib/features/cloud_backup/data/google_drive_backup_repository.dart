@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:archive/archive.dart';
 import 'package:assiette/data/db/app_database.dart';
+import 'package:assiette/features/cloud_backup/data/backup_archive_codec.dart';
+import 'package:assiette/features/cloud_backup/data/backup_restorer.dart';
 import 'package:assiette/features/cloud_backup/data/database_snapshot_codec.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_exception.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
@@ -19,9 +19,11 @@ import 'package:path_provider/path_provider.dart';
 /// backup/restore.
 class GoogleDriveBackupRepository implements CloudBackupRepository {
   /// Creates a [GoogleDriveBackupRepository] backed by [db].
-  GoogleDriveBackupRepository({required AppDatabase db, DatabaseSnapshotCodec? codec})
-    : _db = db,
-      _codec = codec ?? const DatabaseSnapshotCodec();
+  GoogleDriveBackupRepository({
+    required AppDatabase db,
+    DatabaseSnapshotCodec? codec,
+  }) : _db = db,
+       _codec = codec ?? const DatabaseSnapshotCodec();
 
   final AppDatabase _db;
   final DatabaseSnapshotCodec _codec;
@@ -30,7 +32,6 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
   static const List<String> _scopes = [drive.DriveApi.driveAppdataScope];
   static const _backupFileName = 'assiette_backup.zip';
   static const _photosDirName = 'meal_photos';
-  static const _databaseEntryName = 'database.json';
 
   // Android's Credential Manager (used by google_sign_in v7) always
   // requires a "Web application" OAuth client ID here, even for an
@@ -94,8 +95,7 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
   Future<void> backupNow() async {
     final account = await _requireAccount();
     final snapshot = await _codec.export(_db);
-    final photoNames = _codec.photoFileNamesIn(snapshot);
-    final zipBytes = await _buildZip(snapshot, photoNames);
+    final zipBytes = await const BackupArchiveCodec().encode(snapshot);
 
     await _wrapErrors(
       () => _withDriveApi(account, (api) => _upload(api, zipBytes)),
@@ -110,23 +110,10 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
       () => _withDriveApi(account, _download),
     );
 
-    final archive = ZipDecoder().decodeBytes(zipBytes);
-    final databaseEntry = archive.findFile(_databaseEntryName);
-    if (databaseEntry == null) {
-      throw CloudBackupException('Backup archive has no $_databaseEntryName');
-    }
-    final snapshot =
-        jsonDecode(utf8.decode(databaseEntry.content)) as Map<String, dynamic>;
-
     final photosDir = await _photosDir();
-    for (final file in archive.files) {
-      if (!file.isFile || !file.name.startsWith('photos/')) continue;
-      final target = File(p.join(photosDir.path, p.basename(file.name)));
-      await target.writeAsBytes(file.content);
-    }
-
-    await _codec.restore(_db, snapshot, photosDir.path);
-    await _db.cloudBackupStateDao.setHasRestoredOnThisDevice(value: true);
+    await BackupRestorer(
+      snapshotCodec: _codec,
+    ).restore(_db, zipBytes, photosDir);
   }
 
   Future<GoogleSignInAccount> _requireAccount() async {
@@ -137,33 +124,9 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
     return account;
   }
 
-  Future<Uint8List> _buildZip(
-    Map<String, dynamic> snapshot,
-    Set<String> photoNames,
-  ) async {
-    final archive = Archive()
-      ..addFile(
-        ArchiveFile.bytes(
-          _databaseEntryName,
-          utf8.encode(jsonEncode(snapshot)),
-        ),
-      );
-
-    final photosDir = await _photosDir();
-    for (final name in photoNames) {
-      final file = File(p.join(photosDir.path, name));
-      if (!file.existsSync()) continue;
-      archive.addFile(ArchiveFile.bytes('photos/$name', await file.readAsBytes()));
-    }
-
-    return ZipEncoder().encodeBytes(archive);
-  }
-
   Future<Directory> _photosDir() async {
     final documentsDir = await getApplicationDocumentsDirectory();
-    final dir = Directory(p.join(documentsDir.path, _photosDirName));
-    if (!dir.existsSync()) dir.createSync(recursive: true);
-    return dir;
+    return Directory(p.join(documentsDir.path, _photosDirName));
   }
 
   Future<drive.File?> _findBackupFile(drive.DriveApi api) async {
@@ -201,9 +164,7 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
               downloadOptions: drive.DownloadOptions.fullMedia,
             )
             as drive.Media;
-    final builder = BytesBuilder(copy: false);
-    await media.stream.forEach(builder.add);
-    return builder.toBytes();
+    return const BackupArchiveCodec().readDownload(media.stream);
   }
 
   Future<T> _withDriveApi<T>(

@@ -75,8 +75,6 @@ class CloudBackupController extends _$CloudBackupController {
       state = AsyncData(
         (state.value ?? current).copyWith(isBusy: false),
       );
-      await ref.read(appDatabaseProvider).cloudBackupStateDao
-          .setHasRestoredOnThisDevice(value: true);
     }
   }
 
