@@ -10,8 +10,8 @@ abstract final class NotificationActionIds {
   /// "Bon" action on the sleep check-in reminder.
   static const sleepGood = 'sleep_good';
 
-  /// "Photo" action on a meal reminder: opens the app on the entry form.
-  static const mealPhoto = 'meal_photo';
+  /// Opens manual meal entry. Keep the persisted ID for existing reminders.
+  static const mealEntry = 'meal_photo';
 
   /// "Favori" action on a meal reminder: logs the default favorite in the
   /// background, no UI shown.

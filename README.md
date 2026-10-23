@@ -11,11 +11,15 @@ identifier vos déclencheurs probables.
 
 ## 🔒 Vie privée d'abord
 
-- **Aucun compte, aucun backend, aucun tracking.** Toutes les données restent
-  dans une base SQLite sur votre appareil.
-- Les photos de repas sont stockées dans le répertoire interne de l'app.
-- La seule requête réseau effectuée est l'appel météo en tâche de fond à
-  [Open-Meteo](https://open-meteo.com/) (sans clé API, données CC BY 4.0).
+- **Utilisable sans compte.** Les données sont enregistrées dans une base
+  SQLite sur votre appareil. La sauvegarde/restauration Google Drive est
+  facultative et nécessite une connexion Google.
+- La capture photo est retirée ; les anciennes photos restent conservées et
+  visibles dans l'historique et les favoris.
+- La météo et la qualité de l'air sont obtenues auprès
+  d'[Open-Meteo](https://open-meteo.com/) pour le lieu enregistré.
+- La position approximative est lue uniquement quand l'app est visible.
+  Voir la [justification des permissions Android](docs/android-permissions-US-67.md).
 
 ## ✨ Fonctionnalités
 
@@ -31,9 +35,7 @@ identifier vos déclencheurs probables.
   condition, tuiles météo (température, pression, UV, PM2.5/PM10, pollen)
   ouvrant un graphique d'évolution sur 48h (prévision de pression incluse),
   carte sommeil, mise à jour réactive en temps réel.
-- **Saisie de repas en quelques secondes** : photo (optionnelle) avec
-  suggestions de tags par analyse d'image on-device (ML Kit, aucun réseau,
-  jamais appliquées automatiquement), type pré-sélectionné selon l'heure,
+- **Saisie manuelle de repas en quelques secondes** : type pré-sélectionné selon l'heure,
   tags (25 déclencheurs classiques pré-remplis + création à la volée), note,
   horodatage éditable, enregistrement en favori.
 - **Repas favoris** : liste dédiée (créer, éditer, supprimer), relog en 1 tap.
@@ -44,14 +46,15 @@ identifier vos déclencheurs probables.
   symptôme.
 - **Sommeil 1-tap** : qualité (mauvais / moyen / bon), heures de coucher/réveil
   éditables.
-- **Capture automatique météo/pression en tâche de fond** : position
-  approximative, appel [Open-Meteo](https://open-meteo.com/) toutes les
-  heures, rattrapage des jours manqués au démarrage, delta de pression
+- **Capture automatique météo/pression en tâche de fond** : météo du dernier
+  lieu enregistré, appel [Open-Meteo](https://open-meteo.com/) environ toutes les
+  trois heures, position actualisée au premier plan, rattrapage des jours manqués au démarrage, delta de pression
   calculé, dégradation silencieuse sans réseau ni permission localisation.
 - **Rappels et alertes** : notifications actionnables pour repas/sommeil
   (réponse directe depuis la notification), check-in symptôme, alerte
   proactive en cas de chute de pression (>6hPa/24h) ; réglages par canal
-  (activer/désactiver, horaires) dans un écran dédié.
+  (activer/désactiver, horaires) dans un écran dédié. Les rappels utilisent des
+  alarmes inexactes et peuvent être retardés par Android.
 - **Export PDF pour votre médecin** : sélection d'une plage de dates,
   génération d'un PDF par jour (repas + tags, symptômes + intensité,
   traitements, sommeil, pression), prévisualisation et partage.
@@ -78,7 +81,6 @@ identifier vos déclencheurs probables.
 | Notifications | [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) |
 | Graphiques | [fl_chart](https://pub.dev/packages/fl_chart) |
 | Export PDF | [pdf](https://pub.dev/packages/pdf) + [printing](https://pub.dev/packages/printing) + [share_plus](https://pub.dev/packages/share_plus) |
-| Tags photo | [google_mlkit_image_labeling](https://pub.dev/packages/google_mlkit_image_labeling) (on-device) |
 | Typographie | [google_fonts](https://pub.dev/packages/google_fonts) (Rubik) |
 | Lints | [very_good_analysis](https://pub.dev/packages/very_good_analysis) |
 
@@ -91,7 +93,7 @@ lib/
 ├── data/                  # Drift : tables, DAOs, seed des tags système
 ├── features/<feature>/
 │   ├── domain/            # modèles + contrats de repository
-│   ├── data/              # implémentations (Drift, image_picker…)
+│   ├── data/              # implémentations (Drift, clients HTTP…)
 │   └── presentation/      # écrans + contrôleurs Riverpod
 ├── localization/          # AppStrings FR/EN (aucune string UI en dur)
 ├── routing/               # GoRouter + démarrage de l'app
@@ -107,8 +109,8 @@ jour tout seul.
 
 ### Prérequis
 
-- [Flutter](https://docs.flutter.dev/get-started/install) stable ≥ 3.44
-  (Dart ≥ 3.10)
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.44.5
+  (Dart 3.12.2 embarqué, même version que la CI)
 - Un appareil ou émulateur Android (API 24+)
 
 ### Installation

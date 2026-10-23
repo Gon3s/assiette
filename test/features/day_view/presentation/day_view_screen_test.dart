@@ -168,7 +168,7 @@ void main() {
   testWidgets('shows both action buttons', (tester) async {
     await pumpScreen(tester);
 
-    expect(find.text('Meal photo'), findsOneWidget);
+    expect(find.text('Add a meal'), findsOneWidget);
     expect(find.text('Add'), findsOneWidget);
   });
 

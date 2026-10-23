@@ -7,7 +7,6 @@ import 'package:assiette/features/favorites/domain/meal_template_option.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_controller.dart';
 import 'package:assiette/features/favorites/presentation/favorites_providers.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
-import 'package:assiette/features/meal_entry/domain/meal_photo_service.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,12 +16,9 @@ class MockFavoritesRepository extends Mock implements FavoritesRepository {}
 
 class MockMealEntryRepository extends Mock implements MealEntryRepository {}
 
-class MockMealPhotoService extends Mock implements MealPhotoService {}
-
 void main() {
   late MockFavoritesRepository favoritesRepository;
   late MockMealEntryRepository mealEntryRepository;
-  late MockMealPhotoService photoService;
 
   const tag = TagOption(id: 'tag-1', label: 'café', isSystem: true);
   const existing = MealTemplateOption(
@@ -36,7 +32,6 @@ void main() {
   setUp(() {
     favoritesRepository = MockFavoritesRepository();
     mealEntryRepository = MockMealEntryRepository();
-    photoService = MockMealPhotoService();
   });
 
   ProviderContainer makeContainer({
@@ -46,7 +41,7 @@ void main() {
       overrides: [
         favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
         mealEntryRepositoryProvider.overrideWithValue(mealEntryRepository),
-        mealPhotoServiceProvider.overrideWithValue(photoService),
+
         favoriteTemplatesProvider.overrideWith(
           (ref) => Stream.value(favorites),
         ),
@@ -132,28 +127,6 @@ void main() {
       );
     });
 
-    test('takePhoto stores the returned path, removePhoto clears it', () async {
-      when(
-        photoService.captureFromCamera,
-      ).thenAnswer((_) async => '/photos/a.jpg');
-
-      final container = makeContainer();
-      final controller = container.read(
-        favoriteFormControllerProvider(null).notifier,
-      );
-      await controller.takePhoto();
-      expect(
-        container.read(favoriteFormControllerProvider(null)).photoPath,
-        '/photos/a.jpg',
-      );
-
-      controller.removePhoto();
-      expect(
-        container.read(favoriteFormControllerProvider(null)).photoPath,
-        isNull,
-      );
-    });
-
     test('save ignores a blank name', () async {
       final container = makeContainer();
       final saved = await container
@@ -207,7 +180,6 @@ void main() {
           name: any(named: 'name'),
           tagIds: any(named: 'tagIds'),
           defaultMealType: any(named: 'defaultMealType'),
-          defaultPhotoPath: any(named: 'defaultPhotoPath'),
         ),
       ).thenAnswer((_) async {});
 
@@ -230,7 +202,6 @@ void main() {
           name: 'Salade César v2',
           tagIds: ['tag-1'],
           defaultMealType: MealType.lunch,
-          defaultPhotoPath: '/photos/salad.jpg',
         ),
       ).called(1);
     });

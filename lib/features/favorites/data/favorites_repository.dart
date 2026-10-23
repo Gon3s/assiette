@@ -67,14 +67,12 @@ class DriftFavoritesRepository implements FavoritesRepository {
     required String name,
     required List<String> tagIds,
     MealType? defaultMealType,
-    String? defaultPhotoPath,
   }) {
     return _db.templatesDao.updateTemplateWithTags(
       id,
       MealTemplatesCompanion(
         name: Value(name),
         defaultMealType: Value(defaultMealType?.name),
-        defaultPhotoPath: Value(defaultPhotoPath),
         updatedAt: Value(DateTime.now().toUtc()),
       ),
       tagIds,

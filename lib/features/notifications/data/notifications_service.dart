@@ -45,8 +45,10 @@ abstract class NotificationsService {
 
 /// [NotificationsService] backed by `flutter_local_notifications`.
 class LocalNotificationsService implements NotificationsService {
-  final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
+  LocalNotificationsService({FlutterLocalNotificationsPlugin? plugin})
+    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+
+  final FlutterLocalNotificationsPlugin _plugin;
 
   @override
   Future<void> init({
@@ -170,7 +172,7 @@ class LocalNotificationsService implements NotificationsService {
         ],
       ),
     ),
-    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     matchDateTimeComponents: DateTimeComponents.time,
   );
 
@@ -194,8 +196,8 @@ class LocalNotificationsService implements NotificationsService {
           // showsUserInterface: true opens the app on tap - handled by the
           // onForegroundResponse callback, not the background dispatcher.
           AndroidNotificationAction(
-            NotificationActionIds.mealPhoto,
-            strings.mealReminderPhotoAction,
+            NotificationActionIds.mealEntry,
+            strings.mealReminderAddAction,
             showsUserInterface: true,
           ),
           AndroidNotificationAction(
@@ -205,7 +207,7 @@ class LocalNotificationsService implements NotificationsService {
         ],
       ),
     ),
-    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     matchDateTimeComponents: DateTimeComponents.time,
   );
 
@@ -226,7 +228,7 @@ class LocalNotificationsService implements NotificationsService {
         ),
       ),
     ),
-    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     matchDateTimeComponents: DateTimeComponents.time,
   );
 

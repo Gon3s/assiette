@@ -18,11 +18,11 @@ class DriftMealEntryRepository implements MealEntryRepository {
   @override
   Stream<List<TagOption>> watchTags() {
     return _db.tagsDao.watchAll().map(
-          (tags) => [
-            for (final tag in tags)
-              TagOption(id: tag.id, label: tag.label, isSystem: tag.isSystem),
-          ],
-        );
+      (tags) => [
+        for (final tag in tags)
+          TagOption(id: tag.id, label: tag.label, isSystem: tag.isSystem),
+      ],
+    );
   }
 
   @override
@@ -86,7 +86,6 @@ class DriftMealEntryRepository implements MealEntryRepository {
     required DateTime timestamp,
     required MealType mealType,
     required List<String> tagIds,
-    String? photoPath,
     String? note,
   }) {
     return _db.mealsDao.updateMealWithTags(
@@ -94,7 +93,6 @@ class DriftMealEntryRepository implements MealEntryRepository {
       MealsCompanion(
         timestamp: Value(timestamp.toUtc()),
         mealType: Value(mealType),
-        photoPath: Value(photoPath),
         note: Value((note?.isEmpty ?? true) ? null : note),
         updatedAt: Value(DateTime.now().toUtc()),
       ),
@@ -107,8 +105,4 @@ class DriftMealEntryRepository implements MealEntryRepository {
 
   @override
   Future<void> undoDeleteMeal(String id) => _db.mealsDao.restoreMeal(id);
-
-  @override
-  Future<bool> photoTagSuggestionsEnabled() =>
-      _db.appSettingsDao.getPhotoTagSuggestionsEnabled();
 }

@@ -44,6 +44,7 @@ Future<void> bootstrap(AppEnvironment environment) async {
 Future<void> _backfillEnvironmentHistory() async {
   if (!Platform.isAndroid) return;
   try {
+    if (!await GeolocatorLocationReader().hasPermission()) return;
     // Same throwaway-connection pattern as _registerNotifications: the
     // Riverpod ProviderScope isn't up yet at this point in startup.
     final db = AppDatabase();
@@ -72,12 +73,8 @@ Future<void> _registerBackgroundTasks() async {
   try {
     await registerEnvironmentCaptureTask();
 
-    // Requested here, in the foreground, because the periodic task above
-    // runs headless and can't show the system permission dialog.
-    final hasPermission = await GeolocatorLocationReader().ensurePermission();
-    if (hasPermission) {
-      await registerImmediateEnvironmentCaptureTask();
-    }
+    // Registration never asks for permission or acquires a device position.
+    await registerImmediateEnvironmentCaptureTask();
   } on Exception catch (e) {
     Print.red('DLOG', 'Failed to register background tasks: $e');
   }

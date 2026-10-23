@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 /// Handles a notification action tapped while the app has a live UI (or one
 /// that just relaunched it because [rootNavigatorKey] is already attached).
 ///
-/// Only the meal reminder's "Photo" action reaches here: every other action
+/// The meal reminder's "Add a meal" action reaches here: every other action
 /// (sleep quality, "log the default favorite") sets
 /// `showsUserInterface: false` and is handled fully in the background by
 /// `notificationBackgroundDispatcher`, without ever calling this.
@@ -28,7 +28,7 @@ void handleForegroundNotificationResponse(NotificationResponse response) {
     );
     return;
   }
-  if (response.actionId == NotificationActionIds.mealPhoto) {
+  if (response.actionId == NotificationActionIds.mealEntry) {
     unawaited(GoRouter.of(context).pushNamed(AppRouter.mealEntry.name));
   }
 }

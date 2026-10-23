@@ -48,7 +48,7 @@ final class NotificationSettingsControllerProvider
 }
 
 String _$notificationSettingsControllerHash() =>
-    r'01f935d0f2965c12388b455689578e2fa81dd878';
+    r'57fa6e9aeaa88508bce99506125aadf19d9b8c09';
 
 /// Draft state and persistence for the notification settings screen
 /// (US-16): edits are local until [save] persists them and reschedules the

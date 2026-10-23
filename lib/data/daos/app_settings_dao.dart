@@ -16,8 +16,8 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
           .watchSingleOrNull()
           .map((row) => row?.onboardingDone ?? false);
 
-  Future<void> setOnboardingDone({required bool done}) => into(appSettings)
-      .insertOnConflictUpdate(
+  Future<void> setOnboardingDone({required bool done}) =>
+      into(appSettings).insertOnConflictUpdate(
         AppSettingsCompanion.insert(
           id: const Value(_rowId),
           onboardingDone: Value(done),
@@ -33,8 +33,8 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
     return row?.lastPressureAlertDate;
   }
 
-  Future<void> setLastPressureAlertDate(DateTime date) => into(appSettings)
-      .insertOnConflictUpdate(
+  Future<void> setLastPressureAlertDate(DateTime date) =>
+      into(appSettings).insertOnConflictUpdate(
         AppSettingsCompanion.insert(
           id: const Value(_rowId),
           lastPressureAlertDate: Value(date),
@@ -52,9 +52,9 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
 
   /// Notification preferences row, or `null` if nothing has been saved yet
   /// (callers should fall back to defaults in that case).
-  Stream<AppSetting?> watchNotificationSettingsRow() =>
-      (select(appSettings)..where((t) => t.id.equals(_rowId)))
-          .watchSingleOrNull();
+  Stream<AppSetting?> watchNotificationSettingsRow() => (select(
+    appSettings,
+  )..where((t) => t.id.equals(_rowId))).watchSingleOrNull();
 
   /// Persists the full set of notification preferences (US-16).
   Future<void> saveNotificationPreferences({
@@ -91,29 +91,4 @@ class AppSettingsDao extends DatabaseAccessor<AppDatabase>
       symptomsMinute: Value(symptomsMinute),
     ),
   );
-
-  /// Whether photo-based tag suggestions (US-19) are enabled. Defaults to
-  /// `true` when no row exists yet.
-  Stream<bool> watchPhotoTagSuggestionsEnabled() =>
-      (select(appSettings)..where((t) => t.id.equals(_rowId)))
-          .watchSingleOrNull()
-          .map((row) => row?.photoTagSuggestionsEnabled ?? true);
-
-  /// One-off read of [watchPhotoTagSuggestionsEnabled], for call sites that
-  /// don't need to react to later changes (e.g. right after taking a photo).
-  Future<bool> getPhotoTagSuggestionsEnabled() async {
-    final row = await (select(
-      appSettings,
-    )..where((t) => t.id.equals(_rowId))).getSingleOrNull();
-    return row?.photoTagSuggestionsEnabled ?? true;
-  }
-
-  /// Persists the photo tag suggestions toggle (US-19).
-  Future<void> setPhotoTagSuggestionsEnabled({required bool enabled}) =>
-      into(appSettings).insertOnConflictUpdate(
-        AppSettingsCompanion.insert(
-          id: const Value(_rowId),
-          photoTagSuggestionsEnabled: Value(enabled),
-        ),
-      );
 }

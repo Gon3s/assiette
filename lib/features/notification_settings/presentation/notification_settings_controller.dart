@@ -71,12 +71,17 @@ class NotificationSettingsController extends _$NotificationSettingsController {
     if (current == null) return false;
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final notifications = ref.read(notificationsServiceProvider);
+      if (current.mealsEnabled ||
+          current.sleepEnabled ||
+          current.weatherEnabled ||
+          current.symptomsEnabled) {
+        await notifications.requestPermission();
+      }
       await ref
           .read(notificationPreferencesRepositoryProvider)
           .savePreferences(current);
-      await ref
-          .read(notificationsServiceProvider)
-          .scheduleDailyReminders(strings, current);
+      await notifications.scheduleDailyReminders(strings, current);
       return current;
     });
     return !state.hasError;

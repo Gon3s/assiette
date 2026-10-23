@@ -16,6 +16,7 @@ class MockNotificationPreferencesRepository extends Mock
     implements NotificationPreferencesRepository {}
 
 class _FakeNotificationsService implements NotificationsService {
+  int permissionRequests = 0;
   AppStrings? lastStrings;
   NotificationPreferences? lastPreferences;
 
@@ -35,7 +36,9 @@ class _FakeNotificationsService implements NotificationsService {
   }
 
   @override
-  Future<void> requestPermission() async {}
+  Future<void> requestPermission() async {
+    permissionRequests++;
+  }
 
   @override
   Future<void> showPressureDropAlert(AppStrings strings) async {}
@@ -53,8 +56,9 @@ void main() {
   setUp(() {
     repository = MockNotificationPreferencesRepository();
     notificationsService = _FakeNotificationsService();
-    when(() => repository.watchPreferences())
-        .thenAnswer((_) => Stream.value(NotificationPreferences.defaults()));
+    when(
+      () => repository.watchPreferences(),
+    ).thenAnswer((_) => Stream.value(NotificationPreferences.defaults()));
     when(() => repository.savePreferences(any())).thenAnswer((_) async {});
   });
 
@@ -91,7 +95,10 @@ void main() {
           .setMealsEnabled(enabled: false);
 
       expect(
-        container.read(notificationSettingsControllerProvider).value?.mealsEnabled,
+        container
+            .read(notificationSettingsControllerProvider)
+            .value
+            ?.mealsEnabled,
         isFalse,
       );
       verifyNever(() => repository.savePreferences(any()));
@@ -105,7 +112,9 @@ void main() {
           .read(notificationSettingsControllerProvider.notifier)
           .setBreakfastTime(hour: 7, minute: 15);
 
-      final draft = container.read(notificationSettingsControllerProvider).value!;
+      final draft = container
+          .read(notificationSettingsControllerProvider)
+          .value!;
       expect(draft.breakfastHour, 7);
       expect(draft.breakfastMinute, 15);
       expect(draft.lunchHour, NotificationPreferences.defaults().lunchHour);
@@ -125,29 +134,52 @@ void main() {
       expect(saved, isTrue);
       verify(
         () => repository.savePreferences(
-          any(that: isA<NotificationPreferences>()
-              .having((p) => p.symptomsEnabled, 'symptomsEnabled', isTrue)),
+          any(
+            that: isA<NotificationPreferences>().having(
+              (p) => p.symptomsEnabled,
+              'symptomsEnabled',
+              isTrue,
+            ),
+          ),
         ),
       ).called(1);
       expect(notificationsService.lastPreferences?.symptomsEnabled, isTrue);
+      expect(notificationsService.permissionRequests, 1);
     });
 
-    test('save reports failure and keeps the previous value on error',
-        () async {
-      when(() => repository.savePreferences(any()))
-          .thenThrow(StateError('db unavailable'));
+    test('does not prompt while loading or disabling every reminder', () async {
       final container = makeContainer();
       await container.read(notificationSettingsControllerProvider.future);
-
-      final saved = await container
-          .read(notificationSettingsControllerProvider.notifier)
-          .save(strings);
-
-      expect(saved, isFalse);
-      expect(
-        container.read(notificationSettingsControllerProvider).hasError,
-        isTrue,
-      );
+      expect(notificationsService.permissionRequests, 0);
+      final controller =
+          container.read(notificationSettingsControllerProvider.notifier)
+            ..setMealsEnabled(enabled: false)
+            ..setSleepEnabled(enabled: false)
+            ..setWeatherEnabled(enabled: false)
+            ..setSymptomsEnabled(enabled: false);
+      expect(await controller.save(strings), isTrue);
+      expect(notificationsService.permissionRequests, 0);
     });
+
+    test(
+      'save reports failure and keeps the previous value on error',
+      () async {
+        when(
+          () => repository.savePreferences(any()),
+        ).thenThrow(StateError('db unavailable'));
+        final container = makeContainer();
+        await container.read(notificationSettingsControllerProvider.future);
+
+        final saved = await container
+            .read(notificationSettingsControllerProvider.notifier)
+            .save(strings);
+
+        expect(saved, isFalse);
+        expect(
+          container.read(notificationSettingsControllerProvider).hasError,
+          isTrue,
+        );
+      },
+    );
   });
 }
