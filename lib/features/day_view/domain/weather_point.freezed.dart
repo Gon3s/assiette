@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'weather_point.dart';
@@ -9,6 +9,7 @@ part of 'weather_point.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $WeatherPointCopyWith<WeatherPoint> get copyWith => _$WeatherPointCopyWithImpl<W
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherPoint&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure));
+  final _this = this as WeatherPoint;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherPoint&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.temperature, _this.temperature) || other.temperature == _this.temperature)&&(identical(other.pressure, _this.pressure) || other.pressure == _this.pressure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,temperature,pressure);
+int get hashCode {
+  final _this = this as WeatherPoint;
+  return Object.hash(runtimeType,_this.timestamp,_this.temperature,_this.pressure);
+}
 
 @override
 String toString() {
-  return 'WeatherPoint(timestamp: $timestamp, temperature: $temperature, pressure: $pressure)';
+  final _this = this as WeatherPoint;
+  return 'WeatherPoint(timestamp: ${_this.timestamp}, temperature: ${_this.temperature}, pressure: ${_this.pressure})';
 }
 
 
@@ -63,7 +69,7 @@ class _$WeatherPointCopyWithImpl<$Res>
 /// Create a copy of WeatherPoint
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? temperature = freezed,Object? pressure = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(WeatherPoint(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,temperature: freezed == temperature ? _self.temperature : temperature // ignore: cast_nullable_to_non_nullable
 as double?,pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
@@ -225,16 +231,18 @@ _$WeatherPointCopyWith<_WeatherPoint> get copyWith => __$WeatherPointCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherPoint&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherPoint&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.pressure, pressure) || other.pressure == pressure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,temperature,pressure);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,temperature,pressure);
+}
 
 @override
 String toString() {
-  return 'WeatherPoint(timestamp: $timestamp, temperature: $temperature, pressure: $pressure)';
+    return 'WeatherPoint(timestamp: $timestamp, temperature: $temperature, pressure: $pressure)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'medication_intake_draft.dart';
@@ -9,6 +9,7 @@ part of 'medication_intake_draft.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $MedicationIntakeDraftCopyWith<MedicationIntakeDraft> get copyWith => _$Medicati
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationIntakeDraft&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose)&&(identical(other.id, id) || other.id == id)&&(identical(other.symptomId, symptomId) || other.symptomId == symptomId));
+  final _this = this as MedicationIntakeDraft;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationIntakeDraft&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.dose, _this.dose) || other.dose == _this.dose)&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.symptomId, _this.symptomId) || other.symptomId == _this.symptomId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,name,dose,id,symptomId);
+int get hashCode {
+  final _this = this as MedicationIntakeDraft;
+  return Object.hash(runtimeType,_this.timestamp,_this.name,_this.dose,_this.id,_this.symptomId);
+}
 
 @override
 String toString() {
-  return 'MedicationIntakeDraft(timestamp: $timestamp, name: $name, dose: $dose, id: $id, symptomId: $symptomId)';
+  final _this = this as MedicationIntakeDraft;
+  return 'MedicationIntakeDraft(timestamp: ${_this.timestamp}, name: ${_this.name}, dose: ${_this.dose}, id: ${_this.id}, symptomId: ${_this.symptomId})';
 }
 
 
@@ -63,7 +69,7 @@ class _$MedicationIntakeDraftCopyWithImpl<$Res>
 /// Create a copy of MedicationIntakeDraft
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? name = null,Object? dose = freezed,Object? id = freezed,Object? symptomId = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(MedicationIntakeDraft(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,dose: freezed == dose ? _self.dose : dose // ignore: cast_nullable_to_non_nullable
@@ -229,16 +235,18 @@ _$MedicationIntakeDraftCopyWith<_MedicationIntakeDraft> get copyWith => __$Medic
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MedicationIntakeDraft&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose)&&(identical(other.id, id) || other.id == id)&&(identical(other.symptomId, symptomId) || other.symptomId == symptomId));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MedicationIntakeDraft&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose)&&(identical(other.id, id) || other.id == id)&&(identical(other.symptomId, symptomId) || other.symptomId == symptomId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,name,dose,id,symptomId);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,name,dose,id,symptomId);
+}
 
 @override
 String toString() {
-  return 'MedicationIntakeDraft(timestamp: $timestamp, name: $name, dose: $dose, id: $id, symptomId: $symptomId)';
+    return 'MedicationIntakeDraft(timestamp: $timestamp, name: $name, dose: $dose, id: $id, symptomId: $symptomId)';
 }
 
 

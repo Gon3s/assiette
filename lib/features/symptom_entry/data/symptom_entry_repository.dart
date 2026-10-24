@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 /// Drift-backed implementation of [SymptomEntryRepository].
 class DriftSymptomEntryRepository implements SymptomEntryRepository {
   /// Creates a [DriftSymptomEntryRepository].
-  DriftSymptomEntryRepository({required AppDatabase db}) : _db = db;
+  DriftSymptomEntryRepository({required this._db});
 
   final AppDatabase _db;
 

@@ -109,8 +109,8 @@ jour tout seul.
 
 ### Prérequis
 
-- [Flutter](https://docs.flutter.dev/get-started/install) 3.44.5
-  (Dart 3.12.2 embarqué, même version que la CI)
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.47.8
+  (Dart 3.13.7 embarqué, même version que la CI)
 - Un appareil ou émulateur Android (API 24+)
 
 ### Installation

@@ -1,11 +1,13 @@
 include: package:very_good_analysis/analysis_options.10.2.0.yaml
 
 analyzer:
-  exclude: [
-    build/**,
-    lib/**.freezed.dart,
-    lib/**.g.dart,
-  ]
+  exclude:
+    - build/**
+    - lib/**.freezed.dart
+    - lib/**.g.dart
+    - android/**
+    - ios/**
+    - web/**
 
 linter:
   rules:

@@ -13,14 +13,11 @@ class DriftPressureAlertRepository implements PressureAlertRepository {
   /// Creates a [DriftPressureAlertRepository] backed by the given
   /// collaborators.
   DriftPressureAlertRepository({
-    required AppSettingsDao appSettingsDao,
-    required LocationReader locationReader,
-    required OpenMeteoClient openMeteoClient,
-    required NotificationsService notificationsService,
-  }) : _appSettingsDao = appSettingsDao,
-       _locationReader = locationReader,
-       _openMeteoClient = openMeteoClient,
-       _notificationsService = notificationsService;
+    required this._appSettingsDao,
+    required this._locationReader,
+    required this._openMeteoClient,
+    required this._notificationsService,
+  });
 
   final AppSettingsDao _appSettingsDao;
   final LocationReader _locationReader;

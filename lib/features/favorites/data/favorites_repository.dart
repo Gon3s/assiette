@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 /// Drift-backed implementation of [FavoritesRepository].
 class DriftFavoritesRepository implements FavoritesRepository {
   /// Creates a [DriftFavoritesRepository].
-  DriftFavoritesRepository({required AppDatabase db}) : _db = db;
+  DriftFavoritesRepository({required this._db});
 
   final AppDatabase _db;
 

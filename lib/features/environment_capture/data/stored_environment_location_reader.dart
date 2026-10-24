@@ -5,10 +5,9 @@ import 'package:assiette/features/environment_capture/domain/device_location.dar
 /// Background weather uses the last recorded place, never Android location APIs.
 class StoredEnvironmentLocationReader implements LocationReader {
   StoredEnvironmentLocationReader({
-    required EnvironmentDao environmentDao,
-    required Future<bool> Function() canUseLocation,
-  }) : _environmentDao = environmentDao,
-       _canUseLocation = canUseLocation;
+    required this._environmentDao,
+    required this._canUseLocation,
+  });
 
   final EnvironmentDao _environmentDao;
   final Future<bool> Function() _canUseLocation;

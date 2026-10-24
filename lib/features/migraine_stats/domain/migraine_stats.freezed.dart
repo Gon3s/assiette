@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'migraine_stats.dart';
@@ -9,6 +9,7 @@ part of 'migraine_stats.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $MigraineStatsCopyWith<MigraineStats> get copyWith => _$MigraineStatsCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MigraineStats&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.migraineCount, migraineCount) || other.migraineCount == migraineCount)&&(identical(other.migraineDays, migraineDays) || other.migraineDays == migraineDays)&&(identical(other.averageDuration, averageDuration) || other.averageDuration == averageDuration)&&(identical(other.averageMaximumIntensity, averageMaximumIntensity) || other.averageMaximumIntensity == averageMaximumIntensity)&&(identical(other.medicationIntakeCount, medicationIntakeCount) || other.medicationIntakeCount == medicationIntakeCount)&&(identical(other.medicationDays, medicationDays) || other.medicationDays == medicationDays)&&const DeepCollectionEquality().equals(other.frequency, frequency)&&const DeepCollectionEquality().equals(other.medications, medications));
+  final _this = this as MigraineStats;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MigraineStats&&(identical(other.start, _this.start) || other.start == _this.start)&&(identical(other.end, _this.end) || other.end == _this.end)&&(identical(other.migraineCount, _this.migraineCount) || other.migraineCount == _this.migraineCount)&&(identical(other.migraineDays, _this.migraineDays) || other.migraineDays == _this.migraineDays)&&(identical(other.averageDuration, _this.averageDuration) || other.averageDuration == _this.averageDuration)&&(identical(other.averageMaximumIntensity, _this.averageMaximumIntensity) || other.averageMaximumIntensity == _this.averageMaximumIntensity)&&(identical(other.medicationIntakeCount, _this.medicationIntakeCount) || other.medicationIntakeCount == _this.medicationIntakeCount)&&(identical(other.medicationDays, _this.medicationDays) || other.medicationDays == _this.medicationDays)&&const DeepCollectionEquality().equals(other.frequency, _this.frequency)&&const DeepCollectionEquality().equals(other.medications, _this.medications));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,start,end,migraineCount,migraineDays,averageDuration,averageMaximumIntensity,medicationIntakeCount,medicationDays,const DeepCollectionEquality().hash(frequency),const DeepCollectionEquality().hash(medications));
+int get hashCode {
+  final _this = this as MigraineStats;
+  return Object.hash(runtimeType,_this.start,_this.end,_this.migraineCount,_this.migraineDays,_this.averageDuration,_this.averageMaximumIntensity,_this.medicationIntakeCount,_this.medicationDays,const DeepCollectionEquality().hash(_this.frequency),const DeepCollectionEquality().hash(_this.medications));
+}
 
 @override
 String toString() {
-  return 'MigraineStats(start: $start, end: $end, migraineCount: $migraineCount, migraineDays: $migraineDays, averageDuration: $averageDuration, averageMaximumIntensity: $averageMaximumIntensity, medicationIntakeCount: $medicationIntakeCount, medicationDays: $medicationDays, frequency: $frequency, medications: $medications)';
+  final _this = this as MigraineStats;
+  return 'MigraineStats(start: ${_this.start}, end: ${_this.end}, migraineCount: ${_this.migraineCount}, migraineDays: ${_this.migraineDays}, averageDuration: ${_this.averageDuration}, averageMaximumIntensity: ${_this.averageMaximumIntensity}, medicationIntakeCount: ${_this.medicationIntakeCount}, medicationDays: ${_this.medicationDays}, frequency: ${_this.frequency}, medications: ${_this.medications})';
 }
 
 
@@ -63,7 +69,7 @@ class _$MigraineStatsCopyWithImpl<$Res>
 /// Create a copy of MigraineStats
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? start = null,Object? end = null,Object? migraineCount = null,Object? migraineDays = null,Object? averageDuration = freezed,Object? averageMaximumIntensity = freezed,Object? medicationIntakeCount = null,Object? medicationDays = null,Object? frequency = null,Object? medications = null,}) {
-  return _then(_self.copyWith(
+  return _then(MigraineStats(
 start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
 as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,migraineCount: null == migraineCount ? _self.migraineCount : migraineCount // ignore: cast_nullable_to_non_nullable
@@ -215,7 +221,7 @@ return $default(_that.start,_that.end,_that.migraineCount,_that.migraineDays,_th
 
 
 class _MigraineStats implements MigraineStats {
-  const _MigraineStats({required this.start, required this.end, required this.migraineCount, required this.migraineDays, required this.averageDuration, required this.averageMaximumIntensity, required this.medicationIntakeCount, required this.medicationDays, required final  List<MigraineFrequencyBucket> frequency, required final  List<MedicationStats> medications}): _frequency = frequency,_medications = medications;
+  const _MigraineStats({required this.start, required this.end, required this.migraineCount, required this.migraineDays, required this.averageDuration, required this.averageMaximumIntensity, required this.medicationIntakeCount, required this.medicationDays, required  List<MigraineFrequencyBucket> frequency, required  List<MedicationStats> medications}): _frequency = frequency,_medications = medications;
   
 
 @override final  DateTime start;
@@ -251,16 +257,18 @@ _$MigraineStatsCopyWith<_MigraineStats> get copyWith => __$MigraineStatsCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MigraineStats&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.migraineCount, migraineCount) || other.migraineCount == migraineCount)&&(identical(other.migraineDays, migraineDays) || other.migraineDays == migraineDays)&&(identical(other.averageDuration, averageDuration) || other.averageDuration == averageDuration)&&(identical(other.averageMaximumIntensity, averageMaximumIntensity) || other.averageMaximumIntensity == averageMaximumIntensity)&&(identical(other.medicationIntakeCount, medicationIntakeCount) || other.medicationIntakeCount == medicationIntakeCount)&&(identical(other.medicationDays, medicationDays) || other.medicationDays == medicationDays)&&const DeepCollectionEquality().equals(other._frequency, _frequency)&&const DeepCollectionEquality().equals(other._medications, _medications));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MigraineStats&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.migraineCount, migraineCount) || other.migraineCount == migraineCount)&&(identical(other.migraineDays, migraineDays) || other.migraineDays == migraineDays)&&(identical(other.averageDuration, averageDuration) || other.averageDuration == averageDuration)&&(identical(other.averageMaximumIntensity, averageMaximumIntensity) || other.averageMaximumIntensity == averageMaximumIntensity)&&(identical(other.medicationIntakeCount, medicationIntakeCount) || other.medicationIntakeCount == medicationIntakeCount)&&(identical(other.medicationDays, medicationDays) || other.medicationDays == medicationDays)&&const DeepCollectionEquality().equals(other.frequency, _frequency)&&const DeepCollectionEquality().equals(other.medications, _medications));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,start,end,migraineCount,migraineDays,averageDuration,averageMaximumIntensity,medicationIntakeCount,medicationDays,const DeepCollectionEquality().hash(_frequency),const DeepCollectionEquality().hash(_medications));
+int get hashCode {
+    return Object.hash(runtimeType,start,end,migraineCount,migraineDays,averageDuration,averageMaximumIntensity,medicationIntakeCount,medicationDays,const DeepCollectionEquality().hash(_frequency),const DeepCollectionEquality().hash(_medications));
+}
 
 @override
 String toString() {
-  return 'MigraineStats(start: $start, end: $end, migraineCount: $migraineCount, migraineDays: $migraineDays, averageDuration: $averageDuration, averageMaximumIntensity: $averageMaximumIntensity, medicationIntakeCount: $medicationIntakeCount, medicationDays: $medicationDays, frequency: $frequency, medications: $medications)';
+    return 'MigraineStats(start: $start, end: $end, migraineCount: $migraineCount, migraineDays: $migraineDays, averageDuration: $averageDuration, averageMaximumIntensity: $averageMaximumIntensity, medicationIntakeCount: $medicationIntakeCount, medicationDays: $medicationDays, frequency: $frequency, medications: $medications)';
 }
 
 
@@ -321,16 +329,21 @@ $MigraineFrequencyBucketCopyWith<MigraineFrequencyBucket> get copyWith => _$Migr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MigraineFrequencyBucket&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.count, count) || other.count == count));
+  final _this = this as MigraineFrequencyBucket;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MigraineFrequencyBucket&&(identical(other.start, _this.start) || other.start == _this.start)&&(identical(other.end, _this.end) || other.end == _this.end)&&(identical(other.count, _this.count) || other.count == _this.count));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,start,end,count);
+int get hashCode {
+  final _this = this as MigraineFrequencyBucket;
+  return Object.hash(runtimeType,_this.start,_this.end,_this.count);
+}
 
 @override
 String toString() {
-  return 'MigraineFrequencyBucket(start: $start, end: $end, count: $count)';
+  final _this = this as MigraineFrequencyBucket;
+  return 'MigraineFrequencyBucket(start: ${_this.start}, end: ${_this.end}, count: ${_this.count})';
 }
 
 
@@ -359,7 +372,7 @@ class _$MigraineFrequencyBucketCopyWithImpl<$Res>
 /// Create a copy of MigraineFrequencyBucket
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? start = null,Object? end = null,Object? count = null,}) {
-  return _then(_self.copyWith(
+  return _then(MigraineFrequencyBucket(
 start: null == start ? _self.start : start // ignore: cast_nullable_to_non_nullable
 as DateTime,end: null == end ? _self.end : end // ignore: cast_nullable_to_non_nullable
 as DateTime,count: null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
@@ -521,16 +534,18 @@ _$MigraineFrequencyBucketCopyWith<_MigraineFrequencyBucket> get copyWith => __$M
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MigraineFrequencyBucket&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.count, count) || other.count == count));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MigraineFrequencyBucket&&(identical(other.start, start) || other.start == start)&&(identical(other.end, end) || other.end == end)&&(identical(other.count, count) || other.count == count));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,start,end,count);
+int get hashCode {
+    return Object.hash(runtimeType,start,end,count);
+}
 
 @override
 String toString() {
-  return 'MigraineFrequencyBucket(start: $start, end: $end, count: $count)';
+    return 'MigraineFrequencyBucket(start: $start, end: $end, count: $count)';
 }
 
 
@@ -584,16 +599,21 @@ $MedicationStatsCopyWith<MedicationStats> get copyWith => _$MedicationStatsCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationStats&&(identical(other.name, name) || other.name == name)&&(identical(other.intakeCount, intakeCount) || other.intakeCount == intakeCount)&&(identical(other.linkedMigraineCount, linkedMigraineCount) || other.linkedMigraineCount == linkedMigraineCount)&&(identical(other.averageDelayAfterMigraineStart, averageDelayAfterMigraineStart) || other.averageDelayAfterMigraineStart == averageDelayAfterMigraineStart));
+  final _this = this as MedicationStats;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationStats&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.intakeCount, _this.intakeCount) || other.intakeCount == _this.intakeCount)&&(identical(other.linkedMigraineCount, _this.linkedMigraineCount) || other.linkedMigraineCount == _this.linkedMigraineCount)&&(identical(other.averageDelayAfterMigraineStart, _this.averageDelayAfterMigraineStart) || other.averageDelayAfterMigraineStart == _this.averageDelayAfterMigraineStart));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,intakeCount,linkedMigraineCount,averageDelayAfterMigraineStart);
+int get hashCode {
+  final _this = this as MedicationStats;
+  return Object.hash(runtimeType,_this.name,_this.intakeCount,_this.linkedMigraineCount,_this.averageDelayAfterMigraineStart);
+}
 
 @override
 String toString() {
-  return 'MedicationStats(name: $name, intakeCount: $intakeCount, linkedMigraineCount: $linkedMigraineCount, averageDelayAfterMigraineStart: $averageDelayAfterMigraineStart)';
+  final _this = this as MedicationStats;
+  return 'MedicationStats(name: ${_this.name}, intakeCount: ${_this.intakeCount}, linkedMigraineCount: ${_this.linkedMigraineCount}, averageDelayAfterMigraineStart: ${_this.averageDelayAfterMigraineStart})';
 }
 
 
@@ -622,7 +642,7 @@ class _$MedicationStatsCopyWithImpl<$Res>
 /// Create a copy of MedicationStats
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? intakeCount = null,Object? linkedMigraineCount = null,Object? averageDelayAfterMigraineStart = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(MedicationStats(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,intakeCount: null == intakeCount ? _self.intakeCount : intakeCount // ignore: cast_nullable_to_non_nullable
 as int,linkedMigraineCount: null == linkedMigraineCount ? _self.linkedMigraineCount : linkedMigraineCount // ignore: cast_nullable_to_non_nullable
@@ -786,16 +806,18 @@ _$MedicationStatsCopyWith<_MedicationStats> get copyWith => __$MedicationStatsCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MedicationStats&&(identical(other.name, name) || other.name == name)&&(identical(other.intakeCount, intakeCount) || other.intakeCount == intakeCount)&&(identical(other.linkedMigraineCount, linkedMigraineCount) || other.linkedMigraineCount == linkedMigraineCount)&&(identical(other.averageDelayAfterMigraineStart, averageDelayAfterMigraineStart) || other.averageDelayAfterMigraineStart == averageDelayAfterMigraineStart));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MedicationStats&&(identical(other.name, name) || other.name == name)&&(identical(other.intakeCount, intakeCount) || other.intakeCount == intakeCount)&&(identical(other.linkedMigraineCount, linkedMigraineCount) || other.linkedMigraineCount == linkedMigraineCount)&&(identical(other.averageDelayAfterMigraineStart, averageDelayAfterMigraineStart) || other.averageDelayAfterMigraineStart == averageDelayAfterMigraineStart));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,intakeCount,linkedMigraineCount,averageDelayAfterMigraineStart);
+int get hashCode {
+    return Object.hash(runtimeType,name,intakeCount,linkedMigraineCount,averageDelayAfterMigraineStart);
+}
 
 @override
 String toString() {
-  return 'MedicationStats(name: $name, intakeCount: $intakeCount, linkedMigraineCount: $linkedMigraineCount, averageDelayAfterMigraineStart: $averageDelayAfterMigraineStart)';
+    return 'MedicationStats(name: $name, intakeCount: $intakeCount, linkedMigraineCount: $linkedMigraineCount, averageDelayAfterMigraineStart: $averageDelayAfterMigraineStart)';
 }
 
 
