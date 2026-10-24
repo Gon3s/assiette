@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'meal_entry_state.dart';
@@ -9,6 +9,7 @@ part of 'meal_entry_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $MealEntryStateCopyWith<MealEntryState> get copyWith => _$MealEntryStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.selectedTags, selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+  final _this = this as MealEntryState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealEntryState&&(identical(other.mealType, _this.mealType) || other.mealType == _this.mealType)&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&const DeepCollectionEquality().equals(other.selectedTags, _this.selectedTags)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.photoPath, _this.photoPath) || other.photoPath == _this.photoPath)&&(identical(other.isSaving, _this.isSaving) || other.isSaving == _this.isSaving)&&(identical(other.id, _this.id) || other.id == _this.id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(selectedTags),note,photoPath,isSaving,id);
+int get hashCode {
+  final _this = this as MealEntryState;
+  return Object.hash(runtimeType,_this.mealType,_this.timestamp,const DeepCollectionEquality().hash(_this.selectedTags),_this.note,_this.photoPath,_this.isSaving,_this.id);
+}
 
 @override
 String toString() {
-  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving, id: $id)';
+  final _this = this as MealEntryState;
+  return 'MealEntryState(mealType: ${_this.mealType}, timestamp: ${_this.timestamp}, selectedTags: ${_this.selectedTags}, note: ${_this.note}, photoPath: ${_this.photoPath}, isSaving: ${_this.isSaving}, id: ${_this.id})';
 }
 
 
@@ -63,7 +69,7 @@ class _$MealEntryStateCopyWithImpl<$Res>
 /// Create a copy of MealEntryState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? mealType = null,Object? timestamp = null,Object? selectedTags = null,Object? note = null,Object? photoPath = freezed,Object? isSaving = null,Object? id = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(MealEntryState(
 mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,selectedTags: null == selectedTags ? _self.selectedTags : selectedTags // ignore: cast_nullable_to_non_nullable
@@ -212,7 +218,7 @@ return $default(_that.mealType,_that.timestamp,_that.selectedTags,_that.note,_th
 
 
 class _MealEntryState implements MealEntryState {
-  const _MealEntryState({required this.mealType, required this.timestamp, required final  List<TagOption> selectedTags, this.note = '', this.photoPath, this.isSaving = false, this.id}): _selectedTags = selectedTags;
+  const _MealEntryState({required this.mealType, required this.timestamp, required  List<TagOption> selectedTags, this.note = '', this.photoPath, this.isSaving = false, this.id}): _selectedTags = selectedTags;
   
 
 @override final  MealType mealType;
@@ -239,16 +245,18 @@ _$MealEntryStateCopyWith<_MealEntryState> get copyWith => __$MealEntryStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other._selectedTags, _selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealEntryState&&(identical(other.mealType, mealType) || other.mealType == mealType)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&const DeepCollectionEquality().equals(other.selectedTags, _selectedTags)&&(identical(other.note, note) || other.note == note)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(_selectedTags),note,photoPath,isSaving,id);
+int get hashCode {
+    return Object.hash(runtimeType,mealType,timestamp,const DeepCollectionEquality().hash(_selectedTags),note,photoPath,isSaving,id);
+}
 
 @override
 String toString() {
-  return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving, id: $id)';
+    return 'MealEntryState(mealType: $mealType, timestamp: $timestamp, selectedTags: $selectedTags, note: $note, photoPath: $photoPath, isSaving: $isSaving, id: $id)';
 }
 
 

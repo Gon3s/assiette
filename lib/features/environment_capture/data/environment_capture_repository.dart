@@ -16,14 +16,11 @@ class DriftEnvironmentCaptureRepository
   /// Creates a [DriftEnvironmentCaptureRepository] backed by the given
   /// collaborators.
   DriftEnvironmentCaptureRepository({
-    required EnvironmentDao environmentDao,
-    required LocationReader locationReader,
-    required OpenMeteoClient openMeteoClient,
+    required this._environmentDao,
+    required this._locationReader,
+    required this._openMeteoClient,
     DateTime Function()? now,
-  }) : _environmentDao = environmentDao,
-       _locationReader = locationReader,
-       _openMeteoClient = openMeteoClient,
-       _now = now ?? DateTime.now;
+  }) : _now = now ?? DateTime.now;
 
   final EnvironmentDao _environmentDao;
   final LocationReader _locationReader;

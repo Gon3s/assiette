@@ -1,6 +1,8 @@
 @Timeout(Duration(seconds: 5))
 library;
 
+import 'dart:async';
+
 import 'package:assiette/features/day_view/domain/active_migraine.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/medication_entry/domain/medication_entry_repository.dart';
@@ -74,11 +76,42 @@ void main() {
 
     expect(repository.savedSymptomId, isNull);
   });
+
+  testWidgets('saving stays disabled until the intake is stored', (
+    tester,
+  ) async {
+    await pump(tester);
+    final pendingSave = Completer<String>();
+    repository.pendingSave = pendingSave.future;
+
+    await tester.tap(find.text('Sumatriptan'));
+    await tester.pump();
+
+    expect(
+      tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+      isNull,
+    );
+    expect(
+      tester.widget<ActionChip>(find.byType(ActionChip)).onPressed,
+      isNull,
+    );
+    expect(find.text('Intake saved'), findsNothing);
+
+    pendingSave.complete('intake');
+    await tester.pump();
+
+    expect(
+      tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+      isNotNull,
+    );
+    expect(find.text('Intake saved'), findsOneWidget);
+  });
 }
 
 class _FakeMedicationRepository implements MedicationEntryRepository {
   String? savedName;
   String? savedSymptomId;
+  Future<String>? pendingSave;
 
   @override
   Future<List<String>> recentNames() async => const ['Sumatriptan'];
@@ -93,7 +126,7 @@ class _FakeMedicationRepository implements MedicationEntryRepository {
   }) async {
     savedName = name;
     savedSymptomId = symptomId;
-    return 'intake';
+    return pendingSave ?? 'intake';
   }
 
   @override

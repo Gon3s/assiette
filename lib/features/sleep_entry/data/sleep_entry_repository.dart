@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 /// Drift-backed implementation of [SleepEntryRepository].
 class DriftSleepEntryRepository implements SleepEntryRepository {
   /// Creates a [DriftSleepEntryRepository].
-  DriftSleepEntryRepository({required AppDatabase db}) : _db = db;
+  DriftSleepEntryRepository({required this._db});
 
   final AppDatabase _db;
 

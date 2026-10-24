@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sleep_summary.dart';
@@ -9,6 +9,7 @@ part of 'sleep_summary.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $SleepSummaryCopyWith<SleepSummary> get copyWith => _$SleepSummaryCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.note, note) || other.note == note)&&(identical(other.id, id) || other.id == id));
+  final _this = this as SleepSummary;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SleepSummary&&(identical(other.quality, _this.quality) || other.quality == _this.quality)&&(identical(other.bedTime, _this.bedTime) || other.bedTime == _this.bedTime)&&(identical(other.wakeTime, _this.wakeTime) || other.wakeTime == _this.wakeTime)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.id, _this.id) || other.id == _this.id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,note,id);
+int get hashCode {
+  final _this = this as SleepSummary;
+  return Object.hash(runtimeType,_this.quality,_this.bedTime,_this.wakeTime,_this.note,_this.id);
+}
 
 @override
 String toString() {
-  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, note: $note, id: $id)';
+  final _this = this as SleepSummary;
+  return 'SleepSummary(quality: ${_this.quality}, bedTime: ${_this.bedTime}, wakeTime: ${_this.wakeTime}, note: ${_this.note}, id: ${_this.id})';
 }
 
 
@@ -63,7 +69,7 @@ class _$SleepSummaryCopyWithImpl<$Res>
 /// Create a copy of SleepSummary
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? quality = freezed,Object? bedTime = freezed,Object? wakeTime = freezed,Object? note = freezed,Object? id = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(SleepSummary(
 quality: freezed == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
 as int?,bedTime: freezed == bedTime ? _self.bedTime : bedTime // ignore: cast_nullable_to_non_nullable
 as DateTime?,wakeTime: freezed == wakeTime ? _self.wakeTime : wakeTime // ignore: cast_nullable_to_non_nullable
@@ -229,16 +235,18 @@ _$SleepSummaryCopyWith<_SleepSummary> get copyWith => __$SleepSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.note, note) || other.note == note)&&(identical(other.id, id) || other.id == id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SleepSummary&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.bedTime, bedTime) || other.bedTime == bedTime)&&(identical(other.wakeTime, wakeTime) || other.wakeTime == wakeTime)&&(identical(other.note, note) || other.note == note)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,quality,bedTime,wakeTime,note,id);
+int get hashCode {
+    return Object.hash(runtimeType,quality,bedTime,wakeTime,note,id);
+}
 
 @override
 String toString() {
-  return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, note: $note, id: $id)';
+    return 'SleepSummary(quality: $quality, bedTime: $bedTime, wakeTime: $wakeTime, note: $note, id: $id)';
 }
 
 
