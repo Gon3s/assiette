@@ -92,10 +92,12 @@ test('the real repository lockfile is understood and the allowlist matches Depen
 });
 
 function fixture({conclusion = 'success', author = 'dependabot[bot]',
-  protectedBranch = true, jobs = requiredChecks, changedHead = false,
+  protectedBranch = true, jobs = requiredChecks, changedHead = false, changedBase = false,
   fork = false, workflow = '.github/workflows/pull-request.yml',
-  native = false, protectedChecks = requiredChecks, checkApp = 15368} = {}) {
+  native = false, protectedChecks = requiredChecks, checkApp = 15368,
+  mergeStatus, merged = true} = {}) {
   const pr = {number: 1, node_id: 'PR_1', user: {login: author}, state: 'open', draft: false,
+    mergeable_state: 'clean',
     base: {ref: 'main', sha: 'base', repo: {full_name: 'Gon3s/assiette'}},
     head: {ref: 'dependabot/pub/http-1.6.1', sha: 'head', repo: {full_name: 'Gon3s/assiette'}}};
   const mutations = [];
@@ -105,8 +107,15 @@ function fixture({conclusion = 'success', author = 'dependabot[bot]',
       actions: {getWorkflow: async () => ({data: {path: workflow}}),
         listJobsForWorkflowRun: 'jobs'},
       pulls: {list: async () => ({data: [pr]}), listFiles: 'files',
-        get: async () => ({data: ++reads > 1 && changedHead ?
-          {...pr, head: {...pr.head, sha: 'new-head'}} : pr})},
+        get: async () => ({data: ++reads > 1 ? {...pr,
+          head: {...pr.head, sha: changedHead ? 'new-head' : pr.head.sha},
+          base: {...pr.base, sha: changedBase ? 'new-base' : pr.base.sha},
+        } : pr}),
+        merge: async args => {
+          mutations.push(args);
+          if (mergeStatus) throw Object.assign(new Error('Merge refused'), {status: mergeStatus});
+          return {data: {merged}};
+        }},
       repos: {getBranch: async () => ({data: {protected: protectedBranch,
         protection: {required_status_checks: {checks: protectedChecks.map(context =>
           ({context, app_id: checkApp}))}}}}),
@@ -117,7 +126,6 @@ function fixture({conclusion = 'success', author = 'dependabot[bot]',
     },
     paginate: async method => method === 'jobs' ?
       jobs.map(name => ({name, conclusion: 'success'})) : update().files,
-    graphql: async (...args) => mutations.push(args),
   };
   return {github, core: {info: () => {}}, mutations,
     context: {repo: {owner: 'Gon3s', repo: 'assiette'}, payload: {workflow_run: {
@@ -127,17 +135,44 @@ function fixture({conclusion = 'success', author = 'dependabot[bot]',
     }}}};
 }
 
-test('enables squash auto-merge only for the protected, tested bot commit', async () => {
+test('merges only the protected, tested bot commit using squash', async () => {
   const f = fixture();
   await enable(f);
   assert.equal(f.mutations.length, 1);
-  assert.deepEqual(f.mutations[0][1], {id: 'PR_1'});
+  assert.deepEqual(f.mutations[0], {owner: 'Gon3s', repo: 'assiette',
+    pull_number: 1, sha: 'head', merge_method: 'squash'});
+});
+
+for (const status of [405, 409, 422]) {
+  test(`leaves changed or protected PRs open after HTTP ${status}`, async () => {
+    const f = fixture({mergeStatus: status});
+    const messages = [];
+    f.core.info = message => messages.push(message);
+    await assert.doesNotReject(enable(f));
+    assert.equal(f.mutations.length, 1);
+    assert.match(messages.at(-1), /^Manual review:/);
+  });
+}
+
+for (const status of [403, 500]) {
+  test(`reports merge authentication or server failure HTTP ${status}`, async () => {
+    await assert.rejects(enable(fixture({mergeStatus: status})), {status});
+  });
+}
+
+test('does not report a merge if GitHub declines it', async () => {
+  const f = fixture({merged: false});
+  const messages = [];
+  f.core.info = message => messages.push(message);
+  await enable(f);
+  assert.match(messages.at(-1), /^Manual review:/);
+  assert.equal(messages.some(message => message.startsWith('Merged #')), false);
 });
 
 for (const [name, options] of Object.entries({
   failed: {conclusion: 'failure'}, human: {author: 'Gon3s'},
   unprotected: {protectedBranch: false}, missingGate: {jobs: requiredChecks.slice(1)},
-  stale: {changedHead: true}, fork: {fork: true},
+  stale: {changedHead: true}, changedBase: {changedBase: true}, fork: {fork: true},
   differentWorkflow: {workflow: '.github/workflows/other.yml'}, native: {native: true},
   missingRequiredChecks: {protectedChecks: []}, wrongCheckApp: {checkApp: 1},
 })) {
