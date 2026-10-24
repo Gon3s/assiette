@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'timeline_item.dart';
@@ -9,6 +9,7 @@ part of 'timeline_item.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $TimelineItemCopyWith<TimelineItem> get copyWith => _$TimelineItemCopyWithImpl<T
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  final _this = this as TimelineItem;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TimelineItem&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp);
+int get hashCode {
+  final _this = this as TimelineItem;
+  return Object.hash(runtimeType,_this.id,_this.timestamp);
+}
 
 @override
 String toString() {
-  return 'TimelineItem(id: $id, timestamp: $timestamp)';
+  final _this = this as TimelineItem;
+  return 'TimelineItem(id: ${_this.id}, timestamp: ${_this.timestamp})';
 }
 
 
@@ -213,7 +219,7 @@ return medication(_that.id,_that.timestamp,_that.name,_that.dose);case _:
 
 
 class MealTimelineItem implements TimelineItem {
-  const MealTimelineItem({required this.id, required this.timestamp, required this.mealType, required final  List<String> tagLabels, this.photoPath}): _tagLabels = tagLabels;
+  const MealTimelineItem({required this.id, required this.timestamp, required this.mealType, required  List<String> tagLabels, this.photoPath}): _tagLabels = tagLabels;
   
 
 @override final  String id;
@@ -238,16 +244,18 @@ $MealTimelineItemCopyWith<MealTimelineItem> get copyWith => _$MealTimelineItemCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other._tagLabels, _tagLabels)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is MealTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.tagLabels, _tagLabels)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,mealType,const DeepCollectionEquality().hash(_tagLabels),photoPath);
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp,mealType,const DeepCollectionEquality().hash(_tagLabels),photoPath);
+}
 
 @override
 String toString() {
-  return 'TimelineItem.meal(id: $id, timestamp: $timestamp, mealType: $mealType, tagLabels: $tagLabels, photoPath: $photoPath)';
+    return 'TimelineItem.meal(id: $id, timestamp: $timestamp, mealType: $mealType, tagLabels: $tagLabels, photoPath: $photoPath)';
 }
 
 
@@ -312,16 +320,18 @@ $SymptomTimelineItemCopyWith<SymptomTimelineItem> get copyWith => _$SymptomTimel
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,symptomType,intensity,detail);
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp,symptomType,intensity,detail);
+}
 
 @override
 String toString() {
-  return 'TimelineItem.symptom(id: $id, timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail)';
+    return 'TimelineItem.symptom(id: $id, timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail)';
 }
 
 
@@ -385,16 +395,18 @@ $MedicationTimelineItemCopyWith<MedicationTimelineItem> get copyWith => _$Medica
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is MedicationTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,name,dose);
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp,name,dose);
+}
 
 @override
 String toString() {
-  return 'TimelineItem.medication(id: $id, timestamp: $timestamp, name: $name, dose: $dose)';
+    return 'TimelineItem.medication(id: $id, timestamp: $timestamp, name: $name, dose: $dose)';
 }
 
 

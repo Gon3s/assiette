@@ -11,10 +11,9 @@ import 'package:assiette/features/migraine_stats/domain/migraine_stats_repositor
 class DriftMigraineStatsRepository implements MigraineStatsRepository {
   /// Creates a repository backed by the supplied DAOs.
   DriftMigraineStatsRepository({
-    required SymptomsDao symptomsDao,
-    required MedicationIntakesDao medicationIntakesDao,
-  }) : _symptomsDao = symptomsDao,
-       _medicationIntakesDao = medicationIntakesDao;
+    required this._symptomsDao,
+    required this._medicationIntakesDao,
+  });
 
   final SymptomsDao _symptomsDao;
   final MedicationIntakesDao _medicationIntakesDao;

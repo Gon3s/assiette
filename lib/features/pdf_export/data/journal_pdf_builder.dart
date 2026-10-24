@@ -110,9 +110,10 @@ class JournalPdfBuilder {
               timeFormat.format(symptom.timestamp.toLocal()),
             symptomTypeLabel(s, symptom.symptomType),
             if (symptom.intensity case final intensity?)
-              symptom.isDailyNote
-                  ? s.previousIntensity(intensity)
-                  : '${s.intensityLabel} $intensity/10',
+              if (symptom.isDailyNote)
+                s.previousIntensity(intensity)
+              else
+                '${s.intensityLabel} $intensity/10',
             if (symptom.detail != null) symptom.detail!,
             if (symptom.note != null) symptom.note!,
           ].join(' - '),
@@ -143,10 +144,10 @@ class JournalPdfBuilder {
       padding: const pw.EdgeInsets.only(top: 4),
       child: pw.Text(
         [
-        [
-          '${s.sleepCardTitle} : ${sleepQualityLabel(s, sleep.quality)}',
-          if (sleep.note != null) sleep.note!,
-        ].join(' — '),
+          [
+            '${s.sleepCardTitle} : ${sleepQualityLabel(s, sleep.quality)}',
+            if (sleep.note != null) sleep.note!,
+          ].join(' — '),
           if (sleep.note != null) sleep.note!,
         ].join(' — '),
       ),

@@ -6,9 +6,8 @@ import 'package:assiette/features/notifications/domain/notification_preferences_
 /// Drift-backed implementation of [NotificationPreferencesRepository].
 class DriftNotificationPreferencesRepository
     implements NotificationPreferencesRepository {
-  /// Creates a [DriftNotificationPreferencesRepository] backed by [appSettingsDao].
-  DriftNotificationPreferencesRepository({required AppSettingsDao appSettingsDao})
-    : _appSettingsDao = appSettingsDao;
+  /// Creates a [DriftNotificationPreferencesRepository] backed by [_appSettingsDao].
+  DriftNotificationPreferencesRepository({required this._appSettingsDao});
 
   final AppSettingsDao _appSettingsDao;
 

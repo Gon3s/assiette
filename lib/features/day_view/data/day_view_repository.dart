@@ -22,18 +22,13 @@ import 'package:uuid/uuid.dart';
 class DriftDayViewRepository implements DayViewRepository {
   /// Creates a [DriftDayViewRepository] backed by the given DAOs.
   DriftDayViewRepository({
-    required MealsDao mealsDao,
-    required SymptomsDao symptomsDao,
-    required MigraineIntensityMeasurementsDao migraineMeasurementsDao,
-    required MedicationIntakesDao medicationIntakesDao,
-    required SleepEntriesDao sleepEntriesDao,
-    required EnvironmentDao environmentDao,
-  }) : _mealsDao = mealsDao,
-       _symptomsDao = symptomsDao,
-       _migraineMeasurementsDao = migraineMeasurementsDao,
-       _medicationIntakesDao = medicationIntakesDao,
-       _sleepEntriesDao = sleepEntriesDao,
-       _environmentDao = environmentDao;
+    required this._mealsDao,
+    required this._symptomsDao,
+    required this._migraineMeasurementsDao,
+    required this._medicationIntakesDao,
+    required this._sleepEntriesDao,
+    required this._environmentDao,
+  });
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;

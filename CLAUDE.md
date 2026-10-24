@@ -18,7 +18,7 @@ Food · symptoms · environment. Connect the dots.
 ## Flutter toolchain
 
 - Use the exact Flutter version pinned by the CI workflows, currently
-  **3.44.5**. The reference files are
+  **3.47.8**. The reference files are
   `.github/workflows/android-debug-apk.yml` and
   `.github/workflows/android-play-internal.yml`.
 - At the start of each task, read both workflow pins and check the active SDK
