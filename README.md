@@ -161,3 +161,7 @@ caractères) — ex. `feat(feature/day_view): add day navigation`.
 
 Les conventions détaillées du projet sont dans [AGENTS.md](AGENTS.md). Le
 fichier [CLAUDE.md](CLAUDE.md) reste disponible pour les sessions Claude Code.
+
+Les mises à jour des dépendances sont proposées chaque semaine par Dependabot.
+Les règles de revue et de fusion automatique, ainsi que l'inventaire initial,
+figurent dans la [procédure de maintenance](docs/dependency-maintenance-US-64.md).
