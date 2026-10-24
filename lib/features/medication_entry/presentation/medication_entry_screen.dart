@@ -67,7 +67,7 @@ class _MedicationEntryScreenState extends ConsumerState<MedicationEntryScreen> {
     setState(() => _saving = true);
     try {
       final active = await ref.read(activeMigraineProvider.future);
-      return ref
+      return await ref
           .read(medicationEntryRepositoryProvider)
           .saveIntake(
             timestamp: _timestamp,

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'notification_preferences.dart';
@@ -9,6 +9,7 @@ part of 'notification_preferences.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $NotificationPreferencesCopyWith<NotificationPreferences> get copyWith => _$Noti
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationPreferences&&(identical(other.mealsEnabled, mealsEnabled) || other.mealsEnabled == mealsEnabled)&&(identical(other.breakfastHour, breakfastHour) || other.breakfastHour == breakfastHour)&&(identical(other.breakfastMinute, breakfastMinute) || other.breakfastMinute == breakfastMinute)&&(identical(other.lunchHour, lunchHour) || other.lunchHour == lunchHour)&&(identical(other.lunchMinute, lunchMinute) || other.lunchMinute == lunchMinute)&&(identical(other.dinnerHour, dinnerHour) || other.dinnerHour == dinnerHour)&&(identical(other.dinnerMinute, dinnerMinute) || other.dinnerMinute == dinnerMinute)&&(identical(other.sleepEnabled, sleepEnabled) || other.sleepEnabled == sleepEnabled)&&(identical(other.sleepHour, sleepHour) || other.sleepHour == sleepHour)&&(identical(other.sleepMinute, sleepMinute) || other.sleepMinute == sleepMinute)&&(identical(other.weatherEnabled, weatherEnabled) || other.weatherEnabled == weatherEnabled)&&(identical(other.symptomsEnabled, symptomsEnabled) || other.symptomsEnabled == symptomsEnabled)&&(identical(other.symptomsHour, symptomsHour) || other.symptomsHour == symptomsHour)&&(identical(other.symptomsMinute, symptomsMinute) || other.symptomsMinute == symptomsMinute));
+  final _this = this as NotificationPreferences;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is NotificationPreferences&&(identical(other.mealsEnabled, _this.mealsEnabled) || other.mealsEnabled == _this.mealsEnabled)&&(identical(other.breakfastHour, _this.breakfastHour) || other.breakfastHour == _this.breakfastHour)&&(identical(other.breakfastMinute, _this.breakfastMinute) || other.breakfastMinute == _this.breakfastMinute)&&(identical(other.lunchHour, _this.lunchHour) || other.lunchHour == _this.lunchHour)&&(identical(other.lunchMinute, _this.lunchMinute) || other.lunchMinute == _this.lunchMinute)&&(identical(other.dinnerHour, _this.dinnerHour) || other.dinnerHour == _this.dinnerHour)&&(identical(other.dinnerMinute, _this.dinnerMinute) || other.dinnerMinute == _this.dinnerMinute)&&(identical(other.sleepEnabled, _this.sleepEnabled) || other.sleepEnabled == _this.sleepEnabled)&&(identical(other.sleepHour, _this.sleepHour) || other.sleepHour == _this.sleepHour)&&(identical(other.sleepMinute, _this.sleepMinute) || other.sleepMinute == _this.sleepMinute)&&(identical(other.weatherEnabled, _this.weatherEnabled) || other.weatherEnabled == _this.weatherEnabled)&&(identical(other.symptomsEnabled, _this.symptomsEnabled) || other.symptomsEnabled == _this.symptomsEnabled)&&(identical(other.symptomsHour, _this.symptomsHour) || other.symptomsHour == _this.symptomsHour)&&(identical(other.symptomsMinute, _this.symptomsMinute) || other.symptomsMinute == _this.symptomsMinute));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealsEnabled,breakfastHour,breakfastMinute,lunchHour,lunchMinute,dinnerHour,dinnerMinute,sleepEnabled,sleepHour,sleepMinute,weatherEnabled,symptomsEnabled,symptomsHour,symptomsMinute);
+int get hashCode {
+  final _this = this as NotificationPreferences;
+  return Object.hash(runtimeType,_this.mealsEnabled,_this.breakfastHour,_this.breakfastMinute,_this.lunchHour,_this.lunchMinute,_this.dinnerHour,_this.dinnerMinute,_this.sleepEnabled,_this.sleepHour,_this.sleepMinute,_this.weatherEnabled,_this.symptomsEnabled,_this.symptomsHour,_this.symptomsMinute);
+}
 
 @override
 String toString() {
-  return 'NotificationPreferences(mealsEnabled: $mealsEnabled, breakfastHour: $breakfastHour, breakfastMinute: $breakfastMinute, lunchHour: $lunchHour, lunchMinute: $lunchMinute, dinnerHour: $dinnerHour, dinnerMinute: $dinnerMinute, sleepEnabled: $sleepEnabled, sleepHour: $sleepHour, sleepMinute: $sleepMinute, weatherEnabled: $weatherEnabled, symptomsEnabled: $symptomsEnabled, symptomsHour: $symptomsHour, symptomsMinute: $symptomsMinute)';
+  final _this = this as NotificationPreferences;
+  return 'NotificationPreferences(mealsEnabled: ${_this.mealsEnabled}, breakfastHour: ${_this.breakfastHour}, breakfastMinute: ${_this.breakfastMinute}, lunchHour: ${_this.lunchHour}, lunchMinute: ${_this.lunchMinute}, dinnerHour: ${_this.dinnerHour}, dinnerMinute: ${_this.dinnerMinute}, sleepEnabled: ${_this.sleepEnabled}, sleepHour: ${_this.sleepHour}, sleepMinute: ${_this.sleepMinute}, weatherEnabled: ${_this.weatherEnabled}, symptomsEnabled: ${_this.symptomsEnabled}, symptomsHour: ${_this.symptomsHour}, symptomsMinute: ${_this.symptomsMinute})';
 }
 
 
@@ -63,7 +69,7 @@ class _$NotificationPreferencesCopyWithImpl<$Res>
 /// Create a copy of NotificationPreferences
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? mealsEnabled = null,Object? breakfastHour = null,Object? breakfastMinute = null,Object? lunchHour = null,Object? lunchMinute = null,Object? dinnerHour = null,Object? dinnerMinute = null,Object? sleepEnabled = null,Object? sleepHour = null,Object? sleepMinute = null,Object? weatherEnabled = null,Object? symptomsEnabled = null,Object? symptomsHour = null,Object? symptomsMinute = null,}) {
-  return _then(_self.copyWith(
+  return _then(NotificationPreferences(
 mealsEnabled: null == mealsEnabled ? _self.mealsEnabled : mealsEnabled // ignore: cast_nullable_to_non_nullable
 as bool,breakfastHour: null == breakfastHour ? _self.breakfastHour : breakfastHour // ignore: cast_nullable_to_non_nullable
 as int,breakfastMinute: null == breakfastMinute ? _self.breakfastMinute : breakfastMinute // ignore: cast_nullable_to_non_nullable
@@ -247,16 +253,18 @@ _$NotificationPreferencesCopyWith<_NotificationPreferences> get copyWith => __$N
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationPreferences&&(identical(other.mealsEnabled, mealsEnabled) || other.mealsEnabled == mealsEnabled)&&(identical(other.breakfastHour, breakfastHour) || other.breakfastHour == breakfastHour)&&(identical(other.breakfastMinute, breakfastMinute) || other.breakfastMinute == breakfastMinute)&&(identical(other.lunchHour, lunchHour) || other.lunchHour == lunchHour)&&(identical(other.lunchMinute, lunchMinute) || other.lunchMinute == lunchMinute)&&(identical(other.dinnerHour, dinnerHour) || other.dinnerHour == dinnerHour)&&(identical(other.dinnerMinute, dinnerMinute) || other.dinnerMinute == dinnerMinute)&&(identical(other.sleepEnabled, sleepEnabled) || other.sleepEnabled == sleepEnabled)&&(identical(other.sleepHour, sleepHour) || other.sleepHour == sleepHour)&&(identical(other.sleepMinute, sleepMinute) || other.sleepMinute == sleepMinute)&&(identical(other.weatherEnabled, weatherEnabled) || other.weatherEnabled == weatherEnabled)&&(identical(other.symptomsEnabled, symptomsEnabled) || other.symptomsEnabled == symptomsEnabled)&&(identical(other.symptomsHour, symptomsHour) || other.symptomsHour == symptomsHour)&&(identical(other.symptomsMinute, symptomsMinute) || other.symptomsMinute == symptomsMinute));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _NotificationPreferences&&(identical(other.mealsEnabled, mealsEnabled) || other.mealsEnabled == mealsEnabled)&&(identical(other.breakfastHour, breakfastHour) || other.breakfastHour == breakfastHour)&&(identical(other.breakfastMinute, breakfastMinute) || other.breakfastMinute == breakfastMinute)&&(identical(other.lunchHour, lunchHour) || other.lunchHour == lunchHour)&&(identical(other.lunchMinute, lunchMinute) || other.lunchMinute == lunchMinute)&&(identical(other.dinnerHour, dinnerHour) || other.dinnerHour == dinnerHour)&&(identical(other.dinnerMinute, dinnerMinute) || other.dinnerMinute == dinnerMinute)&&(identical(other.sleepEnabled, sleepEnabled) || other.sleepEnabled == sleepEnabled)&&(identical(other.sleepHour, sleepHour) || other.sleepHour == sleepHour)&&(identical(other.sleepMinute, sleepMinute) || other.sleepMinute == sleepMinute)&&(identical(other.weatherEnabled, weatherEnabled) || other.weatherEnabled == weatherEnabled)&&(identical(other.symptomsEnabled, symptomsEnabled) || other.symptomsEnabled == symptomsEnabled)&&(identical(other.symptomsHour, symptomsHour) || other.symptomsHour == symptomsHour)&&(identical(other.symptomsMinute, symptomsMinute) || other.symptomsMinute == symptomsMinute));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mealsEnabled,breakfastHour,breakfastMinute,lunchHour,lunchMinute,dinnerHour,dinnerMinute,sleepEnabled,sleepHour,sleepMinute,weatherEnabled,symptomsEnabled,symptomsHour,symptomsMinute);
+int get hashCode {
+    return Object.hash(runtimeType,mealsEnabled,breakfastHour,breakfastMinute,lunchHour,lunchMinute,dinnerHour,dinnerMinute,sleepEnabled,sleepHour,sleepMinute,weatherEnabled,symptomsEnabled,symptomsHour,symptomsMinute);
+}
 
 @override
 String toString() {
-  return 'NotificationPreferences(mealsEnabled: $mealsEnabled, breakfastHour: $breakfastHour, breakfastMinute: $breakfastMinute, lunchHour: $lunchHour, lunchMinute: $lunchMinute, dinnerHour: $dinnerHour, dinnerMinute: $dinnerMinute, sleepEnabled: $sleepEnabled, sleepHour: $sleepHour, sleepMinute: $sleepMinute, weatherEnabled: $weatherEnabled, symptomsEnabled: $symptomsEnabled, symptomsHour: $symptomsHour, symptomsMinute: $symptomsMinute)';
+    return 'NotificationPreferences(mealsEnabled: $mealsEnabled, breakfastHour: $breakfastHour, breakfastMinute: $breakfastMinute, lunchHour: $lunchHour, lunchMinute: $lunchMinute, dinnerHour: $dinnerHour, dinnerMinute: $dinnerMinute, sleepEnabled: $sleepEnabled, sleepHour: $sleepHour, sleepMinute: $sleepMinute, weatherEnabled: $weatherEnabled, symptomsEnabled: $symptomsEnabled, symptomsHour: $symptomsHour, symptomsMinute: $symptomsMinute)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'symptom_draft.dart';
@@ -9,6 +9,7 @@ part of 'symptom_draft.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $SymptomDraftCopyWith<SymptomDraft> get copyWith => _$SymptomDraftCopyWithImpl<S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.initialIntensity, initialIntensity) || other.initialIntensity == initialIntensity)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.note, note) || other.note == note)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
+  final _this = this as SymptomDraft;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomDraft&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.type, _this.type) || other.type == _this.type)&&(identical(other.intensity, _this.intensity) || other.intensity == _this.intensity)&&(identical(other.detail, _this.detail) || other.detail == _this.detail)&&(identical(other.endTime, _this.endTime) || other.endTime == _this.endTime)&&(identical(other.startedAt, _this.startedAt) || other.startedAt == _this.startedAt)&&(identical(other.startPrecision, _this.startPrecision) || other.startPrecision == _this.startPrecision)&&(identical(other.endedAt, _this.endedAt) || other.endedAt == _this.endedAt)&&(identical(other.initialIntensity, _this.initialIntensity) || other.initialIntensity == _this.initialIntensity)&&(identical(other.maximumIntensity, _this.maximumIntensity) || other.maximumIntensity == _this.maximumIntensity)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.dailyDate, _this.dailyDate) || other.dailyDate == _this.dailyDate)&&(identical(other.isDailyNote, _this.isDailyNote) || other.isDailyNote == _this.isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,startedAt,startPrecision,endedAt,initialIntensity,maximumIntensity,note,dailyDate,isDailyNote);
+int get hashCode {
+  final _this = this as SymptomDraft;
+  return Object.hash(runtimeType,_this.id,_this.timestamp,_this.type,_this.intensity,_this.detail,_this.endTime,_this.startedAt,_this.startPrecision,_this.endedAt,_this.initialIntensity,_this.maximumIntensity,_this.note,_this.dailyDate,_this.isDailyNote);
+}
 
 @override
 String toString() {
-  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, startedAt: $startedAt, startPrecision: $startPrecision, endedAt: $endedAt, initialIntensity: $initialIntensity, maximumIntensity: $maximumIntensity, note: $note, dailyDate: $dailyDate, isDailyNote: $isDailyNote)';
+  final _this = this as SymptomDraft;
+  return 'SymptomDraft(id: ${_this.id}, timestamp: ${_this.timestamp}, type: ${_this.type}, intensity: ${_this.intensity}, detail: ${_this.detail}, endTime: ${_this.endTime}, startedAt: ${_this.startedAt}, startPrecision: ${_this.startPrecision}, endedAt: ${_this.endedAt}, initialIntensity: ${_this.initialIntensity}, maximumIntensity: ${_this.maximumIntensity}, note: ${_this.note}, dailyDate: ${_this.dailyDate}, isDailyNote: ${_this.isDailyNote})';
 }
 
 
@@ -63,7 +69,7 @@ class _$SymptomDraftCopyWithImpl<$Res>
 /// Create a copy of SymptomDraft
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? timestamp = null,Object? type = null,Object? intensity = freezed,Object? detail = freezed,Object? endTime = freezed,Object? startedAt = freezed,Object? startPrecision = freezed,Object? endedAt = freezed,Object? initialIntensity = freezed,Object? maximumIntensity = freezed,Object? note = freezed,Object? dailyDate = freezed,Object? isDailyNote = null,}) {
-  return _then(_self.copyWith(
+  return _then(SymptomDraft(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
@@ -247,16 +253,18 @@ _$SymptomDraftCopyWith<_SymptomDraft> get copyWith => __$SymptomDraftCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.initialIntensity, initialIntensity) || other.initialIntensity == initialIntensity)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.note, note) || other.note == note)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.type, type) || other.type == type)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.endedAt, endedAt) || other.endedAt == endedAt)&&(identical(other.initialIntensity, initialIntensity) || other.initialIntensity == initialIntensity)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.note, note) || other.note == note)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,startedAt,startPrecision,endedAt,initialIntensity,maximumIntensity,note,dailyDate,isDailyNote);
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp,type,intensity,detail,endTime,startedAt,startPrecision,endedAt,initialIntensity,maximumIntensity,note,dailyDate,isDailyNote);
+}
 
 @override
 String toString() {
-  return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, startedAt: $startedAt, startPrecision: $startPrecision, endedAt: $endedAt, initialIntensity: $initialIntensity, maximumIntensity: $maximumIntensity, note: $note, dailyDate: $dailyDate, isDailyNote: $isDailyNote)';
+    return 'SymptomDraft(id: $id, timestamp: $timestamp, type: $type, intensity: $intensity, detail: $detail, endTime: $endTime, startedAt: $startedAt, startPrecision: $startPrecision, endedAt: $endedAt, initialIntensity: $initialIntensity, maximumIntensity: $maximumIntensity, note: $note, dailyDate: $dailyDate, isDailyNote: $isDailyNote)';
 }
 
 

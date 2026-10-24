@@ -33,7 +33,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
-          flutter-version: '3.44.5'
+          flutter-version: '3.47.8'
           channel: stable
           cache: true
 
@@ -55,7 +55,7 @@ jobs:
           --dart-define=GOOGLE_SERVER_CLIENT_ID=${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
 
       - name: Publish debug APK to rolling release
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           tag_name: dev-latest
           name: "Dev build (latest)"

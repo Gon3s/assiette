@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'cloud_backup_state.dart';
@@ -9,6 +9,7 @@ part of 'cloud_backup_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -27,16 +28,21 @@ $CloudBackupStateCopyWith<CloudBackupState> get copyWith => _$CloudBackupStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CloudBackupState&&(identical(other.signedInEmail, signedInEmail) || other.signedInEmail == signedInEmail)&&(identical(other.isBusy, isBusy) || other.isBusy == isBusy));
+  final _this = this as CloudBackupState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CloudBackupState&&(identical(other.signedInEmail, _this.signedInEmail) || other.signedInEmail == _this.signedInEmail)&&(identical(other.isBusy, _this.isBusy) || other.isBusy == _this.isBusy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,signedInEmail,isBusy);
+int get hashCode {
+  final _this = this as CloudBackupState;
+  return Object.hash(runtimeType,_this.signedInEmail,_this.isBusy);
+}
 
 @override
 String toString() {
-  return 'CloudBackupState(signedInEmail: $signedInEmail, isBusy: $isBusy)';
+  final _this = this as CloudBackupState;
+  return 'CloudBackupState(signedInEmail: ${_this.signedInEmail}, isBusy: ${_this.isBusy})';
 }
 
 
@@ -65,7 +71,7 @@ class _$CloudBackupStateCopyWithImpl<$Res>
 /// Create a copy of CloudBackupState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? signedInEmail = freezed,Object? isBusy = null,}) {
-  return _then(_self.copyWith(
+  return _then(CloudBackupState(
 signedInEmail: freezed == signedInEmail ? _self.signedInEmail : signedInEmail // ignore: cast_nullable_to_non_nullable
 as String?,isBusy: null == isBusy ? _self.isBusy : isBusy // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -227,16 +233,18 @@ _$CloudBackupStateCopyWith<_CloudBackupState> get copyWith => __$CloudBackupStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CloudBackupState&&(identical(other.signedInEmail, signedInEmail) || other.signedInEmail == signedInEmail)&&(identical(other.isBusy, isBusy) || other.isBusy == isBusy));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CloudBackupState&&(identical(other.signedInEmail, signedInEmail) || other.signedInEmail == signedInEmail)&&(identical(other.isBusy, isBusy) || other.isBusy == isBusy));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,signedInEmail,isBusy);
+int get hashCode {
+    return Object.hash(runtimeType,signedInEmail,isBusy);
+}
 
 @override
 String toString() {
-  return 'CloudBackupState(signedInEmail: $signedInEmail, isBusy: $isBusy)';
+    return 'CloudBackupState(signedInEmail: $signedInEmail, isBusy: $isBusy)';
 }
 
 

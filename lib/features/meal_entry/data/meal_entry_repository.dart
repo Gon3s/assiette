@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 /// Drift-backed implementation of [MealEntryRepository].
 class DriftMealEntryRepository implements MealEntryRepository {
   /// Creates a [DriftMealEntryRepository].
-  DriftMealEntryRepository({required AppDatabase db}) : _db = db;
+  DriftMealEntryRepository({required this._db});
 
   final AppDatabase _db;
 

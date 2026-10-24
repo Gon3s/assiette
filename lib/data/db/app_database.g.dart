@@ -7485,28 +7485,26 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ];
 }
 
-typedef $$TagsTableCreateCompanionBuilder =
-    TagsCompanion Function({
-      required String id,
-      required String label,
-      Value<String?> category,
-      Value<bool> isSystem,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
-typedef $$TagsTableUpdateCompanionBuilder =
-    TagsCompanion Function({
-      Value<String> id,
-      Value<String> label,
-      Value<String?> category,
-      Value<bool> isSystem,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
+typedef $$TagsTableCreateCompanionBuilder = TagsCompanion Function({
+  required String id,
+  required String label,
+  Value<String?> category,
+  Value<bool> isSystem,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
+typedef $$TagsTableUpdateCompanionBuilder = TagsCompanion Function({
+  Value<String> id,
+  Value<String> label,
+  Value<String?> category,
+  Value<bool> isSystem,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
 
 class $$TagsTableFilterComposer extends Composer<_$AppDatabase, $TagsTable> {
   $$TagsTableFilterComposer({
@@ -7694,7 +7692,12 @@ class $$TagsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$TagsTable, Tag>(table),
+                  BaseReferences<_$AppDatabase, $TagsTable, Tag>(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -7715,32 +7718,30 @@ typedef $$TagsTableProcessedTableManager =
       Tag,
       PrefetchHooks Function()
     >;
-typedef $$MealsTableCreateCompanionBuilder =
-    MealsCompanion Function({
-      required String id,
-      required DateTime timestamp,
-      required MealType mealType,
-      Value<String?> photoPath,
-      Value<String?> note,
-      Value<String?> templateId,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
-typedef $$MealsTableUpdateCompanionBuilder =
-    MealsCompanion Function({
-      Value<String> id,
-      Value<DateTime> timestamp,
-      Value<MealType> mealType,
-      Value<String?> photoPath,
-      Value<String?> note,
-      Value<String?> templateId,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
+typedef $$MealsTableCreateCompanionBuilder = MealsCompanion Function({
+  required String id,
+  required DateTime timestamp,
+  required MealType mealType,
+  Value<String?> photoPath,
+  Value<String?> note,
+  Value<String?> templateId,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
+typedef $$MealsTableUpdateCompanionBuilder = MealsCompanion Function({
+  Value<String> id,
+  Value<DateTime> timestamp,
+  Value<MealType> mealType,
+  Value<String?> photoPath,
+  Value<String?> note,
+  Value<String?> templateId,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
 
 class $$MealsTableFilterComposer extends Composer<_$AppDatabase, $MealsTable> {
   $$MealsTableFilterComposer({
@@ -7966,7 +7967,16 @@ class $$MealsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$MealsTable, Meal>(table),
+                  BaseReferences<_$AppDatabase, $MealsTable, Meal>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -7987,18 +7997,16 @@ typedef $$MealsTableProcessedTableManager =
       Meal,
       PrefetchHooks Function()
     >;
-typedef $$MealTagsTableCreateCompanionBuilder =
-    MealTagsCompanion Function({
-      required String mealId,
-      required String tagId,
-      Value<int> rowid,
-    });
-typedef $$MealTagsTableUpdateCompanionBuilder =
-    MealTagsCompanion Function({
-      Value<String> mealId,
-      Value<String> tagId,
-      Value<int> rowid,
-    });
+typedef $$MealTagsTableCreateCompanionBuilder = MealTagsCompanion Function({
+  required String mealId,
+  required String tagId,
+  Value<int> rowid,
+});
+typedef $$MealTagsTableUpdateCompanionBuilder = MealTagsCompanion Function({
+  Value<String> mealId,
+  Value<String> tagId,
+  Value<int> rowid,
+});
 
 class $$MealTagsTableFilterComposer
     extends Composer<_$AppDatabase, $MealTagsTable> {
@@ -8082,13 +8090,11 @@ class $$MealTagsTableTableManager
               $$MealTagsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$MealTagsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> mealId = const Value.absent(),
-                Value<String> tagId = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) =>
-                  MealTagsCompanion(mealId: mealId, tagId: tagId, rowid: rowid),
+          updateCompanionCallback: ({
+            Value<String> mealId = const Value.absent(),
+            Value<String> tagId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) => MealTagsCompanion(mealId: mealId, tagId: tagId, rowid: rowid),
           createCompanionCallback:
               ({
                 required String mealId,
@@ -8100,7 +8106,16 @@ class $$MealTagsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$MealTagsTable, MealTag>(table),
+                  BaseReferences<_$AppDatabase, $MealTagsTable, MealTag>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -8339,7 +8354,16 @@ class $$MealTemplatesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$MealTemplatesTable, MealTemplate>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $MealTemplatesTable,
+                    MealTemplate
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -8484,7 +8508,16 @@ class $$TemplateTagsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$TemplateTagsTable, TemplateTag>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $TemplateTagsTable,
+                    TemplateTag
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -8508,48 +8541,46 @@ typedef $$TemplateTagsTableProcessedTableManager =
       TemplateTag,
       PrefetchHooks Function()
     >;
-typedef $$SymptomsTableCreateCompanionBuilder =
-    SymptomsCompanion Function({
-      required String id,
-      required DateTime timestamp,
-      required SymptomType type,
-      Value<int?> intensity,
-      Value<String?> detail,
-      Value<DateTime?> endTime,
-      Value<DateTime?> startedAt,
-      Value<MigraineStartPrecision?> startPrecision,
-      Value<DateTime?> endedAt,
-      Value<int?> initialIntensity,
-      Value<int?> maximumIntensity,
-      Value<String?> note,
-      Value<DateTime?> dailyDate,
-      Value<bool> isDailyNote,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
-typedef $$SymptomsTableUpdateCompanionBuilder =
-    SymptomsCompanion Function({
-      Value<String> id,
-      Value<DateTime> timestamp,
-      Value<SymptomType> type,
-      Value<int?> intensity,
-      Value<String?> detail,
-      Value<DateTime?> endTime,
-      Value<DateTime?> startedAt,
-      Value<MigraineStartPrecision?> startPrecision,
-      Value<DateTime?> endedAt,
-      Value<int?> initialIntensity,
-      Value<int?> maximumIntensity,
-      Value<String?> note,
-      Value<DateTime?> dailyDate,
-      Value<bool> isDailyNote,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-      Value<DateTime?> deletedAt,
-      Value<int> rowid,
-    });
+typedef $$SymptomsTableCreateCompanionBuilder = SymptomsCompanion Function({
+  required String id,
+  required DateTime timestamp,
+  required SymptomType type,
+  Value<int?> intensity,
+  Value<String?> detail,
+  Value<DateTime?> endTime,
+  Value<DateTime?> startedAt,
+  Value<MigraineStartPrecision?> startPrecision,
+  Value<DateTime?> endedAt,
+  Value<int?> initialIntensity,
+  Value<int?> maximumIntensity,
+  Value<String?> note,
+  Value<DateTime?> dailyDate,
+  Value<bool> isDailyNote,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
+typedef $$SymptomsTableUpdateCompanionBuilder = SymptomsCompanion Function({
+  Value<String> id,
+  Value<DateTime> timestamp,
+  Value<SymptomType> type,
+  Value<int?> intensity,
+  Value<String?> detail,
+  Value<DateTime?> endTime,
+  Value<DateTime?> startedAt,
+  Value<MigraineStartPrecision?> startPrecision,
+  Value<DateTime?> endedAt,
+  Value<int?> initialIntensity,
+  Value<int?> maximumIntensity,
+  Value<String?> note,
+  Value<DateTime?> dailyDate,
+  Value<bool> isDailyNote,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<int> rowid,
+});
 
 final class $$SymptomsTableReferences
     extends BaseReferences<_$AppDatabase, $SymptomsTable, Symptom> {
@@ -8562,10 +8593,7 @@ final class $$SymptomsTableReferences
   _migraineIntensityMeasurementsRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.migraineIntensityMeasurements,
-        aliasName: $_aliasNameGenerator(
-          db.symptoms.id,
-          db.migraineIntensityMeasurements.symptomId,
-        ),
+        aliasName: 'symptoms__id__migraine_intensity_measurements__symptom_id',
       );
 
   $$MigraineIntensityMeasurementsTableProcessedTableManager
@@ -8587,10 +8615,7 @@ final class $$SymptomsTableReferences
   _medicationIntakesRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.medicationIntakes,
-        aliasName: $_aliasNameGenerator(
-          db.symptoms.id,
-          db.medicationIntakes.symptomId,
-        ),
+        aliasName: 'symptoms__id__medication_intakes__symptom_id',
       );
 
   $$MedicationIntakesTableProcessedTableManager get medicationIntakesRefs {
@@ -9097,7 +9122,7 @@ class $$SymptomsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$SymptomsTable, Symptom>(table),
                   $$SymptomsTableReferences(db, table, e),
                 ),
               )
@@ -9118,10 +9143,11 @@ class $$SymptomsTableTableManager
                   getPrefetchedDataCallback: (items) async {
                     return [
                       if (migraineIntensityMeasurementsRefs)
-                        await $_getPrefetchedData<
+                        await $_getPrefetchedDataByColumns<
                           Symptom,
                           $SymptomsTable,
-                          MigraineIntensityMeasurement
+                          MigraineIntensityMeasurement,
+                          $MigraineIntensityMeasurementsTable
                         >(
                           currentTable: table,
                           referencedTable: $$SymptomsTableReferences
@@ -9132,17 +9158,16 @@ class $$SymptomsTableTableManager
                                 table,
                                 p0,
                               ).migraineIntensityMeasurementsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.symptomId == item.id,
-                              ),
+                          currentColumn: 'id',
+                          referencedColumn: 'symptom_id',
                           typedResults: items,
                         ),
                       if (medicationIntakesRefs)
-                        await $_getPrefetchedData<
+                        await $_getPrefetchedDataByColumns<
                           Symptom,
                           $SymptomsTable,
-                          MedicationIntake
+                          MedicationIntake,
+                          $MedicationIntakesTable
                         >(
                           currentTable: table,
                           referencedTable: $$SymptomsTableReferences
@@ -9153,10 +9178,8 @@ class $$SymptomsTableTableManager
                                 table,
                                 p0,
                               ).medicationIntakesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.symptomId == item.id,
-                              ),
+                          currentColumn: 'id',
+                          referencedColumn: 'symptom_id',
                           typedResults: items,
                         ),
                     ];
@@ -9234,13 +9257,8 @@ final class $$MigraineIntensityMeasurementsTableReferences
     super.$_typedResult,
   );
 
-  static $SymptomsTable _symptomIdTable(_$AppDatabase db) =>
-      db.symptoms.createAlias(
-        $_aliasNameGenerator(
-          db.migraineIntensityMeasurements.symptomId,
-          db.symptoms.id,
-        ),
-      );
+  static $SymptomsTable _symptomIdTable(_$AppDatabase db) => db.symptoms
+      .createAlias('migraine_intensity_measurements__symptom_id__symptoms__id');
 
   $$SymptomsTableProcessedTableManager get symptomId {
     final $_column = $_itemColumn<String>('symptom_id')!;
@@ -9645,7 +9663,10 @@ class $$MigraineIntensityMeasurementsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<
+                    $MigraineIntensityMeasurementsTable,
+                    MigraineIntensityMeasurement
+                  >(table),
                   $$MigraineIntensityMeasurementsTableReferences(db, table, e),
                 ),
               )
@@ -9671,19 +9692,17 @@ class $$MigraineIntensityMeasurementsTableTableManager
                     >
                   >(state) {
                     if (symptomId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.symptomId,
-                                referencedTable:
-                                    $$MigraineIntensityMeasurementsTableReferences
-                                        ._symptomIdTable(db),
-                                referencedColumn:
-                                    $$MigraineIntensityMeasurementsTableReferences
-                                        ._symptomIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.symptomId,
+                        referencedTable:
+                            $$MigraineIntensityMeasurementsTableReferences
+                                ._symptomIdTable(db),
+                        referencedColumn:
+                            $$MigraineIntensityMeasurementsTableReferences
+                                ._symptomIdTable(db)
+                                .id,
+                      ) as T;
                     }
 
                     return state;
@@ -9755,9 +9774,7 @@ final class $$MedicationIntakesTableReferences
   );
 
   static $SymptomsTable _symptomIdTable(_$AppDatabase db) =>
-      db.symptoms.createAlias(
-        $_aliasNameGenerator(db.medicationIntakes.symptomId, db.symptoms.id),
-      );
+      db.symptoms.createAlias('medication_intakes__symptom_id__symptoms__id');
 
   $$SymptomsTableProcessedTableManager? get symptomId {
     final $_column = $_itemColumn<String>('symptom_id');
@@ -10059,7 +10076,7 @@ class $$MedicationIntakesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$MedicationIntakesTable, MedicationIntake>(table),
                   $$MedicationIntakesTableReferences(db, table, e),
                 ),
               )
@@ -10085,19 +10102,15 @@ class $$MedicationIntakesTableTableManager
                     >
                   >(state) {
                     if (symptomId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.symptomId,
-                                referencedTable:
-                                    $$MedicationIntakesTableReferences
-                                        ._symptomIdTable(db),
-                                referencedColumn:
-                                    $$MedicationIntakesTableReferences
-                                        ._symptomIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.symptomId,
+                        referencedTable: $$MedicationIntakesTableReferences
+                            ._symptomIdTable(db),
+                        referencedColumn: $$MedicationIntakesTableReferences
+                            ._symptomIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -10396,7 +10409,16 @@ class $$SleepEntriesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$SleepEntriesTable, SleepEntry>(table),
+                  BaseReferences<_$AppDatabase, $SleepEntriesTable, SleepEntry>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -10892,7 +10914,18 @@ class $$EnvironmentSnapshotsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$EnvironmentSnapshotsTable, EnvironmentSnapshot>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $EnvironmentSnapshotsTable,
+                    EnvironmentSnapshot
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -11367,7 +11400,16 @@ class $$AppSettingsTableTableManager
                 photoTagSuggestionsEnabled: photoTagSuggestionsEnabled,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$AppSettingsTable, AppSetting>(table),
+                  BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -11536,7 +11578,16 @@ class $$CloudBackupStatesTableTableManager
                 hasRestoredOnThisDevice: hasRestoredOnThisDevice,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$CloudBackupStatesTable, CloudBackupState>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CloudBackupStatesTable,
+                    CloudBackupState
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'meal_draft.dart';
@@ -9,6 +9,7 @@ part of 'meal_draft.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $MealDraftCopyWith<MealDraft> get copyWith => _$MealDraftCopyWithImpl<MealDraft>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.tags, tags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.note, note) || other.note == note));
+  final _this = this as MealDraft;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MealDraft&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.mealType, _this.mealType) || other.mealType == _this.mealType)&&const DeepCollectionEquality().equals(other.tags, _this.tags)&&(identical(other.photoPath, _this.photoPath) || other.photoPath == _this.photoPath)&&(identical(other.note, _this.note) || other.note == _this.note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,mealType,const DeepCollectionEquality().hash(tags),photoPath,note);
+int get hashCode {
+  final _this = this as MealDraft;
+  return Object.hash(runtimeType,_this.id,_this.timestamp,_this.mealType,const DeepCollectionEquality().hash(_this.tags),_this.photoPath,_this.note);
+}
 
 @override
 String toString() {
-  return 'MealDraft(id: $id, timestamp: $timestamp, mealType: $mealType, tags: $tags, photoPath: $photoPath, note: $note)';
+  final _this = this as MealDraft;
+  return 'MealDraft(id: ${_this.id}, timestamp: ${_this.timestamp}, mealType: ${_this.mealType}, tags: ${_this.tags}, photoPath: ${_this.photoPath}, note: ${_this.note})';
 }
 
 
@@ -63,7 +69,7 @@ class _$MealDraftCopyWithImpl<$Res>
 /// Create a copy of MealDraft
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? timestamp = null,Object? mealType = null,Object? tags = null,Object? photoPath = freezed,Object? note = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(MealDraft(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
@@ -211,7 +217,7 @@ return $default(_that.id,_that.timestamp,_that.mealType,_that.tags,_that.photoPa
 
 
 class _MealDraft implements MealDraft {
-  const _MealDraft({required this.id, required this.timestamp, required this.mealType, required final  List<TagOption> tags, this.photoPath, this.note}): _tags = tags;
+  const _MealDraft({required this.id, required this.timestamp, required this.mealType, required  List<TagOption> tags, this.photoPath, this.note}): _tags = tags;
   
 
 @override final  String id;
@@ -237,16 +243,18 @@ _$MealDraftCopyWith<_MealDraft> get copyWith => __$MealDraftCopyWithImpl<_MealDr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other._tags, _tags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.note, note) || other.note == note));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MealDraft&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.tags, _tags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.note, note) || other.note == note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,timestamp,mealType,const DeepCollectionEquality().hash(_tags),photoPath,note);
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp,mealType,const DeepCollectionEquality().hash(_tags),photoPath,note);
+}
 
 @override
 String toString() {
-  return 'MealDraft(id: $id, timestamp: $timestamp, mealType: $mealType, tags: $tags, photoPath: $photoPath, note: $note)';
+    return 'MealDraft(id: $id, timestamp: $timestamp, mealType: $mealType, tags: $tags, photoPath: $photoPath, note: $note)';
 }
 
 

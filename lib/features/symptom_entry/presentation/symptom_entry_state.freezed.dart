@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'symptom_entry_state.dart';
@@ -9,6 +9,7 @@ part of 'symptom_entry_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $SymptomEntryStateCopyWith<SymptomEntryState> get copyWith => _$SymptomEntryStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomEntryState&&(identical(other.type, type) || other.type == type)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote)&&(identical(other.previousIntensity, previousIntensity) || other.previousIntensity == previousIntensity)&&const DeepCollectionEquality().equals(other.intakes, intakes)&&const DeepCollectionEquality().equals(other.removedIntakeIds, removedIntakeIds)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+  final _this = this as SymptomEntryState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SymptomEntryState&&(identical(other.type, _this.type) || other.type == _this.type)&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.intensity, _this.intensity) || other.intensity == _this.intensity)&&(identical(other.detail, _this.detail) || other.detail == _this.detail)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.endTime, _this.endTime) || other.endTime == _this.endTime)&&(identical(other.maximumIntensity, _this.maximumIntensity) || other.maximumIntensity == _this.maximumIntensity)&&(identical(other.dailyDate, _this.dailyDate) || other.dailyDate == _this.dailyDate)&&(identical(other.startPrecision, _this.startPrecision) || other.startPrecision == _this.startPrecision)&&(identical(other.isDailyNote, _this.isDailyNote) || other.isDailyNote == _this.isDailyNote)&&(identical(other.previousIntensity, _this.previousIntensity) || other.previousIntensity == _this.previousIntensity)&&const DeepCollectionEquality().equals(other.intakes, _this.intakes)&&const DeepCollectionEquality().equals(other.removedIntakeIds, _this.removedIntakeIds)&&(identical(other.isSaving, _this.isSaving) || other.isSaving == _this.isSaving)&&(identical(other.id, _this.id) || other.id == _this.id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,type,timestamp,intensity,detail,note,endTime,maximumIntensity,dailyDate,startPrecision,isDailyNote,previousIntensity,const DeepCollectionEquality().hash(intakes),const DeepCollectionEquality().hash(removedIntakeIds),isSaving,id);
+int get hashCode {
+  final _this = this as SymptomEntryState;
+  return Object.hash(runtimeType,_this.type,_this.timestamp,_this.intensity,_this.detail,_this.note,_this.endTime,_this.maximumIntensity,_this.dailyDate,_this.startPrecision,_this.isDailyNote,_this.previousIntensity,const DeepCollectionEquality().hash(_this.intakes),const DeepCollectionEquality().hash(_this.removedIntakeIds),_this.isSaving,_this.id);
+}
 
 @override
 String toString() {
-  return 'SymptomEntryState(type: $type, timestamp: $timestamp, intensity: $intensity, detail: $detail, note: $note, endTime: $endTime, maximumIntensity: $maximumIntensity, dailyDate: $dailyDate, startPrecision: $startPrecision, isDailyNote: $isDailyNote, previousIntensity: $previousIntensity, intakes: $intakes, removedIntakeIds: $removedIntakeIds, isSaving: $isSaving, id: $id)';
+  final _this = this as SymptomEntryState;
+  return 'SymptomEntryState(type: ${_this.type}, timestamp: ${_this.timestamp}, intensity: ${_this.intensity}, detail: ${_this.detail}, note: ${_this.note}, endTime: ${_this.endTime}, maximumIntensity: ${_this.maximumIntensity}, dailyDate: ${_this.dailyDate}, startPrecision: ${_this.startPrecision}, isDailyNote: ${_this.isDailyNote}, previousIntensity: ${_this.previousIntensity}, intakes: ${_this.intakes}, removedIntakeIds: ${_this.removedIntakeIds}, isSaving: ${_this.isSaving}, id: ${_this.id})';
 }
 
 
@@ -63,7 +69,7 @@ class _$SymptomEntryStateCopyWithImpl<$Res>
 /// Create a copy of SymptomEntryState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? timestamp = null,Object? intensity = null,Object? detail = freezed,Object? note = null,Object? endTime = freezed,Object? maximumIntensity = freezed,Object? dailyDate = freezed,Object? startPrecision = null,Object? isDailyNote = null,Object? previousIntensity = freezed,Object? intakes = null,Object? removedIntakeIds = null,Object? isSaving = null,Object? id = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(SymptomEntryState(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as SymptomType,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,intensity: null == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
@@ -220,7 +226,7 @@ return $default(_that.type,_that.timestamp,_that.intensity,_that.detail,_that.no
 
 
 class _SymptomEntryState implements SymptomEntryState {
-  const _SymptomEntryState({required this.type, required this.timestamp, this.intensity = 5, this.detail, this.note = '', this.endTime, this.maximumIntensity, this.dailyDate, this.startPrecision = MigraineStartPrecision.exact, this.isDailyNote = false, this.previousIntensity, final  List<MedicationIntakeDraft> intakes = const <MedicationIntakeDraft>[], final  List<String> removedIntakeIds = const <String>[], this.isSaving = false, this.id}): _intakes = intakes,_removedIntakeIds = removedIntakeIds;
+  const _SymptomEntryState({required this.type, required this.timestamp, this.intensity = 5, this.detail, this.note = '', this.endTime, this.maximumIntensity, this.dailyDate, this.startPrecision = MigraineStartPrecision.exact, this.isDailyNote = false, this.previousIntensity,  List<MedicationIntakeDraft> intakes = const <MedicationIntakeDraft>[],  List<String> removedIntakeIds = const <String>[], this.isSaving = false, this.id}): _intakes = intakes,_removedIntakeIds = removedIntakeIds;
   
 
 @override final  SymptomType type;
@@ -261,16 +267,18 @@ _$SymptomEntryStateCopyWith<_SymptomEntryState> get copyWith => __$SymptomEntryS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomEntryState&&(identical(other.type, type) || other.type == type)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote)&&(identical(other.previousIntensity, previousIntensity) || other.previousIntensity == previousIntensity)&&const DeepCollectionEquality().equals(other._intakes, _intakes)&&const DeepCollectionEquality().equals(other._removedIntakeIds, _removedIntakeIds)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SymptomEntryState&&(identical(other.type, type) || other.type == type)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.maximumIntensity, maximumIntensity) || other.maximumIntensity == maximumIntensity)&&(identical(other.dailyDate, dailyDate) || other.dailyDate == dailyDate)&&(identical(other.startPrecision, startPrecision) || other.startPrecision == startPrecision)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote)&&(identical(other.previousIntensity, previousIntensity) || other.previousIntensity == previousIntensity)&&const DeepCollectionEquality().equals(other.intakes, _intakes)&&const DeepCollectionEquality().equals(other.removedIntakeIds, _removedIntakeIds)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,type,timestamp,intensity,detail,note,endTime,maximumIntensity,dailyDate,startPrecision,isDailyNote,previousIntensity,const DeepCollectionEquality().hash(_intakes),const DeepCollectionEquality().hash(_removedIntakeIds),isSaving,id);
+int get hashCode {
+    return Object.hash(runtimeType,type,timestamp,intensity,detail,note,endTime,maximumIntensity,dailyDate,startPrecision,isDailyNote,previousIntensity,const DeepCollectionEquality().hash(_intakes),const DeepCollectionEquality().hash(_removedIntakeIds),isSaving,id);
+}
 
 @override
 String toString() {
-  return 'SymptomEntryState(type: $type, timestamp: $timestamp, intensity: $intensity, detail: $detail, note: $note, endTime: $endTime, maximumIntensity: $maximumIntensity, dailyDate: $dailyDate, startPrecision: $startPrecision, isDailyNote: $isDailyNote, previousIntensity: $previousIntensity, intakes: $intakes, removedIntakeIds: $removedIntakeIds, isSaving: $isSaving, id: $id)';
+    return 'SymptomEntryState(type: $type, timestamp: $timestamp, intensity: $intensity, detail: $detail, note: $note, endTime: $endTime, maximumIntensity: $maximumIntensity, dailyDate: $dailyDate, startPrecision: $startPrecision, isDailyNote: $isDailyNote, previousIntensity: $previousIntensity, intakes: $intakes, removedIntakeIds: $removedIntakeIds, isSaving: $isSaving, id: $id)';
 }
 
 

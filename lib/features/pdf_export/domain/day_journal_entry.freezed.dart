@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'day_journal_entry.dart';
@@ -9,6 +9,7 @@ part of 'day_journal_entry.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $JournalMealEntryCopyWith<JournalMealEntry> get copyWith => _$JournalMealEntryCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalMealEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.tagLabels, tagLabels)&&(identical(other.note, note) || other.note == note));
+  final _this = this as JournalMealEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalMealEntry&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.mealType, _this.mealType) || other.mealType == _this.mealType)&&const DeepCollectionEquality().equals(other.tagLabels, _this.tagLabels)&&(identical(other.note, _this.note) || other.note == _this.note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,mealType,const DeepCollectionEquality().hash(tagLabels),note);
+int get hashCode {
+  final _this = this as JournalMealEntry;
+  return Object.hash(runtimeType,_this.timestamp,_this.mealType,const DeepCollectionEquality().hash(_this.tagLabels),_this.note);
+}
 
 @override
 String toString() {
-  return 'JournalMealEntry(timestamp: $timestamp, mealType: $mealType, tagLabels: $tagLabels, note: $note)';
+  final _this = this as JournalMealEntry;
+  return 'JournalMealEntry(timestamp: ${_this.timestamp}, mealType: ${_this.mealType}, tagLabels: ${_this.tagLabels}, note: ${_this.note})';
 }
 
 
@@ -63,7 +69,7 @@ class _$JournalMealEntryCopyWithImpl<$Res>
 /// Create a copy of JournalMealEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? mealType = null,Object? tagLabels = null,Object? note = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(JournalMealEntry(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,mealType: null == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
 as MealType,tagLabels: null == tagLabels ? _self.tagLabels : tagLabels // ignore: cast_nullable_to_non_nullable
@@ -209,7 +215,7 @@ return $default(_that.timestamp,_that.mealType,_that.tagLabels,_that.note);case 
 
 
 class _JournalMealEntry implements JournalMealEntry {
-  const _JournalMealEntry({required this.timestamp, required this.mealType, required final  List<String> tagLabels, this.note}): _tagLabels = tagLabels;
+  const _JournalMealEntry({required this.timestamp, required this.mealType, required  List<String> tagLabels, this.note}): _tagLabels = tagLabels;
   
 
 @override final  DateTime timestamp;
@@ -233,16 +239,18 @@ _$JournalMealEntryCopyWith<_JournalMealEntry> get copyWith => __$JournalMealEntr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalMealEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other._tagLabels, _tagLabels)&&(identical(other.note, note) || other.note == note));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalMealEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.tagLabels, _tagLabels)&&(identical(other.note, note) || other.note == note));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,mealType,const DeepCollectionEquality().hash(_tagLabels),note);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,mealType,const DeepCollectionEquality().hash(_tagLabels),note);
+}
 
 @override
 String toString() {
-  return 'JournalMealEntry(timestamp: $timestamp, mealType: $mealType, tagLabels: $tagLabels, note: $note)';
+    return 'JournalMealEntry(timestamp: $timestamp, mealType: $mealType, tagLabels: $tagLabels, note: $note)';
 }
 
 
@@ -297,16 +305,21 @@ $JournalSymptomEntryCopyWith<JournalSymptomEntry> get copyWith => _$JournalSympt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
+  final _this = this as JournalSymptomEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalSymptomEntry&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.symptomType, _this.symptomType) || other.symptomType == _this.symptomType)&&(identical(other.intensity, _this.intensity) || other.intensity == _this.intensity)&&(identical(other.detail, _this.detail) || other.detail == _this.detail)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.isDailyNote, _this.isDailyNote) || other.isDailyNote == _this.isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note,isDailyNote);
+int get hashCode {
+  final _this = this as JournalSymptomEntry;
+  return Object.hash(runtimeType,_this.timestamp,_this.symptomType,_this.intensity,_this.detail,_this.note,_this.isDailyNote);
+}
 
 @override
 String toString() {
-  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note, isDailyNote: $isDailyNote)';
+  final _this = this as JournalSymptomEntry;
+  return 'JournalSymptomEntry(timestamp: ${_this.timestamp}, symptomType: ${_this.symptomType}, intensity: ${_this.intensity}, detail: ${_this.detail}, note: ${_this.note}, isDailyNote: ${_this.isDailyNote})';
 }
 
 
@@ -335,7 +348,7 @@ class _$JournalSymptomEntryCopyWithImpl<$Res>
 /// Create a copy of JournalSymptomEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? symptomType = null,Object? intensity = freezed,Object? detail = freezed,Object? note = freezed,Object? isDailyNote = null,}) {
-  return _then(_self.copyWith(
+  return _then(JournalSymptomEntry(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,symptomType: null == symptomType ? _self.symptomType : symptomType // ignore: cast_nullable_to_non_nullable
 as SymptomType,intensity: freezed == intensity ? _self.intensity : intensity // ignore: cast_nullable_to_non_nullable
@@ -503,16 +516,18 @@ _$JournalSymptomEntryCopyWith<_JournalSymptomEntry> get copyWith => __$JournalSy
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalSymptomEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.symptomType, symptomType) || other.symptomType == symptomType)&&(identical(other.intensity, intensity) || other.intensity == intensity)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.note, note) || other.note == note)&&(identical(other.isDailyNote, isDailyNote) || other.isDailyNote == isDailyNote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note,isDailyNote);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,symptomType,intensity,detail,note,isDailyNote);
+}
 
 @override
 String toString() {
-  return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note, isDailyNote: $isDailyNote)';
+    return 'JournalSymptomEntry(timestamp: $timestamp, symptomType: $symptomType, intensity: $intensity, detail: $detail, note: $note, isDailyNote: $isDailyNote)';
 }
 
 
@@ -569,16 +584,21 @@ $JournalMedicationEntryCopyWith<JournalMedicationEntry> get copyWith => _$Journa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalMedicationEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
+  final _this = this as JournalMedicationEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is JournalMedicationEntry&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.dose, _this.dose) || other.dose == _this.dose));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,name,dose);
+int get hashCode {
+  final _this = this as JournalMedicationEntry;
+  return Object.hash(runtimeType,_this.timestamp,_this.name,_this.dose);
+}
 
 @override
 String toString() {
-  return 'JournalMedicationEntry(timestamp: $timestamp, name: $name, dose: $dose)';
+  final _this = this as JournalMedicationEntry;
+  return 'JournalMedicationEntry(timestamp: ${_this.timestamp}, name: ${_this.name}, dose: ${_this.dose})';
 }
 
 
@@ -607,7 +627,7 @@ class _$JournalMedicationEntryCopyWithImpl<$Res>
 /// Create a copy of JournalMedicationEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? name = null,Object? dose = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(JournalMedicationEntry(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,dose: freezed == dose ? _self.dose : dose // ignore: cast_nullable_to_non_nullable
@@ -769,16 +789,18 @@ _$JournalMedicationEntryCopyWith<_JournalMedicationEntry> get copyWith => __$Jou
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalMedicationEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _JournalMedicationEntry&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.name, name) || other.name == name)&&(identical(other.dose, dose) || other.dose == dose));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,name,dose);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,name,dose);
+}
 
 @override
 String toString() {
-  return 'JournalMedicationEntry(timestamp: $timestamp, name: $name, dose: $dose)';
+    return 'JournalMedicationEntry(timestamp: $timestamp, name: $name, dose: $dose)';
 }
 
 
@@ -832,16 +854,21 @@ $DayJournalEntryCopyWith<DayJournalEntry> get copyWith => _$DayJournalEntryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, meals)&&const DeepCollectionEquality().equals(other.symptoms, symptoms)&&const DeepCollectionEquality().equals(other.medications, medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
+  final _this = this as DayJournalEntry;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, _this.date) || other.date == _this.date)&&const DeepCollectionEquality().equals(other.meals, _this.meals)&&const DeepCollectionEquality().equals(other.symptoms, _this.symptoms)&&const DeepCollectionEquality().equals(other.medications, _this.medications)&&(identical(other.sleep, _this.sleep) || other.sleep == _this.sleep)&&(identical(other.weather, _this.weather) || other.weather == _this.weather));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(meals),const DeepCollectionEquality().hash(symptoms),const DeepCollectionEquality().hash(medications),sleep,weather);
+int get hashCode {
+  final _this = this as DayJournalEntry;
+  return Object.hash(runtimeType,_this.date,const DeepCollectionEquality().hash(_this.meals),const DeepCollectionEquality().hash(_this.symptoms),const DeepCollectionEquality().hash(_this.medications),_this.sleep,_this.weather);
+}
 
 @override
 String toString() {
-  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather)';
+  final _this = this as DayJournalEntry;
+  return 'DayJournalEntry(date: ${_this.date}, meals: ${_this.meals}, symptoms: ${_this.symptoms}, medications: ${_this.medications}, sleep: ${_this.sleep}, weather: ${_this.weather})';
 }
 
 
@@ -870,7 +897,7 @@ class _$DayJournalEntryCopyWithImpl<$Res>
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(DayJournalEntry(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,meals: null == meals ? _self.meals : meals // ignore: cast_nullable_to_non_nullable
 as List<JournalMealEntry>,symptoms: null == symptoms ? _self.symptoms : symptoms // ignore: cast_nullable_to_non_nullable
@@ -1042,7 +1069,7 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sl
 
 
 class _DayJournalEntry extends DayJournalEntry {
-  const _DayJournalEntry({required this.date, required final  List<JournalMealEntry> meals, required final  List<JournalSymptomEntry> symptoms, final  List<JournalMedicationEntry> medications = const <JournalMedicationEntry>[], this.sleep, this.weather}): _meals = meals,_symptoms = symptoms,_medications = medications,super._();
+  const _DayJournalEntry({required this.date, required  List<JournalMealEntry> meals, required  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications = const <JournalMedicationEntry>[], this.sleep, this.weather}): _meals = meals,_symptoms = symptoms,_medications = medications,super._();
   
 
 @override final  DateTime date;
@@ -1080,16 +1107,18 @@ _$DayJournalEntryCopyWith<_DayJournalEntry> get copyWith => __$DayJournalEntryCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other._meals, _meals)&&const DeepCollectionEquality().equals(other._symptoms, _symptoms)&&const DeepCollectionEquality().equals(other._medications, _medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, _meals)&&const DeepCollectionEquality().equals(other.symptoms, _symptoms)&&const DeepCollectionEquality().equals(other.medications, _medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),const DeepCollectionEquality().hash(_medications),sleep,weather);
+int get hashCode {
+    return Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),const DeepCollectionEquality().hash(_medications),sleep,weather);
+}
 
 @override
 String toString() {
-  return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather)';
+    return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather)';
 }
 
 
