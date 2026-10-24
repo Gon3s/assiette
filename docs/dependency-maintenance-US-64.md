@@ -4,6 +4,10 @@ Inventaire du 24 octobre 2026, établi avec Flutter **3.44.5** / Dart **3.12.2**
 depuis le lockfile de main (2a4e963). Les versions restent inchangées dans cette
 US : les montées de version et leur validation métier font l'objet de PR dédiées.
 
+Après cet inventaire, la PR #45 a migré le projet vers Flutter **3.47.8** /
+Dart **3.13.7** et Freezed 4. La procédure courante utilise ce nouveau SDK;
+les tableaux ci-dessous conservent l'état initial de l'inventaire.
+
 ## Sources et couverture
 
 - flutter pub outdated --json et flutter pub get --enforce-lockfile :
@@ -101,8 +105,7 @@ une certification de sécurité de leur code.
    automation policy » (tests Node de la politique). La CI des PR est en
    lecture seule et n'utilise aucun secret de publication.
 3. La protection de main doit rendre ces deux contrôles obligatoires et
-   exiger une branche à jour; l'auto-merge du dépôt doit être activé après
-   leur premier passage. Les noms des jobs sont des identifiants stables à
+   exiger une branche à jour. Les noms des jobs sont des identifiants stables à
    conserver synchronisés avec les protections GitHub. La configuration
    attendue est versionnée dans .github/main-protection.json : contrôles liés
    à GitHub Actions (app 15368), administrateurs inclus, force-push et
@@ -113,8 +116,10 @@ une certification de sécurité de leur code.
    code de la branche par défaut et lit le contenu de la PR comme des données.
    Il vérifie l'auteur dependabot[bot], l'origine du dépôt, le SHA testé, les
    deux jobs réussis et leur présence dans la protection de main avec l'identité
-   GitHub Actions, puis demande une fusion squash
-   via l'auto-merge GitHub. Aucun contournement des contrôles n'est utilisé.
+   GitHub Actions, puis demande une fusion squash via l'API REST GitHub avec
+   le SHA testé. Les protections de main restent appliquées par GitHub; un
+   refus ou une modification concurrente laisse la PR ouverte. Les erreurs
+   d'autorisation ou du serveur restent visibles dans Actions.
 5. Éligibilité : uniquement pubspec.yaml / pubspec.lock modifiés, correctifs
    stables croissants de archive, collection, freezed_annotation, http, intl,
    json_annotation, mocktail, path, timezone ou uuid. Chaque changement
@@ -122,11 +127,11 @@ une certification de sécurité de leur code.
    paquet, mineure, majeure, préversion, SDK, ajout/retrait de dépendance,
    changement de registre, de code ou de workflow : revue manuelle.
 6. Les PR non admissibles restent ouvertes pour revue. Sur échec : lire les
-   logs des contrôles, reproduire avec Flutter 3.44.5, corriger dans une PR ou
+   logs des contrôles, reproduire avec Flutter 3.47.8, corriger dans une PR ou
    demander une actualisation Dependabot. Ne pas désactiver les contrôles
    requis et ne pas ignorer un avis de sécurité sans décision documentée.
 7. Arrêt de l'automatisation : désactiver « Dependabot patch auto-merge » dans
-   Actions; retirer également l'auto-merge des PR où il est déjà activé.
+   Actions.
    Refaire une revue avant réactivation. Pour élargir la liste, modifier à la
    fois dependabot.yml et dependency-policy.cjs, avec leurs tests.
 

@@ -73,11 +73,19 @@ module.exports = async function enable({github, context, core}) {
       current.head.sha !== event.head_sha || current.base.sha !== pr.base.sha) {
     return skip('PR changed while it was being evaluated');
   }
-  if (current.auto_merge) return core.info('Auto-merge is already enabled');
-  await github.graphql(`mutation($id: ID!) {
-    enablePullRequestAutoMerge(input: {pullRequestId: $id, mergeMethod: SQUASH}) {
-      pullRequest { number }
+  // Already-clean PRs reject enablePullRequestAutoMerge. The REST endpoint
+  // merges the exact tested head and still enforces main's branch protection.
+  try {
+    const {data: merged} = await github.rest.pulls.merge({
+      owner, repo, pull_number: pr.number,
+      sha: event.head_sha, merge_method: 'squash',
+    });
+    if (!merged.merged) return skip('GitHub did not accept the protected merge');
+  } catch (error) {
+    if ([405, 409, 422].includes(error.status)) {
+      return skip(`protected merge refused or PR changed (HTTP ${error.status})`);
     }
-  }`, {id: pr.node_id});
-  core.info(`Enabled auto-merge for #${pr.number}: ${result.updated.join(', ')}`);
+    throw error;
+  }
+  core.info(`Merged #${pr.number}: ${result.updated.join(', ')}`);
 };
