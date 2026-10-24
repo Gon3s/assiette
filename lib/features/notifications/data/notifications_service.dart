@@ -56,9 +56,9 @@ class LocalNotificationsService implements NotificationsService {
     DidReceiveNotificationResponseCallback? onForegroundResponse,
   }) async {
     tz_data.initializeTimeZones();
-    final timezoneName = await FlutterTimezone.getLocalTimezone();
+    final timezone = await FlutterTimezone.getLocalTimezone();
     try {
-      tz.setLocalLocation(tz.getLocation(timezoneName));
+      tz.setLocalLocation(tz.getLocation(timezone.identifier));
     } on tz.LocationNotFoundException {
       // Some devices report a timezone id (e.g. "GMT") that isn't a
       // canonical IANA location in the tzdata this package ships.
