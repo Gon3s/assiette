@@ -15,16 +15,12 @@ import 'package:collection/collection.dart';
 class DriftJournalExportRepository implements JournalExportRepository {
   /// Creates a [DriftJournalExportRepository] backed by the given DAOs.
   DriftJournalExportRepository({
-    required MealsDao mealsDao,
-    required SymptomsDao symptomsDao,
-    required MedicationIntakesDao medicationIntakesDao,
-    required SleepEntriesDao sleepEntriesDao,
-    required EnvironmentDao environmentDao,
-  }) : _mealsDao = mealsDao,
-       _symptomsDao = symptomsDao,
-       _medicationIntakesDao = medicationIntakesDao,
-       _sleepEntriesDao = sleepEntriesDao,
-       _environmentDao = environmentDao;
+    required this._mealsDao,
+    required this._symptomsDao,
+    required this._medicationIntakesDao,
+    required this._sleepEntriesDao,
+    required this._environmentDao,
+  });
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;

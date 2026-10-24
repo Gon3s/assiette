@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'favorite_form_state.dart';
@@ -9,6 +9,7 @@ part of 'favorite_form_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $FavoriteFormStateCopyWith<FavoriteFormState> get copyWith => _$FavoriteFormStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteFormState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.selectedTags, selectedTags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving));
+  final _this = this as FavoriteFormState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteFormState&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.mealType, _this.mealType) || other.mealType == _this.mealType)&&const DeepCollectionEquality().equals(other.selectedTags, _this.selectedTags)&&(identical(other.photoPath, _this.photoPath) || other.photoPath == _this.photoPath)&&(identical(other.isSaving, _this.isSaving) || other.isSaving == _this.isSaving));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,mealType,const DeepCollectionEquality().hash(selectedTags),photoPath,isSaving);
+int get hashCode {
+  final _this = this as FavoriteFormState;
+  return Object.hash(runtimeType,_this.id,_this.name,_this.mealType,const DeepCollectionEquality().hash(_this.selectedTags),_this.photoPath,_this.isSaving);
+}
 
 @override
 String toString() {
-  return 'FavoriteFormState(id: $id, name: $name, mealType: $mealType, selectedTags: $selectedTags, photoPath: $photoPath, isSaving: $isSaving)';
+  final _this = this as FavoriteFormState;
+  return 'FavoriteFormState(id: ${_this.id}, name: ${_this.name}, mealType: ${_this.mealType}, selectedTags: ${_this.selectedTags}, photoPath: ${_this.photoPath}, isSaving: ${_this.isSaving})';
 }
 
 
@@ -63,7 +69,7 @@ class _$FavoriteFormStateCopyWithImpl<$Res>
 /// Create a copy of FavoriteFormState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? mealType = freezed,Object? selectedTags = null,Object? photoPath = freezed,Object? isSaving = null,}) {
-  return _then(_self.copyWith(
+  return _then(FavoriteFormState(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,mealType: freezed == mealType ? _self.mealType : mealType // ignore: cast_nullable_to_non_nullable
@@ -211,7 +217,7 @@ return $default(_that.id,_that.name,_that.mealType,_that.selectedTags,_that.phot
 
 
 class _FavoriteFormState implements FavoriteFormState {
-  const _FavoriteFormState({this.id, this.name = '', this.mealType, final  List<TagOption> selectedTags = const [], this.photoPath, this.isSaving = false}): _selectedTags = selectedTags;
+  const _FavoriteFormState({this.id, this.name = '', this.mealType,  List<TagOption> selectedTags = const [], this.photoPath, this.isSaving = false}): _selectedTags = selectedTags;
   
 
 @override final  String? id;
@@ -237,16 +243,18 @@ _$FavoriteFormStateCopyWith<_FavoriteFormState> get copyWith => __$FavoriteFormS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavoriteFormState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other._selectedTags, _selectedTags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavoriteFormState&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.mealType, mealType) || other.mealType == mealType)&&const DeepCollectionEquality().equals(other.selectedTags, _selectedTags)&&(identical(other.photoPath, photoPath) || other.photoPath == photoPath)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,mealType,const DeepCollectionEquality().hash(_selectedTags),photoPath,isSaving);
+int get hashCode {
+    return Object.hash(runtimeType,id,name,mealType,const DeepCollectionEquality().hash(_selectedTags),photoPath,isSaving);
+}
 
 @override
 String toString() {
-  return 'FavoriteFormState(id: $id, name: $name, mealType: $mealType, selectedTags: $selectedTags, photoPath: $photoPath, isSaving: $isSaving)';
+    return 'FavoriteFormState(id: $id, name: $name, mealType: $mealType, selectedTags: $selectedTags, photoPath: $photoPath, isSaving: $isSaving)';
 }
 
 

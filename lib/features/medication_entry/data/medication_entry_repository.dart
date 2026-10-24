@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 /// Drift-backed implementation of [MedicationEntryRepository].
 class DriftMedicationEntryRepository implements MedicationEntryRepository {
   /// Creates a [DriftMedicationEntryRepository].
-  DriftMedicationEntryRepository({required AppDatabase db}) : _db = db;
+  DriftMedicationEntryRepository({required this._db});
 
   final AppDatabase _db;
 

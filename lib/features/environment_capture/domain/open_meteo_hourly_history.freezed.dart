@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'open_meteo_hourly_history.dart';
@@ -9,6 +9,7 @@ part of 'open_meteo_hourly_history.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $OpenMeteoHourlyHistoryCopyWith<OpenMeteoHourlyHistory> get copyWith => _$OpenMe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OpenMeteoHourlyHistory&&const DeepCollectionEquality().equals(other.times, times)&&const DeepCollectionEquality().equals(other.pressure, pressure)&&const DeepCollectionEquality().equals(other.temperature, temperature)&&const DeepCollectionEquality().equals(other.humidity, humidity)&&const DeepCollectionEquality().equals(other.weatherCode, weatherCode)&&const DeepCollectionEquality().equals(other.uvIndex, uvIndex));
+  final _this = this as OpenMeteoHourlyHistory;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OpenMeteoHourlyHistory&&const DeepCollectionEquality().equals(other.times, _this.times)&&const DeepCollectionEquality().equals(other.pressure, _this.pressure)&&const DeepCollectionEquality().equals(other.temperature, _this.temperature)&&const DeepCollectionEquality().equals(other.humidity, _this.humidity)&&const DeepCollectionEquality().equals(other.weatherCode, _this.weatherCode)&&const DeepCollectionEquality().equals(other.uvIndex, _this.uvIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(times),const DeepCollectionEquality().hash(pressure),const DeepCollectionEquality().hash(temperature),const DeepCollectionEquality().hash(humidity),const DeepCollectionEquality().hash(weatherCode),const DeepCollectionEquality().hash(uvIndex));
+int get hashCode {
+  final _this = this as OpenMeteoHourlyHistory;
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.times),const DeepCollectionEquality().hash(_this.pressure),const DeepCollectionEquality().hash(_this.temperature),const DeepCollectionEquality().hash(_this.humidity),const DeepCollectionEquality().hash(_this.weatherCode),const DeepCollectionEquality().hash(_this.uvIndex));
+}
 
 @override
 String toString() {
-  return 'OpenMeteoHourlyHistory(times: $times, pressure: $pressure, temperature: $temperature, humidity: $humidity, weatherCode: $weatherCode, uvIndex: $uvIndex)';
+  final _this = this as OpenMeteoHourlyHistory;
+  return 'OpenMeteoHourlyHistory(times: ${_this.times}, pressure: ${_this.pressure}, temperature: ${_this.temperature}, humidity: ${_this.humidity}, weatherCode: ${_this.weatherCode}, uvIndex: ${_this.uvIndex})';
 }
 
 
@@ -63,7 +69,7 @@ class _$OpenMeteoHourlyHistoryCopyWithImpl<$Res>
 /// Create a copy of OpenMeteoHourlyHistory
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? times = null,Object? pressure = null,Object? temperature = null,Object? humidity = null,Object? weatherCode = null,Object? uvIndex = null,}) {
-  return _then(_self.copyWith(
+  return _then(OpenMeteoHourlyHistory(
 times: null == times ? _self.times : times // ignore: cast_nullable_to_non_nullable
 as List<DateTime>,pressure: null == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as List<double?>,temperature: null == temperature ? _self.temperature : temperature // ignore: cast_nullable_to_non_nullable
@@ -211,7 +217,7 @@ return $default(_that.times,_that.pressure,_that.temperature,_that.humidity,_tha
 
 
 class _OpenMeteoHourlyHistory implements OpenMeteoHourlyHistory {
-  const _OpenMeteoHourlyHistory({required final  List<DateTime> times, required final  List<double?> pressure, required final  List<double?> temperature, required final  List<double?> humidity, required final  List<int?> weatherCode, required final  List<double?> uvIndex}): _times = times,_pressure = pressure,_temperature = temperature,_humidity = humidity,_weatherCode = weatherCode,_uvIndex = uvIndex;
+  const _OpenMeteoHourlyHistory({required  List<DateTime> times, required  List<double?> pressure, required  List<double?> temperature, required  List<double?> humidity, required  List<int?> weatherCode, required  List<double?> uvIndex}): _times = times,_pressure = pressure,_temperature = temperature,_humidity = humidity,_weatherCode = weatherCode,_uvIndex = uvIndex;
   
 
  final  List<DateTime> _times;
@@ -267,16 +273,18 @@ _$OpenMeteoHourlyHistoryCopyWith<_OpenMeteoHourlyHistory> get copyWith => __$Ope
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OpenMeteoHourlyHistory&&const DeepCollectionEquality().equals(other._times, _times)&&const DeepCollectionEquality().equals(other._pressure, _pressure)&&const DeepCollectionEquality().equals(other._temperature, _temperature)&&const DeepCollectionEquality().equals(other._humidity, _humidity)&&const DeepCollectionEquality().equals(other._weatherCode, _weatherCode)&&const DeepCollectionEquality().equals(other._uvIndex, _uvIndex));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _OpenMeteoHourlyHistory&&const DeepCollectionEquality().equals(other.times, _times)&&const DeepCollectionEquality().equals(other.pressure, _pressure)&&const DeepCollectionEquality().equals(other.temperature, _temperature)&&const DeepCollectionEquality().equals(other.humidity, _humidity)&&const DeepCollectionEquality().equals(other.weatherCode, _weatherCode)&&const DeepCollectionEquality().equals(other.uvIndex, _uvIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_times),const DeepCollectionEquality().hash(_pressure),const DeepCollectionEquality().hash(_temperature),const DeepCollectionEquality().hash(_humidity),const DeepCollectionEquality().hash(_weatherCode),const DeepCollectionEquality().hash(_uvIndex));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_times),const DeepCollectionEquality().hash(_pressure),const DeepCollectionEquality().hash(_temperature),const DeepCollectionEquality().hash(_humidity),const DeepCollectionEquality().hash(_weatherCode),const DeepCollectionEquality().hash(_uvIndex));
+}
 
 @override
 String toString() {
-  return 'OpenMeteoHourlyHistory(times: $times, pressure: $pressure, temperature: $temperature, humidity: $humidity, weatherCode: $weatherCode, uvIndex: $uvIndex)';
+    return 'OpenMeteoHourlyHistory(times: $times, pressure: $pressure, temperature: $temperature, humidity: $humidity, weatherCode: $weatherCode, uvIndex: $uvIndex)';
 }
 
 

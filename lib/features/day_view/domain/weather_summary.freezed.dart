@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'weather_summary.dart';
@@ -9,6 +9,7 @@ part of 'weather_summary.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -27,16 +28,21 @@ $WeatherSummaryCopyWith<WeatherSummary> get copyWith => _$WeatherSummaryCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherSummary&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.pressureDelta, pressureDelta) || other.pressureDelta == pressureDelta)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.weatherCode, weatherCode) || other.weatherCode == weatherCode)&&(identical(other.uvIndex, uvIndex) || other.uvIndex == uvIndex)&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.pollenMax, pollenMax) || other.pollenMax == pollenMax));
+  final _this = this as WeatherSummary;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeatherSummary&&(identical(other.timestamp, _this.timestamp) || other.timestamp == _this.timestamp)&&(identical(other.pressure, _this.pressure) || other.pressure == _this.pressure)&&(identical(other.pressureDelta, _this.pressureDelta) || other.pressureDelta == _this.pressureDelta)&&(identical(other.temperature, _this.temperature) || other.temperature == _this.temperature)&&(identical(other.humidity, _this.humidity) || other.humidity == _this.humidity)&&(identical(other.lat, _this.lat) || other.lat == _this.lat)&&(identical(other.lon, _this.lon) || other.lon == _this.lon)&&(identical(other.weatherCode, _this.weatherCode) || other.weatherCode == _this.weatherCode)&&(identical(other.uvIndex, _this.uvIndex) || other.uvIndex == _this.uvIndex)&&(identical(other.pm25, _this.pm25) || other.pm25 == _this.pm25)&&(identical(other.pm10, _this.pm10) || other.pm10 == _this.pm10)&&(identical(other.pollenMax, _this.pollenMax) || other.pollenMax == _this.pollenMax));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,pressure,pressureDelta,temperature,humidity,lat,lon,weatherCode,uvIndex,pm25,pm10,pollenMax);
+int get hashCode {
+  final _this = this as WeatherSummary;
+  return Object.hash(runtimeType,_this.timestamp,_this.pressure,_this.pressureDelta,_this.temperature,_this.humidity,_this.lat,_this.lon,_this.weatherCode,_this.uvIndex,_this.pm25,_this.pm10,_this.pollenMax);
+}
 
 @override
 String toString() {
-  return 'WeatherSummary(timestamp: $timestamp, pressure: $pressure, pressureDelta: $pressureDelta, temperature: $temperature, humidity: $humidity, lat: $lat, lon: $lon, weatherCode: $weatherCode, uvIndex: $uvIndex, pm25: $pm25, pm10: $pm10, pollenMax: $pollenMax)';
+  final _this = this as WeatherSummary;
+  return 'WeatherSummary(timestamp: ${_this.timestamp}, pressure: ${_this.pressure}, pressureDelta: ${_this.pressureDelta}, temperature: ${_this.temperature}, humidity: ${_this.humidity}, lat: ${_this.lat}, lon: ${_this.lon}, weatherCode: ${_this.weatherCode}, uvIndex: ${_this.uvIndex}, pm25: ${_this.pm25}, pm10: ${_this.pm10}, pollenMax: ${_this.pollenMax})';
 }
 
 
@@ -65,7 +71,7 @@ class _$WeatherSummaryCopyWithImpl<$Res>
 /// Create a copy of WeatherSummary
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? timestamp = null,Object? pressure = freezed,Object? pressureDelta = freezed,Object? temperature = freezed,Object? humidity = freezed,Object? lat = freezed,Object? lon = freezed,Object? weatherCode = freezed,Object? uvIndex = freezed,Object? pm25 = freezed,Object? pm10 = freezed,Object? pollenMax = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(WeatherSummary(
 timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,pressure: freezed == pressure ? _self.pressure : pressure // ignore: cast_nullable_to_non_nullable
 as double?,pressureDelta: freezed == pressureDelta ? _self.pressureDelta : pressureDelta // ignore: cast_nullable_to_non_nullable
@@ -247,16 +253,18 @@ _$WeatherSummaryCopyWith<_WeatherSummary> get copyWith => __$WeatherSummaryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherSummary&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.pressureDelta, pressureDelta) || other.pressureDelta == pressureDelta)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.weatherCode, weatherCode) || other.weatherCode == weatherCode)&&(identical(other.uvIndex, uvIndex) || other.uvIndex == uvIndex)&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.pollenMax, pollenMax) || other.pollenMax == pollenMax));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeatherSummary&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.pressure, pressure) || other.pressure == pressure)&&(identical(other.pressureDelta, pressureDelta) || other.pressureDelta == pressureDelta)&&(identical(other.temperature, temperature) || other.temperature == temperature)&&(identical(other.humidity, humidity) || other.humidity == humidity)&&(identical(other.lat, lat) || other.lat == lat)&&(identical(other.lon, lon) || other.lon == lon)&&(identical(other.weatherCode, weatherCode) || other.weatherCode == weatherCode)&&(identical(other.uvIndex, uvIndex) || other.uvIndex == uvIndex)&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.pollenMax, pollenMax) || other.pollenMax == pollenMax));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,timestamp,pressure,pressureDelta,temperature,humidity,lat,lon,weatherCode,uvIndex,pm25,pm10,pollenMax);
+int get hashCode {
+    return Object.hash(runtimeType,timestamp,pressure,pressureDelta,temperature,humidity,lat,lon,weatherCode,uvIndex,pm25,pm10,pollenMax);
+}
 
 @override
 String toString() {
-  return 'WeatherSummary(timestamp: $timestamp, pressure: $pressure, pressureDelta: $pressureDelta, temperature: $temperature, humidity: $humidity, lat: $lat, lon: $lon, weatherCode: $weatherCode, uvIndex: $uvIndex, pm25: $pm25, pm10: $pm10, pollenMax: $pollenMax)';
+    return 'WeatherSummary(timestamp: $timestamp, pressure: $pressure, pressureDelta: $pressureDelta, temperature: $temperature, humidity: $humidity, lat: $lat, lon: $lon, weatherCode: $weatherCode, uvIndex: $uvIndex, pm25: $pm25, pm10: $pm10, pollenMax: $pollenMax)';
 }
 
 

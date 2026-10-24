@@ -18,12 +18,11 @@ import 'package:path_provider/path_provider.dart';
 /// overwrites, and is fully overwritten by, the local state on every
 /// backup/restore.
 class GoogleDriveBackupRepository implements CloudBackupRepository {
-  /// Creates a [GoogleDriveBackupRepository] backed by [db].
+  /// Creates a [GoogleDriveBackupRepository] backed by [_db].
   GoogleDriveBackupRepository({
-    required AppDatabase db,
+    required this._db,
     DatabaseSnapshotCodec? codec,
-  }) : _db = db,
-       _codec = codec ?? const DatabaseSnapshotCodec();
+  }) : _codec = codec ?? const DatabaseSnapshotCodec();
 
   final AppDatabase _db;
   final DatabaseSnapshotCodec _codec;
@@ -158,12 +157,10 @@ class GoogleDriveBackupRepository implements CloudBackupRepository {
     if (existing == null) {
       throw CloudBackupException('No backup found', isNotFound: true);
     }
-    final media =
-        await api.files.get(
-              existing.id!,
-              downloadOptions: drive.DownloadOptions.fullMedia,
-            )
-            as drive.Media;
+    final media = await api.files.get(
+      existing.id!,
+      downloadOptions: drive.DownloadOptions.fullMedia,
+    ) as drive.Media;
     return const BackupArchiveCodec().readDownload(media.stream);
   }
 

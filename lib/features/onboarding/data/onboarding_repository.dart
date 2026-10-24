@@ -4,12 +4,13 @@ import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
 /// Drift-backed implementation of [OnboardingRepository].
 class DriftOnboardingRepository implements OnboardingRepository {
   /// Creates a [DriftOnboardingRepository].
-  DriftOnboardingRepository({required AppDatabase db}) : _db = db;
+  DriftOnboardingRepository({required this._db});
 
   final AppDatabase _db;
 
   @override
-  Stream<bool> watchOnboardingDone() => _db.appSettingsDao.watchOnboardingDone();
+  Stream<bool> watchOnboardingDone() =>
+      _db.appSettingsDao.watchOnboardingDone();
 
   @override
   Future<void> completeOnboarding() =>

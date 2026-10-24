@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'air_quality_reading.dart';
@@ -9,6 +9,7 @@ part of 'air_quality_reading.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -25,16 +26,21 @@ $AirQualityReadingCopyWith<AirQualityReading> get copyWith => _$AirQualityReadin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AirQualityReading&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.alderPollen, alderPollen) || other.alderPollen == alderPollen)&&(identical(other.birchPollen, birchPollen) || other.birchPollen == birchPollen)&&(identical(other.grassPollen, grassPollen) || other.grassPollen == grassPollen)&&(identical(other.mugwortPollen, mugwortPollen) || other.mugwortPollen == mugwortPollen)&&(identical(other.olivePollen, olivePollen) || other.olivePollen == olivePollen)&&(identical(other.ragweedPollen, ragweedPollen) || other.ragweedPollen == ragweedPollen));
+  final _this = this as AirQualityReading;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AirQualityReading&&(identical(other.pm25, _this.pm25) || other.pm25 == _this.pm25)&&(identical(other.pm10, _this.pm10) || other.pm10 == _this.pm10)&&(identical(other.alderPollen, _this.alderPollen) || other.alderPollen == _this.alderPollen)&&(identical(other.birchPollen, _this.birchPollen) || other.birchPollen == _this.birchPollen)&&(identical(other.grassPollen, _this.grassPollen) || other.grassPollen == _this.grassPollen)&&(identical(other.mugwortPollen, _this.mugwortPollen) || other.mugwortPollen == _this.mugwortPollen)&&(identical(other.olivePollen, _this.olivePollen) || other.olivePollen == _this.olivePollen)&&(identical(other.ragweedPollen, _this.ragweedPollen) || other.ragweedPollen == _this.ragweedPollen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pm25,pm10,alderPollen,birchPollen,grassPollen,mugwortPollen,olivePollen,ragweedPollen);
+int get hashCode {
+  final _this = this as AirQualityReading;
+  return Object.hash(runtimeType,_this.pm25,_this.pm10,_this.alderPollen,_this.birchPollen,_this.grassPollen,_this.mugwortPollen,_this.olivePollen,_this.ragweedPollen);
+}
 
 @override
 String toString() {
-  return 'AirQualityReading(pm25: $pm25, pm10: $pm10, alderPollen: $alderPollen, birchPollen: $birchPollen, grassPollen: $grassPollen, mugwortPollen: $mugwortPollen, olivePollen: $olivePollen, ragweedPollen: $ragweedPollen)';
+  final _this = this as AirQualityReading;
+  return 'AirQualityReading(pm25: ${_this.pm25}, pm10: ${_this.pm10}, alderPollen: ${_this.alderPollen}, birchPollen: ${_this.birchPollen}, grassPollen: ${_this.grassPollen}, mugwortPollen: ${_this.mugwortPollen}, olivePollen: ${_this.olivePollen}, ragweedPollen: ${_this.ragweedPollen})';
 }
 
 
@@ -63,7 +69,7 @@ class _$AirQualityReadingCopyWithImpl<$Res>
 /// Create a copy of AirQualityReading
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? pm25 = freezed,Object? pm10 = freezed,Object? alderPollen = freezed,Object? birchPollen = freezed,Object? grassPollen = freezed,Object? mugwortPollen = freezed,Object? olivePollen = freezed,Object? ragweedPollen = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(AirQualityReading(
 pm25: freezed == pm25 ? _self.pm25 : pm25 // ignore: cast_nullable_to_non_nullable
 as double?,pm10: freezed == pm10 ? _self.pm10 : pm10 // ignore: cast_nullable_to_non_nullable
 as double?,alderPollen: freezed == alderPollen ? _self.alderPollen : alderPollen // ignore: cast_nullable_to_non_nullable
@@ -235,16 +241,18 @@ _$AirQualityReadingCopyWith<_AirQualityReading> get copyWith => __$AirQualityRea
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AirQualityReading&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.alderPollen, alderPollen) || other.alderPollen == alderPollen)&&(identical(other.birchPollen, birchPollen) || other.birchPollen == birchPollen)&&(identical(other.grassPollen, grassPollen) || other.grassPollen == grassPollen)&&(identical(other.mugwortPollen, mugwortPollen) || other.mugwortPollen == mugwortPollen)&&(identical(other.olivePollen, olivePollen) || other.olivePollen == olivePollen)&&(identical(other.ragweedPollen, ragweedPollen) || other.ragweedPollen == ragweedPollen));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AirQualityReading&&(identical(other.pm25, pm25) || other.pm25 == pm25)&&(identical(other.pm10, pm10) || other.pm10 == pm10)&&(identical(other.alderPollen, alderPollen) || other.alderPollen == alderPollen)&&(identical(other.birchPollen, birchPollen) || other.birchPollen == birchPollen)&&(identical(other.grassPollen, grassPollen) || other.grassPollen == grassPollen)&&(identical(other.mugwortPollen, mugwortPollen) || other.mugwortPollen == mugwortPollen)&&(identical(other.olivePollen, olivePollen) || other.olivePollen == olivePollen)&&(identical(other.ragweedPollen, ragweedPollen) || other.ragweedPollen == ragweedPollen));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,pm25,pm10,alderPollen,birchPollen,grassPollen,mugwortPollen,olivePollen,ragweedPollen);
+int get hashCode {
+    return Object.hash(runtimeType,pm25,pm10,alderPollen,birchPollen,grassPollen,mugwortPollen,olivePollen,ragweedPollen);
+}
 
 @override
 String toString() {
-  return 'AirQualityReading(pm25: $pm25, pm10: $pm10, alderPollen: $alderPollen, birchPollen: $birchPollen, grassPollen: $grassPollen, mugwortPollen: $mugwortPollen, olivePollen: $olivePollen, ragweedPollen: $ragweedPollen)';
+    return 'AirQualityReading(pm25: $pm25, pm10: $pm10, alderPollen: $alderPollen, birchPollen: $birchPollen, grassPollen: $grassPollen, mugwortPollen: $mugwortPollen, olivePollen: $olivePollen, ragweedPollen: $ragweedPollen)';
 }
 
 
