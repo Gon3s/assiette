@@ -73,7 +73,7 @@ final class TagManagementControllerProvider
 }
 
 String _$tagManagementControllerHash() =>
-    r'3e88a37ca4663e1a856ec24ffcf70fddf7148acd';
+    r'a0b5bff2613293b18ee8e3397197a457e40f87e4';
 
 abstract class _$TagManagementController extends $AsyncNotifier<void> {
   FutureOr<void> build();

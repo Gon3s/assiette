@@ -76,6 +76,19 @@ void main() {
     expect(find.text('No tags match your search.'), findsOneWidget);
   });
 
+  testWidgets('search finds legacy tags with redundant whitespace', (
+    tester,
+  ) async {
+    when(repository.watchTags).thenAnswer(
+      (_) => Stream.value([coffee.copyWith(label: 'Petit  déjeuner')]),
+    );
+    await pumpScreen(tester);
+    await tester.enterText(find.byType(TextField), ' PETIT  DÉJEUNER ');
+    await tester.pump();
+    expect(find.text('Petit  déjeuner'), findsOneWidget);
+    expect(find.text('No tags match your search.'), findsNothing);
+  });
+
   testWidgets('rename keeps the dialog open for validation, then saves', (
     tester,
   ) async {

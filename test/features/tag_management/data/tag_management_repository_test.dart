@@ -226,7 +226,7 @@ void main() {
     () async {
       final directory = await Directory.systemTemp.createTemp('assiette-tags-');
       final file = File('${directory.path}/test.sqlite');
-    await db.close();
+      await db.close();
       var persistent = AppDatabase(NativeDatabase(file));
       try {
         final system = await persistent.tagsDao.watchAll().first;

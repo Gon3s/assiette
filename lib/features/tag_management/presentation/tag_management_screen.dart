@@ -94,7 +94,10 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                 final query = normalizeTagLabel(_query).toLowerCase();
                 final filtered = all
                     .where(
-                      (tag) => tag.label.toLowerCase().contains(query),
+                      (tag) =>
+                          normalizeTagLabel(tag.label)
+                              .toLowerCase()
+                              .contains(query),
                     )
                     .toList();
                 if (filtered.isEmpty) {

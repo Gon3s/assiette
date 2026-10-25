@@ -52,7 +52,9 @@ class _TagSelectorState extends ConsumerState<TagSelector> {
         : allTags
               .where(
                 (tag) =>
-                    tag.label.toLowerCase().contains(query) &&
+                    normalizeTagLabel(tag.label)
+                        .toLowerCase()
+                        .contains(query) &&
                     !selected.any((t) => t.id == tag.id),
               )
               .take(6)

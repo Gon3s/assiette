@@ -13,6 +13,7 @@ class MockTagManagementRepository extends Mock
 void main() {
   late MockTagManagementRepository repository;
   late ProviderContainer container;
+  late ProviderSubscription<AsyncValue<void>> subscription;
 
   setUp(() async {
     repository = MockTagManagementRepository();
@@ -20,7 +21,8 @@ void main() {
       overrides: [
         tagManagementRepositoryProvider.overrideWithValue(repository),
       ],
-    )..listen(tagManagementControllerProvider, (_, _) {});
+    );
+    subscription = container.listen(tagManagementControllerProvider, (_, _) {});
     await container.read(tagManagementControllerProvider.future);
   });
 
@@ -66,4 +68,28 @@ void main() {
     expect(await controller.deleteTag('tag'), isFalse);
     expect(container.read(tagManagementControllerProvider).hasError, isTrue);
   });
+
+  for (final rename in [false, true]) {
+    test('completes pending ${rename ? "rename" : "deletion"} after leaving '
+        'the screen', () async {
+      final pending = Completer<void>();
+      if (rename) {
+        when(() => repository.renameTag('tag', 'New'))
+            .thenAnswer((_) => pending.future);
+      } else {
+        when(() => repository.deleteTag('tag'))
+            .thenAnswer((_) => pending.future);
+      }
+      final controller = container.read(
+        tagManagementControllerProvider.notifier,
+      );
+      final operation = rename
+          ? controller.renameTag('tag', 'New')
+          : controller.deleteTag('tag');
+      subscription.close();
+      await container.pump();
+      pending.complete();
+      expect(await operation, isTrue);
+    });
+  }
 }

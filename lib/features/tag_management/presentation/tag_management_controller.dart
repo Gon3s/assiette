@@ -16,18 +16,20 @@ class TagManagementController extends _$TagManagementController {
   Future<bool> renameTag(String id, String label) async {
     if (state.isLoading) return false;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
+    final result = await AsyncValue.guard(
       () => ref.read(tagManagementRepositoryProvider).renameTag(id, label),
     );
-    return !state.hasError;
+    if (ref.mounted) state = result;
+    return !result.hasError;
   }
 
   Future<bool> deleteTag(String id) async {
     if (state.isLoading) return false;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
+    final result = await AsyncValue.guard(
       () => ref.read(tagManagementRepositoryProvider).deleteTag(id),
     );
-    return !state.hasError;
+    if (ref.mounted) state = result;
+    return !result.hasError;
   }
 }
