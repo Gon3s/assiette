@@ -27,17 +27,8 @@ class DriftMealEntryRepository implements MealEntryRepository {
 
   @override
   Future<TagOption> createTag(String label) async {
-    final id = _uuid.v4();
-    final now = DateTime.now().toUtc();
-    await _db.tagsDao.insertTag(
-      TagsCompanion.insert(
-        id: id,
-        label: label,
-        createdAt: Value(now),
-        updatedAt: Value(now),
-      ),
-    );
-    return TagOption(id: id, label: label, isSystem: false);
+    final tag = await _db.tagsDao.createOrGet(id: _uuid.v4(), label: label);
+    return TagOption(id: tag.id, label: tag.label, isSystem: tag.isSystem);
   }
 
   @override
@@ -47,7 +38,7 @@ class DriftMealEntryRepository implements MealEntryRepository {
     required List<String> tagIds,
     String? photoPath,
     String? note,
-  }) {
+  }) async {
     final now = DateTime.now().toUtc();
     return _db.mealsDao.insertMealWithTags(
       MealsCompanion.insert(
@@ -59,7 +50,7 @@ class DriftMealEntryRepository implements MealEntryRepository {
         createdAt: Value(now),
         updatedAt: Value(now),
       ),
-      tagIds,
+      await _db.tagsDao.activeIds(tagIds),
     );
   }
 

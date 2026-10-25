@@ -16,6 +16,7 @@ import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.da
 import 'package:assiette/features/sleep_entry/presentation/sleep_shortcut_screen.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
 import 'package:assiette/features/symptom_entry/presentation/symptom_entry_screen.dart';
+import 'package:assiette/features/tag_management/presentation/tag_management_screen.dart';
 import 'package:assiette/routing/app_startup.dart';
 import 'package:assiette/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,8 @@ enum AppRouter {
 
   /// The app info / about screen.
   settings,
+
+  tagManagement,
 
   /// The notification settings screen.
   notificationSettings,
@@ -124,12 +127,14 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/${AppRouter.sleepStart.name}',
         name: AppRouter.sleepStart.name,
-        builder: (context, state) => const SleepShortcutScreen(startNight: true),
+        builder: (context, state) =>
+            const SleepShortcutScreen(startNight: true),
       ),
       GoRoute(
         path: '/${AppRouter.sleepWake.name}',
         name: AppRouter.sleepWake.name,
-        builder: (context, state) => const SleepShortcutScreen(startNight: false),
+        builder: (context, state) =>
+            const SleepShortcutScreen(startNight: false),
       ),
       GoRoute(
         path: '/',
@@ -176,6 +181,11 @@ GoRouter goRouter(Ref ref) {
             name: AppRouter.settings.name,
             builder: (context, state) => const SettingsScreen(),
             routes: [
+              GoRoute(
+                path: 'tags',
+                name: AppRouter.tagManagement.name,
+                builder: (context, state) => const TagManagementScreen(),
+              ),
               GoRoute(
                 path: 'notifications',
                 name: AppRouter.notificationSettings.name,

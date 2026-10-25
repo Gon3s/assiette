@@ -34,7 +34,7 @@ class TemplatesDao extends DatabaseAccessor<AppDatabase>
             ),
             leftOuterJoin(
               tags,
-              tags.id.equalsExp(templateTags.tagId) & tags.deletedAt.isNull(),
+              tags.id.equalsExp(templateTags.tagId),
             ),
           ])
           ..where(mealTemplates.deletedAt.isNull())
