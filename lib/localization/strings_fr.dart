@@ -131,6 +131,49 @@ class AppStringsFr implements AppStrings {
   String get entryDeleted => 'Entrée supprimée';
 
   @override
+  String get manageTagsAction => 'Gérer les tags';
+  @override
+  String get manageTagsSearchHint => 'Rechercher un tag';
+  @override
+  String get noTagsMessage => 'Aucun tag actif.';
+  @override
+  String get noTagsFound => 'Aucun tag ne correspond à la recherche.';
+  @override
+  String get tagActions => 'Actions du tag';
+  @override
+  String get renameTagAction => 'Renommer le tag';
+  @override
+  String get tagLabelField => 'Libellé';
+  @override
+  String get tagLabelRequired => 'Saisissez un libellé.';
+  @override
+  String get tagLabelDuplicate => 'Un tag porte déjà ce libellé.';
+  @override
+  String get tagDeleted => 'Tag supprimé';
+  @override
+  String get systemTagLabel => 'Préinstallé';
+  @override
+  String get tagCategoryFood => 'Alimentation';
+  @override
+  String get tagCategoryLifestyle => 'Mode de vie';
+  @override
+  String get tagCategoryEnvironment => 'Environnement';
+  @override
+  String get tagCategoryMedical => 'Médical';
+  @override
+  String get tagCategoryOther => 'Sans catégorie';
+  @override
+  String tagUsageDays(int count) =>
+      '$count ${count == 1 ? "jour d’utilisation" : "jours d’utilisation"}';
+  @override
+  String deleteTagTitle(String label) => 'Supprimer « $label » ?';
+  @override
+  String deleteTagMessage(int days, int meals, int favorites) =>
+      'Utilisation : $days jour(s), $meals repas et $favorites favori(s). '
+      'Les repas et favoris existants conservent ce tag. '
+      'Il ne sera plus proposé ni ajouté aux nouveaux repas depuis un favori.';
+
+  @override
   String get favoriteMealAdded => 'Repas ajouté';
   @override
   String get undoAction => 'Annuler';
@@ -376,7 +419,7 @@ class AppStringsFr implements AppStrings {
   String get retryAction => 'Réessayer';
 
   @override
-  String get settingsTitle => 'À propos';
+  String get settingsTitle => 'Réglages';
   @override
   String get aboutSectionTitle => 'Sources de données';
   @override

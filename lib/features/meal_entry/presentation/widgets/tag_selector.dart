@@ -2,6 +2,7 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/utils/tag_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,9 +33,7 @@ class _TagSelectorState extends ConsumerState<TagSelector> {
   }
 
   Future<void> _onCreate(String label) async {
-    await ref
-        .read(mealEntryControllerProvider.notifier)
-        .createAndAddTag(label);
+    await ref.read(mealEntryControllerProvider.notifier).createAndAddTag(label);
     _searchController.clear();
     setState(() => _query = '');
   }
@@ -47,19 +46,20 @@ class _TagSelectorState extends ConsumerState<TagSelector> {
     );
     final allTags = ref.watch(availableTagsProvider).value ?? [];
 
-    final query = _query.trim().toLowerCase();
+    final query = normalizeTagLabel(_query).toLowerCase();
     final suggestions = query.isEmpty
         ? const <TagOption>[]
         : allTags
-            .where(
-              (tag) =>
-                  tag.label.toLowerCase().contains(query) &&
-                  !selected.any((t) => t.id == tag.id),
-            )
-            .take(6)
-            .toList();
-    final exactMatch =
-        allTags.any((tag) => tag.label.toLowerCase() == query);
+              .where(
+                (tag) =>
+                    tag.label.toLowerCase().contains(query) &&
+                    !selected.any((t) => t.id == tag.id),
+              )
+              .take(6)
+              .toList();
+    final exactMatch = allTags.any(
+      (tag) => normalizeTagLabel(tag.label).toLowerCase() == query,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,10 @@ class _TagSelectorState extends ConsumerState<TagSelector> {
             children: [
               for (final tag in selected)
                 InputChip(
-                  label: Text(tag.label),
+                  label: Text(
+                    allTags.where((t) => t.id == tag.id).firstOrNull?.label ??
+                        tag.label,
+                  ),
                   onDeleted: () => ref
                       .read(mealEntryControllerProvider.notifier)
                       .removeTag(tag),

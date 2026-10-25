@@ -3,6 +3,7 @@ import 'package:assiette/features/favorites/presentation/favorite_form_controlle
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/utils/tag_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,7 +57,7 @@ class _FavoriteTagSelectorState extends ConsumerState<FavoriteTagSelector> {
     );
     final allTags = ref.watch(availableTagsProvider).value ?? [];
 
-    final query = _query.trim().toLowerCase();
+    final query = normalizeTagLabel(_query).toLowerCase();
     final suggestions = query.isEmpty
         ? const <TagOption>[]
         : allTags
@@ -68,7 +69,7 @@ class _FavoriteTagSelectorState extends ConsumerState<FavoriteTagSelector> {
               .take(6)
               .toList();
     final exactMatch = allTags.any(
-      (tag) => tag.label.toLowerCase() == query,
+      (tag) => normalizeTagLabel(tag.label).toLowerCase() == query,
     );
 
     return Column(
@@ -81,7 +82,10 @@ class _FavoriteTagSelectorState extends ConsumerState<FavoriteTagSelector> {
             children: [
               for (final tag in selected)
                 InputChip(
-                  label: Text(tag.label),
+                  label: Text(
+                    allTags.where((t) => t.id == tag.id).firstOrNull?.label ??
+                        tag.label,
+                  ),
                   onDeleted: () => ref
                       .read(
                         favoriteFormControllerProvider(

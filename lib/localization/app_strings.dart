@@ -86,6 +86,26 @@ abstract class AppStrings {
   String get errorGeneric;
   String get entryDeleted;
 
+  String get manageTagsAction;
+  String get manageTagsSearchHint;
+  String get noTagsMessage;
+  String get noTagsFound;
+  String get tagActions;
+  String get renameTagAction;
+  String get tagLabelField;
+  String get tagLabelRequired;
+  String get tagLabelDuplicate;
+  String get tagDeleted;
+  String get systemTagLabel;
+  String get tagCategoryFood;
+  String get tagCategoryLifestyle;
+  String get tagCategoryEnvironment;
+  String get tagCategoryMedical;
+  String get tagCategoryOther;
+  String tagUsageDays(int count);
+  String deleteTagTitle(String label);
+  String deleteTagMessage(int days, int meals, int favorites);
+
   // Favorites
   String get favoriteMealAdded;
   String get undoAction;

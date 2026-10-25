@@ -46,7 +46,7 @@ class DriftFavoritesRepository implements FavoritesRepository {
     required List<String> tagIds,
     MealType? defaultMealType,
     String? defaultPhotoPath,
-  }) {
+  }) async {
     final now = DateTime.now().toUtc();
     return _db.templatesDao.insertTemplateWithTags(
       MealTemplatesCompanion.insert(
@@ -57,7 +57,7 @@ class DriftFavoritesRepository implements FavoritesRepository {
         createdAt: Value(now),
         updatedAt: Value(now),
       ),
-      tagIds,
+      await _db.tagsDao.activeIds(tagIds),
     );
   }
 
@@ -97,7 +97,7 @@ class DriftFavoritesRepository implements FavoritesRepository {
         createdAt: Value(now),
         updatedAt: Value(now),
       ),
-      [for (final tag in template.tags) tag.id],
+      await _db.tagsDao.activeIds([for (final tag in template.tags) tag.id]),
     );
     return id;
   }

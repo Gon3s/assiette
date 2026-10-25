@@ -130,6 +130,49 @@ class AppStringsEn implements AppStrings {
   String get entryDeleted => 'Entry deleted';
 
   @override
+  String get manageTagsAction => 'Manage tags';
+  @override
+  String get manageTagsSearchHint => 'Search tags';
+  @override
+  String get noTagsMessage => 'No active tags.';
+  @override
+  String get noTagsFound => 'No tags match your search.';
+  @override
+  String get tagActions => 'Tag actions';
+  @override
+  String get renameTagAction => 'Rename tag';
+  @override
+  String get tagLabelField => 'Label';
+  @override
+  String get tagLabelRequired => 'Enter a label.';
+  @override
+  String get tagLabelDuplicate => 'A tag already has this label.';
+  @override
+  String get tagDeleted => 'Tag deleted';
+  @override
+  String get systemTagLabel => 'Preinstalled';
+  @override
+  String get tagCategoryFood => 'Food';
+  @override
+  String get tagCategoryLifestyle => 'Lifestyle';
+  @override
+  String get tagCategoryEnvironment => 'Environment';
+  @override
+  String get tagCategoryMedical => 'Medical';
+  @override
+  String get tagCategoryOther => 'Uncategorized';
+  @override
+  String tagUsageDays(int count) =>
+      '$count ${count == 1 ? "day used" : "days used"}';
+  @override
+  String deleteTagTitle(String label) => 'Delete “$label”?';
+  @override
+  String deleteTagMessage(int days, int meals, int favorites) =>
+      'Usage: $days day(s), $meals meals and $favorites favorite(s). '
+      'Existing meals and favorites keep this tag. '
+      'It will no longer be suggested or added to new meals from a favorite.';
+
+  @override
   String get favoriteMealAdded => 'Meal added';
   @override
   String get undoAction => 'Undo';
@@ -372,7 +415,7 @@ class AppStringsEn implements AppStrings {
   String get retryAction => 'Try again';
 
   @override
-  String get settingsTitle => 'About';
+  String get settingsTitle => 'Settings';
   @override
   String get aboutSectionTitle => 'Data sources';
   @override

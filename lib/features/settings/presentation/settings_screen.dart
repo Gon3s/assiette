@@ -22,6 +22,13 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.label_outline),
+            title: Text(s.manageTagsAction),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRouter.tagManagement.name),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.star_outline),
             title: Text(s.manageFavoritesAction),
             trailing: const Icon(Icons.chevron_right),

@@ -48,7 +48,7 @@ class MealsDao extends DatabaseAccessor<AppDatabase> with _$MealsDaoMixin {
       leftOuterJoin(mealTags, mealTags.mealId.equalsExp(meals.id)),
       leftOuterJoin(
         tags,
-        tags.id.equalsExp(mealTags.tagId) & tags.deletedAt.isNull(),
+        tags.id.equalsExp(mealTags.tagId),
       ),
     ])
       ..where(
