@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Politique de confidentialité d’Assiette : journal local, météo, sauvegarde Google Drive, conservation et suppression des données.">
+  <meta name="color-scheme" content="light">
+  <title>Politique de confidentialité — Assiette</title>
+  <style>
+    :root { color-scheme: light; --ink: #142440; --muted: #526276; --accent: #096b65; --line: #dbe4e8; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+    body { margin: 0; color: var(--ink); background: #f5f8fa; font: 1rem/1.75 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: var(--accent); text-underline-offset: .2em; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; border-radius: 2px; }
+    .skip { position: absolute; top: -5rem; left: 1rem; padding: .5rem 1rem; background: white; z-index: 2; }
+    .skip:focus { top: 1rem; }
+    header, main, footer { width: min(100% - 2.5rem, 52rem); margin-inline: auto; }
+    header { padding: 3.5rem 0 2rem; }
+    .brand { margin: 0 0 1.5rem; font-size: 1.15rem; font-weight: 750; letter-spacing: .025em; color: var(--accent); }
+    .eyebrow { margin: 0 0 .6rem; color: var(--muted); font-size: .8rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(2.05rem, 6vw, 3.1rem); line-height: 1.15; letter-spacing: -.045em; }
+    .date { margin: 1rem 0 1.75rem; color: var(--muted); font-size: .92rem; }
+    .intro { font-size: 1.12rem; }
+    .summary { border-left: 4px solid var(--accent); padding: .15rem 0 .15rem 1.25rem; margin: 1.75rem 0; }
+    .summary p { margin: .35rem 0; }
+    .identity { padding: 1rem 1.25rem; background: #e9f2f1; border-radius: .65rem; }
+    .identity p { margin: .35rem 0; }
+    nav { padding: 1.5rem 0 0; }
+    nav ul { display: flex; flex-wrap: wrap; gap: .35rem 1.35rem; padding: 0; list-style: none; font-size: .95rem; }
+    main { padding: .5rem 2.5rem 2rem; background: #fff; border: 1px solid var(--line); border-radius: .8rem; }
+    section { padding-top: 1.75rem; }
+    section + section { margin-top: 1.75rem; border-top: 1px solid var(--line); }
+    h2 { margin: 0 0 1rem; font-size: 1.4rem; line-height: 1.35; letter-spacing: -.02em; }
+    h3 { margin: 1.4rem 0 .65rem; font-size: 1.05rem; }
+    p { margin: .85rem 0; }
+    li + li { margin-top: .6rem; }
+    strong { font-weight: 700; }
+    .note { padding: 1rem 1.15rem; background: #f4f7fa; border-radius: .5rem; }
+    footer { padding: 1.75rem 0 3rem; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 560px) { header { padding-top: 2rem; } main { padding-inline: 1.25rem; } .intro { font-size: 1.03rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print { body { background: white; font-size: 10pt; } header, main, footer { width: 100%; } header { padding-top: 0; } main { padding-inline: 0; border: 0; } nav, .skip { display: none; } h2, h3 { break-after: avoid; } p, li { orphans: 3; widows: 3; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#politique">Aller à la politique</a>
+  <header>
+    <p class="brand">Assiette</p>
+    <p class="eyebrow">Vos données, vos choix</p>
+    <h1>Politique de confidentialité</h1>
+    <p class="date">Dernière mise à jour : <time datetime="2026-10-25">25 octobre 2026</time></p>
+    <p class="intro">Assiette vous permet de tenir un journal de vos repas, de vos symptômes, de vos prises de médicaments, de votre sommeil et de votre environnement.</p>
+    <div class="summary">
+      <p><strong>Le journal fonctionne sans compte et conserve vos données sur votre appareil.</strong></p>
+      <p>La météo utilise des services en ligne. La sauvegarde Google Drive est facultative et transmet une copie du journal à votre compte Google.</p>
+    </div>
+    <div class="identity">
+      <p><strong>Éditeur et responsable :</strong> CUOQ Kevin</p>
+      <p><strong>Contact :</strong> <a href="mailto:assiette@gmail.com">assiette@gmail.com</a></p>
+      <p><strong>Application Android :</strong> com.gones.assiette · <strong>Public visé :</strong> 16 ans et plus</p>
+    </div>
+    <nav aria-label="Sommaire de la politique">
+      <ul>
+        <li><a href="#journal">Journal local</a></li>
+        <li><a href="#meteo">Localisation et météo</a></li>
+        <li><a href="#sauvegarde">Google Drive</a></li>
+        <li><a href="#suppression">Conservation et suppression</a></li>
+        <li><a href="#droits">Vos droits</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="politique">
+    <section id="journal" aria-labelledby="journal-titre">
+      <h2 id="journal-titre">1. Votre journal sur l’appareil</h2>
+      <p>Le journal principal est utilisable sans connexion à un compte. Les repas, tags, favoris, symptômes, migraines, prises de médicaments, entrées de sommeil, notes, réglages et relevés environnementaux sont enregistrés dans le stockage privé de l’application sur votre appareil.</p>
+      <p>Les symptômes, leur intensité et leur durée, les médicaments et le sommeil peuvent constituer des <strong>données de santé</strong>. Les notes libres peuvent aussi contenir des informations sensibles. Saisissez uniquement les informations que vous souhaitez conserver dans votre journal.</p>
+      <p>La version actuelle ne permet plus de prendre de nouvelles photos de repas. Elle peut conserver, afficher et sauvegarder des photos provenant de versions antérieures.</p>
+      <p>Le journal local n’est pas envoyé automatiquement à un serveur de l’éditeur. Ses données peuvent quitter l’appareil dans les cas décrits ci-dessous, notamment lors d’une sauvegarde ou d’un partage que vous déclenchez.</p>
+    </section>
+    <section id="meteo" aria-labelledby="meteo-titre">
+      <h2 id="meteo-titre">2. Localisation, météo et qualité de l’air</h2>
+      <p>Si vous autorisez la localisation, Assiette lit votre <strong>position approximative lorsque l’application est visible</strong>. L’application ne demande ni la localisation précise ni la permission de localisation en arrière-plan.</p>
+      <p>Le dernier lieu enregistré est conservé pour obtenir la météo, la pression atmosphérique, la qualité de l’air et les pollens. Des requêtes météo peuvent être effectuées en arrière-plan à partir de ce lieu déjà enregistré, sans nouvelle lecture de votre position.</p>
+      <p>Les coordonnées approximatives sont transmises aux services météo et qualité de l’air d’<a href="https://open-meteo.com/">Open-Meteo</a>. Le service de géocodage fourni par le système peut également être utilisé pour obtenir un nom de lieu. Les services en ligne reçoivent aussi les informations techniques nécessaires à une requête réseau, notamment l’adresse IP.</p>
+      <p>Vous pouvez refuser ou retirer la permission dans les réglages Android. Son retrait empêche les nouvelles lectures de position ; il <strong>n’efface pas le lieu déjà enregistré</strong> et ne garantit pas l’arrêt des requêtes météo utilisant ce lieu. La version actuelle ne propose pas de commande dédiée pour effacer uniquement ce lieu.</p>
+    </section>
+    <section id="sauvegarde" aria-labelledby="sauvegarde-titre">
+      <h2 id="sauvegarde-titre">3. Sauvegarde et restauration Google Drive</h2>
+      <p>La sauvegarde et la restauration sont <strong>facultatives</strong>. Elles nécessitent une connexion à un compte Google existant. Assiette ne crée pas de compte utilisateur propre à l’application.</p>
+      <p>Google Sign-In fournit des informations de connexion, dont l’adresse e-mail et un identifiant de compte. Elles servent à authentifier la connexion et à accéder à la sauvegarde du compte choisi.</p>
+      <p>Lorsque vous déclenchez une sauvegarde, une archive <strong>assiette_backup.zip</strong> est transférée dans le dossier applicatif privé de votre Google Drive. Elle contient le journal, les réglages, les relevés environnementaux avec les coordonnées enregistrées et les éventuelles photos référencées. Cette archive peut donc contenir des données de santé.</p>
+      <p>L’autorisation Drive est limitée au dossier applicatif d’Assiette. Elle ne donne pas à l’application un accès général à vos documents Google Drive.</p>
+      <p>Une nouvelle sauvegarde remplace la précédente pour le compte choisi. Les transferts vers Google Drive utilisent une connexion sécurisée. <strong>L’archive n’est pas chiffrée de bout en bout par Assiette.</strong> Sa protection et son hébergement dépendent également de Google et de la sécurité de votre compte.</p>
+      <p>La restauration remplace le journal local par le contenu de la sauvegarde téléchargée. Elle ne supprime pas l’archive sur Google Drive. La sauvegarde système Android et le transfert système des données de l’application sont désactivés dans la configuration Android actuelle.</p>
+    </section>
+    <section id="partage" aria-labelledby="partage-titre">
+      <h2 id="partage-titre">4. Export PDF, partage et impression</h2>
+      <p>Vous pouvez générer un PDF du journal sur une période choisie. Ce document peut contenir des données de santé.</p>
+      <p>Si vous utilisez le partage ou l’impression, les applications, services et destinataires que vous choisissez reçoivent le document et appliquent leurs propres règles. Assiette n’envoie pas automatiquement votre journal à un médecin. Vérifiez le destinataire avant de partager un document sensible.</p>
+    </section>
+    <section id="services" aria-labelledby="services-titre">
+      <h2 id="services-titre">5. Autres connexions et usages</h2>
+      <p>Assiette n’intègre pas de réseau publicitaire ni de SDK de suivi analytique. Les rappels et alertes sont des notifications planifiées localement sur l’appareil.</p>
+      <p>Les polices de caractères peuvent être téléchargées auprès des services Google puis mises en cache. Comme pour toute connexion réseau, ce téléchargement transmet les informations techniques nécessaires à son traitement.</p>
+      <p>Les flux décrits servent au fonctionnement du journal, de la météo, de l’authentification, de la sauvegarde et de la restauration. Assiette ne vend pas les données du journal. Les services tiers traitent les informations qu’ils reçoivent selon leurs propres règles, notamment <a href="https://policies.google.com/privacy?hl=fr">celles de Google</a> et celles publiées par Open-Meteo.</p>
+    </section>
+    <section id="suppression" aria-labelledby="suppression-titre">
+      <h2 id="suppression-titre">6. Conservation et suppression</h2>
+      <p>La version actuelle ne prévoit pas de durée automatique d’expiration du journal ou de l’archive Drive.</p>
+      <h3>Entrées supprimées dans le journal</h3>
+      <p>La suppression d’une entrée peut être réversible : l’entrée est alors masquée plutôt qu’effacée définitivement de la base. Les sauvegardes incluent aussi ces enregistrements conservés. <strong>La suppression visible d’une entrée ne garantit donc pas son effacement de la base ou d’une sauvegarde.</strong></p>
+      <h3>Données locales</h3>
+      <p>Pour effacer les données locales, utilisez la fonction Android d’effacement du stockage de l’application. Cela ne supprime pas les copies déjà exportées, partagées ou sauvegardées sur Google Drive. Une restauration peut réintroduire des données d’une ancienne sauvegarde.</p>
+      <h3>Sauvegarde Google Drive et documents partagés</h3>
+      <p>La déconnexion Google ne supprime pas la sauvegarde Drive. La version actuelle ne propose pas de suppression distante de cette archive ni de procédure de demande de suppression intégrée. Sa gestion doit être effectuée au moyen des fonctions de gestion des données d’application proposées par Google Drive.</p>
+      <p>Les copies de PDF doivent être gérées dans les applications où vous les avez enregistrées et auprès des destinataires auxquels vous les avez transmises.</p>
+      <p>L’éditeur ne possède pas de copie centralisée de votre journal et ne peut pas effacer à distance le stockage de votre appareil ou de votre compte Drive depuis un serveur Assiette.</p>
+    </section>
+    <section id="droits" aria-labelledby="droits-titre">
+      <h2 id="droits-titre">7. Votre public, vos choix et vos droits</h2>
+      <p>Assiette s’adresse aux utilisateurs de <strong>16 ans et plus</strong>, y compris aux adolescents de 16 et 17 ans. Elle ne s’adresse pas aux enfants de moins de 16 ans. La classification du contenu PEGI 3 ne définit pas à elle seule le public cible de l’application.</p>
+      <p>Vous choisissez les informations que vous saisissez dans le journal. Vous pouvez utiliser le journal sans connexion Google, refuser la localisation et ne pas déclencher de sauvegarde ou de partage. La révocation d’une autorisation n’efface pas les informations déjà enregistrées ou transférées.</p>
+      <p>Pour une question relative à l’accès, la rectification, l’effacement, la limitation, l’opposition ou la portabilité de vos données, vous pouvez contacter <a href="mailto:assiette@gmail.com">assiette@gmail.com</a>. La réponse tiendra compte des droits applicables, du stockage local et des services tiers concernés. <strong>Ne joignez pas spontanément votre journal de santé à votre demande.</strong></p>
+      <p>Vous pouvez également adresser une réclamation à l’autorité de protection des données compétente, notamment la <a href="https://www.cnil.fr/fr/plaintes">CNIL en France</a>.</p>
+    </section>
+    <section id="sante" aria-labelledby="sante-titre">
+      <h2 id="sante-titre">8. Un outil de suivi personnel</h2>
+      <p class="note"><strong>Assiette n’est pas un dispositif médical.</strong> L’application ne diagnostique, ne traite, ne guérit et ne prévient aucune maladie. Elle ne remplace pas l’avis d’un professionnel de santé. Consultez un professionnel de santé pour un avis médical, un diagnostic ou un traitement. Les rapprochements entre événements du journal ne démontrent pas de lien de cause à effet.</p>
+    </section>
+    <section id="mises-a-jour" aria-labelledby="mises-a-jour-titre">
+      <h2 id="mises-a-jour-titre">9. Mise à jour de cette politique</h2>
+      <p>Cette politique peut évoluer avec le fonctionnement de l’application et les services utilisés. La date de mise à jour figure en haut de cette page.</p>
+      <p>Contact : <a href="mailto:assiette@gmail.com">assiette@gmail.com</a> · CUOQ Kevin, éditeur d’Assiette.</p>
+    </section>
+  </main>
+  <footer>
+    <p>Assiette · Repas, symptômes, sommeil et environnement.</p>
+    <p>Cette page ne contient aucun formulaire et n’utilise aucun outil de mesure d’audience. Son hébergement sur GitHub Pages implique les traitements techniques de l’hébergeur décrits dans la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">déclaration de confidentialité de GitHub</a>.</p>
+  </footer>
+</body>
+</html>
