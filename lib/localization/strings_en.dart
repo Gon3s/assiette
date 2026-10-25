@@ -417,6 +417,17 @@ class AppStringsEn implements AppStrings {
   @override
   String get settingsTitle => 'Settings';
   @override
+  String get privacyPolicyAction => 'Privacy policy';
+  @override
+  String get privacyPolicyOpenError =>
+      'Unable to open the privacy policy. Please try again later.';
+  @override
+  String get medicalDisclaimer =>
+      'Assiette is a personal tracking tool, not a medical device. '
+      'The app does not diagnose, treat, cure or prevent any disease. '
+      'Consult a healthcare professional for medical advice, diagnosis '
+      'or treatment.';
+  @override
   String get aboutSectionTitle => 'Data sources';
   @override
   String get openMeteoAttribution =>

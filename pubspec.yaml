@@ -50,6 +50,7 @@ dependencies:
   riverpod_annotation: ^4.0.2
   share_plus: ^13.1.0
   timezone: ^0.11.0
+  url_launcher: ^6.3.3
   uuid: ^4.5.3
   # Tâches de fond
   workmanager: ^0.9.0

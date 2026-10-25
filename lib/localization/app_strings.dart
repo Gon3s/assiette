@@ -232,6 +232,9 @@ abstract class AppStrings {
 
   // Settings
   String get settingsTitle;
+  String get privacyPolicyAction;
+  String get privacyPolicyOpenError;
+  String get medicalDisclaimer;
   String get aboutSectionTitle;
   String get openMeteoAttribution;
   String get manageNotificationsAction;
