@@ -217,6 +217,18 @@ abstract class AppStrings {
   String migraineStatsDurationHoursMinutes(int hours, int minutes);
   String migraineStatsFrequencyBucket(String date, int count);
 
+  String get migraineHistoryTitle;
+  String get migraineHistoryEmpty;
+  String get migraineHistoryLoadError;
+  String get migraineHistoryOngoing;
+  String get migraineHistoryEnded;
+  String get migraineHistoryNoIntakes;
+  String get migraineHistoryEdit;
+  String migraineHistoryStart(String dateTime);
+  String migraineHistoryApproximateStart(String dateTime);
+  String migraineHistoryEnd(String dateTime);
+  String migraineHistoryRecordedOn(String date);
+
   // Sleep entry
   String get sleepQualityLabel;
   String get bedTimeLabel;

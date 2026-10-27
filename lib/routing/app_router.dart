@@ -6,6 +6,7 @@ import 'package:assiette/features/favorites/presentation/favorites_manage_screen
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/medication_entry/presentation/medication_entry_screen.dart';
+import 'package:assiette/features/migraine_history/presentation/migraine_history_screen.dart';
 import 'package:assiette/features/migraine_stats/presentation/migraine_stats_screen.dart';
 import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
 import 'package:assiette/features/onboarding/domain/onboarding_repository.dart';
@@ -58,6 +59,8 @@ enum AppRouter {
 
   /// The migraine and medication statistics screen.
   migraineStats,
+
+  migraineHistory,
 
   /// The app info / about screen.
   settings,
@@ -175,6 +178,11 @@ GoRouter goRouter(Ref ref) {
             path: 'migraine-stats',
             name: AppRouter.migraineStats.name,
             builder: (context, state) => const MigraineStatsScreen(),
+          ),
+          GoRoute(
+            path: 'migraine-history',
+            name: AppRouter.migraineHistory.name,
+            builder: (context, state) => const MigraineHistoryScreen(),
           ),
           GoRoute(
             path: 'settings',

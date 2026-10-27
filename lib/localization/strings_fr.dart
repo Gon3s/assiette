@@ -396,6 +396,30 @@ class AppStringsFr implements AppStrings {
       count == 1 ? '$date, 1 crise' : '$date, $count crises';
 
   @override
+  String get migraineHistoryTitle => 'Historique des migraines';
+  @override
+  String get migraineHistoryEmpty => 'Aucune migraine enregistrée.';
+  @override
+  String get migraineHistoryLoadError => 'Impossible de charger les migraines.';
+  @override
+  String get migraineHistoryOngoing => 'Crise en cours';
+  @override
+  String get migraineHistoryEnded => 'Crise terminée';
+  @override
+  String get migraineHistoryNoIntakes => 'Aucune prise associée à cette crise.';
+  @override
+  String get migraineHistoryEdit => 'Modifier la migraine';
+  @override
+  String migraineHistoryStart(String dateTime) => 'Début : $dateTime';
+  @override
+  String migraineHistoryApproximateStart(String dateTime) =>
+      'Début approximatif : $dateTime';
+  @override
+  String migraineHistoryEnd(String dateTime) => 'Fin : $dateTime';
+  @override
+  String migraineHistoryRecordedOn(String date) => 'Enregistrée le $date';
+
+  @override
   String get sleepQualityLabel => 'Qualité';
   @override
   String get bedTimeLabel => 'Heure du coucher';

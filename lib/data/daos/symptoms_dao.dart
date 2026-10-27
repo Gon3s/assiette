@@ -1,14 +1,47 @@
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
+import 'package:assiette/data/db/tables/medication_intakes_table.dart';
 import 'package:assiette/data/db/tables/symptoms_table.dart';
 import 'package:drift/drift.dart';
 
 part 'symptoms_dao.g.dart';
 
-@DriftAccessor(tables: [Symptoms])
+@DriftAccessor(tables: [Symptoms, MedicationIntakes])
 class SymptomsDao extends DatabaseAccessor<AppDatabase>
     with _$SymptomsDaoMixin {
   SymptomsDao(super.attachedDatabase);
+
+  /// Watches the complete migraine history and its active linked intakes.
+  Stream<List<({Symptom migraine, MedicationIntake? intake})>>
+  watchMigrainesWithIntakes() {
+    final query =
+        select(symptoms).join([
+            leftOuterJoin(
+              medicationIntakes,
+              medicationIntakes.symptomId.equalsExp(symptoms.id) &
+                  medicationIntakes.deletedAt.isNull(),
+            ),
+          ])
+          ..where(
+            symptoms.deletedAt.isNull() &
+                symptoms.type.equalsValue(SymptomType.migraine),
+          )
+          ..orderBy([
+            OrderingTerm.desc(symptoms.timestamp),
+            OrderingTerm.asc(symptoms.id),
+            OrderingTerm.asc(medicationIntakes.timestamp),
+            OrderingTerm.asc(medicationIntakes.id),
+          ]);
+    return query.watch().map(
+      (rows) => [
+        for (final row in rows)
+          (
+            migraine: row.readTable(symptoms),
+            intake: row.readTableOrNull(medicationIntakes),
+          ),
+      ],
+    );
+  }
 
   Stream<List<Symptom>> watchByDay(DateTime day) {
     final start = DateTime(day.year, day.month, day.day).toUtc();

@@ -5,8 +5,10 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/migraine_stats/domain/migraine_stats.dart';
 import 'package:assiette/features/migraine_stats/presentation/migraine_stats_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
+import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 /// Dashboard summarizing migraine episodes and medication intakes.
@@ -21,7 +23,16 @@ class MigraineStatsScreen extends ConsumerWidget {
     final stats = ref.watch(migraineStatsProvider(period));
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.migraineStatsTitle)),
+      appBar: AppBar(
+        title: Text(s.migraineStatsTitle),
+        actions: [
+          IconButton(
+            tooltip: s.migraineHistoryTitle,
+            icon: const Icon(Icons.history),
+            onPressed: () => context.pushNamed(AppRouter.migraineHistory.name),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
