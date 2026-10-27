@@ -48,6 +48,82 @@ final class ManagedTagsProvider
 
 String _$managedTagsHash() => r'8dbf9a5255b3bf9edb49b36db8b8e4ca31de2e62';
 
+@ProviderFor(tagMergePreview)
+final tagMergePreviewProvider = TagMergePreviewFamily._();
+
+final class TagMergePreviewProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<TagMergePreview>,
+          TagMergePreview,
+          FutureOr<TagMergePreview>
+        >
+    with $FutureModifier<TagMergePreview>, $FutureProvider<TagMergePreview> {
+  TagMergePreviewProvider._({
+    required TagMergePreviewFamily super.from,
+    required (String, String) super.argument,
+  }) : super(
+         retry: null,
+         name: r'tagMergePreviewProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$tagMergePreviewHash();
+
+  @override
+  String toString() {
+    return r'tagMergePreviewProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<TagMergePreview> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<TagMergePreview> create(Ref ref) {
+    final argument = this.argument as (String, String);
+    return tagMergePreview(ref, argument.$1, argument.$2);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is TagMergePreviewProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$tagMergePreviewHash() => r'7c40cfd66771d1308a894557a27b623f3db9cdaa';
+
+final class TagMergePreviewFamily extends $Family
+    with
+        $FunctionalFamilyOverride<FutureOr<TagMergePreview>, (String, String)> {
+  TagMergePreviewFamily._()
+    : super(
+        retry: null,
+        name: r'tagMergePreviewProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  TagMergePreviewProvider call(String sourceId, String targetId) =>
+      TagMergePreviewProvider._(argument: (sourceId, targetId), from: this);
+
+  @override
+  String toString() => r'tagMergePreviewProvider';
+}
+
 @ProviderFor(TagManagementController)
 final tagManagementControllerProvider = TagManagementControllerProvider._();
 
@@ -73,7 +149,7 @@ final class TagManagementControllerProvider
 }
 
 String _$tagManagementControllerHash() =>
-    r'a0b5bff2613293b18ee8e3397197a457e40f87e4';
+    r'435de37f3d067420c25d0effd4ac6012f2848ea2';
 
 abstract class _$TagManagementController extends $AsyncNotifier<void> {
   FutureOr<void> build();

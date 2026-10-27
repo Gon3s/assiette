@@ -5,6 +5,7 @@ import 'package:assiette/data/db/tables/meals_table.dart';
 import 'package:assiette/data/db/tables/tags_table.dart';
 import 'package:assiette/data/db/tables/template_tags_table.dart';
 import 'package:assiette/utils/tag_labels.dart';
+import 'package:assiette/utils/tag_merge_exception.dart';
 import 'package:drift/drift.dart';
 
 part 'tags_dao.g.dart';
@@ -144,6 +145,75 @@ class TagsDao extends DatabaseAccessor<AppDatabase> with _$TagsDaoMixin {
     return (update(tags)..where((t) => t.id.equals(id) & t.deletedAt.isNull()))
         .write(TagsCompanion(deletedAt: Value(now), updatedAt: Value(now)));
   }
+
+  Future<List<String>> favoriteNamesForTag(String id) async {
+    final query =
+        select(mealTemplates).join([
+            innerJoin(
+              templateTags,
+              templateTags.templateId.equalsExp(mealTemplates.id),
+            ),
+          ])
+          ..where(
+            templateTags.tagId.equals(id) & mealTemplates.deletedAt.isNull(),
+          )
+          ..orderBy([
+            OrderingTerm.asc(mealTemplates.name),
+            OrderingTerm.asc(mealTemplates.id),
+          ]);
+    return [
+      for (final row in await query.get()) row.readTable(mealTemplates).name,
+    ];
+  }
+
+  Future<void> mergeTags(
+    String sourceId,
+    String targetId,
+  ) => transaction(() async {
+    if (sourceId == targetId) {
+      throw const TagMergeException(TagMergeError.sameTag);
+    }
+    final active = await activeIds([sourceId, targetId]);
+    if (active.length != 2) {
+      throw const TagMergeException(TagMergeError.missing);
+    }
+    final now = DateTime.now().toUtc();
+    // Include deleted parents so restoring an entry preserves the merge.
+    await (update(meals)..where(
+          (t) => t.id.isInQuery(
+            selectOnly(mealTags)
+              ..addColumns([mealTags.mealId])
+              ..where(mealTags.tagId.equals(sourceId)),
+          ),
+        ))
+        .write(MealsCompanion(updatedAt: Value(now)));
+    await (update(mealTemplates)..where(
+          (t) => t.id.isInQuery(
+            selectOnly(templateTags)
+              ..addColumns([templateTags.templateId])
+              ..where(templateTags.tagId.equals(sourceId)),
+          ),
+        ))
+        .write(MealTemplatesCompanion(updatedAt: Value(now)));
+    await customInsert(
+      'INSERT OR IGNORE INTO meal_tags (meal_id, tag_id) '
+      'SELECT meal_id, ? FROM meal_tags WHERE tag_id = ?',
+      variables: [Variable.withString(targetId), Variable.withString(sourceId)],
+      updates: {mealTags},
+    );
+    await (delete(mealTags)..where((t) => t.tagId.equals(sourceId))).go();
+    await customInsert(
+      'INSERT OR IGNORE INTO template_tags (template_id, tag_id) '
+      'SELECT template_id, ? FROM template_tags WHERE tag_id = ?',
+      variables: [Variable.withString(targetId), Variable.withString(sourceId)],
+      updates: {templateTags},
+    );
+    await (delete(templateTags)..where((t) => t.tagId.equals(sourceId))).go();
+    await softDeleteTag(sourceId);
+    await (update(tags)..where((t) => t.id.equals(targetId))).write(
+      TagsCompanion(updatedAt: Value(now)),
+    );
+  });
 
   String _labelKey(String label) => normalizeTagLabel(label).toLowerCase();
 }
