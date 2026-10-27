@@ -1,12 +1,13 @@
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/tag_management/domain/managed_tag.dart';
 import 'package:assiette/features/tag_management/presentation/tag_management_controller.dart';
+import 'package:assiette/features/tag_management/presentation/widgets/merge_tag_dialog.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/utils/tag_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum _TagAction { rename, delete }
+enum _TagAction { rename, merge, delete }
 
 class TagManagementScreen extends ConsumerStatefulWidget {
   const TagManagementScreen({super.key});
@@ -23,6 +24,17 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
     context: context,
     builder: (_) => _RenameTagDialog(tag: tag),
   );
+
+  Future<void> _merge(ManagedTag tag) async {
+    final merged = await showDialog<bool>(
+      context: context,
+      builder: (_) => MergeTagDialog(sourceId: tag.id),
+    );
+    if (merged != true || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppStrings.of(context).tagsMerged)),
+    );
+  }
 
   Future<void> _delete(ManagedTag tag) async {
     final s = AppStrings.of(context);
@@ -130,6 +142,8 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                           switch (action) {
                             case _TagAction.rename:
                               await _rename(tag);
+                            case _TagAction.merge:
+                              await _merge(tag);
                             case _TagAction.delete:
                               await _delete(tag);
                           }
@@ -138,6 +152,10 @@ class _TagManagementScreenState extends ConsumerState<TagManagementScreen> {
                           PopupMenuItem(
                             value: _TagAction.rename,
                             child: Text(s.renameTagAction),
+                          ),
+                          PopupMenuItem(
+                            value: _TagAction.merge,
+                            child: Text(s.mergeTagsAction),
                           ),
                           PopupMenuItem(
                             value: _TagAction.delete,
