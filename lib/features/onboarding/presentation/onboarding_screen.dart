@@ -61,18 +61,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final pages = [
       _OnboardingPage(
         icon: Icons.restaurant,
-        title: s.onboardingValueTitle,
-        body: s.onboardingValueBody,
+        title: s.onboardingMealsTitle,
+        body: s.onboardingMealsBody,
+        extra: _FoodTagsExample(
+          mealTitle: s.onboardingFoodExampleTitle,
+          mealItems: s.onboardingFoodExampleItems,
+          tagsTitle: s.onboardingFoodTagsTitle,
+          tagExamples: s.onboardingFoodTagExamples,
+          optInNote: s.onboardingFoodTagsOptIn,
+        ),
       ),
       _OnboardingPage(
-        icon: Icons.restaurant,
-        title: s.onboardingLoggingTitle,
-        body: s.onboardingLoggingBody,
+        icon: Icons.sentiment_satisfied_alt,
+        title: s.onboardingSymptomsTitle,
+        body: s.onboardingSymptomsBody,
       ),
       _OnboardingPage(
         icon: Icons.cloud,
-        title: s.onboardingWeatherTitle,
-        body: s.onboardingWeatherBody,
+        title: s.onboardingContextTitle,
+        body: s.onboardingContextBody,
       ),
       _OnboardingPage(
         icon: Icons.location_on,
@@ -80,7 +87,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         body: s.onboardingPermissionBody,
       ),
     ];
-    final isLastPage = _page == pages.length - 1;
+    final isPermissionPage = _page == pages.length - 1;
+    final tutorialPageCount = pages.length - 1;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -89,7 +97,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           children: [
             SizedBox(
               height: Sizes.p48,
-              child: isLastPage
+              child: isPermissionPage
                   ? null
                   : Align(
                       alignment: Alignment.topRight,
@@ -106,25 +114,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 children: pages,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < pages.length; i++)
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: Sizes.p4,
-                      vertical: Sizes.p16,
+            SizedBox(
+              height: Sizes.p48,
+              child: isPermissionPage
+                  ? null
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0; i < tutorialPageCount; i++)
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: Sizes.p4,
+                              vertical: Sizes.p16,
+                            ),
+                            width: Sizes.p8,
+                            height: Sizes.p8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: i == _page
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.surfaceContainerHighest,
+                            ),
+                          ),
+                      ],
                     ),
-                    width: Sizes.p8,
-                    height: Sizes.p8,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: i == _page
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceContainerHighest,
-                    ),
-                  ),
-              ],
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(
@@ -133,7 +146,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 Sizes.p16,
                 Sizes.p24,
               ),
-              child: isLastPage
+              child: isPermissionPage
                   ? Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -165,37 +178,104 @@ class _OnboardingPage extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.body,
+    this.extra,
   });
 
   final IconData icon;
   final String title;
   final String body;
+  final Widget? extra;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(Sizes.p24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: Sizes.p64,
-            color: Theme.of(context).colorScheme.primary,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.p24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: Sizes.p64,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                gapH24,
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center,
+                ),
+                gapH16,
+                Text(
+                  body,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+                if (extra != null) ...[
+                  gapH24,
+                  extra!,
+                ],
+              ],
+            ),
           ),
-          gapH24,
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          gapH16,
-          Text(
-            body,
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FoodTagsExample extends StatelessWidget {
+  const _FoodTagsExample({
+    required this.mealTitle,
+    required this.mealItems,
+    required this.tagsTitle,
+    required this.tagExamples,
+    required this.optInNote,
+  });
+
+  final String mealTitle;
+  final String mealItems;
+  final String tagsTitle;
+  final String tagExamples;
+  final String optInNote;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(Sizes.p16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(Sizes.p16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(mealTitle, style: theme.textTheme.labelMedium),
+            gapH8,
+            Text(mealItems, style: theme.textTheme.titleSmall),
+            gapH16,
+            Text(tagsTitle, style: theme.textTheme.labelLarge),
+            gapH8,
+            Wrap(
+              spacing: Sizes.p8,
+              runSpacing: Sizes.p8,
+              children: [
+                for (final label in tagExamples.split(' · '))
+                  Chip(
+                    label: Text(label),
+                    visualDensity: VisualDensity.compact,
+                  ),
+              ],
+            ),
+            gapH8,
+            Text(optInNote, style: theme.textTheme.bodySmall),
+          ],
+        ),
       ),
     );
   }

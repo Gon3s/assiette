@@ -128,7 +128,7 @@ void main() {
 
   group('export', () {
     test(
-      'dumps every table keyed by name, including seeded system tags',
+      'dumps every table keyed by name, including custom tags',
       () async {
         await seedSource();
         final snapshot = await codec.export(source);
@@ -138,8 +138,8 @@ void main() {
 
         final tags = table('tags');
         expect(snapshot['formatVersion'], 5);
-        expect(tags.length, greaterThan(1)); // 25 seeded + the custom one
-        expect(tags.any((row) => row['id'] == 'tag-1'), isTrue);
+        expect(tags, hasLength(1));
+        expect(tags.single['id'], 'tag-1');
         expect(table('meals').single['id'], 'meal-1');
         expect(table('mealTags').single['tagId'], 'tag-1');
         expect(table('symptoms').single['id'], 'symptom-1');

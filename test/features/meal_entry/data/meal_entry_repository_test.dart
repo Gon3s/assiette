@@ -19,13 +19,10 @@ void main() {
   tearDown(() => db.close());
 
   group('watchTags', () {
-    test('exposes the seeded system tags sorted by label', () async {
+    test('starts without system tags', () async {
       final tags = await repository.watchTags().first;
 
-      expect(tags, isNotEmpty);
-      expect(tags.every((t) => t.isSystem), isTrue);
-      final labels = [for (final t in tags) t.label];
-      expect(labels, containsAll(['café', 'gluten', 'stress']));
+      expect(tags, isEmpty);
     });
   });
 

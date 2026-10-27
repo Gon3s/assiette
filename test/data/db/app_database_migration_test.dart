@@ -9,11 +9,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'v8 migration preserves every legacy health entry through v12',
+    'v8 migration preserves every legacy health entry through v13',
     () async {
       final executor = NativeDatabase.memory(
         setup: (database) {
           database
+            ..execute(_legacyTagSchema)
             ..execute('''
 CREATE TABLE symptoms (
   id TEXT NOT NULL PRIMARY KEY,
@@ -158,7 +159,7 @@ INSERT INTO medication_intakes (
       expect(medication.dose, '50 mg');
 
       final version = await db.customSelect('PRAGMA user_version').getSingle();
-      expect(version.read<int>('user_version'), 12);
+      expect(version.read<int>('user_version'), 13);
     },
   );
 
@@ -166,6 +167,7 @@ INSERT INTO medication_intakes (
     final executor = NativeDatabase.memory(
       setup: (database) {
         database
+          ..execute(_legacyTagSchema)
           ..execute('''
 CREATE TABLE migraine_intensity_measurements (
   id TEXT NOT NULL PRIMARY KEY,
@@ -207,6 +209,7 @@ INSERT INTO migraine_intensity_measurements (
       final executor = NativeDatabase.memory(
         setup: (database) {
           database
+            ..execute(_legacyTagSchema)
             ..execute(_legacySleepSchema)
             ..execute('''
 INSERT INTO sleep_entries (
@@ -246,7 +249,62 @@ INSERT INTO sleep_entries (
       expect(updated.wakeTime, original.wakeTime);
     },
   );
+
+  test('v13 retires only untouched and unused system tags', () async {
+    final db = AppDatabase(
+      NativeDatabase.memory(
+        setup: (database) {
+          database
+            ..execute(_legacyTagSchema)
+            ..execute('''
+INSERT INTO tags (id, label, is_system, created_at, updated_at, deleted_at)
+VALUES
+  ('unused', 'coffee', 1, 100, 100, NULL),
+  ('meal', 'milk', 1, 100, 100, NULL),
+  ('favorite', 'wheat', 1, 100, 100, NULL),
+  ('renamed', 'my tag', 1, 100, 200, NULL),
+  ('custom', 'egg', 0, 100, 100, NULL),
+  ('deleted', 'cheese', 1, 100, 200, 200);
+INSERT INTO meal_tags VALUES ('meal-1', 'meal');
+INSERT INTO template_tags VALUES ('favorite-1', 'favorite');
+PRAGMA user_version = 12;
+''');
+        },
+      ),
+    );
+    addTearDown(db.close);
+
+    final active = await db.tagsDao.watchAll().first;
+    expect(
+      active.map((tag) => tag.id),
+      unorderedEquals(['meal', 'favorite', 'renamed', 'custom']),
+    );
+    final all = await db.select(db.tags).get();
+    final retired = all.singleWhere((tag) => tag.id == 'unused');
+    expect(retired.deletedAt, isNotNull);
+    expect(retired.updatedAt, retired.deletedAt);
+    expect(
+      all.singleWhere((tag) => tag.id == 'deleted').deletedAt,
+      DateTime.fromMillisecondsSinceEpoch(200000),
+    );
+    expect((await db.select(db.mealTags).get()).single.tagId, 'meal');
+    expect((await db.select(db.templateTags).get()).single.tagId, 'favorite');
+  });
 }
+
+const _legacyTagSchema = '''
+CREATE TABLE tags (
+  id TEXT NOT NULL PRIMARY KEY,
+  label TEXT NOT NULL,
+  category TEXT NULL,
+  is_system INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  deleted_at INTEGER NULL
+);
+CREATE TABLE meal_tags (meal_id TEXT NOT NULL, tag_id TEXT NOT NULL);
+CREATE TABLE template_tags (template_id TEXT NOT NULL, tag_id TEXT NOT NULL);
+''';
 
 const _legacySleepSchema = '''
 CREATE TABLE sleep_entries (

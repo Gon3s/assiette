@@ -323,12 +323,17 @@ abstract class AppStrings {
   // Onboarding
   String get onboardingSkip;
   String get onboardingNext;
-  String get onboardingValueTitle;
-  String get onboardingValueBody;
-  String get onboardingLoggingTitle;
-  String get onboardingLoggingBody;
-  String get onboardingWeatherTitle;
-  String get onboardingWeatherBody;
+  String get onboardingMealsTitle;
+  String get onboardingMealsBody;
+  String get onboardingSymptomsTitle;
+  String get onboardingSymptomsBody;
+  String get onboardingFoodExampleTitle;
+  String get onboardingFoodExampleItems;
+  String get onboardingFoodTagsTitle;
+  String get onboardingFoodTagExamples;
+  String get onboardingFoodTagsOptIn;
+  String get onboardingContextTitle;
+  String get onboardingContextBody;
   String get onboardingPermissionTitle;
   String get onboardingPermissionBody;
   String get onboardingEnableLocation;

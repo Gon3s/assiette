@@ -74,6 +74,9 @@ void main() {
     });
 
     test('includes the meal tags', () async {
+      await db.tagsDao.insertTag(
+        TagsCompanion.insert(id: 'tag-1', label: 'milk'),
+      );
       final tag = await db.tagsDao.watchAll().first.then((t) => t.first);
       await insertMeal('meal-1', at(12), tagIds: [tag.id]);
 
