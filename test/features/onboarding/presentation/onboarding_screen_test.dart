@@ -50,12 +50,12 @@ void main() {
     }
   }
 
-  testWidgets('shows the value proposition first, with a skip action', (
+  testWidgets('shows the first tutorial step with a skip action', (
     tester,
   ) async {
     await pumpScreen(tester);
 
-    expect(find.text('Food, symptoms, environment'), findsOneWidget);
+    expect(find.text('Start with your meals'), findsOneWidget);
     expect(find.text('Skip'), findsOneWidget);
     expect(find.text('Next'), findsOneWidget);
   });
@@ -70,6 +70,51 @@ void main() {
 
     verify(repository.completeOnboarding).called(1);
     expect(router.routerDelegate.currentConfiguration.uri.toString(), '/');
+  });
+
+  testWidgets('explains meals, symptoms and context before permissions', (
+    tester,
+  ) async {
+    await pumpScreen(tester);
+    expect(find.text('Milk'), findsOneWidget);
+    expect(find.text('Wheat'), findsOneWidget);
+    expect(find.text('Egg'), findsOneWidget);
+    expect(
+      find.text('Examples only: no tags are created automatically.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Notice how you feel'), findsOneWidget);
+    expect(
+      find.text('Record symptoms separately. They do not use tags.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Add context'), findsOneWidget);
+    verifyNever(repository.completeOnboarding);
+  });
+
+  testWidgets('tutorial scrolls on a small screen with large text', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 480);
+    tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await pumpScreen(tester);
+    expect(tester.takeException(), isNull);
+    await tester.ensureVisible(
+      find.text('Examples only: no tags are created automatically.'),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text('Notice how you feel'), findsOneWidget);
   });
 
   testWidgets('the last page offers a location permission choice', (

@@ -89,13 +89,16 @@ void main() {
   });
 
   test(
-    'rename normalizes whitespace and preserves system provenance',
+    'rename normalizes whitespace and preserves user provenance',
     () async {
-      final original = (await db.tagsDao.watchAll().first).first;
+      await db.tagsDao.insertTag(
+        TagsCompanion.insert(id: 'original', label: 'petit déjeuner'),
+      );
+      final original = (await db.tagsDao.watchAll().first).single;
       await repository.renameTag(original.id, '  Petit\t déjeuner  ');
       final renamed = await usage(original.id);
       expect(renamed.label, 'Petit déjeuner');
-      expect(renamed.isSystem, isTrue);
+      expect(renamed.isSystem, isFalse);
       expect(renamed.category, original.category);
       final stored = await (db.select(
         db.tags,
@@ -222,28 +225,34 @@ void main() {
   );
 
   test(
-    'system tags stay renamed or deleted after reopening the database',
+    'tags stay renamed or deleted after reopening the database',
     () async {
       final directory = await Directory.systemTemp.createTemp('assiette-tags-');
       final file = File('${directory.path}/test.sqlite');
       await db.close();
       var persistent = AppDatabase(NativeDatabase(file));
       try {
-        final system = await persistent.tagsDao.watchAll().first;
-        await persistent.tagsDao.renameTag(system[0].id, 'Renamed system tag');
-        await persistent.tagsDao.softDeleteTag(system[1].id);
+        await persistent.tagsDao.insertTag(
+          TagsCompanion.insert(id: 'first', label: 'first'),
+        );
+        await persistent.tagsDao.insertTag(
+          TagsCompanion.insert(id: 'second', label: 'second'),
+        );
+        final original = await persistent.tagsDao.watchAll().first;
+        await persistent.tagsDao.renameTag(original[0].id, 'Renamed tag');
+        await persistent.tagsDao.softDeleteTag(original[1].id);
         await persistent.close();
         persistent = AppDatabase(NativeDatabase(file));
         final active = await persistent.tagsDao.watchAll().first;
-        expect(active, hasLength(system.length - 1));
-        expect(active.any((t) => t.id == system[1].id), isFalse);
+        expect(active, hasLength(original.length - 1));
+        expect(active.any((t) => t.id == original[1].id), isFalse);
         expect(
-          active.singleWhere((t) => t.id == system[0].id).label,
-          'Renamed system tag',
+          active.singleWhere((t) => t.id == original[0].id).label,
+          'Renamed tag',
         );
         expect(
-          active.singleWhere((t) => t.id == system[0].id).isSystem,
-          isTrue,
+          active.singleWhere((t) => t.id == original[0].id).isSystem,
+          isFalse,
         );
       } finally {
         await persistent.close();

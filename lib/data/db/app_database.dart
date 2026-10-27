@@ -27,7 +27,6 @@ import 'package:assiette/data/db/tables/tags_table.dart';
 import 'package:assiette/data/db/tables/template_tags_table.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 part 'app_database.g.dart';
 
@@ -64,13 +63,12 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
-      await _seedSystemTags();
     },
     onUpgrade: (m, from, to) async {
       if (from < 2) {
@@ -213,51 +211,21 @@ class AppDatabase extends _$AppDatabase {
           ),
         );
       }
+      if (from < 13) {
+        final now = DateTime.now().toUtc();
+        // Keep tags chosen for meals/favorites or customized by the user.
+        await customStatement(
+          'UPDATE tags SET deleted_at = ?, updated_at = ? '
+          'WHERE is_system = 1 AND deleted_at IS NULL '
+          'AND created_at = updated_at '
+          'AND NOT EXISTS (SELECT 1 FROM meal_tags WHERE tag_id = tags.id) '
+          'AND NOT EXISTS (SELECT 1 FROM template_tags WHERE tag_id = tags.id)',
+          [
+            now.millisecondsSinceEpoch ~/ 1000,
+            now.millisecondsSinceEpoch ~/ 1000,
+          ],
+        );
+      }
     },
   );
-
-  Future<void> _seedSystemTags() async {
-    const uuid = Uuid();
-    final now = DateTime.now().toUtc();
-    for (final (label, category) in _systemTagData) {
-      await into(tags).insert(
-        TagsCompanion.insert(
-          id: uuid.v4(),
-          label: label,
-          category: Value(category),
-          isSystem: const Value(true),
-          createdAt: Value(now),
-          updatedAt: Value(now),
-        ),
-      );
-    }
-  }
-
-  static const List<(String, String)> _systemTagData = [
-    ('café', 'alimentation'),
-    ('alcool', 'alimentation'),
-    ('vin rouge', 'alimentation'),
-    ('fromage affiné', 'alimentation'),
-    ('chocolat', 'alimentation'),
-    ('charcuterie', 'alimentation'),
-    ('gluten', 'alimentation'),
-    ('lactose', 'alimentation'),
-    ('agrumes', 'alimentation'),
-    ('plats épicés', 'alimentation'),
-    ('fritures', 'alimentation'),
-    ('édulcorant', 'alimentation'),
-    ('MSG', 'alimentation'),
-    ('thé', 'alimentation'),
-    ('eau gazeuse', 'alimentation'),
-    ('stress', 'mode_de_vie'),
-    ('manque de sommeil', 'mode_de_vie'),
-    ('activité physique', 'mode_de_vie'),
-    ('jeûne', 'mode_de_vie'),
-    ('déshydratation', 'mode_de_vie'),
-    ('position écran', 'mode_de_vie'),
-    ('lumière vive', 'environnement'),
-    ('bruit fort', 'environnement'),
-    ('changement météo', 'environnement'),
-    ('menstruation', 'médical'),
-  ];
 }

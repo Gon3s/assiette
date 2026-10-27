@@ -34,6 +34,9 @@ void main() {
 
   group('loadRange', () {
     test('aggregates meals, symptoms, sleep and weather per day', () async {
+      await db.tagsDao.insertTag(
+        TagsCompanion.insert(id: 'tag-1', label: 'milk'),
+      );
       final tag = await db.tagsDao.watchAll().first.then((t) => t.first);
       await db.mealsDao.insertMealWithTags(
         MealsCompanion.insert(

@@ -27,6 +27,13 @@ void main() {
     for (final id in ['source', 'target', 'unrelated', 'deleted']) {
       await db.tagsDao.insertTag(TagsCompanion.insert(id: id, label: id));
     }
+    await db.tagsDao.insertTag(
+      TagsCompanion.insert(
+        id: 'legacy-system',
+        label: 'legacy system',
+        isSystem: const Value(true),
+      ),
+    );
     await repository.deleteTag('deleted');
   });
 

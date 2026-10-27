@@ -609,21 +609,31 @@ class AppStringsEn implements AppStrings {
   @override
   String get onboardingNext => 'Next';
   @override
-  String get onboardingValueTitle => 'Food, symptoms, environment';
+  String get onboardingMealsTitle => 'Start with your meals';
   @override
-  String get onboardingValueBody =>
-      'Assiette helps you connect what you eat, how you feel, and the '
-      'weather.';
+  String get onboardingMealsBody =>
+      'Log what you eat. Tags are only for foods, and you choose which ones to create.';
   @override
-  String get onboardingLoggingTitle => 'A meal, a few tags';
+  String get onboardingSymptomsTitle => 'Notice how you feel';
   @override
-  String get onboardingLoggingBody =>
-      'Log your meal manually and add tags in seconds.';
+  String get onboardingSymptomsBody =>
+      'Record symptoms separately. They do not use tags.';
   @override
-  String get onboardingWeatherTitle => 'Automatic weather and pressure';
+  String get onboardingFoodExampleTitle => 'Meal example';
   @override
-  String get onboardingWeatherBody =>
-      'Weather and pressure are refreshed for the last saved place. Your location is updated only while the app is visible.';
+  String get onboardingFoodExampleItems => 'Apple · Yogurt · Coffee';
+  @override
+  String get onboardingFoodTagsTitle => 'Food tags, your choice';
+  @override
+  String get onboardingFoodTagExamples => 'Milk · Wheat · Egg';
+  @override
+  String get onboardingFoodTagsOptIn =>
+      'Examples only: no tags are created automatically.';
+  @override
+  String get onboardingContextTitle => 'Add context';
+  @override
+  String get onboardingContextBody =>
+      'Sleep, activity, and weather help you make sense of your notes. Weather is optional.';
   @override
   String get onboardingPermissionTitle => 'Allow location';
   @override

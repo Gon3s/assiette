@@ -13,9 +13,15 @@ void main() {
   late AppDatabase db;
   late DriftFavoritesRepository repository;
 
-  setUp(() {
+  setUp(() async {
     db = AppDatabase(NativeDatabase.memory());
     repository = DriftFavoritesRepository(db: db);
+    await db.tagsDao.insertTag(
+      TagsCompanion.insert(id: 'tag-a', label: 'milk'),
+    );
+    await db.tagsDao.insertTag(
+      TagsCompanion.insert(id: 'tag-b', label: 'wheat'),
+    );
   });
 
   tearDown(() => db.close());

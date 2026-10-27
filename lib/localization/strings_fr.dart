@@ -617,21 +617,31 @@ class AppStringsFr implements AppStrings {
   @override
   String get onboardingNext => 'Suivant';
   @override
-  String get onboardingValueTitle => 'Repas, symptômes, environnement';
+  String get onboardingMealsTitle => 'Commence par tes repas';
   @override
-  String get onboardingValueBody =>
-      "Assiette t'aide à relier ce que tu manges, comment tu te sens et "
-      'la météo du jour.';
+  String get onboardingMealsBody =>
+      'Note ce que tu manges. Les tags sont réservés aux aliments et tu choisis ceux que tu crées.';
   @override
-  String get onboardingLoggingTitle => 'Un repas, quelques tags';
+  String get onboardingSymptomsTitle => 'Note ce que tu ressens';
   @override
-  String get onboardingLoggingBody =>
-      'Saisis ton repas et ajoute des tags en quelques secondes.';
+  String get onboardingSymptomsBody =>
+      'Ajoute tes symptômes séparément. Ils n’utilisent pas de tags.';
   @override
-  String get onboardingWeatherTitle => 'Météo et pression automatiques';
+  String get onboardingFoodExampleTitle => 'Exemple de repas';
   @override
-  String get onboardingWeatherBody =>
-      'La météo et la pression sont actualisées pour le dernier lieu enregistré. La position est mise à jour uniquement quand l’application est visible.';
+  String get onboardingFoodExampleItems => 'Pomme · Yaourt · Café';
+  @override
+  String get onboardingFoodTagsTitle => 'Tags alimentaires, à ton choix';
+  @override
+  String get onboardingFoodTagExamples => 'Lait · Blé · Œuf';
+  @override
+  String get onboardingFoodTagsOptIn =>
+      'Exemples seulement : aucun tag n’est créé automatiquement.';
+  @override
+  String get onboardingContextTitle => 'Ajoute du contexte';
+  @override
+  String get onboardingContextBody =>
+      'Sommeil, activité et météo aident à mieux comprendre tes notes. La météo reste facultative.';
   @override
   String get onboardingPermissionTitle => 'Autoriser la localisation';
   @override

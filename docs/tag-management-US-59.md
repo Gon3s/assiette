@@ -25,13 +25,18 @@ tags masquent le tag supprimé. L’ajout rapide d’un favori conserve ses autr
 tags mais omet ceux qui sont supprimés dans le nouveau repas. Modifier un
 ancien repas ou favori peut conserver ses liens historiques.
 
-Les tags préinstallés suivent les mêmes règles. Leur initialisation intervient
-uniquement à la création de la base : un redémarrage ne les réintroduit pas.
+Les anciens tags préinstallés suivent les mêmes règles. Depuis la version 13
+de la base, les nouvelles installations démarrent sans tags. La migration
+masque les anciens tags système uniquement s'ils n'ont jamais été modifiés
+(`createdAt == updatedAt`) et n'ont aucun lien vers un repas ou un favori.
+Elle conserve les tags utilisés, personnalisés, créés par l'utilisateur et
+les dates des suppressions précédentes. Un redémarrage ne réintroduit pas
+les tags retirés.
 Recréer explicitement un libellé supprimé produit un nouvel identifiant ;
 l’ancien tag et ses liens restent dans l’historique.
 
-Aucune modification de schéma ni migration n’est nécessaire : les colonnes
-de suppression et de provenance existaient déjà. La sauvegarde JSON conserve
+La migration 13 réutilise les colonnes de suppression et de provenance
+existantes, sans modifier la structure des tables. La sauvegarde JSON conserve
 ces colonnes et les liaisons, y compris pour les tags supprimés.
 
 Une opération en cours peut se terminer après la fermeture de l’écran. Le
