@@ -2,9 +2,14 @@ name: Android Play Store (internal testing)
 
 on:
   workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Visible Store version (e.g. 1.2.3); empty uses pubspec.yaml'
+        required: false
+        type: string
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: play-store-com-gones-assiette
   cancel-in-progress: false
 
 permissions:
@@ -13,7 +18,7 @@ permissions:
 jobs:
   build-and-publish:
     name: Build App Bundle and publish to internal track
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
 
     steps:
@@ -34,42 +39,73 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Generate code
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build
 
       - name: Analyze
         run: flutter analyze --no-pub
 
       - name: Run tests
-        run: flutter test
+        run: flutter test --no-pub
+
+      - name: Set up Node 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+
+      - name: Authenticate to Google
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          credentials_json: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3
+        with:
+          skip_install: true
+
+      - name: Prepare Store version
+        id: release
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: node .github/scripts/play-store.cjs prepare
 
       # Recreated on every run from secrets; never written to the repo
       # (see .gitignore). storeFile path is relative to android/app/.
       - name: Decode signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/upload-keystore.jks
-          cat > android/key.properties <<EOF
-          storeFile=upload-keystore.jks
-          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
-          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
-          EOF
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+          printf '%s\n' 'storeFile=upload-keystore.jks' \
+            "storePassword=$STORE_PASSWORD" "keyAlias=$KEY_ALIAS" \
+            "keyPassword=$KEY_PASSWORD" > android/key.properties
 
-      # versionCode must strictly increase between Play Store uploads, so it's
-      # driven by the CI run number instead of the pubspec version.
       - name: Build release App Bundle
+        env:
+          VERSION_NAME: ${{ steps.release.outputs.version_name }}
+          VERSION_CODE: ${{ steps.release.outputs.version_code }}
+          GOOGLE_SERVER_CLIENT_ID: ${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
         run: >-
           flutter build appbundle --release -t lib/main.dart
-          --build-number=${{ github.run_number }}
-          --dart-define=GOOGLE_SERVER_CLIENT_ID=${{ secrets.GOOGLE_SERVER_CLIENT_ID }}
+          --build-name="$VERSION_NAME" --build-number="$VERSION_CODE"
+          --dart-define="GOOGLE_SERVER_CLIENT_ID=$GOOGLE_SERVER_CLIENT_ID"
 
       - name: Publish to Play Store internal track
-        uses: r0adkll/upload-google-play@e738b9dd8f2476ea806d921b64aacd24f34515a5 # v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
-          packageName: com.gones.assiette
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: internal
-          status: completed
+        id: publish
+        env:
+          PLAY_EDIT_ID: ${{ steps.release.outputs.edit_id }}
+          VERSION_NAME: ${{ steps.release.outputs.version_name }}
+          VERSION_CODE: ${{ steps.release.outputs.version_code }}
+          BUNDLE_PATH: build/app/outputs/bundle/release/app-release.aab
+        run: node .github/scripts/play-store.cjs publish
+
+      - name: Discard unfinished Play edit
+        if: ${{ always() && steps.release.outputs.edit_id != '' && steps.publish.outcome != 'success' }}
+        env:
+          PLAY_EDIT_ID: ${{ steps.release.outputs.edit_id }}
+        run: node .github/scripts/play-store.cjs cleanup

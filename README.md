@@ -147,6 +147,15 @@ environnement Flutter local, pas de connexion GitHub requise :
 
 Le workflow est aussi lançable à la main (*Run workflow*).
 
+## Publication Play Store
+
+Le workflow manuel [Android Play Store (internal testing)](https://github.com/Gon3s/assiette/actions/workflows/android-play-internal.yml)
+publie un AAB signé sur la piste interne. Le champ facultatif `version_name`
+choisit la version visible (par exemple `1.2.3`) ; vide, il reprend celle du
+`pubspec.yaml`. Le numéro Android est calculé automatiquement depuis Play,
+y compris lors d'une relance du workflow. La procédure et les prérequis sont
+décrits dans [le guide de publication](docs/play-store-releases.md).
+
 ## 🤝 Contribuer
 
 Le projet suit un backlog d'user stories. Avant tout commit :
