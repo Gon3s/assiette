@@ -11,7 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 
 /// Builds the printable/shareable journal PDF for a date range (US-17).
 class JournalPdfBuilder {
-  static final _sectionStyle = pw.TextStyle(
+  static const _sectionStyle = pw.TextStyle(
     fontSize: 11,
     fontWeight: pw.FontWeight.bold,
   );
@@ -33,7 +33,7 @@ class JournalPdfBuilder {
           header: (context) => context.pageNumber == 1
               ? pw.Text(
                   s.pdfDocTitle,
-                  style: pw.TextStyle(
+                  style: const pw.TextStyle(
                     fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                   ),
@@ -62,7 +62,10 @@ class JournalPdfBuilder {
         children: [
           pw.Text(
             _capitalize(dateFormat.format(entry.date.toLocal())),
-            style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold),
+            style: const pw.TextStyle(
+              fontSize: 14,
+              fontWeight: pw.FontWeight.bold,
+            ),
           ),
           pw.Divider(thickness: 0.5),
           if (entry.meals.isNotEmpty)
