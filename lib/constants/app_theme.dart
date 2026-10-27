@@ -36,10 +36,42 @@ abstract final class AppTheme {
       onInverseSurface: AppColors.background,
     );
 
-    final textTheme = GoogleFonts.rubikTextTheme(base.textTheme).apply(
-      bodyColor: AppColors.textPrimary,
-      displayColor: AppColors.textPrimary,
-    );
+    // Google Fonts 9 uses material_ui's TextTheme. Apply Rubik per style
+    // to preserve the Flutter TextTheme and its typography metrics.
+    final textTheme = base.textTheme
+        .copyWith(
+          displayLarge: GoogleFonts.rubik(
+            textStyle: base.textTheme.displayLarge,
+          ),
+          displayMedium: GoogleFonts.rubik(
+            textStyle: base.textTheme.displayMedium,
+          ),
+          displaySmall: GoogleFonts.rubik(
+            textStyle: base.textTheme.displaySmall,
+          ),
+          headlineLarge: GoogleFonts.rubik(
+            textStyle: base.textTheme.headlineLarge,
+          ),
+          headlineMedium: GoogleFonts.rubik(
+            textStyle: base.textTheme.headlineMedium,
+          ),
+          headlineSmall: GoogleFonts.rubik(
+            textStyle: base.textTheme.headlineSmall,
+          ),
+          titleLarge: GoogleFonts.rubik(textStyle: base.textTheme.titleLarge),
+          titleMedium: GoogleFonts.rubik(textStyle: base.textTheme.titleMedium),
+          titleSmall: GoogleFonts.rubik(textStyle: base.textTheme.titleSmall),
+          bodyLarge: GoogleFonts.rubik(textStyle: base.textTheme.bodyLarge),
+          bodyMedium: GoogleFonts.rubik(textStyle: base.textTheme.bodyMedium),
+          bodySmall: GoogleFonts.rubik(textStyle: base.textTheme.bodySmall),
+          labelLarge: GoogleFonts.rubik(textStyle: base.textTheme.labelLarge),
+          labelMedium: GoogleFonts.rubik(textStyle: base.textTheme.labelMedium),
+          labelSmall: GoogleFonts.rubik(textStyle: base.textTheme.labelSmall),
+        )
+        .apply(
+          bodyColor: AppColors.textPrimary,
+          displayColor: AppColors.textPrimary,
+        );
 
     return base.copyWith(
       colorScheme: scheme,
