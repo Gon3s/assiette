@@ -78,7 +78,6 @@ void main() {
     '../a.jpg',
     'photos/../a.jpg',
     'photos/./a.jpg',
-    r'photos\a.jpg',
     'photos/sub/a.jpg',
     'photos/a.exe',
     'photos/CON.jpg',
@@ -100,6 +99,25 @@ void main() {
       );
     });
   }
+
+  test('rejects raw backslashes in ZIP entry names', () async {
+    final bytes = zip(
+      photos: [
+        ArchiveFile.bytes('photos/a.jpg', [1]),
+      ],
+    );
+    final central = headerOffset(bytes, 1);
+    final data = ByteData.sublistView(bytes);
+    final local = data.getUint32(central + 42, Endian.little);
+    // Patch raw headers because the encoder now normalizes path separators.
+    bytes[central + 46 + 6] = 0x5c;
+    bytes[local + 30 + 6] = 0x5c;
+    expect(
+      utf8.decode(bytes.sublist(central + 46, central + 46 + 12)),
+      r'photos\a.jpg',
+    );
+    await expectLater(codec.decode(bytes), rejectsBackup);
+  });
 
   test('rejects symbolic links before reading their contents', () async {
     final bytes = zip(
