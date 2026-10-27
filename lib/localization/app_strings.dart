@@ -105,6 +105,16 @@ abstract class AppStrings {
   String tagUsageDays(int count);
   String deleteTagTitle(String label);
   String deleteTagMessage(int days, int meals, int favorites);
+  String get mergeTagsAction;
+  String get tagsMerged;
+  String get tagMergeSourceLabel;
+  String get tagMergeTargetLabel;
+  String get tagMergeUnavailable;
+  String get tagMergeNoTarget;
+  String get tagMergeNoFavorites;
+  String tagMergeAffectedFavorites(int count);
+  String tagMergeFavoriteCount(int count);
+  String tagMergeMessage(String source, String target);
 
   // Favorites
   String get favoriteMealAdded;

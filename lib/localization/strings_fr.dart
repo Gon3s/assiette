@@ -174,6 +174,31 @@ class AppStringsFr implements AppStrings {
       'Il ne sera plus proposé ni ajouté aux nouveaux repas depuis un favori.';
 
   @override
+  String get mergeTagsAction => 'Fusionner les tags';
+  @override
+  String get tagsMerged => 'Tags fusionnés';
+  @override
+  String get tagMergeSourceLabel => 'Tag à fusionner';
+  @override
+  String get tagMergeTargetLabel => 'Tag à conserver';
+  @override
+  String get tagMergeUnavailable =>
+      'Impossible de préparer la fusion. Vérifiez que les deux tags sont encore disponibles.';
+  @override
+  String get tagMergeNoTarget => 'Créez un autre tag pour pouvoir fusionner.';
+  @override
+  String get tagMergeNoFavorites => 'Aucun favori associé au tag à fusionner.';
+  @override
+  String tagMergeAffectedFavorites(int count) => 'Favoris concernés ($count)';
+  @override
+  String tagMergeFavoriteCount(int count) =>
+      count == 1 ? '1 favori' : '$count favoris';
+  @override
+  String tagMergeMessage(String source, String target) =>
+      'Les repas et favoris de « $source » seront rattachés à « $target ». '
+      '« $source » ne sera plus proposé à la saisie.';
+
+  @override
   String get favoriteMealAdded => 'Repas ajouté';
   @override
   String get undoAction => 'Annuler';

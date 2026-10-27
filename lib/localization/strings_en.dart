@@ -173,6 +173,31 @@ class AppStringsEn implements AppStrings {
       'It will no longer be suggested or added to new meals from a favorite.';
 
   @override
+  String get mergeTagsAction => 'Merge tags';
+  @override
+  String get tagsMerged => 'Tags merged';
+  @override
+  String get tagMergeSourceLabel => 'Tag to merge';
+  @override
+  String get tagMergeTargetLabel => 'Tag to keep';
+  @override
+  String get tagMergeUnavailable =>
+      'Unable to prepare the merge. Check that both tags are still available.';
+  @override
+  String get tagMergeNoTarget => 'Create another tag to merge into.';
+  @override
+  String get tagMergeNoFavorites => 'No favorites linked to the tag to merge.';
+  @override
+  String tagMergeAffectedFavorites(int count) => 'Affected favorites ($count)';
+  @override
+  String tagMergeFavoriteCount(int count) =>
+      count == 1 ? '1 favorite' : '$count favorites';
+  @override
+  String tagMergeMessage(String source, String target) =>
+      'Meals and favorites using "$source" will use "$target". '
+      '"$source" will no longer be offered for new entries.';
+
+  @override
   String get favoriteMealAdded => 'Meal added';
   @override
   String get undoAction => 'Undo';

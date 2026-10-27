@@ -19,6 +19,9 @@ abstract class LocalityResolver {
 /// Results are memoized per ~1 km grid cell: the header re-requests the
 /// locality on every new snapshot, and the place rarely changes.
 class GeocodingLocalityResolver implements LocalityResolver {
+  GeocodingLocalityResolver({this._geocoder});
+
+  geocoding.Geocoding? _geocoder;
   final _cache = <String, String?>{};
 
   @override
@@ -32,20 +35,26 @@ class GeocodingLocalityResolver implements LocalityResolver {
 
     String? locality;
     try {
-      final placemarks = await geocoding.placemarkFromCoordinates(
+      if (_geocoder == null &&
+          geocoding.GeocodingPlatformFactory.instance == null) {
+        return null;
+      }
+      final geocoder = _geocoder ??= geocoding.Geocoding();
+      final placemarks = await geocoder.placemarkFromCoordinates(
         latitude,
         longitude,
       );
       if (placemarks.isNotEmpty) {
         final placemark = placemarks.first;
-        locality = [
-          placemark.locality,
-          placemark.subAdministrativeArea,
-          placemark.administrativeArea,
-        ].firstWhere(
-          (name) => name != null && name.isNotEmpty,
-          orElse: () => null,
-        );
+        locality =
+            [
+              placemark.locality,
+              placemark.subAdministrativeArea,
+              placemark.administrativeArea,
+            ].firstWhere(
+              (name) => name != null && name.isNotEmpty,
+              orElse: () => null,
+            );
       }
     } on Exception {
       locality = null;
