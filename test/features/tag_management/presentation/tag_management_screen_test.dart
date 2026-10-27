@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:assiette/features/settings/presentation/settings_screen.dart';
 import 'package:assiette/features/tag_management/domain/managed_tag.dart';
 import 'package:assiette/features/tag_management/domain/tag_management_repository.dart';
+import 'package:assiette/features/tag_management/domain/tag_merge_preview.dart';
 import 'package:assiette/features/tag_management/presentation/tag_management_screen.dart';
 import 'package:assiette/localization/strings_fr.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:assiette/utils/tag_labels.dart';
+import 'package:assiette/utils/tag_merge_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -60,6 +62,179 @@ void main() {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
   }
+
+  Future<void> openMerge(WidgetTester tester) async {
+    await tester.tap(find.byTooltip('Tag actions').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Merge tags'));
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> selectTarget(WidgetTester tester) async {
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byType(DropdownMenuItem<String>),
+        matching: find.text('café'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Custom').last);
+    await tester.pump();
+  }
+
+  const preview = TagMergePreview(
+    source: coffee,
+    target: custom,
+    favoriteNames: ['Breakfast'],
+  );
+
+  testWidgets('merge waits for a target and preview, then can be cancelled', (
+    tester,
+  ) async {
+    final pending = Completer<TagMergePreview>();
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenAnswer((_) => pending.future);
+    await pumpScreen(tester);
+    await openMerge(tester);
+    final confirm = find.widgetWithText(FilledButton, 'Merge tags');
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    await selectTarget(tester);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    pending.complete(preview);
+    await tester.pumpAndSettle();
+    expect(find.text('2 days used · 1 favorite'), findsOneWidget);
+    expect(find.text('0 days used · 1 favorite'), findsOneWidget);
+    expect(find.text('Affected favorites (1)'), findsOneWidget);
+    expect(find.text('Breakfast'), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    verifyNever(() => repository.mergeTags(any(), any()));
+  });
+
+  testWidgets('confirmed merge blocks duplicate actions and refreshes tags', (
+    tester,
+  ) async {
+    final pending = Completer<void>();
+    final updates = StreamController<List<ManagedTag>>();
+    addTearDown(updates.close);
+    when(repository.watchTags).thenAnswer((_) => updates.stream);
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenAnswer((_) async => preview);
+    when(() => repository.mergeTags('coffee', 'custom'))
+        .thenAnswer((_) => pending.future);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          tagManagementRepositoryProvider.overrideWithValue(repository),
+        ],
+        child: const MaterialApp(home: TagManagementScreen()),
+      ),
+    );
+    updates.add([coffee, custom]);
+    await tester.pumpAndSettle();
+    await openMerge(tester);
+    await selectTarget(tester);
+    await tester.pumpAndSettle();
+    final confirm = find.widgetWithText(FilledButton, 'Merge tags');
+    await tester.ensureVisible(confirm);
+    await tester.tap(confirm);
+    await tester.pump();
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    expect(
+      tester
+          .widget<TextButton>(find.widgetWithText(TextButton, 'Cancel'))
+          .onPressed,
+      isNull,
+    );
+    verify(() => repository.mergeTags('coffee', 'custom')).called(1);
+    pending.complete();
+    updates.add([custom.copyWith(dayCount: 2)]);
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.text('Tags merged'), findsOneWidget);
+    expect(find.text('café'), findsNothing);
+    expect(find.textContaining('2 days used'), findsOneWidget);
+  });
+
+  testWidgets('failed merge stays open and permits a successful retry', (
+    tester,
+  ) async {
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenAnswer((_) async => preview);
+    when(() => repository.mergeTags('coffee', 'custom'))
+        .thenThrow(const TagMergeException(TagMergeError.missing));
+    await pumpScreen(tester);
+    await openMerge(tester);
+    await selectTarget(tester);
+    await tester.pumpAndSettle();
+    final confirm = find.widgetWithText(FilledButton, 'Merge tags');
+    await tester.ensureVisible(confirm);
+    await tester.tap(confirm);
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(
+      find.textContaining('Check that both tags are still available.'),
+      findsOneWidget,
+    );
+    when(() => repository.mergeTags('coffee', 'custom'))
+        .thenAnswer((_) async {});
+    await tester.ensureVisible(confirm);
+    await tester.tap(confirm);
+    await tester.pumpAndSettle();
+    expect(find.text('Tags merged'), findsOneWidget);
+  });
+
+  testWidgets('preview failure offers retry before enabling confirmation', (
+    tester,
+  ) async {
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenThrow(Exception('read'));
+    await pumpScreen(tester);
+    await openMerge(tester);
+    await selectTarget(tester);
+    await tester.pumpAndSettle();
+    final confirm = find.widgetWithText(FilledButton, 'Merge tags');
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenAnswer((_) async => preview);
+    await tester.tap(find.text('Try again'));
+    await tester.pumpAndSettle();
+    expect(find.text('Breakfast'), findsOneWidget);
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNotNull);
+  });
+
+  testWidgets('a removed target clears selection and disables confirmation', (
+    tester,
+  ) async {
+    final updates = StreamController<List<ManagedTag>>();
+    addTearDown(updates.close);
+    when(repository.watchTags).thenAnswer((_) => updates.stream);
+    when(() => repository.previewMerge('coffee', 'custom'))
+        .thenAnswer((_) async => preview);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          tagManagementRepositoryProvider.overrideWithValue(repository),
+        ],
+        child: const MaterialApp(home: TagManagementScreen()),
+      ),
+    );
+    updates.add([coffee, custom]);
+    await tester.pumpAndSettle();
+    await openMerge(tester);
+    await selectTarget(tester);
+    await tester.pumpAndSettle();
+    updates.add([coffee]);
+    await tester.pumpAndSettle();
+    expect(find.text('Create another tag to merge into.'), findsOneWidget);
+    final confirm = find.widgetWithText(FilledButton, 'Merge tags');
+    expect(tester.widget<FilledButton>(confirm).onPressed, isNull);
+    verifyNever(() => repository.mergeTags(any(), any()));
+  });
 
   testWidgets('lists categories, system origin and usage, then filters tags', (
     tester,
