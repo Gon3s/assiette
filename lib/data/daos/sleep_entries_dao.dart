@@ -58,11 +58,19 @@ class SleepEntriesDao extends DatabaseAccessor<AppDatabase>
   Future<void> upsertSleepEntry(SleepEntriesCompanion entry) =>
       into(sleepEntries).insertOnConflictUpdate(entry);
 
-  Future<SleepEntry?> getOpenEntry() =>
+  Future<SleepEntry?> getOpenEntry({DateTime? at}) =>
       (select(sleepEntries)
             ..where((t) => t.deletedAt.isNull())
             ..where((t) => t.bedTime.isNotNull())
             ..where((t) => t.wakeTime.isNull())
+            ..where(
+              (t) => at == null
+                  ? const Constant(true)
+                  : t.bedTime.isSmallerOrEqualValue(at.toUtc()) &
+                        t.bedTime.isBiggerOrEqualValue(
+                          at.toUtc().subtract(const Duration(hours: 24)),
+                        ),
+            )
             ..orderBy([(t) => OrderingTerm.desc(t.bedTime)])
             ..limit(1))
           .getSingleOrNull();

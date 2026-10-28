@@ -33,6 +33,25 @@ void main() {
   tearDown(() => db.close());
 
   group('loadRange', () {
+    test('a canonical sleep night is exported only on its wake day', () async {
+      await db.sleepEntriesDao.upsertSleepEntry(
+        SleepEntriesCompanion.insert(
+          id: 'wake-day-night',
+          nightDate: DateTime.utc(day2.year, day2.month, day2.day),
+          bedTime: Value(at(day1, 22)),
+          wakeTime: Value(at(day2, 7)),
+        ),
+      );
+
+      final entries = await repository.loadRange(day1, day2);
+      expect(entries, hasLength(1));
+      expect(
+        entries.single.date,
+        DateTime(day2.year, day2.month, day2.day).toUtc(),
+      );
+      expect(entries.single.sleep?.id, 'wake-day-night');
+    });
+
     test('aggregates meals, symptoms, sleep and weather per day', () async {
       await db.tagsDao.insertTag(
         TagsCompanion.insert(id: 'tag-1', label: 'milk'),

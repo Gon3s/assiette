@@ -86,19 +86,24 @@ class DriftJournalExportRepository implements JournalExportRepository {
         localDate.month,
         localDate.day,
       );
-      final sleepEntry = sleepEntries
-          .where(
-            (entry) =>
-                entry.nightDate.isAtSameMomentAs(day) ||
-                entry.nightDate.isAtSameMomentAs(utcNightDate) ||
-                (entry.bedTime != null &&
-                    _inRange(
-                      entry.bedTime!,
-                      day,
-                      day.add(const Duration(days: 1)),
-                    )),
-          )
+      final canonicalSleep = sleepEntries
+          .where((entry) => entry.nightDate.isAtSameMomentAs(utcNightDate))
           .firstOrNull;
+      final sleepEntry =
+          canonicalSleep ??
+          sleepEntries
+              .where(
+                (entry) =>
+                    entry.nightDate.isAtSameMomentAs(day) ||
+                    (_hasLegacySleepKey(entry) &&
+                        entry.bedTime != null &&
+                        _inRange(
+                          entry.bedTime!,
+                          day,
+                          day.add(const Duration(days: 1)),
+                        )),
+              )
+              .firstOrNull;
       final daySnapshots = [
         for (final snapshot in snapshots)
           if (_inRange(snapshot.timestamp, day, dayEnd)) snapshot,
@@ -129,6 +134,11 @@ class DriftJournalExportRepository implements JournalExportRepository {
 
   static bool _inRange(DateTime timestamp, DateTime start, DateTime end) =>
       !timestamp.isBefore(start) && timestamp.isBefore(end);
+
+  static bool _hasLegacySleepKey(SleepEntry entry) {
+    final key = entry.nightDate.toUtc();
+    return key != DateTime.utc(key.year, key.month, key.day);
+  }
 
   static DateTime _dayStartUtc(DateTime date) =>
       DateTime(date.year, date.month, date.day).toUtc();

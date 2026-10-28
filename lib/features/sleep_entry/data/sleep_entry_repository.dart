@@ -1,4 +1,5 @@
 import 'package:assiette/data/db/app_database.dart';
+import 'package:assiette/features/sleep_entry/domain/sleep_day.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
@@ -38,17 +39,15 @@ class DriftSleepEntryRepository implements SleepEntryRepository {
   }
 
   @override
-  Future<DateTime> startNight(DateTime startedAt) async {
-    final openEntry = await _db.sleepEntriesDao.getOpenEntry();
-    if (openEntry != null) return _dateForEntry(openEntry);
-
-    final existing = await _db.sleepEntriesDao.watchByDate(startedAt).first;
+  Future<DateTime> startNight(DateTime startedAt) => _db.transaction(() async {
+    final day = sleepDayForBedTime(startedAt);
+    final existing = await _db.sleepEntriesDao.watchByDate(day).first;
     if (existing == null) {
       final now = DateTime.now().toUtc();
       await _db.sleepEntriesDao.upsertSleepEntry(
         SleepEntriesCompanion.insert(
           id: _uuid.v4(),
-          nightDate: _nightDateKey(startedAt),
+          nightDate: _nightDateKey(day),
           bedTime: Value(startedAt.toUtc()),
           createdAt: Value(now),
           updatedAt: Value(now),
@@ -64,41 +63,73 @@ class DriftSleepEntryRepository implements SleepEntryRepository {
             ),
       );
     }
-    return DateTime(startedAt.year, startedAt.month, startedAt.day);
-  }
+    return day;
+  });
 
   @override
-  Future<DateTime> recordWake(DateTime wokeAt) async {
-    final openEntry = await _db.sleepEntriesDao.getOpenEntry();
+  Future<DateTime> recordWake(DateTime wokeAt) => _db.transaction(() async {
+    final local = wokeAt.toLocal();
+    final day = DateTime(local.year, local.month, local.day);
+    final existing = await _db.sleepEntriesDao.watchByDate(day).first;
+    // Prefer today's entry. An old unfinished night must not steal this wake.
+    final openEntry = existing == null
+        ? await _db.sleepEntriesDao.getOpenEntry(at: wokeAt)
+        : null;
     final now = DateTime.now().toUtc();
     if (openEntry != null) {
+      // Repair a recent night created under the old bedtime-day convention
+      // only when the destination is empty. Keep other stored keys (travel).
+      final bedTime = openEntry.bedTime!.toLocal();
+      final storedDay = _dateForEntry(openEntry);
+      final isLegacyBedDay =
+          storedDay == DateTime(bedTime.year, bedTime.month, bedTime.day) &&
+          sleepDayForBedTime(bedTime) == day;
+      // Deleted entries still occupy their unique key and may be restored.
+      final destination = isLegacyBedDay
+          ? await (_db.select(_db.sleepEntries)..where(
+                  (t) => t.nightDate.equals(_nightDateKey(day)),
+                ))
+                .getSingleOrNull()
+          : null;
+      final moveToWakeDay = isLegacyBedDay && destination == null;
+      final night = moveToWakeDay ? day : storedDay;
       await _db.sleepEntriesDao.upsertSleepEntry(
         openEntry
+            .toCompanion(true)
+            .copyWith(
+              nightDate: Value(
+                moveToWakeDay ? _nightDateKey(night) : openEntry.nightDate,
+              ),
+              wakeTime: Value(wokeAt.toUtc()),
+              updatedAt: Value(now),
+            ),
+      );
+      return night;
+    }
+
+    if (existing?.bedTime?.isAfter(wokeAt) ?? false) return day;
+    if (existing != null && existing.wakeTime == null) {
+      await _db.sleepEntriesDao.upsertSleepEntry(
+        existing
             .toCompanion(true)
             .copyWith(
               wakeTime: Value(wokeAt.toUtc()),
               updatedAt: Value(now),
             ),
       );
-      return _dateForEntry(openEntry);
-    }
-
-    final day = DateTime(wokeAt.year, wokeAt.month, wokeAt.day);
-    final existing = await _db.sleepEntriesDao.watchByDate(day).first;
-    if (existing == null || existing.wakeTime == null) {
+    } else if (existing == null) {
       await _db.sleepEntriesDao.upsertSleepEntry(
         SleepEntriesCompanion.insert(
-          id: existing?.id ?? _uuid.v4(),
-          nightDate: _nightDateKey(wokeAt),
-          quality: Value(existing?.quality),
+          id: _uuid.v4(),
+          nightDate: _nightDateKey(day),
           wakeTime: Value(wokeAt.toUtc()),
-          createdAt: Value(existing?.createdAt ?? now),
+          createdAt: Value(now),
           updatedAt: Value(now),
         ),
       );
     }
     return day;
-  }
+  });
 
   static DateTime _nightDateKey(DateTime date) =>
       DateTime.utc(date.year, date.month, date.day);

@@ -30,15 +30,18 @@ class SleepEntryScreen extends ConsumerWidget {
     final day = ref.read(selectedDateProvider);
     var date = current?.toLocal() ?? day;
     final wakeTime = ref.read(sleepEntryControllerProvider).wakeTime?.toLocal();
-    final selectedTimeIsAfterWake =
-        wakeTime != null &&
-        wakeTime.year == day.year &&
-        wakeTime.month == day.month &&
-        wakeTime.day == day.day &&
-        (picked.hour > wakeTime.hour ||
-            (picked.hour == wakeTime.hour && picked.minute > wakeTime.minute));
-    if (current == null && selectedTimeIsAfterWake) {
-      date = DateTime(day.year, day.month, day.day - 1);
+    if (current == null) {
+      final previousDay = wakeTime == null
+          ? picked.hour >= 12
+          : picked.hour > wakeTime.hour ||
+                (picked.hour == wakeTime.hour &&
+                    picked.minute > wakeTime.minute);
+      final wakeDay = wakeTime ?? day;
+      date = DateTime(
+        wakeDay.year,
+        wakeDay.month,
+        wakeDay.day - (previousDay ? 1 : 0),
+      );
     }
     ref
         .read(sleepEntryControllerProvider.notifier)
@@ -65,13 +68,15 @@ class SleepEntryScreen extends ConsumerWidget {
     var month = date.month;
     var dayOfMonth = date.day;
     final bedTime = ref.read(sleepEntryControllerProvider).bedTime?.toLocal();
-    final bedtimeIsAfterWake =
-        bedTime != null &&
-        (TimeOfDay.fromDateTime(bedTime).hour > picked.hour ||
-            (TimeOfDay.fromDateTime(bedTime).hour == picked.hour &&
-                TimeOfDay.fromDateTime(bedTime).minute > picked.minute));
-    if (current == null && bedtimeIsAfterWake) {
-      final nextDay = DateTime(year, month, dayOfMonth + 1);
+    final candidate = DateTime(
+      year,
+      month,
+      dayOfMonth,
+      picked.hour,
+      picked.minute,
+    );
+    if (current == null && bedTime != null && candidate.isBefore(bedTime)) {
+      final nextDay = DateTime(bedTime.year, bedTime.month, bedTime.day + 1);
       year = nextDay.year;
       month = nextDay.month;
       dayOfMonth = nextDay.day;
