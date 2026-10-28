@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_entry_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _SleepShortcutScreenState extends ConsumerState<SleepShortcutScreen> {
           ? await repository.startNight(now)
           : await repository.recordWake(now);
       if (!mounted) return;
+      ref.invalidate(sleepEntryControllerProvider);
       ref.read(selectedDateProvider.notifier).select(night);
       if (widget.startNight) {
         context.goNamed(AppRouter.home.name);

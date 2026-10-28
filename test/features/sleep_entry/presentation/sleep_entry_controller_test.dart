@@ -1,6 +1,8 @@
 @Timeout(Duration(seconds: 5))
 library;
 
+import 'dart:async';
+
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
@@ -49,6 +51,72 @@ void main() {
   }
 
   group('SleepEntryController', () {
+    test('a fresh wake updates the form without losing local edits', () async {
+      final stream = StreamController<SleepSummary?>.broadcast(sync: true);
+      addTearDown(stream.close);
+      when(() => dayViewRepository.watchSleepForNight(any()))
+          .thenAnswer((_) => stream.stream);
+      final container = ProviderContainer(
+        overrides: [
+          dayViewRepositoryProvider.overrideWithValue(dayViewRepository),
+          sleepEntryRepositoryProvider.overrideWithValue(sleepEntryRepository),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.listen(sleepEntryControllerProvider, (_, _) {});
+      final bedtime = DateTime(2026, 7, 7, 22);
+      stream.add(SleepSummary(id: 'night', bedTime: bedtime));
+      await container.pump();
+      final controller = container.read(sleepEntryControllerProvider.notifier)
+        ..setQuality(3)
+        ..setNote('Still editing')
+        ..clearBedTime();
+
+      final wake = DateTime(2026, 7, 8, 7);
+      stream.add(SleepSummary(id: 'night', bedTime: bedtime, wakeTime: wake));
+      await container.pump();
+
+      final state = container.read(sleepEntryControllerProvider);
+      expect(state.id, 'night');
+      expect(state.wakeTime, wake);
+      expect(state.bedTime, isNull);
+      expect(state.quality, 3);
+      expect(state.note, 'Still editing');
+      controller.setWakeTime(DateTime(2026, 7, 8, 8));
+      stream.add(SleepSummary(id: 'night', bedTime: bedtime, wakeTime: wake));
+      await container.pump();
+      expect(
+        container.read(sleepEntryControllerProvider).wakeTime,
+        DateTime(2026, 7, 8, 8),
+      );
+    });
+
+    test('changing the journal day resets the form to that night', () async {
+      when(() => dayViewRepository.watchSleepForNight(any())).thenAnswer(
+        (invocation) => Stream.value(
+          SleepSummary(
+            id: '${invocation.positionalArguments.single}',
+            wakeTime: (invocation.positionalArguments.single as DateTime).add(
+              const Duration(hours: 7),
+            ),
+          ),
+        ),
+      );
+      final container = await makeContainer();
+      container.listen(sleepEntryControllerProvider, (_, _) {});
+      container.read(sleepEntryControllerProvider.notifier).setNote('Unsaved');
+
+      final nextDay = DateTime(2026, 7, 8);
+      container.read(selectedDateProvider.notifier).select(nextDay);
+      await container.read(daySleepProvider(nextDay).future);
+      await container.pump();
+
+      final state = container.read(sleepEntryControllerProvider);
+      expect(state.id, '$nextDay');
+      expect(state.wakeTime, DateTime(2026, 7, 8, 7));
+      expect(state.note, isNull);
+    });
+
     test(
       'initial state leaves quality empty when no sleep is logged',
       () async {

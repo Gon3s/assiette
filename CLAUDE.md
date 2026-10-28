@@ -28,6 +28,12 @@ Food · symptoms · environment. Connect the dots.
   that same Flutter installation, and ensure Git hooks resolve to it too.
 - Do not substitute another patch version and merely report the gap.
   An exception requires an explicit user instruction.
+- On Windows, if `PATH` selects an older SDK, use the offline project wrapper:
+  `rtk powershell -NoProfile -ExecutionPolicy Bypass -File tool/flutter.ps1 --version`.
+  It selects the CI-pinned SDK from `FLUTTER_ROOT`, a sibling
+  `flutter-<version>` installation, or the active SDK. Pass Flutter arguments
+  normally, or add `-Dart` before `run build_runner build` for matching Dart.
+  The Windows Git hook uses this wrapper too; it never changes the system PATH.
 
 ## Golden rules
 

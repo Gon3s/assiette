@@ -8,6 +8,7 @@ import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
 import 'package:assiette/features/sleep_entry/domain/sleep_entry_repository.dart';
+import 'package:assiette/features/sleep_entry/presentation/sleep_entry_controller.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -138,6 +139,38 @@ void main() {
     await tester.pump();
 
     expect(find.text('Bed time'), findsOneWidget);
+  });
+
+  testWidgets('manual evening bedtime belongs to the previous calendar day', (
+    tester,
+  ) async {
+    when(() => dayViewRepository.watchSleepForNight(any()))
+        .thenAnswer((_) => Stream.value(null));
+    await pumpScreen(tester);
+    await tester.tap(find.text('Bed time'));
+    await tester.pumpAndSettle();
+    final dialog = tester.element(find.byType(TimePickerDialog));
+    Navigator.of(dialog).pop(const TimeOfDay(hour: 22, minute: 0));
+    await tester.pumpAndSettle();
+
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(SleepEntryScreen)),
+    );
+    final day = container.read(selectedDateProvider);
+    expect(
+      container.read(sleepEntryControllerProvider).bedTime,
+      DateTime(day.year, day.month, day.day - 1, 22),
+    );
+
+    await tester.tap(find.text('Wake time'));
+    await tester.pumpAndSettle();
+    Navigator.of(tester.element(find.byType(TimePickerDialog)))
+        .pop(const TimeOfDay(hour: 7, minute: 0));
+    await tester.pumpAndSettle();
+    expect(
+      container.read(sleepEntryControllerProvider).wakeTime,
+      DateTime(day.year, day.month, day.day, 7),
+    );
   });
 
   testWidgets('saving calls the repository and pops back', (tester) async {

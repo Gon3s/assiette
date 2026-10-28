@@ -7,14 +7,36 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sleep_entry_controller.g.dart';
 
+enum _SleepField { quality, note, bedTime, wakeTime }
+
 /// Holds and mutates the sleep entry detail form (quality, bed/wake time),
 /// seeded from the sleep already logged for the selected day, and performs
 /// the final save.
 @riverpod
 class SleepEntryController extends _$SleepEntryController {
+  final _edited = <_SleepField>{};
+
   @override
   SleepEntryState build() {
-    final day = ref.read(selectedDateProvider);
+    final day = ref.watch(selectedDateProvider);
+    _edited.clear();
+    ref.listen(daySleepProvider(day), (_, next) {
+      if (!next.hasValue) return;
+      final sleep = next.value;
+      state = state.copyWith(
+        id: sleep?.id,
+        quality: _edited.contains(_SleepField.quality)
+            ? state.quality
+            : sleep?.quality,
+        note: _edited.contains(_SleepField.note) ? state.note : sleep?.note,
+        bedTime: _edited.contains(_SleepField.bedTime)
+            ? state.bedTime
+            : sleep?.bedTime,
+        wakeTime: _edited.contains(_SleepField.wakeTime)
+            ? state.wakeTime
+            : sleep?.wakeTime,
+      );
+    });
     final sleep = ref.read(daySleepProvider(day)).value;
     return SleepEntryState(
       id: sleep?.id,
@@ -26,23 +48,39 @@ class SleepEntryController extends _$SleepEntryController {
   }
 
   /// Changes the sleep quality (1-3).
-  void setQuality(int? quality) => state = state.copyWith(quality: quality);
+  void setQuality(int? quality) {
+    _edited.add(_SleepField.quality);
+    state = state.copyWith(quality: quality);
+  }
 
-  void setNote(String note) => state = state.copyWith(note: note);
+  void setNote(String note) {
+    _edited.add(_SleepField.note);
+    state = state.copyWith(note: note);
+  }
 
   /// Changes the bed time (kept local; converted to UTC on save).
-  void setBedTime(DateTime bedTime) =>
-      state = state.copyWith(bedTime: bedTime);
+  void setBedTime(DateTime bedTime) {
+    _edited.add(_SleepField.bedTime);
+    state = state.copyWith(bedTime: bedTime);
+  }
 
   /// Clears the optional bed time.
-  void clearBedTime() => state = state.copyWith(bedTime: null);
+  void clearBedTime() {
+    _edited.add(_SleepField.bedTime);
+    state = state.copyWith(bedTime: null);
+  }
 
   /// Changes the wake time (kept local; converted to UTC on save).
-  void setWakeTime(DateTime wakeTime) =>
-      state = state.copyWith(wakeTime: wakeTime);
+  void setWakeTime(DateTime wakeTime) {
+    _edited.add(_SleepField.wakeTime);
+    state = state.copyWith(wakeTime: wakeTime);
+  }
 
   /// Clears the optional wake time.
-  void clearWakeTime() => state = state.copyWith(wakeTime: null);
+  void clearWakeTime() {
+    _edited.add(_SleepField.wakeTime);
+    state = state.copyWith(wakeTime: null);
+  }
 
   /// Persists the sleep entry for the selected day. Returns true on success.
   Future<bool> save() async {
