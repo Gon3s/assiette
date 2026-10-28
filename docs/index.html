@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Assiette, le journal Android pour noter vos repas, symptômes et sommeil, et garder le contexte de vos journées. Utilisable sans compte, avec sauvegarde Google Drive facultative.">
+  <meta name="color-scheme" content="light">
+  <title>Assiette — Votre quotidien, dans un même journal</title>
+  <style>
+    :root { color-scheme: light; --ink: #142440; --muted: #526276; --green: #096b65; --paper: #f5f8fa; --line: #dbe4e8; --mint: #e9f2f1; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1.05rem/1.7 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: var(--green); text-underline-offset: .22em; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--green); outline-offset: 5px; }
+    .skip { position: absolute; top: -5rem; left: 1rem; padding: .5rem 1rem; background: white; }
+    .skip:focus { top: 1rem; z-index: 2; }
+    header, main, footer { width: min(100% - 3rem, 70rem); margin-inline: auto; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: .7rem; font-size: 1.4rem; font-weight: 750; }
+    .brand svg { width: 2.3rem; height: 2.3rem; color: var(--green); }
+    nav { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .95rem; }
+    .hero { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 4rem; padding-block: 5rem; }
+    h1 { font-size: clamp(2.65rem, 5vw, 4.5rem); line-height: 1.08; letter-spacing: -.055em; margin: 0 0 1.5rem; font-weight: 750; }
+    .lead { font-size: 1.2rem; color: var(--muted); max-width: 36rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 2rem; }
+    .button { display: inline-block; background: var(--green); color: white; text-decoration: none; font-weight: 650; padding: .85rem 1.25rem; border-radius: .5rem; }
+    .button:hover { background: #075650; }
+    .alpha { font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+    .journal { background: white; border: 1px solid var(--line); border-radius: 1.5rem; padding: 1.75rem; box-shadow: 0 20px 45px #1424400a; }
+    .journal figcaption { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+    .journal strong { font-size: 1.25rem; }
+    .example { font-size: .8rem; color: var(--muted); }
+    .entry { display: grid; grid-template-columns: 3.4rem 1fr; gap: .8rem; padding-block: 1.25rem; }
+    .entry + .entry { border-top: 1px solid var(--line); }
+    .entry time { color: var(--muted); font-size: .85rem; padding-top: .2rem; }
+    .entry h3 { font-size: 1.05rem; margin: 0 0 .25rem; }
+    .entry p { margin: 0; font-size: .9rem; color: var(--muted); }
+    .journal-note { margin: .25rem 0 0; padding: .7rem 1rem; background: var(--mint); border-radius: .5rem; color: var(--green); font-size: .85rem; }
+    .overview { border-top: 1px solid var(--line); padding-block: 3rem; }
+    h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); letter-spacing: -.035em; line-height: 1.2; margin: 0 0 1.75rem; }
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+    .features h3 { font-size: 1.1rem; margin: 0 0 .5rem; }
+    .features p { color: var(--muted); margin: 0; }
+    .privacy { padding: 2.5rem; background: var(--mint); border-radius: 1rem; margin-bottom: 3rem; }
+    .privacy h2 { margin-bottom: 1rem; }
+    .privacy p { max-width: 60ch; }
+    .notice { max-width: 78ch; color: var(--muted); font-size: .95rem; padding-bottom: 2rem; }
+    footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; border-top: 1px solid var(--line); padding-block: 1.75rem 3rem; color: var(--muted); font-size: .9rem; }
+    footer p { margin: 0; }
+    footer a { overflow-wrap: anywhere; }
+    @media (max-width: 800px) { .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 3rem; } .journal { margin: 0; max-width: 34rem; } .features { grid-template-columns: 1fr; gap: 1.5rem; } }
+    @media (max-width: 480px) { header, main, footer { width: min(100% - 2rem, 70rem); } header { align-items: flex-start; } nav { flex-direction: column; gap: .25rem; font-size: .85rem; } .privacy { padding: 1.5rem; } .journal { padding: 1.25rem; } .journal figcaption { flex-wrap: wrap; gap: .25rem; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="17" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 20h5l3-5 3 10 3-5h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Assiette
+    </div>
+    <nav aria-label="Navigation principale">
+      <a href="#fonctionnement">L’application</a>
+      <a href="privacy.html">Confidentialité</a>
+    </nav>
+  </header>
+  <main id="contenu">
+    <section class="hero" aria-labelledby="titre">
+      <div>
+        <h1 id="titre">Votre quotidien, dans un même journal.</h1>
+        <p class="lead">Repas, symptômes, sommeil et environnement : Assiette vous aide à garder une trace de vos journées et à retrouver ce que vous avez ressenti.</p>
+        <div class="actions">
+          <a class="button" href="https://play.google.com/store/apps/details?id=com.gones.assiette">Voir sur Google Play</a>
+        </div>
+        <p class="alpha">Application Android en alpha. Accès réservé aux testeurs inscrits.</p>
+      </div>
+      <figure class="journal" aria-label="Illustration d’une journée dans le journal">
+        <figcaption><strong>Une journée avec Assiette</strong><span class="example">Exemple fictif</span></figcaption>
+        <div class="entry"><time>7:30</time><div><h3>Sommeil</h3><p>Une nuit reposante, notée au réveil.</p></div></div>
+        <div class="entry"><time>12:30</time><div><h3>Repas</h3><p>Les aliments et les détails à retenir.</p></div></div>
+        <div class="entry"><time>16:00</time><div><h3>Ressenti</h3><p>Un symptôme, son intensité, une note.</p></div></div>
+        <p class="journal-note">Le contexte météo accompagne votre journal.</p>
+      </figure>
+    </section>
+    <section class="overview" id="fonctionnement" aria-labelledby="fonctionnement-titre">
+      <h2 id="fonctionnement-titre">Noter aujourd’hui. Retrouver plus tard.</h2>
+      <div class="features">
+        <div><h3>Rassembler vos observations</h3><p>Consignez vos repas, symptômes, prises de médicaments et nuits de sommeil dans une vue par journée.</p></div>
+        <div><h3>Garder le contexte</h3><p>Consultez la météo et la pression atmosphérique du lieu enregistré pour compléter vos observations.</p></div>
+        <div><h3>Préparer un échange</h3><p>Exportez une période de votre journal en PDF pour la relire ou la partager avec un professionnel de santé.</p></div>
+      </div>
+    </section>
+    <section class="privacy" aria-labelledby="donnees-titre">
+      <h2 id="donnees-titre">Un journal sur votre appareil.</h2>
+      <p>Assiette est utilisable sans compte. Les données du journal sont conservées localement sur votre appareil.</p>
+      <p>La connexion Google sert à la sauvegarde et à la restauration facultatives dans le dossier privé d’Assiette sur votre Google Drive. Elle ne donne pas accès à l’ensemble de vos documents. Une sauvegarde peut contenir des données de santé.</p>
+      <p>La météo utilise des services en ligne. Retrouvez les détails sur les données, leur conservation et leur suppression dans la <a href="privacy.html">politique de confidentialité</a>.</p>
+    </section>
+    <p class="notice">Assiette est un outil de suivi personnel destiné aux personnes de 16 ans et plus. Ce n’est pas un dispositif médical. L’application ne pose pas de diagnostic et ne remplace pas l’avis d’un professionnel de santé. Les rapprochements entre événements ne démontrent pas de lien de cause à effet.</p>
+  </main>
+  <footer>
+    <p>Assiette · Éditée par CUOQ Kevin<br><a href="mailto:assiette@gmail.com">Contacter l’éditeur</a></p>
+    <p><a href="privacy.html">Politique de confidentialité</a><br><a href="https://github.com/Gon3s/assiette">Code source sur GitHub</a></p>
+  </footer>
+</body>
+</html>
