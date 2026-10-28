@@ -5,6 +5,7 @@ import 'package:assiette/features/day_view/domain/weather_summary.dart';
 import 'package:assiette/features/pdf_export/domain/day_journal_entry.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/localization/enum_labels.dart';
+import 'package:assiette/localization/menstrual_labels.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -75,6 +76,15 @@ class JournalPdfBuilder {
           if (entry.medications.isNotEmpty)
             ..._medicationsSection(s, entry.medications, timeFormat),
           if (entry.sleep != null) _sleepLine(s, entry.sleep!),
+          if (entry.menstrual case final menstrual?) ...[
+            pw.Text(s.menstrualTitle, style: _sectionStyle),
+            pw.Bullet(
+              text: [
+                menstrualSummary(s, menstrual),
+                if (menstrual.note != null) menstrual.note!,
+              ].join(' - '),
+            ),
+          ],
           if (entry.weather != null) _weatherLine(s, entry.weather!),
         ],
       ),

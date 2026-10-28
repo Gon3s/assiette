@@ -2,6 +2,7 @@ import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_state_providers.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_controller.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_state.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_export_notice.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,9 +14,15 @@ class CloudBackupScreen extends ConsumerWidget {
   /// Creates a [CloudBackupScreen].
   const CloudBackupScreen({super.key});
 
-  Future<void> _signIn(BuildContext context, WidgetRef ref, AppStrings s) async {
+  Future<void> _signIn(
+    BuildContext context,
+    WidgetRef ref,
+    AppStrings s,
+  ) async {
     final messenger = ScaffoldMessenger.of(context);
-    final error = await ref.read(cloudBackupControllerProvider.notifier).signIn();
+    final error = await ref
+        .read(cloudBackupControllerProvider.notifier)
+        .signIn();
     if (error != null) {
       // TODO(US-26): revert to s.errorGeneric once the internal-testing
       // sign-in failure is diagnosed — this surfaces the raw diagnostic
@@ -32,7 +39,9 @@ class CloudBackupScreen extends ConsumerWidget {
     AppStrings s,
   ) async {
     final messenger = ScaffoldMessenger.of(context);
-    final ok = await ref.read(cloudBackupControllerProvider.notifier).backupNow();
+    final ok = await ref
+        .read(cloudBackupControllerProvider.notifier)
+        .backupNow();
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -42,7 +51,11 @@ class CloudBackupScreen extends ConsumerWidget {
       );
   }
 
-  Future<void> _restore(BuildContext context, WidgetRef ref, AppStrings s) async {
+  Future<void> _restore(
+    BuildContext context,
+    WidgetRef ref,
+    AppStrings s,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -100,6 +113,7 @@ class CloudBackupScreen extends ConsumerWidget {
               ),
             ),
             gapH8,
+            const MenstrualExportNotice(forBackup: true),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.account_circle_outlined),
@@ -127,7 +141,9 @@ class CloudBackupScreen extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: state.isBusy
                     ? null
-                    : () => ref.read(cloudBackupControllerProvider.notifier).signOut(),
+                    : () => ref
+                          .read(cloudBackupControllerProvider.notifier)
+                          .signOut(),
                 icon: const Icon(Icons.logout),
                 label: Text(s.cloudBackupSignOutAction),
               ),
@@ -141,8 +157,8 @@ class CloudBackupScreen extends ConsumerWidget {
                     data: (timestamp) => timestamp == null
                         ? s.cloudBackupNeverBackedUp
                         : DateFormat.yMd(locale).add_Hm().format(
-                              timestamp.toLocal(),
-                            ),
+                            timestamp.toLocal(),
+                          ),
                     loading: () => '',
                     error: (error, stack) => s.cloudBackupNeverBackedUp,
                   ),
@@ -158,7 +174,9 @@ class CloudBackupScreen extends ConsumerWidget {
               ),
               gapH8,
               OutlinedButton.icon(
-                onPressed: state.isBusy ? null : () => _restore(context, ref, s),
+                onPressed: state.isBusy
+                    ? null
+                    : () => _restore(context, ref, s),
                 icon: const Icon(Icons.cloud_download_outlined),
                 label: Text(s.cloudRestoreAction),
               ),

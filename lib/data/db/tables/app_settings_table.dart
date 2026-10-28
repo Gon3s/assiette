@@ -12,8 +12,7 @@ class AppSettings extends Table {
   BoolColumn get remindersMealsEnabled =>
       boolean().withDefault(const Constant(true))();
   IntColumn get breakfastHour => integer().withDefault(const Constant(8))();
-  IntColumn get breakfastMinute =>
-      integer().withDefault(const Constant(30))();
+  IntColumn get breakfastMinute => integer().withDefault(const Constant(30))();
   IntColumn get lunchHour => integer().withDefault(const Constant(12))();
   IntColumn get lunchMinute => integer().withDefault(const Constant(30))();
   IntColumn get dinnerHour => integer().withDefault(const Constant(19))();
@@ -40,4 +39,11 @@ class AppSettings extends Table {
 
   @override
   Set<Column<Object>> get primaryKey => {id};
+
+  BoolColumn get menstrualTrackingEnabled =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get menstrualBackupEnabled =>
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get menstrualPdfEnabled =>
+      boolean().withDefault(const Constant(false))();
 }

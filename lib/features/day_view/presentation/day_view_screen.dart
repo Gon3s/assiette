@@ -12,6 +12,9 @@ import 'package:assiette/features/day_view/presentation/widgets/day_header.dart'
 import 'package:assiette/features/day_view/presentation/widgets/sleep_card.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_tile.dart';
 import 'package:assiette/features/favorites/presentation/widgets/favorites_row.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_observation.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_day_card.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_providers.dart';
 import 'package:assiette/features/symptom_entry/domain/migraine_observation.dart';
 import 'package:assiette/features/symptom_entry/domain/migraine_observation_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_entry_repository.dart';
@@ -218,6 +221,7 @@ class _DayViewBody extends ConsumerWidget {
         const SliverToBoxAdapter(child: _ActiveMigraineCard()),
         SliverToBoxAdapter(child: _DailyFeelingsCard(date: date)),
         SliverToBoxAdapter(child: SleepCard(date: date)),
+        SliverToBoxAdapter(child: MenstrualDayCard(date: date)),
         const SliverToBoxAdapter(child: gapH8),
         const SliverToBoxAdapter(child: FavoritesRow()),
         const SliverToBoxAdapter(child: gapH8),
@@ -320,12 +324,21 @@ class _ActionBar extends ConsumerWidget {
   }
 
   Future<void> _showAddMenu(BuildContext context, WidgetRef ref) async {
+    final menstrualEnabled =
+        ref.read(menstrualPreferencesProvider).value?.enabled == true &&
+        menstrualDateKey(date).compareTo(menstrualDateKey(DateTime.now())) <= 0;
     final choice = await showModalBottomSheet<_AddChoice>(
       context: context,
       builder: (context) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (menstrualEnabled)
+              ListTile(
+                leading: const Icon(Icons.water_drop_outlined),
+                title: Text(s.menstrualTitle),
+                onTap: () => Navigator.pop(context, _AddChoice.menstrual),
+              ),
             ListTile(
               leading: const Icon(Icons.bolt),
               title: Text(s.symptomTypeMigraine),
@@ -351,6 +364,10 @@ class _ActionBar extends ConsumerWidget {
       ),
     );
     if (choice == null || !context.mounted) return;
+    if (choice == _AddChoice.menstrual) {
+      await context.pushNamed(AppRouter.menstrualEntry.name, extra: date);
+      return;
+    }
     if (choice == _AddChoice.medication) {
       await context.pushNamed(AppRouter.medicationEntry.name, extra: date);
       return;
@@ -383,7 +400,7 @@ class _ActionBar extends ConsumerWidget {
   }
 }
 
-enum _AddChoice { migraine, feeling, mood, medication }
+enum _AddChoice { migraine, feeling, mood, medication, menstrual }
 
 class _DailyFeelingsCard extends ConsumerWidget {
   const _DailyFeelingsCard({required this.date});

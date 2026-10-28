@@ -3,6 +3,7 @@ import 'package:assiette/data/daos/cloud_backup_state_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/medication_intakes_dao.dart';
+import 'package:assiette/data/daos/menstrual_days_dao.dart';
 import 'package:assiette/data/daos/migraine_intensity_measurements_dao.dart';
 import 'package:assiette/data/daos/sleep_entries_dao.dart';
 import 'package:assiette/data/daos/symptoms_dao.dart';
@@ -20,6 +21,7 @@ import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
 import 'package:assiette/data/db/tables/meals_table.dart';
 import 'package:assiette/data/db/tables/medication_intakes_table.dart';
+import 'package:assiette/data/db/tables/menstrual_days_table.dart';
 import 'package:assiette/data/db/tables/migraine_intensity_measurements_table.dart';
 import 'package:assiette/data/db/tables/sleep_entries_table.dart';
 import 'package:assiette/data/db/tables/symptoms_table.dart';
@@ -44,6 +46,7 @@ part 'app_database.g.dart';
     EnvironmentSnapshots,
     AppSettings,
     CloudBackupStates,
+    MenstrualDays,
   ],
   daos: [
     TagsDao,
@@ -56,6 +59,7 @@ part 'app_database.g.dart';
     EnvironmentDao,
     AppSettingsDao,
     CloudBackupStateDao,
+    MenstrualDaysDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -63,7 +67,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 13;
+  int get schemaVersion => 14;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -225,6 +229,15 @@ class AppDatabase extends _$AppDatabase {
             now.millisecondsSinceEpoch ~/ 1000,
           ],
         );
+      }
+      if (from < 14) {
+        await m.createTable(menstrualDays);
+        // Pre-v2 databases create the current app_settings table above.
+        if (from >= 2) {
+          await m.addColumn(appSettings, appSettings.menstrualTrackingEnabled);
+          await m.addColumn(appSettings, appSettings.menstrualBackupEnabled);
+          await m.addColumn(appSettings, appSettings.menstrualPdfEnabled);
+        }
       }
     },
   );

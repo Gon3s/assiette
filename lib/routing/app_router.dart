@@ -6,6 +6,8 @@ import 'package:assiette/features/favorites/presentation/favorites_manage_screen
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/medication_entry/presentation/medication_entry_screen.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_entry_screen.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_settings_screen.dart';
 import 'package:assiette/features/migraine_history/presentation/migraine_history_screen.dart';
 import 'package:assiette/features/migraine_stats/presentation/migraine_stats_screen.dart';
 import 'package:assiette/features/notification_settings/presentation/notification_settings_screen.dart';
@@ -49,6 +51,8 @@ enum AppRouter {
 
   /// The autonomous medication intake screen.
   medicationEntry,
+  menstrualEntry,
+  menstrualSettings,
 
   /// The sleep entry detail screen.
   sleepEntry,
@@ -146,6 +150,13 @@ GoRouter goRouter(Ref ref) {
             const NoTransitionPage(child: DayViewScreen()),
         routes: [
           GoRoute(
+            path: 'menstrual-entry',
+            name: AppRouter.menstrualEntry.name,
+            builder: (context, state) => MenstrualEntryScreen(
+              date: state.extra as DateTime? ?? DateTime.now(),
+            ),
+          ),
+          GoRoute(
             path: 'meal-entry',
             name: AppRouter.mealEntry.name,
             builder: (context, state) =>
@@ -189,6 +200,11 @@ GoRouter goRouter(Ref ref) {
             name: AppRouter.settings.name,
             builder: (context, state) => const SettingsScreen(),
             routes: [
+              GoRoute(
+                path: 'menstrual-settings',
+                name: AppRouter.menstrualSettings.name,
+                builder: (context, state) => const MenstrualSettingsScreen(),
+              ),
               GoRoute(
                 path: 'tags',
                 name: AppRouter.tagManagement.name,

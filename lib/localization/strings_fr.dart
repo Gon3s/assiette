@@ -2,6 +2,67 @@ import 'package:assiette/localization/app_strings.dart';
 
 /// French strings.
 class AppStringsFr implements AppStrings {
+  // Menstrual tracking
+  @override
+  String get menstrualTitle => 'Règles';
+  @override
+  String get menstrualSettingsTitle => 'Suivi des règles';
+  @override
+  String get menstrualPrivacyNotice =>
+      'Ce suivi facultatif enregistre les saignements à la journée. Les jours non renseignés restent inconnus. Désactiver le suivi conserve l’historique. Les données restent locales, sauf si vous choisissez de les inclure dans Drive ou les PDF.';
+  @override
+  String get menstrualBackupOption =>
+      'Inclure les données de règles dans les sauvegardes Drive';
+  @override
+  String get menstrualPdfOption => 'Inclure les données de règles dans les PDF';
+  @override
+  String get menstrualBackupIncluded =>
+      'Données de règles : incluses dans la prochaine sauvegarde Drive.';
+  @override
+  String get menstrualBackupExcluded =>
+      'Données de règles : exclues de la prochaine sauvegarde Drive.';
+  @override
+  String get menstrualPdfIncluded =>
+      'Données de règles : incluses dans le PDF.';
+  @override
+  String get menstrualPdfExcluded => 'Données de règles : exclues du PDF.';
+  @override
+  String get menstrualNone => 'Aucun saignement';
+  @override
+  String get menstrualSpotting => 'Spotting / petites pertes';
+  @override
+  String get menstrualPeriod => 'Règles';
+  @override
+  String get menstrualUnknown => 'Non renseigné';
+  @override
+  String get menstrualFlow => 'Flux (facultatif)';
+  @override
+  String get menstrualFlowUnknown => 'Non renseigné';
+  @override
+  String get menstrualFlowLight => 'Faible';
+  @override
+  String get menstrualFlowMedium => 'Moyen';
+  @override
+  String get menstrualFlowHeavy => 'Abondant';
+  @override
+  String get menstrualStart => 'Premier jour des règles';
+  @override
+  String get menstrualChangeStatusNotice =>
+      'Le flux et le premier jour seront retirés si vous changez de type de saignement.';
+  @override
+  String get menstrualDeleteTitle => 'Supprimer cette observation ?';
+  @override
+  String get menstrualDeleteBody =>
+      'Cette journée redeviendra non renseignée. Les autres données du journal seront conservées.';
+  @override
+  String get menstrualPurgeAction =>
+      'Effacer définitivement les données de règles';
+  @override
+  String get menstrualPurgeBody =>
+      'Toutes les observations de règles sur cet appareil seront effacées et les options de suivi, Drive et PDF désactivées. Les autres données du journal seront conservées. Les anciens PDF et sauvegardes Drive subsistent ; une restauration peut réintroduire ces données.';
+  @override
+  String get menstrualFutureDate =>
+      'Les observations ne peuvent pas être enregistrées pour une date future.';
   @override
   String get save => 'Enregistrer';
   @override

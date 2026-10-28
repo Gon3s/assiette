@@ -137,7 +137,7 @@ void main() {
             (snapshot[name]! as List).cast<Map<String, dynamic>>();
 
         final tags = table('tags');
-        expect(snapshot['formatVersion'], 5);
+        expect(snapshot['formatVersion'], 6);
         expect(tags, hasLength(1));
         expect(tags.single['id'], 'tag-1');
         expect(table('meals').single['id'], 'meal-1');
@@ -176,7 +176,7 @@ void main() {
       );
     });
 
-    for (final version in [null, 0, -1, 6, 1.0, '5']) {
+    for (final version in [null, 0, -1, 7, 1.0, '5']) {
       test('rejects unsupported format version $version', () async {
         final snapshot = await codec.export(source)
           ..['formatVersion'] = version;

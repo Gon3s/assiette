@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_export_notice.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_providers.dart';
 import 'package:assiette/features/pdf_export/presentation/pdf_export_controller.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,11 @@ class _PdfExportScreenState extends ConsumerState<PdfExportScreen> {
     final locale = Localizations.maybeLocaleOf(context)?.toString();
     final dateFormat = DateFormat.yMd(locale);
     final pdfState = ref.watch(pdfExportControllerProvider);
+    ref.listen(menstrualPreferencesProvider, (previous, next) {
+      if (previous?.value?.includeInPdf != next.value?.includeInPdf) {
+        ref.read(pdfExportControllerProvider.notifier).reset();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(s.pdfExportScreenTitle)),
@@ -81,12 +88,13 @@ class _PdfExportScreenState extends ConsumerState<PdfExportScreen> {
                 _range == null
                     ? s.pdfExportChooseRange
                     : '${dateFormat.format(_range!.start)} – '
-                        '${dateFormat.format(_range!.end)}',
+                          '${dateFormat.format(_range!.end)}',
               ),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _pickRange(context),
             ),
             gapH16,
+            const MenstrualExportNotice(forBackup: false),
             FilledButton(
               onPressed: _range == null || pdfState.isLoading
                   ? null

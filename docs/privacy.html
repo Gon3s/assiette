@@ -50,7 +50,7 @@
     <p class="brand">Assiette</p>
     <p class="eyebrow">Vos données, vos choix</p>
     <h1>Politique de confidentialité</h1>
-    <p class="date">Dernière mise à jour : <time datetime="2026-10-25">25 octobre 2026</time></p>
+    <p class="date">Dernière mise à jour : <time datetime="2026-10-28">28 octobre 2026</time></p>
     <p class="intro">Assiette vous permet de tenir un journal de vos repas, de vos symptômes, de vos prises de médicaments, de votre sommeil et de votre environnement.</p>
     <div class="summary">
       <p><strong>Le journal fonctionne sans compte et conserve vos données sur votre appareil.</strong></p>
@@ -76,6 +76,7 @@
       <h2 id="journal-titre">1. Votre journal sur l’appareil</h2>
       <p>Le journal principal est utilisable sans connexion à un compte. Les repas, tags, favoris, symptômes, migraines, prises de médicaments, entrées de sommeil, notes, réglages et relevés environnementaux sont enregistrés dans le stockage privé de l’application sur votre appareil.</p>
       <p>Les symptômes, leur intensité et leur durée, les médicaments et le sommeil peuvent constituer des <strong>données de santé</strong>. Les notes libres peuvent aussi contenir des informations sensibles. Saisissez uniquement les informations que vous souhaitez conserver dans votre journal.</p>
+      <p>Le suivi des règles est facultatif et désactivé par défaut. Il conserve la date, le type de saignement, le flux éventuel, le premier jour déclaré et les notes dans la base locale. Ces informations sont des données de santé. Une journée non renseignée reste inconnue. Désactiver le suivi masque le module et conserve son historique.</p>
       <p>La version actuelle ne permet plus de prendre de nouvelles photos de repas. Elle peut conserver, afficher et sauvegarder des photos provenant de versions antérieures.</p>
       <p>Le journal local n’est pas envoyé automatiquement à un serveur de l’éditeur. Ses données peuvent quitter l’appareil dans les cas décrits ci-dessous, notamment lors d’une sauvegarde ou d’un partage que vous déclenchez.</p>
     </section>
@@ -92,12 +93,14 @@
       <p>Google Sign-In fournit des informations de connexion, dont l’adresse e-mail et un identifiant de compte. Elles servent à authentifier la connexion et à accéder à la sauvegarde du compte choisi.</p>
       <p>Lorsque vous déclenchez une sauvegarde, une archive <strong>assiette_backup.zip</strong> est transférée dans le dossier applicatif privé de votre Google Drive. Elle contient le journal, les réglages, les relevés environnementaux avec les coordonnées enregistrées et les éventuelles photos référencées. Cette archive peut donc contenir des données de santé.</p>
       <p>L’autorisation Drive est limitée au dossier applicatif d’Assiette. Elle ne donne pas à l’application un accès général à vos documents Google Drive.</p>
+      <p>Les observations de règles sont exclues des sauvegardes par défaut. Vous pouvez choisir de les inclure dans les réglages du suivi des règles, indépendamment de son activation. Cette option est rappelée sur l’écran de sauvegarde. Les réglages du module eux-mêmes font partie de la sauvegarde du journal.</p>
       <p>Une nouvelle sauvegarde remplace la précédente pour le compte choisi. Les transferts vers Google Drive utilisent une connexion sécurisée. <strong>L’archive n’est pas chiffrée de bout en bout par Assiette.</strong> Sa protection et son hébergement dépendent également de Google et de la sécurité de votre compte.</p>
       <p>La restauration remplace le journal local par le contenu de la sauvegarde téléchargée. Elle ne supprime pas l’archive sur Google Drive. La sauvegarde système Android et le transfert système des données de l’application sont désactivés dans la configuration Android actuelle.</p>
     </section>
     <section id="partage" aria-labelledby="partage-titre">
       <h2 id="partage-titre">4. Export PDF, partage et impression</h2>
       <p>Vous pouvez générer un PDF du journal sur une période choisie. Ce document peut contenir des données de santé.</p>
+      <p>Les observations de règles sont exclues des PDF par défaut. Leur inclusion nécessite un choix dans les réglages du suivi ; ce choix est rappelé avant la génération. Les jours non renseignés ne sont pas présentés comme des jours sans saignement.</p>
       <p>Si vous utilisez le partage ou l’impression, les applications, services et destinataires que vous choisissez reçoivent le document et appliquent leurs propres règles. Assiette n’envoie pas automatiquement votre journal à un médecin. Vérifiez le destinataire avant de partager un document sensible.</p>
     </section>
     <section id="services" aria-labelledby="services-titre">
@@ -112,6 +115,7 @@
       <h3>Entrées supprimées dans le journal</h3>
       <p>La suppression d’une entrée peut être réversible : l’entrée est alors masquée plutôt qu’effacée définitivement de la base. Les sauvegardes incluent aussi ces enregistrements conservés. <strong>La suppression visible d’une entrée ne garantit donc pas son effacement de la base ou d’une sauvegarde.</strong></p>
       <h3>Données locales</h3>
+      <p>Dans les réglages du suivi des règles, « Effacer définitivement les données de règles » supprime les observations menstruelles de la base locale, y compris celles précédemment masquées, et désactive les options de suivi, Drive et PDF. Les autres données du journal sont conservées. Cette commande ne supprime pas les anciens PDF ni les archives Drive ; leur restauration peut réintroduire les observations.</p>
       <p>Pour effacer les données locales, utilisez la fonction Android d’effacement du stockage de l’application. Cela ne supprime pas les copies déjà exportées, partagées ou sauvegardées sur Google Drive. Une restauration peut réintroduire des données d’une ancienne sauvegarde.</p>
       <h3>Sauvegarde Google Drive et documents partagés</h3>
       <p>La déconnexion Google ne supprime pas la sauvegarde Drive. La version actuelle ne propose pas de suppression distante de cette archive ni de procédure de demande de suppression intégrée. Sa gestion doit être effectuée au moyen des fonctions de gestion des données d’application proposées par Google Drive.</p>
