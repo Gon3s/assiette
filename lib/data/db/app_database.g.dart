@@ -6259,6 +6259,50 @@ class $AppSettingsTable extends AppSettings
         ),
         defaultValue: const Constant(true),
       );
+  static const VerificationMeta _menstrualTrackingEnabledMeta =
+      const VerificationMeta('menstrualTrackingEnabled');
+  @override
+  late final GeneratedColumn<bool> menstrualTrackingEnabled =
+      GeneratedColumn<bool>(
+        'menstrual_tracking_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("menstrual_tracking_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _menstrualBackupEnabledMeta =
+      const VerificationMeta('menstrualBackupEnabled');
+  @override
+  late final GeneratedColumn<bool> menstrualBackupEnabled =
+      GeneratedColumn<bool>(
+        'menstrual_backup_enabled',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("menstrual_backup_enabled" IN (0, 1))',
+        ),
+        defaultValue: const Constant(false),
+      );
+  static const VerificationMeta _menstrualPdfEnabledMeta =
+      const VerificationMeta('menstrualPdfEnabled');
+  @override
+  late final GeneratedColumn<bool> menstrualPdfEnabled = GeneratedColumn<bool>(
+    'menstrual_pdf_enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("menstrual_pdf_enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -6279,6 +6323,9 @@ class $AppSettingsTable extends AppSettings
     symptomsHour,
     symptomsMinute,
     photoTagSuggestionsEnabled,
+    menstrualTrackingEnabled,
+    menstrualBackupEnabled,
+    menstrualPdfEnabled,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -6439,6 +6486,33 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('menstrual_tracking_enabled')) {
+      context.handle(
+        _menstrualTrackingEnabledMeta,
+        menstrualTrackingEnabled.isAcceptableOrUnknown(
+          data['menstrual_tracking_enabled']!,
+          _menstrualTrackingEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('menstrual_backup_enabled')) {
+      context.handle(
+        _menstrualBackupEnabledMeta,
+        menstrualBackupEnabled.isAcceptableOrUnknown(
+          data['menstrual_backup_enabled']!,
+          _menstrualBackupEnabledMeta,
+        ),
+      );
+    }
+    if (data.containsKey('menstrual_pdf_enabled')) {
+      context.handle(
+        _menstrualPdfEnabledMeta,
+        menstrualPdfEnabled.isAcceptableOrUnknown(
+          data['menstrual_pdf_enabled']!,
+          _menstrualPdfEnabledMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -6520,6 +6594,18 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.bool,
         data['${effectivePrefix}photo_tag_suggestions_enabled'],
       )!,
+      menstrualTrackingEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}menstrual_tracking_enabled'],
+      )!,
+      menstrualBackupEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}menstrual_backup_enabled'],
+      )!,
+      menstrualPdfEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}menstrual_pdf_enabled'],
+      )!,
     );
   }
 
@@ -6553,6 +6639,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   /// Whether photo-based tag suggestions (US-19, on-device) are enabled.
   final bool photoTagSuggestionsEnabled;
+  final bool menstrualTrackingEnabled;
+  final bool menstrualBackupEnabled;
+  final bool menstrualPdfEnabled;
   const AppSetting({
     required this.id,
     required this.onboardingDone,
@@ -6572,6 +6661,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.symptomsHour,
     required this.symptomsMinute,
     required this.photoTagSuggestionsEnabled,
+    required this.menstrualTrackingEnabled,
+    required this.menstrualBackupEnabled,
+    required this.menstrualPdfEnabled,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -6602,6 +6694,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     map['photo_tag_suggestions_enabled'] = Variable<bool>(
       photoTagSuggestionsEnabled,
     );
+    map['menstrual_tracking_enabled'] = Variable<bool>(
+      menstrualTrackingEnabled,
+    );
+    map['menstrual_backup_enabled'] = Variable<bool>(menstrualBackupEnabled);
+    map['menstrual_pdf_enabled'] = Variable<bool>(menstrualPdfEnabled);
     return map;
   }
 
@@ -6627,6 +6724,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       symptomsHour: Value(symptomsHour),
       symptomsMinute: Value(symptomsMinute),
       photoTagSuggestionsEnabled: Value(photoTagSuggestionsEnabled),
+      menstrualTrackingEnabled: Value(menstrualTrackingEnabled),
+      menstrualBackupEnabled: Value(menstrualBackupEnabled),
+      menstrualPdfEnabled: Value(menstrualPdfEnabled),
     );
   }
 
@@ -6666,6 +6766,15 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       photoTagSuggestionsEnabled: serializer.fromJson<bool>(
         json['photoTagSuggestionsEnabled'],
       ),
+      menstrualTrackingEnabled: serializer.fromJson<bool>(
+        json['menstrualTrackingEnabled'],
+      ),
+      menstrualBackupEnabled: serializer.fromJson<bool>(
+        json['menstrualBackupEnabled'],
+      ),
+      menstrualPdfEnabled: serializer.fromJson<bool>(
+        json['menstrualPdfEnabled'],
+      ),
     );
   }
   @override
@@ -6698,6 +6807,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'photoTagSuggestionsEnabled': serializer.toJson<bool>(
         photoTagSuggestionsEnabled,
       ),
+      'menstrualTrackingEnabled': serializer.toJson<bool>(
+        menstrualTrackingEnabled,
+      ),
+      'menstrualBackupEnabled': serializer.toJson<bool>(menstrualBackupEnabled),
+      'menstrualPdfEnabled': serializer.toJson<bool>(menstrualPdfEnabled),
     };
   }
 
@@ -6720,6 +6834,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     int? symptomsHour,
     int? symptomsMinute,
     bool? photoTagSuggestionsEnabled,
+    bool? menstrualTrackingEnabled,
+    bool? menstrualBackupEnabled,
+    bool? menstrualPdfEnabled,
   }) => AppSetting(
     id: id ?? this.id,
     onboardingDone: onboardingDone ?? this.onboardingDone,
@@ -6744,6 +6861,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     symptomsMinute: symptomsMinute ?? this.symptomsMinute,
     photoTagSuggestionsEnabled:
         photoTagSuggestionsEnabled ?? this.photoTagSuggestionsEnabled,
+    menstrualTrackingEnabled:
+        menstrualTrackingEnabled ?? this.menstrualTrackingEnabled,
+    menstrualBackupEnabled:
+        menstrualBackupEnabled ?? this.menstrualBackupEnabled,
+    menstrualPdfEnabled: menstrualPdfEnabled ?? this.menstrualPdfEnabled,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
@@ -6795,6 +6917,15 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       photoTagSuggestionsEnabled: data.photoTagSuggestionsEnabled.present
           ? data.photoTagSuggestionsEnabled.value
           : this.photoTagSuggestionsEnabled,
+      menstrualTrackingEnabled: data.menstrualTrackingEnabled.present
+          ? data.menstrualTrackingEnabled.value
+          : this.menstrualTrackingEnabled,
+      menstrualBackupEnabled: data.menstrualBackupEnabled.present
+          ? data.menstrualBackupEnabled.value
+          : this.menstrualBackupEnabled,
+      menstrualPdfEnabled: data.menstrualPdfEnabled.present
+          ? data.menstrualPdfEnabled.value
+          : this.menstrualPdfEnabled,
     );
   }
 
@@ -6818,13 +6949,16 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
           ..write('symptomsHour: $symptomsHour, ')
           ..write('symptomsMinute: $symptomsMinute, ')
-          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled')
+          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled, ')
+          ..write('menstrualTrackingEnabled: $menstrualTrackingEnabled, ')
+          ..write('menstrualBackupEnabled: $menstrualBackupEnabled, ')
+          ..write('menstrualPdfEnabled: $menstrualPdfEnabled')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     onboardingDone,
     lastPressureAlertDate,
@@ -6843,7 +6977,10 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     symptomsHour,
     symptomsMinute,
     photoTagSuggestionsEnabled,
-  );
+    menstrualTrackingEnabled,
+    menstrualBackupEnabled,
+    menstrualPdfEnabled,
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6865,7 +7002,10 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.remindersSymptomsEnabled == this.remindersSymptomsEnabled &&
           other.symptomsHour == this.symptomsHour &&
           other.symptomsMinute == this.symptomsMinute &&
-          other.photoTagSuggestionsEnabled == this.photoTagSuggestionsEnabled);
+          other.photoTagSuggestionsEnabled == this.photoTagSuggestionsEnabled &&
+          other.menstrualTrackingEnabled == this.menstrualTrackingEnabled &&
+          other.menstrualBackupEnabled == this.menstrualBackupEnabled &&
+          other.menstrualPdfEnabled == this.menstrualPdfEnabled);
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
@@ -6887,6 +7027,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<int> symptomsHour;
   final Value<int> symptomsMinute;
   final Value<bool> photoTagSuggestionsEnabled;
+  final Value<bool> menstrualTrackingEnabled;
+  final Value<bool> menstrualBackupEnabled;
+  final Value<bool> menstrualPdfEnabled;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
@@ -6906,6 +7049,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.symptomsHour = const Value.absent(),
     this.symptomsMinute = const Value.absent(),
     this.photoTagSuggestionsEnabled = const Value.absent(),
+    this.menstrualTrackingEnabled = const Value.absent(),
+    this.menstrualBackupEnabled = const Value.absent(),
+    this.menstrualPdfEnabled = const Value.absent(),
   });
   AppSettingsCompanion.insert({
     this.id = const Value.absent(),
@@ -6926,6 +7072,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.symptomsHour = const Value.absent(),
     this.symptomsMinute = const Value.absent(),
     this.photoTagSuggestionsEnabled = const Value.absent(),
+    this.menstrualTrackingEnabled = const Value.absent(),
+    this.menstrualBackupEnabled = const Value.absent(),
+    this.menstrualPdfEnabled = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
     Expression<int>? id,
@@ -6946,6 +7095,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<int>? symptomsHour,
     Expression<int>? symptomsMinute,
     Expression<bool>? photoTagSuggestionsEnabled,
+    Expression<bool>? menstrualTrackingEnabled,
+    Expression<bool>? menstrualBackupEnabled,
+    Expression<bool>? menstrualPdfEnabled,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -6972,6 +7124,12 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       if (symptomsMinute != null) 'symptoms_minute': symptomsMinute,
       if (photoTagSuggestionsEnabled != null)
         'photo_tag_suggestions_enabled': photoTagSuggestionsEnabled,
+      if (menstrualTrackingEnabled != null)
+        'menstrual_tracking_enabled': menstrualTrackingEnabled,
+      if (menstrualBackupEnabled != null)
+        'menstrual_backup_enabled': menstrualBackupEnabled,
+      if (menstrualPdfEnabled != null)
+        'menstrual_pdf_enabled': menstrualPdfEnabled,
     });
   }
 
@@ -6994,6 +7152,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<int>? symptomsHour,
     Value<int>? symptomsMinute,
     Value<bool>? photoTagSuggestionsEnabled,
+    Value<bool>? menstrualTrackingEnabled,
+    Value<bool>? menstrualBackupEnabled,
+    Value<bool>? menstrualPdfEnabled,
   }) {
     return AppSettingsCompanion(
       id: id ?? this.id,
@@ -7020,6 +7181,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       symptomsMinute: symptomsMinute ?? this.symptomsMinute,
       photoTagSuggestionsEnabled:
           photoTagSuggestionsEnabled ?? this.photoTagSuggestionsEnabled,
+      menstrualTrackingEnabled:
+          menstrualTrackingEnabled ?? this.menstrualTrackingEnabled,
+      menstrualBackupEnabled:
+          menstrualBackupEnabled ?? this.menstrualBackupEnabled,
+      menstrualPdfEnabled: menstrualPdfEnabled ?? this.menstrualPdfEnabled,
     );
   }
 
@@ -7092,6 +7258,19 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
         photoTagSuggestionsEnabled.value,
       );
     }
+    if (menstrualTrackingEnabled.present) {
+      map['menstrual_tracking_enabled'] = Variable<bool>(
+        menstrualTrackingEnabled.value,
+      );
+    }
+    if (menstrualBackupEnabled.present) {
+      map['menstrual_backup_enabled'] = Variable<bool>(
+        menstrualBackupEnabled.value,
+      );
+    }
+    if (menstrualPdfEnabled.present) {
+      map['menstrual_pdf_enabled'] = Variable<bool>(menstrualPdfEnabled.value);
+    }
     return map;
   }
 
@@ -7115,7 +7294,10 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('remindersSymptomsEnabled: $remindersSymptomsEnabled, ')
           ..write('symptomsHour: $symptomsHour, ')
           ..write('symptomsMinute: $symptomsMinute, ')
-          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled')
+          ..write('photoTagSuggestionsEnabled: $photoTagSuggestionsEnabled, ')
+          ..write('menstrualTrackingEnabled: $menstrualTrackingEnabled, ')
+          ..write('menstrualBackupEnabled: $menstrualBackupEnabled, ')
+          ..write('menstrualPdfEnabled: $menstrualPdfEnabled')
           ..write(')'))
         .toString();
   }
@@ -7400,6 +7582,526 @@ class CloudBackupStatesCompanion extends UpdateCompanion<CloudBackupState> {
   }
 }
 
+class $MenstrualDaysTable extends MenstrualDays
+    with TableInfo<$MenstrualDaysTable, MenstrualDay> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MenstrualDaysTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _localDateMeta = const VerificationMeta(
+    'localDate',
+  );
+  @override
+  late final GeneratedColumn<String> localDate = GeneratedColumn<String>(
+    'local_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _bleedingStatusMeta = const VerificationMeta(
+    'bleedingStatus',
+  );
+  @override
+  late final GeneratedColumn<String> bleedingStatus = GeneratedColumn<String>(
+    'bleeding_status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _flowMeta = const VerificationMeta('flow');
+  @override
+  late final GeneratedColumn<String> flow = GeneratedColumn<String>(
+    'flow',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isPeriodStartMeta = const VerificationMeta(
+    'isPeriodStart',
+  );
+  @override
+  late final GeneratedColumn<bool> isPeriodStart = GeneratedColumn<bool>(
+    'is_period_start',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_period_start" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 2000),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    localDate,
+    bleedingStatus,
+    flow,
+    isPeriodStart,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'menstrual_days';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MenstrualDay> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('local_date')) {
+      context.handle(
+        _localDateMeta,
+        localDate.isAcceptableOrUnknown(data['local_date']!, _localDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_localDateMeta);
+    }
+    if (data.containsKey('bleeding_status')) {
+      context.handle(
+        _bleedingStatusMeta,
+        bleedingStatus.isAcceptableOrUnknown(
+          data['bleeding_status']!,
+          _bleedingStatusMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_bleedingStatusMeta);
+    }
+    if (data.containsKey('flow')) {
+      context.handle(
+        _flowMeta,
+        flow.isAcceptableOrUnknown(data['flow']!, _flowMeta),
+      );
+    }
+    if (data.containsKey('is_period_start')) {
+      context.handle(
+        _isPeriodStartMeta,
+        isPeriodStart.isAcceptableOrUnknown(
+          data['is_period_start']!,
+          _isPeriodStartMeta,
+        ),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {localDate};
+  @override
+  MenstrualDay map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MenstrualDay(
+      localDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}local_date'],
+      )!,
+      bleedingStatus: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}bleeding_status'],
+      )!,
+      flow: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}flow'],
+      ),
+      isPeriodStart: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_period_start'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $MenstrualDaysTable createAlias(String alias) {
+    return $MenstrualDaysTable(attachedDatabase, alias);
+  }
+}
+
+class MenstrualDay extends DataClass implements Insertable<MenstrualDay> {
+  final String localDate;
+  final String bleedingStatus;
+  final String? flow;
+  final bool isPeriodStart;
+  final String? note;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const MenstrualDay({
+    required this.localDate,
+    required this.bleedingStatus,
+    this.flow,
+    required this.isPeriodStart,
+    this.note,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['local_date'] = Variable<String>(localDate);
+    map['bleeding_status'] = Variable<String>(bleedingStatus);
+    if (!nullToAbsent || flow != null) {
+      map['flow'] = Variable<String>(flow);
+    }
+    map['is_period_start'] = Variable<bool>(isPeriodStart);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    return map;
+  }
+
+  MenstrualDaysCompanion toCompanion(bool nullToAbsent) {
+    return MenstrualDaysCompanion(
+      localDate: Value(localDate),
+      bleedingStatus: Value(bleedingStatus),
+      flow: flow == null && nullToAbsent ? const Value.absent() : Value(flow),
+      isPeriodStart: Value(isPeriodStart),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory MenstrualDay.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MenstrualDay(
+      localDate: serializer.fromJson<String>(json['localDate']),
+      bleedingStatus: serializer.fromJson<String>(json['bleedingStatus']),
+      flow: serializer.fromJson<String?>(json['flow']),
+      isPeriodStart: serializer.fromJson<bool>(json['isPeriodStart']),
+      note: serializer.fromJson<String?>(json['note']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'localDate': serializer.toJson<String>(localDate),
+      'bleedingStatus': serializer.toJson<String>(bleedingStatus),
+      'flow': serializer.toJson<String?>(flow),
+      'isPeriodStart': serializer.toJson<bool>(isPeriodStart),
+      'note': serializer.toJson<String?>(note),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  MenstrualDay copyWith({
+    String? localDate,
+    String? bleedingStatus,
+    Value<String?> flow = const Value.absent(),
+    bool? isPeriodStart,
+    Value<String?> note = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => MenstrualDay(
+    localDate: localDate ?? this.localDate,
+    bleedingStatus: bleedingStatus ?? this.bleedingStatus,
+    flow: flow.present ? flow.value : this.flow,
+    isPeriodStart: isPeriodStart ?? this.isPeriodStart,
+    note: note.present ? note.value : this.note,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  MenstrualDay copyWithCompanion(MenstrualDaysCompanion data) {
+    return MenstrualDay(
+      localDate: data.localDate.present ? data.localDate.value : this.localDate,
+      bleedingStatus: data.bleedingStatus.present
+          ? data.bleedingStatus.value
+          : this.bleedingStatus,
+      flow: data.flow.present ? data.flow.value : this.flow,
+      isPeriodStart: data.isPeriodStart.present
+          ? data.isPeriodStart.value
+          : this.isPeriodStart,
+      note: data.note.present ? data.note.value : this.note,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MenstrualDay(')
+          ..write('localDate: $localDate, ')
+          ..write('bleedingStatus: $bleedingStatus, ')
+          ..write('flow: $flow, ')
+          ..write('isPeriodStart: $isPeriodStart, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    localDate,
+    bleedingStatus,
+    flow,
+    isPeriodStart,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MenstrualDay &&
+          other.localDate == this.localDate &&
+          other.bleedingStatus == this.bleedingStatus &&
+          other.flow == this.flow &&
+          other.isPeriodStart == this.isPeriodStart &&
+          other.note == this.note &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class MenstrualDaysCompanion extends UpdateCompanion<MenstrualDay> {
+  final Value<String> localDate;
+  final Value<String> bleedingStatus;
+  final Value<String?> flow;
+  final Value<bool> isPeriodStart;
+  final Value<String?> note;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> rowid;
+  const MenstrualDaysCompanion({
+    this.localDate = const Value.absent(),
+    this.bleedingStatus = const Value.absent(),
+    this.flow = const Value.absent(),
+    this.isPeriodStart = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MenstrualDaysCompanion.insert({
+    required String localDate,
+    required String bleedingStatus,
+    this.flow = const Value.absent(),
+    this.isPeriodStart = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : localDate = Value(localDate),
+       bleedingStatus = Value(bleedingStatus);
+  static Insertable<MenstrualDay> custom({
+    Expression<String>? localDate,
+    Expression<String>? bleedingStatus,
+    Expression<String>? flow,
+    Expression<bool>? isPeriodStart,
+    Expression<String>? note,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (localDate != null) 'local_date': localDate,
+      if (bleedingStatus != null) 'bleeding_status': bleedingStatus,
+      if (flow != null) 'flow': flow,
+      if (isPeriodStart != null) 'is_period_start': isPeriodStart,
+      if (note != null) 'note': note,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MenstrualDaysCompanion copyWith({
+    Value<String>? localDate,
+    Value<String>? bleedingStatus,
+    Value<String?>? flow,
+    Value<bool>? isPeriodStart,
+    Value<String?>? note,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return MenstrualDaysCompanion(
+      localDate: localDate ?? this.localDate,
+      bleedingStatus: bleedingStatus ?? this.bleedingStatus,
+      flow: flow ?? this.flow,
+      isPeriodStart: isPeriodStart ?? this.isPeriodStart,
+      note: note ?? this.note,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (localDate.present) {
+      map['local_date'] = Variable<String>(localDate.value);
+    }
+    if (bleedingStatus.present) {
+      map['bleeding_status'] = Variable<String>(bleedingStatus.value);
+    }
+    if (flow.present) {
+      map['flow'] = Variable<String>(flow.value);
+    }
+    if (isPeriodStart.present) {
+      map['is_period_start'] = Variable<bool>(isPeriodStart.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MenstrualDaysCompanion(')
+          ..write('localDate: $localDate, ')
+          ..write('bleedingStatus: $bleedingStatus, ')
+          ..write('flow: $flow, ')
+          ..write('isPeriodStart: $isPeriodStart, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -7419,6 +8121,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $CloudBackupStatesTable cloudBackupStates =
       $CloudBackupStatesTable(this);
+  late final $MenstrualDaysTable menstrualDays = $MenstrualDaysTable(this);
   late final Index idxMealsTimestamp = Index(
     'idx_meals_timestamp',
     'CREATE INDEX idx_meals_timestamp ON meals (timestamp)',
@@ -7460,6 +8163,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final CloudBackupStateDao cloudBackupStateDao = CloudBackupStateDao(
     this as AppDatabase,
   );
+  late final MenstrualDaysDao menstrualDaysDao = MenstrualDaysDao(
+    this as AppDatabase,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -7477,6 +8183,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     environmentSnapshots,
     appSettings,
     cloudBackupStates,
+    menstrualDays,
     idxMealsTimestamp,
     idxSymptomsTimestamp,
     idxMigraineMeasurementsSymptomTimestamp,
@@ -10973,6 +11680,9 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<int> symptomsHour,
       Value<int> symptomsMinute,
       Value<bool> photoTagSuggestionsEnabled,
+      Value<bool> menstrualTrackingEnabled,
+      Value<bool> menstrualBackupEnabled,
+      Value<bool> menstrualPdfEnabled,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
@@ -10994,6 +11704,9 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<int> symptomsHour,
       Value<int> symptomsMinute,
       Value<bool> photoTagSuggestionsEnabled,
+      Value<bool> menstrualTrackingEnabled,
+      Value<bool> menstrualBackupEnabled,
+      Value<bool> menstrualPdfEnabled,
     });
 
 class $$AppSettingsTableFilterComposer
@@ -11092,6 +11805,21 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<bool> get photoTagSuggestionsEnabled => $composableBuilder(
     column: $table.photoTagSuggestionsEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get menstrualTrackingEnabled => $composableBuilder(
+    column: $table.menstrualTrackingEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get menstrualBackupEnabled => $composableBuilder(
+    column: $table.menstrualBackupEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get menstrualPdfEnabled => $composableBuilder(
+    column: $table.menstrualPdfEnabled,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -11194,6 +11922,21 @@ class $$AppSettingsTableOrderingComposer
     column: $table.photoTagSuggestionsEnabled,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get menstrualTrackingEnabled => $composableBuilder(
+    column: $table.menstrualTrackingEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get menstrualBackupEnabled => $composableBuilder(
+    column: $table.menstrualBackupEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get menstrualPdfEnabled => $composableBuilder(
+    column: $table.menstrualPdfEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AppSettingsTableAnnotationComposer
@@ -11288,6 +12031,21 @@ class $$AppSettingsTableAnnotationComposer
     column: $table.photoTagSuggestionsEnabled,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get menstrualTrackingEnabled => $composableBuilder(
+    column: $table.menstrualTrackingEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get menstrualBackupEnabled => $composableBuilder(
+    column: $table.menstrualBackupEnabled,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get menstrualPdfEnabled => $composableBuilder(
+    column: $table.menstrualPdfEnabled,
+    builder: (column) => column,
+  );
 }
 
 class $$AppSettingsTableTableManager
@@ -11339,6 +12097,9 @@ class $$AppSettingsTableTableManager
                 Value<int> symptomsHour = const Value.absent(),
                 Value<int> symptomsMinute = const Value.absent(),
                 Value<bool> photoTagSuggestionsEnabled = const Value.absent(),
+                Value<bool> menstrualTrackingEnabled = const Value.absent(),
+                Value<bool> menstrualBackupEnabled = const Value.absent(),
+                Value<bool> menstrualPdfEnabled = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
                 onboardingDone: onboardingDone,
@@ -11358,6 +12119,9 @@ class $$AppSettingsTableTableManager
                 symptomsHour: symptomsHour,
                 symptomsMinute: symptomsMinute,
                 photoTagSuggestionsEnabled: photoTagSuggestionsEnabled,
+                menstrualTrackingEnabled: menstrualTrackingEnabled,
+                menstrualBackupEnabled: menstrualBackupEnabled,
+                menstrualPdfEnabled: menstrualPdfEnabled,
               ),
           createCompanionCallback:
               ({
@@ -11379,6 +12143,9 @@ class $$AppSettingsTableTableManager
                 Value<int> symptomsHour = const Value.absent(),
                 Value<int> symptomsMinute = const Value.absent(),
                 Value<bool> photoTagSuggestionsEnabled = const Value.absent(),
+                Value<bool> menstrualTrackingEnabled = const Value.absent(),
+                Value<bool> menstrualBackupEnabled = const Value.absent(),
+                Value<bool> menstrualPdfEnabled = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
                 onboardingDone: onboardingDone,
@@ -11398,6 +12165,9 @@ class $$AppSettingsTableTableManager
                 symptomsHour: symptomsHour,
                 symptomsMinute: symptomsMinute,
                 photoTagSuggestionsEnabled: photoTagSuggestionsEnabled,
+                menstrualTrackingEnabled: menstrualTrackingEnabled,
+                menstrualBackupEnabled: menstrualBackupEnabled,
+                menstrualPdfEnabled: menstrualPdfEnabled,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -11615,6 +12385,276 @@ typedef $$CloudBackupStatesTableProcessedTableManager =
       CloudBackupState,
       PrefetchHooks Function()
     >;
+typedef $$MenstrualDaysTableCreateCompanionBuilder =
+    MenstrualDaysCompanion Function({
+      required String localDate,
+      required String bleedingStatus,
+      Value<String?> flow,
+      Value<bool> isPeriodStart,
+      Value<String?> note,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$MenstrualDaysTableUpdateCompanionBuilder =
+    MenstrualDaysCompanion Function({
+      Value<String> localDate,
+      Value<String> bleedingStatus,
+      Value<String?> flow,
+      Value<bool> isPeriodStart,
+      Value<String?> note,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$MenstrualDaysTableFilterComposer
+    extends Composer<_$AppDatabase, $MenstrualDaysTable> {
+  $$MenstrualDaysTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get localDate => $composableBuilder(
+    column: $table.localDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get bleedingStatus => $composableBuilder(
+    column: $table.bleedingStatus,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get flow => $composableBuilder(
+    column: $table.flow,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isPeriodStart => $composableBuilder(
+    column: $table.isPeriodStart,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$MenstrualDaysTableOrderingComposer
+    extends Composer<_$AppDatabase, $MenstrualDaysTable> {
+  $$MenstrualDaysTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get localDate => $composableBuilder(
+    column: $table.localDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get bleedingStatus => $composableBuilder(
+    column: $table.bleedingStatus,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get flow => $composableBuilder(
+    column: $table.flow,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isPeriodStart => $composableBuilder(
+    column: $table.isPeriodStart,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$MenstrualDaysTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MenstrualDaysTable> {
+  $$MenstrualDaysTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get localDate =>
+      $composableBuilder(column: $table.localDate, builder: (column) => column);
+
+  GeneratedColumn<String> get bleedingStatus => $composableBuilder(
+    column: $table.bleedingStatus,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get flow =>
+      $composableBuilder(column: $table.flow, builder: (column) => column);
+
+  GeneratedColumn<bool> get isPeriodStart => $composableBuilder(
+    column: $table.isPeriodStart,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$MenstrualDaysTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MenstrualDaysTable,
+          MenstrualDay,
+          $$MenstrualDaysTableFilterComposer,
+          $$MenstrualDaysTableOrderingComposer,
+          $$MenstrualDaysTableAnnotationComposer,
+          $$MenstrualDaysTableCreateCompanionBuilder,
+          $$MenstrualDaysTableUpdateCompanionBuilder,
+          (
+            MenstrualDay,
+            BaseReferences<_$AppDatabase, $MenstrualDaysTable, MenstrualDay>,
+          ),
+          MenstrualDay,
+          PrefetchHooks Function()
+        > {
+  $$MenstrualDaysTableTableManager(_$AppDatabase db, $MenstrualDaysTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MenstrualDaysTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MenstrualDaysTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MenstrualDaysTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> localDate = const Value.absent(),
+                Value<String> bleedingStatus = const Value.absent(),
+                Value<String?> flow = const Value.absent(),
+                Value<bool> isPeriodStart = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MenstrualDaysCompanion(
+                localDate: localDate,
+                bleedingStatus: bleedingStatus,
+                flow: flow,
+                isPeriodStart: isPeriodStart,
+                note: note,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String localDate,
+                required String bleedingStatus,
+                Value<String?> flow = const Value.absent(),
+                Value<bool> isPeriodStart = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MenstrualDaysCompanion.insert(
+                localDate: localDate,
+                bleedingStatus: bleedingStatus,
+                flow: flow,
+                isPeriodStart: isPeriodStart,
+                note: note,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$MenstrualDaysTable, MenstrualDay>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $MenstrualDaysTable,
+                    MenstrualDay
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$MenstrualDaysTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MenstrualDaysTable,
+      MenstrualDay,
+      $$MenstrualDaysTableFilterComposer,
+      $$MenstrualDaysTableOrderingComposer,
+      $$MenstrualDaysTableAnnotationComposer,
+      $$MenstrualDaysTableCreateCompanionBuilder,
+      $$MenstrualDaysTableUpdateCompanionBuilder,
+      (
+        MenstrualDay,
+        BaseReferences<_$AppDatabase, $MenstrualDaysTable, MenstrualDay>,
+      ),
+      MenstrualDay,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -11646,4 +12686,6 @@ class $AppDatabaseManager {
       $$AppSettingsTableTableManager(_db, _db.appSettings);
   $$CloudBackupStatesTableTableManager get cloudBackupStates =>
       $$CloudBackupStatesTableTableManager(_db, _db.cloudBackupStates);
+  $$MenstrualDaysTableTableManager get menstrualDays =>
+      $$MenstrualDaysTableTableManager(_db, _db.menstrualDays);
 }

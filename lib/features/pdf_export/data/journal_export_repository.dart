@@ -7,6 +7,8 @@ import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_observation.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_tracking_repository.dart';
 import 'package:assiette/features/pdf_export/domain/day_journal_entry.dart';
 import 'package:assiette/features/pdf_export/domain/journal_export_repository.dart';
 import 'package:collection/collection.dart';
@@ -20,6 +22,7 @@ class DriftJournalExportRepository implements JournalExportRepository {
     required this._medicationIntakesDao,
     required this._sleepEntriesDao,
     required this._environmentDao,
+    this._menstrualRepository,
   });
 
   final MealsDao _mealsDao;
@@ -27,11 +30,12 @@ class DriftJournalExportRepository implements JournalExportRepository {
   final MedicationIntakesDao _medicationIntakesDao;
   final SleepEntriesDao _sleepEntriesDao;
   final EnvironmentDao _environmentDao;
+  final MenstrualTrackingRepository? _menstrualRepository;
 
   @override
   Future<List<DayJournalEntry>> loadRange(DateTime start, DateTime end) async {
     final rangeStart = _dayStartUtc(start);
-    final rangeEnd = _dayStartUtc(end).add(const Duration(days: 1));
+    final rangeEnd = DateTime(end.year, end.month, end.day + 1).toUtc();
 
     final meals = await _mealsDao.getRangeWithTags(rangeStart, rangeEnd);
     final symptoms = await _symptomsDao.getRange(rangeStart, rangeEnd);
@@ -41,14 +45,28 @@ class DriftJournalExportRepository implements JournalExportRepository {
       rangeEnd,
     );
     final snapshots = await _environmentDao.getRange(rangeStart, rangeEnd);
+    final menstrualRepository = _menstrualRepository;
+    final menstrual =
+        menstrualRepository != null &&
+            (await menstrualRepository.getPreferences()).includeInPdf
+        ? await menstrualRepository.getRange(
+            menstrualDateKey(start),
+            menstrualDateKey(end),
+          )
+        : <MenstrualObservation>[];
 
     final entries = <DayJournalEntry>[];
     for (
-      var day = _dayStartUtc(start);
-      !day.isAfter(_dayStartUtc(end));
-      day = day.add(const Duration(days: 1))
+      var localDay = DateTime(start.year, start.month, start.day);
+      !localDay.isAfter(DateTime(end.year, end.month, end.day));
+      localDay = DateTime(localDay.year, localDay.month, localDay.day + 1)
     ) {
-      final dayEnd = day.add(const Duration(days: 1));
+      final day = localDay.toUtc();
+      final dayEnd = DateTime(
+        localDay.year,
+        localDay.month,
+        localDay.day + 1,
+      ).toUtc();
       final dayMeals = [
         for (final row in meals)
           if (_inRange(row.meal.timestamp, day, dayEnd))
@@ -80,7 +98,7 @@ class DriftJournalExportRepository implements JournalExportRepository {
               dose: intake.dose,
             ),
       ];
-      final localDate = day.toLocal();
+      final localDate = localDay;
       final utcNightDate = DateTime.utc(
         localDate.year,
         localDate.month,
@@ -110,6 +128,11 @@ class DriftJournalExportRepository implements JournalExportRepository {
       ];
 
       final entry = DayJournalEntry(
+        menstrual: menstrual
+            .where(
+              (row) => row.localDate == menstrualDateKey(localDate),
+            )
+            .firstOrNull,
         date: day,
         meals: dayMeals,
         symptoms: daySymptoms,

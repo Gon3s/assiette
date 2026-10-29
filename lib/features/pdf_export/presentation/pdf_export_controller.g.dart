@@ -40,7 +40,7 @@ final class PdfExportControllerProvider
 }
 
 String _$pdfExportControllerHash() =>
-    r'04f5d3d547dac2157618730fc3fa1f7b7899e2b1';
+    r'fcf0fa52ac12a0bdc229524718ce166db40b1b22';
 
 /// Generates the journal PDF for a chosen date range (US-17). Idle until
 /// [generate] is called.

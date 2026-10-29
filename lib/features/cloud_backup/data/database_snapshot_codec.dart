@@ -1,6 +1,8 @@
 import 'package:assiette/data/db/app_database.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_exception.dart';
+import 'package:assiette/features/menstrual_tracking/data/drift_menstrual_tracking_repository.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_observation.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
@@ -14,7 +16,7 @@ class DatabaseSnapshotCodec {
   const DatabaseSnapshotCodec();
 
   /// Snapshot format version, bumped if the shape below ever changes.
-  static const formatVersion = 5;
+  static const formatVersion = 6;
 
   static const _tables = {
     'tags',
@@ -28,6 +30,7 @@ class DatabaseSnapshotCodec {
     'sleepEntries',
     'environmentSnapshots',
     'appSettings',
+    'menstrualDays',
   };
 
   /// Checks deserialization, SQLite constraints and references in isolation.
@@ -85,6 +88,11 @@ class DatabaseSnapshotCodec {
     }
     var rowCount = 0;
     for (final table in _tables) {
+      if (table == 'menstrualDays' &&
+          version < 6 &&
+          !snapshot.containsKey(table)) {
+        continue;
+      }
       if (table == 'migraineIntensityMeasurements' &&
           version < 3 &&
           !snapshot.containsKey(table)) {
@@ -122,7 +130,10 @@ class DatabaseSnapshotCodec {
       ).hasMatch(name);
 
   /// Dumps every row of every table as JSON-safe maps, keyed by table name.
-  Future<Map<String, dynamic>> export(AppDatabase db) async {
+  Future<Map<String, dynamic>> export(AppDatabase db) =>
+      db.transaction(() => _export(db));
+
+  Future<Map<String, dynamic>> _export(AppDatabase db) async {
     final tags = await db.select(db.tags).get();
     final mealTemplates = await db.select(db.mealTemplates).get();
     final meals = await db.select(db.meals).get();
@@ -136,6 +147,12 @@ class DatabaseSnapshotCodec {
     final sleepEntries = await db.select(db.sleepEntries).get();
     final environmentSnapshots = await db.select(db.environmentSnapshots).get();
     final appSettings = await db.select(db.appSettings).get();
+    final includeMenstrual = appSettings.any(
+      (row) => row.id == 0 && row.menstrualBackupEnabled,
+    );
+    final menstrualRows = includeMenstrual
+        ? await db.select(db.menstrualDays).get()
+        : <MenstrualDay>[];
 
     return {
       'formatVersion': formatVersion,
@@ -156,6 +173,7 @@ class DatabaseSnapshotCodec {
         for (final row in environmentSnapshots) row.toJson(),
       ],
       'appSettings': [for (final row in appSettings) row.toJson()],
+      'menstrualDays': [for (final row in menstrualRows) row.toJson()],
     };
   }
 
@@ -218,6 +236,7 @@ class DatabaseSnapshotCodec {
       // symptoms); the rest have no declared FK but the same ordering
       // keeps things logically consistent.
       await db.delete(db.appSettings).go();
+      await db.delete(db.menstrualDays).go();
       await db.delete(db.environmentSnapshots).go();
       await db.delete(db.sleepEntries).go();
       await db.delete(db.medicationIntakes).go();
@@ -338,7 +357,28 @@ class DatabaseSnapshotCodec {
       }
       for (final row
           in (snapshot['appSettings'] as List).cast<Map<String, dynamic>>()) {
-        await db.into(db.appSettings).insert(AppSetting.fromJson(row));
+        await db
+            .into(db.appSettings)
+            .insert(
+              AppSetting.fromJson({
+                ...row,
+                if ((snapshot['formatVersion'] as int) < 6) ...{
+                  'menstrualTrackingEnabled': false,
+                  'menstrualBackupEnabled': false,
+                  'menstrualPdfEnabled': false,
+                },
+              }),
+            );
+      }
+      final menstrualRows = (snapshot['formatVersion'] as int) < 6
+          ? <Map<String, dynamic>>[]
+          : (snapshot['menstrualDays'] as List).cast<Map<String, dynamic>>();
+      for (final row in menstrualRows) {
+        final day = MenstrualDay.fromJson(row);
+        validateMenstrualObservation(
+          DriftMenstrualTrackingRepository.observationFromRow(day),
+        );
+        await db.into(db.menstrualDays).insert(day);
       }
     });
   }

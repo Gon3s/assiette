@@ -4,6 +4,7 @@
 // ignore_for_file: one_member_abstracts
 
 import 'package:assiette/data/db/database_provider.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_tracking_repository.dart';
 import 'package:assiette/features/pdf_export/data/journal_export_repository.dart';
 import 'package:assiette/features/pdf_export/domain/day_journal_entry.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,5 +28,6 @@ JournalExportRepository journalExportRepository(Ref ref) {
     medicationIntakesDao: db.medicationIntakesDao,
     sleepEntriesDao: db.sleepEntriesDao,
     environmentDao: db.environmentDao,
+    menstrualRepository: ref.watch(menstrualTrackingRepositoryProvider),
   );
 }

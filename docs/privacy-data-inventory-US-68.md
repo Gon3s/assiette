@@ -33,6 +33,24 @@ l’authentification et le transfert de l’archive. La portée Drive observée 
 
 ## Éléments externes requis avant clôture
 
+### Extension : suivi des règles (28 octobre 2026)
+
+Les dates civiles, statuts de saignement, flux facultatifs, débuts déclarés et
+notes sont conservés dans `menstrual_days`. Le suivi, l’inclusion Drive et
+l’inclusion PDF sont trois options indépendantes, toutes désactivées par défaut.
+Une suppression d’observation est logique ; la commande dédiée d’effacement
+définitif supprime toutes les observations locales et remet les trois options
+à faux. Elle ne touche ni les autres données ni les copies Drive/PDF existantes.
+Une restauration par remplacement peut réintroduire des données d’une archive.
+Le format de sauvegarde v6 inclut une liste vide lorsque l’inclusion est refusée.
+Les réglages du module restent dans la sauvegarde générale des réglages.
+Il n’y a ni nouveau service distant ni nouvelle permission Android.
+
+La politique source a été adaptée ; vérifier sa publication et les déclarations
+Google Play relatives aux données menstruelles avant diffusion de cette version.
+
+### Vérifications externes
+
 - URL et contenu de la politique de confidentialité effectivement publiée.
 - Valeurs actuelles de la fiche Google Play Data safety, y compris collecte,
   partage, chiffrement en transit, suppression et rétention.

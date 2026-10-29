@@ -2,6 +2,7 @@ import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/day_view/domain/sleep_summary.dart';
 import 'package:assiette/features/day_view/domain/weather_summary.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_observation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'day_journal_entry.freezed.dart';
@@ -55,6 +56,7 @@ abstract class DayJournalEntry with _$DayJournalEntry {
     List<JournalMedicationEntry> medications,
     SleepSummary? sleep,
     WeatherSummary? weather,
+    MenstrualObservation? menstrual,
   }) = _DayJournalEntry;
 
   const DayJournalEntry._();
@@ -65,5 +67,6 @@ abstract class DayJournalEntry with _$DayJournalEntry {
       symptoms.isNotEmpty ||
       medications.isNotEmpty ||
       sleep != null ||
-      weather != null;
+      weather != null ||
+      menstrual != null;
 }

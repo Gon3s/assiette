@@ -11,6 +11,8 @@ part 'pdf_export_controller.g.dart';
 /// [generate] is called.
 @riverpod
 class PdfExportController extends _$PdfExportController {
+  int _generation = 0;
+
   @override
   Future<Uint8List?> build() async => null;
 
@@ -22,15 +24,20 @@ class PdfExportController extends _$PdfExportController {
     DateTime end, {
     String? locale,
   }) async {
+    final generation = ++_generation;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       final entries = await ref
           .read(journalExportRepositoryProvider)
           .loadRange(start, end);
       return JournalPdfBuilder().build(strings, entries, locale: locale);
     });
+    if (ref.mounted && generation == _generation) state = result;
   }
 
   /// Clears the generated PDF, e.g. after the range selection changes.
-  void reset() => state = const AsyncData(null);
+  void reset() {
+    _generation++;
+    state = const AsyncData(null);
+  }
 }

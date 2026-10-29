@@ -49,6 +49,13 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.water_drop_outlined),
+            title: Text(s.menstrualSettingsTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRouter.menstrualSettings.name),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.label_outline),
             title: Text(s.manageTagsAction),
             trailing: const Icon(Icons.chevron_right),

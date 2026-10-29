@@ -4,6 +4,33 @@ import 'package:flutter/widgets.dart';
 
 /// Abstract base class for all app strings.
 abstract class AppStrings {
+  // Menstrual tracking
+  String get menstrualTitle;
+  String get menstrualSettingsTitle;
+  String get menstrualPrivacyNotice;
+  String get menstrualBackupOption;
+  String get menstrualPdfOption;
+  String get menstrualBackupIncluded;
+  String get menstrualBackupExcluded;
+  String get menstrualPdfIncluded;
+  String get menstrualPdfExcluded;
+  String get menstrualNone;
+  String get menstrualSpotting;
+  String get menstrualPeriod;
+  String get menstrualUnknown;
+  String get menstrualFlow;
+  String get menstrualFlowUnknown;
+  String get menstrualFlowLight;
+  String get menstrualFlowMedium;
+  String get menstrualFlowHeavy;
+  String get menstrualStart;
+  String get menstrualChangeStatusNotice;
+  String get menstrualDeleteTitle;
+  String get menstrualDeleteBody;
+  String get menstrualPurgeAction;
+  String get menstrualPurgeBody;
+  String get menstrualFutureDate;
+
   /// Returns the [AppStrings] implementation for the current locale.
   /// Falls back to English if no localization ancestor is found.
   static AppStrings of(BuildContext context) {

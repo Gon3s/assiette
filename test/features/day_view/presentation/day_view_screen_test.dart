@@ -18,6 +18,8 @@ import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
 import 'package:assiette/features/meal_entry/domain/tag_option.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
+import 'package:assiette/features/menstrual_tracking/domain/menstrual_observation.dart';
+import 'package:assiette/features/menstrual_tracking/presentation/menstrual_providers.dart';
 import 'package:assiette/features/sleep_entry/presentation/sleep_entry_screen.dart';
 import 'package:assiette/features/symptom_entry/domain/migraine_observation_repository.dart';
 import 'package:assiette/features/symptom_entry/domain/symptom_draft.dart';
@@ -107,6 +109,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          menstrualPreferencesProvider.overrideWith(
+            (_) => Stream.value(const MenstrualPreferences()),
+          ),
           dayViewRepositoryProvider.overrideWithValue(repository),
           favoritesRepositoryProvider.overrideWithValue(favoritesRepository),
           mealEntryRepositoryProvider.overrideWithValue(mealEntryRepository),

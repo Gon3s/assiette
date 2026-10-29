@@ -59,4 +59,4 @@ final class JournalExportRepositoryProvider
 }
 
 String _$journalExportRepositoryHash() =>
-    r'7b297cf591575520af85649e75f2bfffec7ea2e7';
+    r'77ad7688d2173194969b53646484e3e858767194';

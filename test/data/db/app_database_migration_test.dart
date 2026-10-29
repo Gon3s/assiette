@@ -9,7 +9,36 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'v8 migration preserves every legacy health entry through v13',
+    'v13 adds optional menstrual tracking without changing existing settings',
+    () async {
+      final db = AppDatabase(
+        NativeDatabase.memory(
+          setup: (database) {
+            database
+              ..execute(_legacyTagSchema)
+              ..execute(
+                'INSERT INTO app_settings (id, onboarding_done, breakfast_hour) VALUES (0, 1, 9)',
+              )
+              ..execute(
+                "INSERT INTO tags (id, label, created_at, updated_at) VALUES ('kept', 'custom', 1, 1)",
+              )
+              ..execute('PRAGMA user_version = 13');
+          },
+        ),
+      );
+      addTearDown(db.close);
+      final settings = (await db.select(db.appSettings).get()).single;
+      expect(settings.onboardingDone, isTrue);
+      expect(settings.breakfastHour, 9);
+      expect(settings.menstrualTrackingEnabled, isFalse);
+      expect(settings.menstrualBackupEnabled, isFalse);
+      expect(settings.menstrualPdfEnabled, isFalse);
+      expect(await db.select(db.menstrualDays).get(), isEmpty);
+      expect((await db.select(db.tags).get()).single.id, 'kept');
+    },
+  );
+  test(
+    'v8 migration preserves every legacy health entry through v14',
     () async {
       final executor = NativeDatabase.memory(
         setup: (database) {
@@ -159,7 +188,7 @@ INSERT INTO medication_intakes (
       expect(medication.dose, '50 mg');
 
       final version = await db.customSelect('PRAGMA user_version').getSingle();
-      expect(version.read<int>('user_version'), 13);
+      expect(version.read<int>('user_version'), 14);
     },
   );
 
@@ -293,6 +322,26 @@ PRAGMA user_version = 12;
 }
 
 const _legacyTagSchema = '''
+CREATE TABLE app_settings (
+  id INTEGER NOT NULL PRIMARY KEY,
+  onboarding_done INTEGER NOT NULL DEFAULT 0,
+  last_pressure_alert_date INTEGER NULL,
+  reminders_meals_enabled INTEGER NOT NULL DEFAULT 1,
+  breakfast_hour INTEGER NOT NULL DEFAULT 8,
+  breakfast_minute INTEGER NOT NULL DEFAULT 30,
+  lunch_hour INTEGER NOT NULL DEFAULT 12,
+  lunch_minute INTEGER NOT NULL DEFAULT 30,
+  dinner_hour INTEGER NOT NULL DEFAULT 19,
+  dinner_minute INTEGER NOT NULL DEFAULT 30,
+  reminders_sleep_enabled INTEGER NOT NULL DEFAULT 1,
+  sleep_hour INTEGER NOT NULL DEFAULT 8,
+  sleep_minute INTEGER NOT NULL DEFAULT 0,
+  reminders_weather_enabled INTEGER NOT NULL DEFAULT 1,
+  reminders_symptoms_enabled INTEGER NOT NULL DEFAULT 0,
+  symptoms_hour INTEGER NOT NULL DEFAULT 20,
+  symptoms_minute INTEGER NOT NULL DEFAULT 0,
+  photo_tag_suggestions_enabled INTEGER NOT NULL DEFAULT 1
+);
 CREATE TABLE tags (
   id TEXT NOT NULL PRIMARY KEY,
   label TEXT NOT NULL,

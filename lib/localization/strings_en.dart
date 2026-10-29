@@ -2,6 +2,64 @@ import 'package:assiette/localization/app_strings.dart';
 
 /// English strings.
 class AppStringsEn implements AppStrings {
+  // Menstrual tracking
+  @override
+  String get menstrualTitle => 'Periods';
+  @override
+  String get menstrualSettingsTitle => 'Period tracking';
+  @override
+  String get menstrualPrivacyNotice =>
+      'This optional tracker records bleeding by day. Unlogged days remain unknown. Disabling tracking keeps your history. Data stays on this device unless you choose to include it in Drive or PDFs.';
+  @override
+  String get menstrualBackupOption => 'Include period data in Drive backups';
+  @override
+  String get menstrualPdfOption => 'Include period data in PDFs';
+  @override
+  String get menstrualBackupIncluded =>
+      'Period data: included in the next Drive backup.';
+  @override
+  String get menstrualBackupExcluded =>
+      'Period data: excluded from the next Drive backup.';
+  @override
+  String get menstrualPdfIncluded => 'Period data: included in the PDF.';
+  @override
+  String get menstrualPdfExcluded => 'Period data: excluded from the PDF.';
+  @override
+  String get menstrualNone => 'No bleeding';
+  @override
+  String get menstrualSpotting => 'Spotting';
+  @override
+  String get menstrualPeriod => 'Period';
+  @override
+  String get menstrualUnknown => 'Not logged';
+  @override
+  String get menstrualFlow => 'Flow (optional)';
+  @override
+  String get menstrualFlowUnknown => 'Not specified';
+  @override
+  String get menstrualFlowLight => 'Light';
+  @override
+  String get menstrualFlowMedium => 'Medium';
+  @override
+  String get menstrualFlowHeavy => 'Heavy';
+  @override
+  String get menstrualStart => 'First day of period';
+  @override
+  String get menstrualChangeStatusNotice =>
+      'Changing the bleeding type will clear the flow and first-day marker.';
+  @override
+  String get menstrualDeleteTitle => 'Delete this observation?';
+  @override
+  String get menstrualDeleteBody =>
+      'This day will become unlogged again. Other journal data will be kept.';
+  @override
+  String get menstrualPurgeAction => 'Permanently erase period data';
+  @override
+  String get menstrualPurgeBody =>
+      'All period observations on this device will be erased and tracking, Drive and PDF options turned off. Other journal data will be kept. Existing PDFs and Drive backups remain; restoring a backup may bring this data back.';
+  @override
+  String get menstrualFutureDate =>
+      'Observations cannot be logged for a future date.';
   @override
   String get save => 'Save';
   @override
