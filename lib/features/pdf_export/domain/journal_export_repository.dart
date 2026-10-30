@@ -23,6 +23,7 @@ abstract class JournalExportRepository {
 JournalExportRepository journalExportRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   return DriftJournalExportRepository(
+    coffeeIntakesDao: db.coffeeIntakesDao,
     mealsDao: db.mealsDao,
     symptomsDao: db.symptomsDao,
     medicationIntakesDao: db.medicationIntakesDao,

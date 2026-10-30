@@ -4,6 +4,13 @@ import 'package:flutter/widgets.dart';
 
 /// Abstract base class for all app strings.
 abstract class AppStrings {
+  String get coffeeTitle;
+  String get coffeeAdded;
+  String coffeeCount(int count);
+  String get coffeeManualAdd;
+  String get quickFavoriteTitle;
+  String get quickFavoriteHint;
+  String get quickFavoriteNone;
   // Menstrual tracking
   String get menstrualTitle;
   String get menstrualSettingsTitle;

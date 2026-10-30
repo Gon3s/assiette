@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:assiette/data/daos/coffee_intakes_dao.dart';
+
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/medication_intakes_dao.dart';
@@ -28,7 +30,10 @@ class DriftDayViewRepository implements DayViewRepository {
     required this._medicationIntakesDao,
     required this._sleepEntriesDao,
     required this._environmentDao,
+    this._coffeeIntakesDao,
   });
+
+  final CoffeeIntakesDao? _coffeeIntakesDao;
 
   final MealsDao _mealsDao;
   final SymptomsDao _symptomsDao;
@@ -50,7 +55,20 @@ class DriftDayViewRepository implements DayViewRepository {
     final medications = _medicationIntakesDao
         .watchByDay(day)
         .map((rows) => rows.map(_intakeToTimelineItem).toList());
-    return _combineSorted([meals, symptoms, medications]);
+    final coffee = _coffeeIntakesDao
+        ?.watchByDay(day)
+        .map(
+          (rows) => [
+            for (final row in rows)
+              TimelineItem.coffee(id: row.id, timestamp: row.timestamp),
+          ],
+        );
+    return _combineSorted([
+      meals,
+      symptoms,
+      medications,
+      ?coffee,
+    ]);
   }
 
   @override

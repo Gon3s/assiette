@@ -843,7 +843,7 @@ as String?,
 /// @nodoc
 mixin _$DayJournalEntry {
 
- DateTime get date; List<JournalMealEntry> get meals; List<JournalSymptomEntry> get symptoms; List<JournalMedicationEntry> get medications; SleepSummary? get sleep; WeatherSummary? get weather; MenstrualObservation? get menstrual;
+ DateTime get date; List<JournalMealEntry> get meals; List<JournalSymptomEntry> get symptoms; List<DateTime> get coffee; List<JournalMedicationEntry> get medications; SleepSummary? get sleep; WeatherSummary? get weather; MenstrualObservation? get menstrual;
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -855,20 +855,20 @@ $DayJournalEntryCopyWith<DayJournalEntry> get copyWith => _$DayJournalEntryCopyW
 @override
 bool operator ==(Object other) {
   final _this = this as DayJournalEntry;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, _this.date) || other.date == _this.date)&&const DeepCollectionEquality().equals(other.meals, _this.meals)&&const DeepCollectionEquality().equals(other.symptoms, _this.symptoms)&&const DeepCollectionEquality().equals(other.medications, _this.medications)&&(identical(other.sleep, _this.sleep) || other.sleep == _this.sleep)&&(identical(other.weather, _this.weather) || other.weather == _this.weather)&&(identical(other.menstrual, _this.menstrual) || other.menstrual == _this.menstrual));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DayJournalEntry&&(identical(other.date, _this.date) || other.date == _this.date)&&const DeepCollectionEquality().equals(other.meals, _this.meals)&&const DeepCollectionEquality().equals(other.symptoms, _this.symptoms)&&const DeepCollectionEquality().equals(other.coffee, _this.coffee)&&const DeepCollectionEquality().equals(other.medications, _this.medications)&&(identical(other.sleep, _this.sleep) || other.sleep == _this.sleep)&&(identical(other.weather, _this.weather) || other.weather == _this.weather)&&(identical(other.menstrual, _this.menstrual) || other.menstrual == _this.menstrual));
 }
 
 
 @override
 int get hashCode {
   final _this = this as DayJournalEntry;
-  return Object.hash(runtimeType,_this.date,const DeepCollectionEquality().hash(_this.meals),const DeepCollectionEquality().hash(_this.symptoms),const DeepCollectionEquality().hash(_this.medications),_this.sleep,_this.weather,_this.menstrual);
+  return Object.hash(runtimeType,_this.date,const DeepCollectionEquality().hash(_this.meals),const DeepCollectionEquality().hash(_this.symptoms),const DeepCollectionEquality().hash(_this.coffee),const DeepCollectionEquality().hash(_this.medications),_this.sleep,_this.weather,_this.menstrual);
 }
 
 @override
 String toString() {
   final _this = this as DayJournalEntry;
-  return 'DayJournalEntry(date: ${_this.date}, meals: ${_this.meals}, symptoms: ${_this.symptoms}, medications: ${_this.medications}, sleep: ${_this.sleep}, weather: ${_this.weather}, menstrual: ${_this.menstrual})';
+  return 'DayJournalEntry(date: ${_this.date}, meals: ${_this.meals}, symptoms: ${_this.symptoms}, coffee: ${_this.coffee}, medications: ${_this.medications}, sleep: ${_this.sleep}, weather: ${_this.weather}, menstrual: ${_this.menstrual})';
 }
 
 
@@ -879,7 +879,7 @@ abstract mixin class $DayJournalEntryCopyWith<$Res>  {
   factory $DayJournalEntryCopyWith(DayJournalEntry value, $Res Function(DayJournalEntry) _then) = _$DayJournalEntryCopyWithImpl;
 @useResult
 $Res call({
- DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather, MenstrualObservation? menstrual
+ DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<DateTime> coffee, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather, MenstrualObservation? menstrual
 });
 
 
@@ -896,12 +896,13 @@ class _$DayJournalEntryCopyWithImpl<$Res>
 
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,Object? menstrual = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? coffee = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,Object? menstrual = freezed,}) {
   return _then(DayJournalEntry(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,meals: null == meals ? _self.meals : meals // ignore: cast_nullable_to_non_nullable
 as List<JournalMealEntry>,symptoms: null == symptoms ? _self.symptoms : symptoms // ignore: cast_nullable_to_non_nullable
-as List<JournalSymptomEntry>,medications: null == medications ? _self.medications : medications // ignore: cast_nullable_to_non_nullable
+as List<JournalSymptomEntry>,coffee: null == coffee ? _self.coffee : coffee // ignore: cast_nullable_to_non_nullable
+as List<DateTime>,medications: null == medications ? _self.medications : medications // ignore: cast_nullable_to_non_nullable
 as List<JournalMedicationEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
 as SleepSummary?,weather: freezed == weather ? _self.weather : weather // ignore: cast_nullable_to_non_nullable
 as WeatherSummary?,menstrual: freezed == menstrual ? _self.menstrual : menstrual // ignore: cast_nullable_to_non_nullable
@@ -1026,10 +1027,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<DateTime> coffee,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DayJournalEntry() when $default != null:
-return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.coffee,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
   return orElse();
 
 }
@@ -1047,10 +1048,10 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sl
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<DateTime> coffee,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)  $default,) {final _that = this;
 switch (_that) {
 case _DayJournalEntry():
-return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.coffee,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1067,10 +1068,10 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sl
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime date,  List<JournalMealEntry> meals,  List<JournalSymptomEntry> symptoms,  List<DateTime> coffee,  List<JournalMedicationEntry> medications,  SleepSummary? sleep,  WeatherSummary? weather,  MenstrualObservation? menstrual)?  $default,) {final _that = this;
 switch (_that) {
 case _DayJournalEntry() when $default != null:
-return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
+return $default(_that.date,_that.meals,_that.symptoms,_that.coffee,_that.medications,_that.sleep,_that.weather,_that.menstrual);case _:
   return null;
 
 }
@@ -1082,7 +1083,7 @@ return $default(_that.date,_that.meals,_that.symptoms,_that.medications,_that.sl
 
 
 class _DayJournalEntry extends DayJournalEntry {
-  const _DayJournalEntry({required this.date, required  List<JournalMealEntry> meals, required  List<JournalSymptomEntry> symptoms,  List<JournalMedicationEntry> medications = const <JournalMedicationEntry>[], this.sleep, this.weather, this.menstrual}): _meals = meals,_symptoms = symptoms,_medications = medications,super._();
+  const _DayJournalEntry({required this.date, required  List<JournalMealEntry> meals, required  List<JournalSymptomEntry> symptoms,  List<DateTime> coffee = const <DateTime>[],  List<JournalMedicationEntry> medications = const <JournalMedicationEntry>[], this.sleep, this.weather, this.menstrual}): _meals = meals,_symptoms = symptoms,_coffee = coffee,_medications = medications,super._();
   
 
 @override final  DateTime date;
@@ -1098,6 +1099,13 @@ class _DayJournalEntry extends DayJournalEntry {
   if (_symptoms is EqualUnmodifiableListView) return _symptoms;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_symptoms);
+}
+
+ final  List<DateTime> _coffee;
+@override@JsonKey() List<DateTime> get coffee {
+  if (_coffee is EqualUnmodifiableListView) return _coffee;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_coffee);
 }
 
  final  List<JournalMedicationEntry> _medications;
@@ -1121,18 +1129,18 @@ _$DayJournalEntryCopyWith<_DayJournalEntry> get copyWith => __$DayJournalEntryCo
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, _meals)&&const DeepCollectionEquality().equals(other.symptoms, _symptoms)&&const DeepCollectionEquality().equals(other.medications, _medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather)&&(identical(other.menstrual, menstrual) || other.menstrual == menstrual));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DayJournalEntry&&(identical(other.date, date) || other.date == date)&&const DeepCollectionEquality().equals(other.meals, _meals)&&const DeepCollectionEquality().equals(other.symptoms, _symptoms)&&const DeepCollectionEquality().equals(other.coffee, _coffee)&&const DeepCollectionEquality().equals(other.medications, _medications)&&(identical(other.sleep, sleep) || other.sleep == sleep)&&(identical(other.weather, weather) || other.weather == weather)&&(identical(other.menstrual, menstrual) || other.menstrual == menstrual));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),const DeepCollectionEquality().hash(_medications),sleep,weather,menstrual);
+    return Object.hash(runtimeType,date,const DeepCollectionEquality().hash(_meals),const DeepCollectionEquality().hash(_symptoms),const DeepCollectionEquality().hash(_coffee),const DeepCollectionEquality().hash(_medications),sleep,weather,menstrual);
 }
 
 @override
 String toString() {
-    return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, medications: $medications, sleep: $sleep, weather: $weather, menstrual: $menstrual)';
+    return 'DayJournalEntry(date: $date, meals: $meals, symptoms: $symptoms, coffee: $coffee, medications: $medications, sleep: $sleep, weather: $weather, menstrual: $menstrual)';
 }
 
 
@@ -1143,7 +1151,7 @@ abstract mixin class _$DayJournalEntryCopyWith<$Res> implements $DayJournalEntry
   factory _$DayJournalEntryCopyWith(_DayJournalEntry value, $Res Function(_DayJournalEntry) _then) = __$DayJournalEntryCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather, MenstrualObservation? menstrual
+ DateTime date, List<JournalMealEntry> meals, List<JournalSymptomEntry> symptoms, List<DateTime> coffee, List<JournalMedicationEntry> medications, SleepSummary? sleep, WeatherSummary? weather, MenstrualObservation? menstrual
 });
 
 
@@ -1160,12 +1168,13 @@ class __$DayJournalEntryCopyWithImpl<$Res>
 
 /// Create a copy of DayJournalEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,Object? menstrual = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? date = null,Object? meals = null,Object? symptoms = null,Object? coffee = null,Object? medications = null,Object? sleep = freezed,Object? weather = freezed,Object? menstrual = freezed,}) {
   return _then(_DayJournalEntry(
 date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as DateTime,meals: null == meals ? _self._meals : meals // ignore: cast_nullable_to_non_nullable
 as List<JournalMealEntry>,symptoms: null == symptoms ? _self._symptoms : symptoms // ignore: cast_nullable_to_non_nullable
-as List<JournalSymptomEntry>,medications: null == medications ? _self._medications : medications // ignore: cast_nullable_to_non_nullable
+as List<JournalSymptomEntry>,coffee: null == coffee ? _self._coffee : coffee // ignore: cast_nullable_to_non_nullable
+as List<DateTime>,medications: null == medications ? _self._medications : medications // ignore: cast_nullable_to_non_nullable
 as List<JournalMedicationEntry>,sleep: freezed == sleep ? _self.sleep : sleep // ignore: cast_nullable_to_non_nullable
 as SleepSummary?,weather: freezed == weather ? _self.weather : weather // ignore: cast_nullable_to_non_nullable
 as WeatherSummary?,menstrual: freezed == menstrual ? _self.menstrual : menstrual // ignore: cast_nullable_to_non_nullable

@@ -9,6 +9,11 @@ part 'timeline_item.freezed.dart';
 /// merged and sorted chronologically.
 @freezed
 sealed class TimelineItem with _$TimelineItem {
+  const factory TimelineItem.coffee({
+    required String id,
+    required DateTime timestamp,
+  }) = CoffeeTimelineItem;
+
   /// A logged meal.
   const factory TimelineItem.meal({
     required String id,

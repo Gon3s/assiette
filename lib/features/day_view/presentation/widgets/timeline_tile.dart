@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/coffee/domain/coffee_entry.dart';
+import 'package:assiette/features/coffee/presentation/coffee_actions.dart';
 import 'package:assiette/features/day_view/domain/timeline_item.dart';
 import 'package:assiette/features/day_view/presentation/widgets/timeline_labels.dart';
 import 'package:assiette/features/meal_entry/domain/meal_entry_repository.dart';
@@ -99,6 +101,9 @@ class TimelineTile extends ConsumerWidget {
     final time = DateFormat.Hm(locale).format(item.timestamp.toLocal());
 
     return switch (item) {
+      CoffeeTimelineItem(:final id, :final timestamp) => CoffeeTimelineTile(
+        entry: CoffeeEntry(id: id, timestamp: timestamp),
+      ),
       MealTimelineItem(
         :final id,
         :final mealType,

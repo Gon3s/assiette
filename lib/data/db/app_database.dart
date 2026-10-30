@@ -1,5 +1,6 @@
 import 'package:assiette/data/daos/app_settings_dao.dart';
 import 'package:assiette/data/daos/cloud_backup_state_dao.dart';
+import 'package:assiette/data/daos/coffee_intakes_dao.dart';
 import 'package:assiette/data/daos/environment_dao.dart';
 import 'package:assiette/data/daos/meals_dao.dart';
 import 'package:assiette/data/daos/medication_intakes_dao.dart';
@@ -16,6 +17,7 @@ import 'package:assiette/data/db/enums/migraine_start_precision.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/data/db/tables/app_settings_table.dart';
 import 'package:assiette/data/db/tables/cloud_backup_state_table.dart';
+import 'package:assiette/data/db/tables/coffee_intakes_table.dart';
 import 'package:assiette/data/db/tables/environment_snapshots_table.dart';
 import 'package:assiette/data/db/tables/meal_tags_table.dart';
 import 'package:assiette/data/db/tables/meal_templates_table.dart';
@@ -34,6 +36,7 @@ part 'app_database.g.dart';
 
 @DriftDatabase(
   tables: [
+    CoffeeIntakes,
     Tags,
     Meals,
     MealTags,
@@ -49,6 +52,7 @@ part 'app_database.g.dart';
     MenstrualDays,
   ],
   daos: [
+    CoffeeIntakesDao,
     TagsDao,
     MealsDao,
     TemplatesDao,
@@ -67,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'assiette'));
 
   @override
-  int get schemaVersion => 14;
+  int get schemaVersion => 15;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -75,6 +79,12 @@ class AppDatabase extends _$AppDatabase {
       await m.createAll();
     },
     onUpgrade: (m, from, to) async {
+      if (from < 15) {
+        await m.createTable(coffeeIntakes);
+        if (from >= 2) {
+          await m.addColumn(appSettings, appSettings.quickFavoriteId);
+        }
+      }
       if (from < 2) {
         await m.createTable(appSettings);
       }

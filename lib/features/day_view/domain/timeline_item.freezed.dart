@@ -93,10 +93,11 @@ extension TimelineItemPatterns on TimelineItem {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( MealTimelineItem value)?  meal,TResult Function( SymptomTimelineItem value)?  symptom,TResult Function( MedicationTimelineItem value)?  medication,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CoffeeTimelineItem value)?  coffee,TResult Function( MealTimelineItem value)?  meal,TResult Function( SymptomTimelineItem value)?  symptom,TResult Function( MedicationTimelineItem value)?  medication,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case MealTimelineItem() when meal != null:
+case CoffeeTimelineItem() when coffee != null:
+return coffee(_that);case MealTimelineItem() when meal != null:
 return meal(_that);case SymptomTimelineItem() when symptom != null:
 return symptom(_that);case MedicationTimelineItem() when medication != null:
 return medication(_that);case _:
@@ -117,10 +118,11 @@ return medication(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( MealTimelineItem value)  meal,required TResult Function( SymptomTimelineItem value)  symptom,required TResult Function( MedicationTimelineItem value)  medication,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CoffeeTimelineItem value)  coffee,required TResult Function( MealTimelineItem value)  meal,required TResult Function( SymptomTimelineItem value)  symptom,required TResult Function( MedicationTimelineItem value)  medication,}){
 final _that = this;
 switch (_that) {
-case MealTimelineItem():
+case CoffeeTimelineItem():
+return coffee(_that);case MealTimelineItem():
 return meal(_that);case SymptomTimelineItem():
 return symptom(_that);case MedicationTimelineItem():
 return medication(_that);}
@@ -137,10 +139,11 @@ return medication(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( MealTimelineItem value)?  meal,TResult? Function( SymptomTimelineItem value)?  symptom,TResult? Function( MedicationTimelineItem value)?  medication,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CoffeeTimelineItem value)?  coffee,TResult? Function( MealTimelineItem value)?  meal,TResult? Function( SymptomTimelineItem value)?  symptom,TResult? Function( MedicationTimelineItem value)?  medication,}){
 final _that = this;
 switch (_that) {
-case MealTimelineItem() when meal != null:
+case CoffeeTimelineItem() when coffee != null:
+return coffee(_that);case MealTimelineItem() when meal != null:
 return meal(_that);case SymptomTimelineItem() when symptom != null:
 return symptom(_that);case MedicationTimelineItem() when medication != null:
 return medication(_that);case _:
@@ -160,9 +163,10 @@ return medication(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)?  meal,TResult Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)?  symptom,TResult Function( String id,  DateTime timestamp,  String name,  String? dose)?  medication,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String id,  DateTime timestamp)?  coffee,TResult Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)?  meal,TResult Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)?  symptom,TResult Function( String id,  DateTime timestamp,  String name,  String? dose)?  medication,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case MealTimelineItem() when meal != null:
+case CoffeeTimelineItem() when coffee != null:
+return coffee(_that.id,_that.timestamp);case MealTimelineItem() when meal != null:
 return meal(_that.id,_that.timestamp,_that.mealType,_that.tagLabels,_that.photoPath);case SymptomTimelineItem() when symptom != null:
 return symptom(_that.id,_that.timestamp,_that.symptomType,_that.intensity,_that.detail);case MedicationTimelineItem() when medication != null:
 return medication(_that.id,_that.timestamp,_that.name,_that.dose);case _:
@@ -183,9 +187,10 @@ return medication(_that.id,_that.timestamp,_that.name,_that.dose);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)  meal,required TResult Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)  symptom,required TResult Function( String id,  DateTime timestamp,  String name,  String? dose)  medication,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String id,  DateTime timestamp)  coffee,required TResult Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)  meal,required TResult Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)  symptom,required TResult Function( String id,  DateTime timestamp,  String name,  String? dose)  medication,}) {final _that = this;
 switch (_that) {
-case MealTimelineItem():
+case CoffeeTimelineItem():
+return coffee(_that.id,_that.timestamp);case MealTimelineItem():
 return meal(_that.id,_that.timestamp,_that.mealType,_that.tagLabels,_that.photoPath);case SymptomTimelineItem():
 return symptom(_that.id,_that.timestamp,_that.symptomType,_that.intensity,_that.detail);case MedicationTimelineItem():
 return medication(_that.id,_that.timestamp,_that.name,_that.dose);}
@@ -202,9 +207,10 @@ return medication(_that.id,_that.timestamp,_that.name,_that.dose);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)?  meal,TResult? Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)?  symptom,TResult? Function( String id,  DateTime timestamp,  String name,  String? dose)?  medication,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String id,  DateTime timestamp)?  coffee,TResult? Function( String id,  DateTime timestamp,  MealType mealType,  List<String> tagLabels,  String? photoPath)?  meal,TResult? Function( String id,  DateTime timestamp,  SymptomType symptomType,  int intensity,  String? detail)?  symptom,TResult? Function( String id,  DateTime timestamp,  String name,  String? dose)?  medication,}) {final _that = this;
 switch (_that) {
-case MealTimelineItem() when meal != null:
+case CoffeeTimelineItem() when coffee != null:
+return coffee(_that.id,_that.timestamp);case MealTimelineItem() when meal != null:
 return meal(_that.id,_that.timestamp,_that.mealType,_that.tagLabels,_that.photoPath);case SymptomTimelineItem() when symptom != null:
 return symptom(_that.id,_that.timestamp,_that.symptomType,_that.intensity,_that.detail);case MedicationTimelineItem() when medication != null:
 return medication(_that.id,_that.timestamp,_that.name,_that.dose);case _:
@@ -212,6 +218,76 @@ return medication(_that.id,_that.timestamp,_that.name,_that.dose);case _:
 
 }
 }
+
+}
+
+/// @nodoc
+
+
+class CoffeeTimelineItem implements TimelineItem {
+  const CoffeeTimelineItem({required this.id, required this.timestamp});
+  
+
+@override final  String id;
+@override final  DateTime timestamp;
+
+/// Create a copy of TimelineItem
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CoffeeTimelineItemCopyWith<CoffeeTimelineItem> get copyWith => _$CoffeeTimelineItemCopyWithImpl<CoffeeTimelineItem>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CoffeeTimelineItem&&(identical(other.id, id) || other.id == id)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,id,timestamp);
+}
+
+@override
+String toString() {
+    return 'TimelineItem.coffee(id: $id, timestamp: $timestamp)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CoffeeTimelineItemCopyWith<$Res> implements $TimelineItemCopyWith<$Res> {
+  factory $CoffeeTimelineItemCopyWith(CoffeeTimelineItem value, $Res Function(CoffeeTimelineItem) _then) = _$CoffeeTimelineItemCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, DateTime timestamp
+});
+
+
+
+
+}
+/// @nodoc
+class _$CoffeeTimelineItemCopyWithImpl<$Res>
+    implements $CoffeeTimelineItemCopyWith<$Res> {
+  _$CoffeeTimelineItemCopyWithImpl(this._self, this._then);
+
+  final CoffeeTimelineItem _self;
+  final $Res Function(CoffeeTimelineItem) _then;
+
+/// Create a copy of TimelineItem
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? timestamp = null,}) {
+  return _then(CoffeeTimelineItem(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
 
 }
 

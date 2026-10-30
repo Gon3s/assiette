@@ -52,6 +52,7 @@ abstract class DayJournalEntry with _$DayJournalEntry {
     required DateTime date,
     required List<JournalMealEntry> meals,
     required List<JournalSymptomEntry> symptoms,
+    @Default(<DateTime>[]) List<DateTime> coffee,
     @Default(<JournalMedicationEntry>[])
     List<JournalMedicationEntry> medications,
     SleepSummary? sleep,
@@ -63,6 +64,7 @@ abstract class DayJournalEntry with _$DayJournalEntry {
 
   /// Whether anything was logged this day.
   bool get hasData =>
+      coffee.isNotEmpty ||
       meals.isNotEmpty ||
       symptoms.isNotEmpty ||
       medications.isNotEmpty ||

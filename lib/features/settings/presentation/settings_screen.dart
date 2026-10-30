@@ -1,4 +1,5 @@
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/favorites/presentation/quick_favorite_picker.dart';
 import 'package:assiette/localization/app_strings.dart';
 import 'package:assiette/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,7 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(Sizes.p16),
         children: [
+          const QuickFavoriteSetting(),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.water_drop_outlined),

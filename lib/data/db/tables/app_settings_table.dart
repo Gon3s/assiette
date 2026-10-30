@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 @DataClassName('AppSetting')
 class AppSettings extends Table {
+  TextColumn get quickFavoriteId => text().nullable()();
   IntColumn get id => integer()();
   BoolColumn get onboardingDone =>
       boolean().withDefault(const Constant(false))();

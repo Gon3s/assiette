@@ -36,7 +36,7 @@ void main() {
         ),
       );
       final snapshot = await codec.export(db);
-      expect(snapshot['formatVersion'], 6);
+      expect(snapshot['formatVersion'], 7);
       expect(snapshot['menstrualDays'], hasLength(1));
       await repository.purge();
       await codec.restore(db, snapshot, 'photos');

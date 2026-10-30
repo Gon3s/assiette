@@ -3,6 +3,366 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
+class $CoffeeIntakesTable extends CoffeeIntakes
+    with TableInfo<$CoffeeIntakesTable, CoffeeIntake> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CoffeeIntakesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
+  @override
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    timestamp,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'coffee_intakes';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CoffeeIntake> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_timestampMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CoffeeIntake map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CoffeeIntake(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $CoffeeIntakesTable createAlias(String alias) {
+    return $CoffeeIntakesTable(attachedDatabase, alias);
+  }
+}
+
+class CoffeeIntake extends DataClass implements Insertable<CoffeeIntake> {
+  final String id;
+  final DateTime timestamp;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const CoffeeIntake({
+    required this.id,
+    required this.timestamp,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    return map;
+  }
+
+  CoffeeIntakesCompanion toCompanion(bool nullToAbsent) {
+    return CoffeeIntakesCompanion(
+      id: Value(id),
+      timestamp: Value(timestamp),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory CoffeeIntake.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CoffeeIntake(
+      id: serializer.fromJson<String>(json['id']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  CoffeeIntake copyWith({
+    String? id,
+    DateTime? timestamp,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => CoffeeIntake(
+    id: id ?? this.id,
+    timestamp: timestamp ?? this.timestamp,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  CoffeeIntake copyWithCompanion(CoffeeIntakesCompanion data) {
+    return CoffeeIntake(
+      id: data.id.present ? data.id.value : this.id,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CoffeeIntake(')
+          ..write('id: $id, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, timestamp, createdAt, updatedAt, deletedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CoffeeIntake &&
+          other.id == this.id &&
+          other.timestamp == this.timestamp &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class CoffeeIntakesCompanion extends UpdateCompanion<CoffeeIntake> {
+  final Value<String> id;
+  final Value<DateTime> timestamp;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> rowid;
+  const CoffeeIntakesCompanion({
+    this.id = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CoffeeIntakesCompanion.insert({
+    required String id,
+    required DateTime timestamp,
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       timestamp = Value(timestamp);
+  static Insertable<CoffeeIntake> custom({
+    Expression<String>? id,
+    Expression<DateTime>? timestamp,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CoffeeIntakesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? timestamp,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return CoffeeIntakesCompanion(
+      id: id ?? this.id,
+      timestamp: timestamp ?? this.timestamp,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CoffeeIntakesCompanion(')
+          ..write('id: $id, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $TagsTable extends Tags with TableInfo<$TagsTable, Tag> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -6029,6 +6389,17 @@ class $AppSettingsTable extends AppSettings
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $AppSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _quickFavoriteIdMeta = const VerificationMeta(
+    'quickFavoriteId',
+  );
+  @override
+  late final GeneratedColumn<String> quickFavoriteId = GeneratedColumn<String>(
+    'quick_favorite_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -6305,6 +6676,7 @@ class $AppSettingsTable extends AppSettings
   );
   @override
   List<GeneratedColumn> get $columns => [
+    quickFavoriteId,
     id,
     onboardingDone,
     lastPressureAlertDate,
@@ -6339,6 +6711,15 @@ class $AppSettingsTable extends AppSettings
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('quick_favorite_id')) {
+      context.handle(
+        _quickFavoriteIdMeta,
+        quickFavoriteId.isAcceptableOrUnknown(
+          data['quick_favorite_id']!,
+          _quickFavoriteIdMeta,
+        ),
+      );
+    }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
@@ -6522,6 +6903,10 @@ class $AppSettingsTable extends AppSettings
   AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AppSetting(
+      quickFavoriteId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}quick_favorite_id'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -6616,6 +7001,7 @@ class $AppSettingsTable extends AppSettings
 }
 
 class AppSetting extends DataClass implements Insertable<AppSetting> {
+  final String? quickFavoriteId;
   final int id;
   final bool onboardingDone;
   final DateTime? lastPressureAlertDate;
@@ -6643,6 +7029,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   final bool menstrualBackupEnabled;
   final bool menstrualPdfEnabled;
   const AppSetting({
+    this.quickFavoriteId,
     required this.id,
     required this.onboardingDone,
     this.lastPressureAlertDate,
@@ -6668,6 +7055,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (!nullToAbsent || quickFavoriteId != null) {
+      map['quick_favorite_id'] = Variable<String>(quickFavoriteId);
+    }
     map['id'] = Variable<int>(id);
     map['onboarding_done'] = Variable<bool>(onboardingDone);
     if (!nullToAbsent || lastPressureAlertDate != null) {
@@ -6704,6 +7094,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   AppSettingsCompanion toCompanion(bool nullToAbsent) {
     return AppSettingsCompanion(
+      quickFavoriteId: quickFavoriteId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quickFavoriteId),
       id: Value(id),
       onboardingDone: Value(onboardingDone),
       lastPressureAlertDate: lastPressureAlertDate == null && nullToAbsent
@@ -6736,6 +7129,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AppSetting(
+      quickFavoriteId: serializer.fromJson<String?>(json['quickFavoriteId']),
       id: serializer.fromJson<int>(json['id']),
       onboardingDone: serializer.fromJson<bool>(json['onboardingDone']),
       lastPressureAlertDate: serializer.fromJson<DateTime?>(
@@ -6781,6 +7175,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'quickFavoriteId': serializer.toJson<String?>(quickFavoriteId),
       'id': serializer.toJson<int>(id),
       'onboardingDone': serializer.toJson<bool>(onboardingDone),
       'lastPressureAlertDate': serializer.toJson<DateTime?>(
@@ -6816,6 +7211,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   }
 
   AppSetting copyWith({
+    Value<String?> quickFavoriteId = const Value.absent(),
     int? id,
     bool? onboardingDone,
     Value<DateTime?> lastPressureAlertDate = const Value.absent(),
@@ -6838,6 +7234,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     bool? menstrualBackupEnabled,
     bool? menstrualPdfEnabled,
   }) => AppSetting(
+    quickFavoriteId: quickFavoriteId.present
+        ? quickFavoriteId.value
+        : this.quickFavoriteId,
     id: id ?? this.id,
     onboardingDone: onboardingDone ?? this.onboardingDone,
     lastPressureAlertDate: lastPressureAlertDate.present
@@ -6869,6 +7268,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
     return AppSetting(
+      quickFavoriteId: data.quickFavoriteId.present
+          ? data.quickFavoriteId.value
+          : this.quickFavoriteId,
       id: data.id.present ? data.id.value : this.id,
       onboardingDone: data.onboardingDone.present
           ? data.onboardingDone.value
@@ -6932,6 +7334,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   @override
   String toString() {
     return (StringBuffer('AppSetting(')
+          ..write('quickFavoriteId: $quickFavoriteId, ')
           ..write('id: $id, ')
           ..write('onboardingDone: $onboardingDone, ')
           ..write('lastPressureAlertDate: $lastPressureAlertDate, ')
@@ -6959,6 +7362,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   @override
   int get hashCode => Object.hashAll([
+    quickFavoriteId,
     id,
     onboardingDone,
     lastPressureAlertDate,
@@ -6985,6 +7389,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AppSetting &&
+          other.quickFavoriteId == this.quickFavoriteId &&
           other.id == this.id &&
           other.onboardingDone == this.onboardingDone &&
           other.lastPressureAlertDate == this.lastPressureAlertDate &&
@@ -7009,6 +7414,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 }
 
 class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+  final Value<String?> quickFavoriteId;
   final Value<int> id;
   final Value<bool> onboardingDone;
   final Value<DateTime?> lastPressureAlertDate;
@@ -7031,6 +7437,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<bool> menstrualBackupEnabled;
   final Value<bool> menstrualPdfEnabled;
   const AppSettingsCompanion({
+    this.quickFavoriteId = const Value.absent(),
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
     this.lastPressureAlertDate = const Value.absent(),
@@ -7054,6 +7461,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.menstrualPdfEnabled = const Value.absent(),
   });
   AppSettingsCompanion.insert({
+    this.quickFavoriteId = const Value.absent(),
     this.id = const Value.absent(),
     this.onboardingDone = const Value.absent(),
     this.lastPressureAlertDate = const Value.absent(),
@@ -7077,6 +7485,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.menstrualPdfEnabled = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
+    Expression<String>? quickFavoriteId,
     Expression<int>? id,
     Expression<bool>? onboardingDone,
     Expression<DateTime>? lastPressureAlertDate,
@@ -7100,6 +7509,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<bool>? menstrualPdfEnabled,
   }) {
     return RawValuesInsertable({
+      if (quickFavoriteId != null) 'quick_favorite_id': quickFavoriteId,
       if (id != null) 'id': id,
       if (onboardingDone != null) 'onboarding_done': onboardingDone,
       if (lastPressureAlertDate != null)
@@ -7134,6 +7544,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 
   AppSettingsCompanion copyWith({
+    Value<String?>? quickFavoriteId,
     Value<int>? id,
     Value<bool>? onboardingDone,
     Value<DateTime?>? lastPressureAlertDate,
@@ -7157,6 +7568,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<bool>? menstrualPdfEnabled,
   }) {
     return AppSettingsCompanion(
+      quickFavoriteId: quickFavoriteId ?? this.quickFavoriteId,
       id: id ?? this.id,
       onboardingDone: onboardingDone ?? this.onboardingDone,
       lastPressureAlertDate:
@@ -7192,6 +7604,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (quickFavoriteId.present) {
+      map['quick_favorite_id'] = Variable<String>(quickFavoriteId.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
@@ -7277,6 +7692,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   @override
   String toString() {
     return (StringBuffer('AppSettingsCompanion(')
+          ..write('quickFavoriteId: $quickFavoriteId, ')
           ..write('id: $id, ')
           ..write('onboardingDone: $onboardingDone, ')
           ..write('lastPressureAlertDate: $lastPressureAlertDate, ')
@@ -8105,6 +8521,7 @@ class MenstrualDaysCompanion extends UpdateCompanion<MenstrualDay> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
+  late final $CoffeeIntakesTable coffeeIntakes = $CoffeeIntakesTable(this);
   late final $TagsTable tags = $TagsTable(this);
   late final $MealsTable meals = $MealsTable(this);
   late final $MealTagsTable mealTags = $MealTagsTable(this);
@@ -8122,6 +8539,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CloudBackupStatesTable cloudBackupStates =
       $CloudBackupStatesTable(this);
   late final $MenstrualDaysTable menstrualDays = $MenstrualDaysTable(this);
+  late final Index idxCoffeeTimestamp = Index(
+    'idx_coffee_timestamp',
+    'CREATE INDEX idx_coffee_timestamp ON coffee_intakes (timestamp)',
+  );
   late final Index idxMealsTimestamp = Index(
     'idx_meals_timestamp',
     'CREATE INDEX idx_meals_timestamp ON meals (timestamp)',
@@ -8141,6 +8562,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final Index idxEnvTimestamp = Index(
     'idx_env_timestamp',
     'CREATE INDEX idx_env_timestamp ON environment_snapshots (timestamp)',
+  );
+  late final CoffeeIntakesDao coffeeIntakesDao = CoffeeIntakesDao(
+    this as AppDatabase,
   );
   late final TagsDao tagsDao = TagsDao(this as AppDatabase);
   late final MealsDao mealsDao = MealsDao(this as AppDatabase);
@@ -8171,6 +8595,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
+    coffeeIntakes,
     tags,
     meals,
     mealTags,
@@ -8184,6 +8609,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     appSettings,
     cloudBackupStates,
     menstrualDays,
+    idxCoffeeTimestamp,
     idxMealsTimestamp,
     idxSymptomsTimestamp,
     idxMigraineMeasurementsSymptomTimestamp,
@@ -8192,6 +8618,215 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ];
 }
 
+typedef $$CoffeeIntakesTableCreateCompanionBuilder =
+    CoffeeIntakesCompanion Function({
+      required String id,
+      required DateTime timestamp,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$CoffeeIntakesTableUpdateCompanionBuilder =
+    CoffeeIntakesCompanion Function({
+      Value<String> id,
+      Value<DateTime> timestamp,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$CoffeeIntakesTableFilterComposer
+    extends Composer<_$AppDatabase, $CoffeeIntakesTable> {
+  $$CoffeeIntakesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CoffeeIntakesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CoffeeIntakesTable> {
+  $$CoffeeIntakesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CoffeeIntakesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CoffeeIntakesTable> {
+  $$CoffeeIntakesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$CoffeeIntakesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CoffeeIntakesTable,
+          CoffeeIntake,
+          $$CoffeeIntakesTableFilterComposer,
+          $$CoffeeIntakesTableOrderingComposer,
+          $$CoffeeIntakesTableAnnotationComposer,
+          $$CoffeeIntakesTableCreateCompanionBuilder,
+          $$CoffeeIntakesTableUpdateCompanionBuilder,
+          (
+            CoffeeIntake,
+            BaseReferences<_$AppDatabase, $CoffeeIntakesTable, CoffeeIntake>,
+          ),
+          CoffeeIntake,
+          PrefetchHooks Function()
+        > {
+  $$CoffeeIntakesTableTableManager(_$AppDatabase db, $CoffeeIntakesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CoffeeIntakesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CoffeeIntakesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CoffeeIntakesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CoffeeIntakesCompanion(
+                id: id,
+                timestamp: timestamp,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime timestamp,
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CoffeeIntakesCompanion.insert(
+                id: id,
+                timestamp: timestamp,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CoffeeIntakesTable, CoffeeIntake>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CoffeeIntakesTable,
+                    CoffeeIntake
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CoffeeIntakesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CoffeeIntakesTable,
+      CoffeeIntake,
+      $$CoffeeIntakesTableFilterComposer,
+      $$CoffeeIntakesTableOrderingComposer,
+      $$CoffeeIntakesTableAnnotationComposer,
+      $$CoffeeIntakesTableCreateCompanionBuilder,
+      $$CoffeeIntakesTableUpdateCompanionBuilder,
+      (
+        CoffeeIntake,
+        BaseReferences<_$AppDatabase, $CoffeeIntakesTable, CoffeeIntake>,
+      ),
+      CoffeeIntake,
+      PrefetchHooks Function()
+    >;
 typedef $$TagsTableCreateCompanionBuilder = TagsCompanion Function({
   required String id,
   required String label,
@@ -11662,6 +12297,7 @@ typedef $$EnvironmentSnapshotsTableProcessedTableManager =
     >;
 typedef $$AppSettingsTableCreateCompanionBuilder =
     AppSettingsCompanion Function({
+      Value<String?> quickFavoriteId,
       Value<int> id,
       Value<bool> onboardingDone,
       Value<DateTime?> lastPressureAlertDate,
@@ -11686,6 +12322,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
     AppSettingsCompanion Function({
+      Value<String?> quickFavoriteId,
       Value<int> id,
       Value<bool> onboardingDone,
       Value<DateTime?> lastPressureAlertDate,
@@ -11718,6 +12355,11 @@ class $$AppSettingsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get quickFavoriteId => $composableBuilder(
+    column: $table.quickFavoriteId,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -11833,6 +12475,11 @@ class $$AppSettingsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get quickFavoriteId => $composableBuilder(
+    column: $table.quickFavoriteId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -11948,6 +12595,11 @@ class $$AppSettingsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get quickFavoriteId => $composableBuilder(
+    column: $table.quickFavoriteId,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -12079,6 +12731,7 @@ class $$AppSettingsTableTableManager
               $$AppSettingsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String?> quickFavoriteId = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
                 Value<DateTime?> lastPressureAlertDate = const Value.absent(),
@@ -12101,6 +12754,7 @@ class $$AppSettingsTableTableManager
                 Value<bool> menstrualBackupEnabled = const Value.absent(),
                 Value<bool> menstrualPdfEnabled = const Value.absent(),
               }) => AppSettingsCompanion(
+                quickFavoriteId: quickFavoriteId,
                 id: id,
                 onboardingDone: onboardingDone,
                 lastPressureAlertDate: lastPressureAlertDate,
@@ -12125,6 +12779,7 @@ class $$AppSettingsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String?> quickFavoriteId = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<bool> onboardingDone = const Value.absent(),
                 Value<DateTime?> lastPressureAlertDate = const Value.absent(),
@@ -12147,6 +12802,7 @@ class $$AppSettingsTableTableManager
                 Value<bool> menstrualBackupEnabled = const Value.absent(),
                 Value<bool> menstrualPdfEnabled = const Value.absent(),
               }) => AppSettingsCompanion.insert(
+                quickFavoriteId: quickFavoriteId,
                 id: id,
                 onboardingDone: onboardingDone,
                 lastPressureAlertDate: lastPressureAlertDate,
@@ -12659,6 +13315,8 @@ typedef $$MenstrualDaysTableProcessedTableManager =
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
+  $$CoffeeIntakesTableTableManager get coffeeIntakes =>
+      $$CoffeeIntakesTableTableManager(_db, _db.coffeeIntakes);
   $$TagsTableTableManager get tags => $$TagsTableTableManager(_db, _db.tags);
   $$MealsTableTableManager get meals =>
       $$MealsTableTableManager(_db, _db.meals);

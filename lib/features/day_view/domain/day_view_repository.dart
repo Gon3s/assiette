@@ -52,6 +52,7 @@ abstract class DayViewRepository {
 DayViewRepository dayViewRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   return DriftDayViewRepository(
+    coffeeIntakesDao: db.coffeeIntakesDao,
     mealsDao: db.mealsDao,
     symptomsDao: db.symptomsDao,
     migraineMeasurementsDao: db.migraineIntensityMeasurementsDao,
