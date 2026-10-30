@@ -90,19 +90,34 @@ enum AppRouter {
 /// The application router provider.
 @riverpod
 GoRouter goRouter(Ref ref) {
-  final appStartupState = ref.watch(appStartupProvider);
-  final onboardingDoneState = ref.watch(onboardingDoneProvider);
+  final refresh = ValueNotifier(0);
+  ref
+    ..listen(appStartupProvider, (_, _) => refresh.value++)
+    ..listen(onboardingDoneProvider, (_, _) => refresh.value++)
+    ..onDispose(refresh.dispose);
 
-  return GoRouter(
+  final router = GoRouter(
     initialLocation: '/',
     navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
+    refreshListenable: refresh,
     redirect: (context, state) {
-      if (appStartupState.isLoading || appStartupState.hasError) {
-        return '/${AppRouter.startup.name}';
-      }
-      if (onboardingDoneState.isLoading || onboardingDoneState.hasError) {
-        return '/${AppRouter.startup.name}';
+      final appStartupState = ref.read(appStartupProvider);
+      final onboardingDoneState = ref.read(onboardingDoneProvider);
+      final isStartupRoute = state.uri.path == '/${AppRouter.startup.name}';
+      final destination = isStartupRoute
+          ? state.uri.queryParameters['from'] ?? '/'
+          : state.uri.toString();
+      if (appStartupState.isLoading ||
+          appStartupState.hasError ||
+          onboardingDoneState.isLoading ||
+          onboardingDoneState.hasError) {
+        return isStartupRoute
+            ? null
+            : Uri(
+                path: '/${AppRouter.startup.name}',
+                queryParameters: {'from': destination},
+              ).toString();
       }
 
       final onboardingDone = onboardingDoneState.requireValue;
@@ -113,6 +128,13 @@ GoRouter goRouter(Ref ref) {
       }
       if (onboardingDone && isOnboardingRoute) {
         return '/';
+      }
+      if (isStartupRoute) return destination;
+
+      // Android shortcuts deliver a custom-scheme URI. Keep navigation inside
+      // the app, including when the router resolves subsequent relative paths.
+      if (state.uri.scheme == 'assiette') {
+        return state.uri.replace(scheme: '').toString();
       }
 
       return null;
@@ -247,6 +269,8 @@ GoRouter goRouter(Ref ref) {
     errorPageBuilder: (context, state) =>
         const NoTransitionPage(child: NotFoundScreen()),
   );
+  ref.onDispose(router.dispose);
+  return router;
 }
 
 SymptomType _symptomType(String? name) => SymptomType.values.firstWhere(
