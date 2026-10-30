@@ -3,6 +3,7 @@ import 'package:assiette/features/cloud_backup/presentation/cloud_backup_screen.
 import 'package:assiette/features/day_view/presentation/day_view_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorite_form_screen.dart';
 import 'package:assiette/features/favorites/presentation/favorites_manage_screen.dart';
+import 'package:assiette/features/favorites/presentation/quick_action_screen.dart';
 import 'package:assiette/features/meal_entry/domain/meal_draft.dart';
 import 'package:assiette/features/meal_entry/presentation/meal_entry_screen.dart';
 import 'package:assiette/features/medication_entry/presentation/medication_entry_screen.dart';
@@ -34,6 +35,8 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 /// The application router.
 enum AppRouter {
+  favoriteQuick,
+
   /// The startup screen.
   startup,
 
@@ -141,6 +144,11 @@ GoRouter goRouter(Ref ref) {
     },
 
     routes: [
+      GoRoute(
+        path: '/favoriteQuick',
+        name: AppRouter.favoriteQuick.name,
+        builder: (context, state) => const QuickActionScreen(),
+      ),
       GoRoute(
         path: '/${AppRouter.startup.name}',
         pageBuilder: (context, state) => NoTransitionPage(

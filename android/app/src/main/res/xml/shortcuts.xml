@@ -1,4 +1,13 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="favorite_quick" android:enabled="true"
+        android:icon="@drawable/ic_shortcut_favorite"
+        android:shortcutShortLabel="@string/favorite_shortcut"
+        android:shortcutLongLabel="@string/favorite_shortcut">
+        <intent android:action="android.intent.action.VIEW"
+            android:targetPackage="com.gones.assiette"
+            android:targetClass="com.gones.assiette.MainActivity"
+            android:data="assiette:/favoriteQuick" />
+    </shortcut>
     <shortcut
         android:shortcutId="sleep_start"
         android:enabled="true"

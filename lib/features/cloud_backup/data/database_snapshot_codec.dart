@@ -16,9 +16,10 @@ class DatabaseSnapshotCodec {
   const DatabaseSnapshotCodec();
 
   /// Snapshot format version, bumped if the shape below ever changes.
-  static const formatVersion = 6;
+  static const formatVersion = 7;
 
   static const _tables = {
+    'coffeeIntakes',
     'tags',
     'mealTemplates',
     'meals',
@@ -88,6 +89,11 @@ class DatabaseSnapshotCodec {
     }
     var rowCount = 0;
     for (final table in _tables) {
+      if (table == 'coffeeIntakes' &&
+          version < 7 &&
+          !snapshot.containsKey(table)) {
+        continue;
+      }
       if (table == 'menstrualDays' &&
           version < 6 &&
           !snapshot.containsKey(table)) {
@@ -134,6 +140,7 @@ class DatabaseSnapshotCodec {
       db.transaction(() => _export(db));
 
   Future<Map<String, dynamic>> _export(AppDatabase db) async {
+    final coffee = await db.select(db.coffeeIntakes).get();
     final tags = await db.select(db.tags).get();
     final mealTemplates = await db.select(db.mealTemplates).get();
     final meals = await db.select(db.meals).get();
@@ -156,6 +163,7 @@ class DatabaseSnapshotCodec {
 
     return {
       'formatVersion': formatVersion,
+      'coffeeIntakes': [for (final row in coffee) row.toJson()],
       'tags': [for (final row in tags) row.toJson()],
       'mealTemplates': [for (final row in mealTemplates) row.toJson()],
       'meals': [for (final row in meals) row.toJson()],
@@ -232,6 +240,13 @@ class DatabaseSnapshotCodec {
     String photosDirPath,
   ) async {
     await db.transaction(() async {
+      await db.delete(db.coffeeIntakes).go();
+      final coffeeRows = (snapshot['formatVersion'] as int) < 7
+          ? <Map<String, dynamic>>[]
+          : (snapshot['coffeeIntakes'] as List).cast<Map<String, dynamic>>();
+      for (final row in coffeeRows) {
+        await db.into(db.coffeeIntakes).insert(CoffeeIntake.fromJson(row));
+      }
       // Children first, respecting the one real FK (medicationIntakes ->
       // symptoms); the rest have no declared FK but the same ordering
       // keeps things logically consistent.
@@ -361,6 +376,7 @@ class DatabaseSnapshotCodec {
             .into(db.appSettings)
             .insert(
               AppSetting.fromJson({
+                'quickFavoriteId': null,
                 ...row,
                 if ((snapshot['formatVersion'] as int) < 6) ...{
                   'menstrualTrackingEnabled': false,

@@ -4,6 +4,7 @@ library;
 import 'package:assiette/data/db/enums/meal_type.dart';
 import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
+import 'package:assiette/features/coffee/domain/coffee_repository.dart';
 import 'package:assiette/features/day_view/domain/active_migraine.dart';
 import 'package:assiette/features/day_view/domain/daily_feeling.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
@@ -109,6 +110,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          coffeeDayProvider.overrideWith((ref, date) => Stream.value([])),
           menstrualPreferencesProvider.overrideWith(
             (_) => Stream.value(const MenstrualPreferences()),
           ),

@@ -5,6 +5,7 @@ import 'package:assiette/data/db/enums/symptom_type.dart';
 import 'package:assiette/features/cloud_backup/domain/cloud_backup_repository.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_controller.dart';
 import 'package:assiette/features/cloud_backup/presentation/cloud_backup_state.dart';
+import 'package:assiette/features/coffee/presentation/coffee_actions.dart';
 import 'package:assiette/features/day_view/domain/day_view_repository.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
 import 'package:assiette/features/day_view/presentation/selected_date_provider.dart';
@@ -221,6 +222,7 @@ class _DayViewBody extends ConsumerWidget {
         const SliverToBoxAdapter(child: _ActiveMigraineCard()),
         SliverToBoxAdapter(child: _DailyFeelingsCard(date: date)),
         SliverToBoxAdapter(child: SleepCard(date: date)),
+        SliverToBoxAdapter(child: CoffeeSummary(date: date)),
         SliverToBoxAdapter(child: MenstrualDayCard(date: date)),
         const SliverToBoxAdapter(child: gapH8),
         const SliverToBoxAdapter(child: FavoritesRow()),

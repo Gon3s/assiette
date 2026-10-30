@@ -2,6 +2,21 @@ import 'package:assiette/localization/app_strings.dart';
 
 /// English strings.
 class AppStringsEn implements AppStrings {
+  @override
+  String get coffeeTitle => 'Coffee';
+  @override
+  String get coffeeAdded => 'Coffee added';
+  @override
+  String coffeeCount(int count) => '$count coffee${count == 1 ? '' : 's'}';
+  @override
+  String get coffeeManualAdd => 'Add coffee at another time';
+  @override
+  String get quickFavoriteTitle => 'Favorite shortcut';
+  @override
+  String get quickFavoriteHint =>
+      'Choose what the Favorite shortcut adds from the app icon.';
+  @override
+  String get quickFavoriteNone => 'Choose a favorite';
   // Menstrual tracking
   @override
   String get menstrualTitle => 'Periods';

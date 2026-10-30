@@ -1,4 +1,5 @@
 import 'package:assiette/constants/app_sizes.dart';
+import 'package:assiette/features/coffee/presentation/coffee_actions.dart';
 import 'package:assiette/features/favorites/domain/favorites_repository.dart';
 import 'package:assiette/features/favorites/domain/meal_template_option.dart';
 import 'package:assiette/features/favorites/presentation/favorites_providers.dart';
@@ -50,17 +51,25 @@ class FavoritesRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favorites = ref.watch(favoriteTemplatesProvider).value ?? const [];
-    if (favorites.isEmpty) return const SizedBox.shrink();
 
     return SizedBox(
       height: Sizes.p48,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
-        itemCount: favorites.length,
+        itemCount: favorites.length + 1,
         separatorBuilder: (context, index) => gapW8,
         itemBuilder: (context, index) {
-          final template = favorites[index];
+          if (index == 0) {
+            return Center(
+              child: ActionChip(
+                avatar: const Icon(Icons.coffee_outlined, size: Sizes.p16),
+                label: Text(AppStrings.of(context).coffeeTitle),
+                onPressed: () => addCoffee(context, ref),
+              ),
+            );
+          }
+          final template = favorites[index - 1];
           return Center(
             child: ActionChip(
               avatar: const Icon(Icons.star, size: Sizes.p16),

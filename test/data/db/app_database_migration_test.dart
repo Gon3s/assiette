@@ -30,6 +30,8 @@ void main() {
       final settings = (await db.select(db.appSettings).get()).single;
       expect(settings.onboardingDone, isTrue);
       expect(settings.breakfastHour, 9);
+      expect(settings.quickFavoriteId, isNull);
+      expect(await db.select(db.coffeeIntakes).get(), isEmpty);
       expect(settings.menstrualTrackingEnabled, isFalse);
       expect(settings.menstrualBackupEnabled, isFalse);
       expect(settings.menstrualPdfEnabled, isFalse);
@@ -38,7 +40,7 @@ void main() {
     },
   );
   test(
-    'v8 migration preserves every legacy health entry through v14',
+    'v8 migration preserves every legacy health entry through v15',
     () async {
       final executor = NativeDatabase.memory(
         setup: (database) {
@@ -188,7 +190,7 @@ INSERT INTO medication_intakes (
       expect(medication.dose, '50 mg');
 
       final version = await db.customSelect('PRAGMA user_version').getSingle();
-      expect(version.read<int>('user_version'), 14);
+      expect(version.read<int>('user_version'), 15);
     },
   );
 

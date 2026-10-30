@@ -1,4 +1,5 @@
 <resources>
+    <string name="favorite_shortcut">Favori</string>
     <string name="sleep_start_shortcut_short">Coucher</string>
     <string name="sleep_start_shortcut_long">Je vais me coucher</string>
     <string name="sleep_wake_shortcut_short">Lever</string>

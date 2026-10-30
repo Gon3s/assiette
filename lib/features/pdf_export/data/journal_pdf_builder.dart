@@ -69,6 +69,14 @@ class JournalPdfBuilder {
             ),
           ),
           pw.Divider(thickness: 0.5),
+          if (entry.coffee.isNotEmpty) ...[
+            pw.Text(s.coffeeCount(entry.coffee.length), style: _sectionStyle),
+            for (final timestamp in entry.coffee)
+              pw.Bullet(
+                text:
+                    '${timeFormat.format(timestamp.toLocal())} - ${s.coffeeTitle}',
+              ),
+          ],
           if (entry.meals.isNotEmpty)
             ..._mealsSection(s, entry.meals, timeFormat),
           if (entry.symptoms.isNotEmpty)

@@ -58,4 +58,4 @@ final class DayViewRepositoryProvider
   }
 }
 
-String _$dayViewRepositoryHash() => r'25ceceef4e1bd09217c580610f5ffae25e915666';
+String _$dayViewRepositoryHash() => r'ef9d1154a8ef4a7c868fab89494137b530ab9d9d';
