@@ -45,6 +45,9 @@ coverage
 
 # Android release signing (generated locally or by CI from secrets, never committed)
 android/key.properties
+
+# Private local records (Play Console screenshots, administrative evidence)
+/.local-archive/
 android/app/*.jks
 android/app/*.keystore
 
