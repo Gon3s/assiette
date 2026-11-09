@@ -76,6 +76,7 @@ abstract class AppStrings {
   String get sleepNightInProgress;
   String get sleepQuestion;
   String get weatherUnavailable;
+  String get weatherNextMetric;
   String get pressureUnit;
   String get weatherTemperatureLabel;
   String get weatherPressureLabel;

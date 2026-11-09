@@ -25,6 +25,9 @@ void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2026));
     registerFallbackValue(
+      CoffeeEntry(id: 'fallback', timestamp: DateTime(2026)),
+    );
+    registerFallbackValue(
       const MealTemplateOption(id: 'fallback', name: 'Fallback', tags: []),
     );
   });
@@ -33,6 +36,7 @@ void main() {
     favorites = MockFavoritesRepository();
     when(favorites.watchFavorites).thenAnswer((_) => Stream.value([]));
     when(() => coffee.add(any())).thenAnswer((_) async => 'coffee-1');
+    when(() => coffee.update(any())).thenAnswer((_) async {});
     when(() => coffee.setDeleted(any(), deleted: true))
         .thenAnswer((_) async {});
   });
@@ -60,13 +64,14 @@ void main() {
     verifyNever(() => favorites.logFavorite(any()));
   });
 
-  testWidgets('summary shows the count and opens manual date selection', (
+  testWidgets('manual coffee asks only for time and keeps the journal day', (
     tester,
   ) async {
     final day = DateTime(2026, 10, 25);
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          coffeeRepositoryProvider.overrideWithValue(coffee),
           coffeeDayProvider(day).overrideWith(
             (_) => Stream.value([
               CoffeeEntry(id: 'one', timestamp: day),
@@ -75,6 +80,10 @@ void main() {
           ),
         ],
         child: MaterialApp(
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          ),
           home: Scaffold(body: CoffeeSummary(date: day)),
         ),
       ),
@@ -83,13 +92,83 @@ void main() {
     expect(find.text('2 coffees'), findsOneWidget);
     await tester.tap(find.byTooltip('Add coffee at another time'));
     await tester.pumpAndSettle();
-    expect(find.byType(DatePickerDialog), findsOneWidget);
+    expect(find.byType(DatePickerDialog), findsNothing);
+    expect(find.byType(TimePickerDialog), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.keyboard_outlined));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '09');
+    await tester.enterText(find.byType(TextField).last, '15');
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    verify(() => coffee.add(DateTime(2026, 10, 25, 9, 15))).called(1);
+    verifyNever(() => coffee.update(any()));
+  });
+
+  testWidgets('cancelling manual coffee leaves the repository untouched', (
+    tester,
+  ) async {
+    final day = DateTime(2026, 10, 25);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          coffeeRepositoryProvider.overrideWithValue(coffee),
+          coffeeDayProvider(day).overrideWith((_) => Stream.value([])),
+        ],
+        child: MaterialApp(
+          home: Scaffold(body: CoffeeSummary(date: day)),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Add coffee at another time'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+
+    verifyNever(() => coffee.add(any()));
+    verifyNever(() => coffee.update(any()));
+  });
+
+  testWidgets('editing coffee changes only its local time', (tester) async {
+    final entry = CoffeeEntry(
+      id: 'existing',
+      timestamp: DateTime(2026, 10, 25, 13, 45).toUtc(),
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [coffeeRepositoryProvider.overrideWithValue(coffee)],
+        child: MaterialApp(
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          ),
+          home: Scaffold(body: CoffeeTimelineTile(entry: entry)),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Coffee'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatePickerDialog), findsNothing);
     expect(
       tester
-          .widget<DatePickerDialog>(find.byType(DatePickerDialog))
-          .initialDate,
-      day,
+          .widget<TimePickerDialog>(find.byType(TimePickerDialog))
+          .initialTime,
+      const TimeOfDay(hour: 13, minute: 45),
     );
+    await tester.tap(find.byIcon(Icons.keyboard_outlined));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '14');
+    await tester.enterText(find.byType(TextField).last, '20');
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => coffee.update(
+        entry.copyWith(timestamp: DateTime(2026, 10, 25, 14, 20)),
+      ),
+    ).called(1);
+    verifyNever(() => coffee.add(any()));
   });
 
   for (final isCoffee in [true, false]) {

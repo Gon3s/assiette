@@ -50,6 +50,9 @@ void main() {
   late MockMealEntryRepository mealEntryRepository;
   late MockSymptomEntryRepository symptomEntryRepository;
   late MockMigraineObservationRepository migraineObservationRepository;
+  final dayPager = find.byWidgetPredicate(
+    (widget) => widget is PageView && widget.scrollDirection == Axis.horizontal,
+  );
 
   setUp(() {
     repository = MockDayViewRepository();
@@ -196,7 +199,7 @@ void main() {
 
     expect(find.byIcon(Icons.today), findsNothing);
 
-    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.fling(dayPager, const Offset(-400, 0), 1000);
     await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.today), findsOneWidget);
@@ -218,6 +221,7 @@ void main() {
         WeatherSummary(
           timestamp: day.toUtc().add(const Duration(hours: 12)),
           temperature: isToday ? 21 : 7,
+          pressure: 1009,
         ),
       );
     });
@@ -238,7 +242,7 @@ void main() {
     await pumpScreen(tester);
     expect(find.text('21°C'), findsOneWidget);
 
-    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.fling(dayPager, const Offset(-400, 0), 1000);
     await tester.pumpAndSettle();
 
     expect(find.text('21°C'), findsNothing);
@@ -252,7 +256,7 @@ void main() {
   testWidgets('tapping the today shortcut returns to today', (tester) async {
     await pumpScreen(tester);
 
-    await tester.fling(find.byType(PageView), const Offset(-400, 0), 1000);
+    await tester.fling(dayPager, const Offset(-400, 0), 1000);
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.today), findsOneWidget);
 
@@ -409,7 +413,14 @@ void main() {
 
     expect(find.text('Good'), findsOneWidget);
     expect(find.text('21°C'), findsOneWidget);
-    expect(find.text('1009 hPa'), findsOneWidget);
+    final weatherTop = tester.getTopLeft(find.text('21°C')).dy;
+    await tester.drag(
+      find.byKey(const Key('weather-metrics')),
+      const Offset(0, -60),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('1009 hPa').hitTestable(), findsOneWidget);
+    expect(tester.getTopLeft(find.text('1009 hPa')).dy, weatherTop);
     expect(find.byIcon(Icons.arrow_downward), findsOneWidget);
   });
 

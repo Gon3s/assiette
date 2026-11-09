@@ -41,14 +41,7 @@ Future<void> editCoffee(
   final s = AppStrings.of(context);
   final repository = ref.read(coffeeRepositoryProvider);
   final messenger = ScaffoldMessenger.of(context);
-  final initial = entry?.timestamp.toLocal() ?? date;
-  final day = await showDatePicker(
-    context: context,
-    initialDate: initial,
-    firstDate: DateTime(2000),
-    lastDate: DateTime.now(),
-  );
-  if (day == null || !context.mounted) return;
+  final day = entry?.timestamp.toLocal() ?? date;
   final time = await showTimePicker(
     context: context,
     initialTime: TimeOfDay.fromDateTime(
@@ -99,7 +92,7 @@ class CoffeeSummary extends ConsumerWidget {
           onPressed: () => editCoffee(
             context,
             ref,
-            date: date.isAfter(DateTime.now()) ? DateTime.now() : date,
+            date: date,
           ),
         ),
       ),

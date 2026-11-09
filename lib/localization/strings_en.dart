@@ -119,6 +119,8 @@ class AppStringsEn implements AppStrings {
   @override
   String get weatherUnavailable => 'Weather unavailable';
   @override
+  String get weatherNextMetric => 'Next weather indicator';
+  @override
   String get pressureUnit => 'hPa';
   @override
   String get weatherTemperatureLabel => 'Temperature';

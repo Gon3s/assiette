@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:assiette/common_widgets/stat_tile_card.dart';
 import 'package:assiette/constants/app_colors.dart';
 import 'package:assiette/constants/app_sizes.dart';
 import 'package:assiette/features/day_view/presentation/day_view_providers.dart';
@@ -11,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Header of the day view: latest weather captured for the day (place,
-/// freshness, condition icon) and a grid of stat tiles. Temperature and
-/// pressure tiles open the day-evolution chart sheet.
+/// freshness, condition icon) and a vertically paged row of metrics.
+/// Temperature and pressure open the day-evolution chart sheet.
 class DayHeader extends ConsumerWidget {
   /// Creates a [DayHeader].
   const DayHeader({required this.date, super.key});
@@ -41,10 +40,14 @@ class DayHeader extends ConsumerWidget {
           children: [
             Icon(Icons.cloud_off, size: Sizes.p16, color: theme.hintColor),
             gapW8,
-            Text(
-              s.weatherUnavailable,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.hintColor,
+            Expanded(
+              child: Text(
+                s.weatherUnavailable,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.hintColor,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -65,12 +68,11 @@ class DayHeader extends ConsumerWidget {
     final pm25 = weather.pm25;
     final pm10 = weather.pm10;
 
-    final tiles = <Widget>[
+    final tiles = <_WeatherMetricRow>[
       if (temperature != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherTemperatureLabel,
           value: '${temperature.round()}°C',
-          accent: AppColors.turquoise,
           onTap: () => showWeatherChartSheet(
             context,
             WeatherChartKind.temperature,
@@ -78,7 +80,7 @@ class DayHeader extends ConsumerWidget {
           ),
         ),
       if (pressure != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherPressureLabel,
           value: '${pressure.round()} ${s.pressureUnit}',
           trailing: delta == null || delta == 0
@@ -95,91 +97,78 @@ class DayHeader extends ConsumerWidget {
           ),
         ),
       if (humidity != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherHumidityLabel,
           value: '${humidity.round()} %',
         ),
       if (uvIndex != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherUvLabel,
           value: '${uvIndex.round()}',
         ),
       if (pollenMax != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherPollenLabel,
           value: _pollenLevelLabel(s, pollenMax),
         ),
       if (pm25 != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherAirLabel,
           value: '${pm25.round()} ${s.airQualityUnit}',
         ),
       if (pm10 != null)
-        StatTileCard(
+        _WeatherMetricRow(
           label: s.weatherAirPm10Label,
           value: '${pm10.round()} ${s.airQualityUnit}',
         ),
     ];
 
-    final hasMetaRow =
+    final hasMetadata =
         locality != null || weatherCode != null || updatedLabel != null;
-    if (tiles.isEmpty && !hasMetaRow) return const SizedBox.shrink();
+    if (tiles.isEmpty && !hasMetadata) return const SizedBox.shrink();
 
-    final metaStyle = theme.textTheme.bodySmall?.copyWith(
-      color: AppColors.textSecondary,
-    );
+    final metadata = [?locality, ?updatedLabel].join(' · ');
 
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: Sizes.p16,
         vertical: Sizes.p8,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (hasMetaRow) ...[
-            Row(
-              children: [
-                if (weatherCode != null) ...[
-                  Icon(
-                    weatherCodeIcon(weatherCode),
-                    size: Sizes.p16,
-                    color: AppColors.textSecondary,
-                  ),
-                  gapW8,
-                ],
-                if (locality != null)
-                  Expanded(
-                    child: Text(
-                      locality,
-                      style: metaStyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                else
-                  const Spacer(),
-                if (updatedLabel != null) Text(updatedLabel, style: metaStyle),
-              ],
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Row(
+          children: [
+            Tooltip(
+              message: metadata,
+              triggerMode: TooltipTriggerMode.tap,
+              child: SizedBox.square(
+                dimension: Sizes.p48,
+                child: Icon(
+                  weatherCode == null
+                      ? Icons.cloud_outlined
+                      : weatherCodeIcon(weatherCode),
+                  size: Sizes.p20,
+                  color: AppColors.textSecondary,
+                ),
+              ),
             ),
-            gapH8,
+            if (tiles.isNotEmpty)
+              Expanded(
+                child: _WeatherPager(
+                  key: ValueKey((date, tiles.map((tile) => tile.label).join())),
+                  tiles: tiles,
+                ),
+              )
+            else
+              Expanded(
+                child: Text(
+                  metadata,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
           ],
-          for (var i = 0; i < tiles.length; i += 3) ...[
-            if (i > 0) gapH8,
-            Row(
-              children: [
-                for (var j = i; j < math.min(i + 3, tiles.length); j++) ...[
-                  if (j > i) gapW8,
-                  Expanded(child: tiles[j]),
-                ],
-                // Pad the last row so tiles keep the same width.
-                for (var j = tiles.length; j < i + 3; j++) ...[
-                  gapW8,
-                  const Expanded(child: SizedBox.shrink()),
-                ],
-              ],
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -209,5 +198,127 @@ class DayHeader extends ConsumerWidget {
     if (pollen < _pollenLowThreshold) return s.pollenLevelLow;
     if (pollen < _pollenHighThreshold) return s.pollenLevelModerate;
     return s.pollenLevelHigh;
+  }
+}
+
+class _WeatherPager extends StatefulWidget {
+  const _WeatherPager({required this.tiles, super.key});
+
+  final List<_WeatherMetricRow> tiles;
+
+  @override
+  State<_WeatherPager> createState() => _WeatherPagerState();
+}
+
+class _WeatherPagerState extends State<_WeatherPager> {
+  final _controller = PageController();
+  var _page = 0;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _nextMetric() {
+    final next = (_page + 1) % widget.tiles.length;
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _controller.jumpToPage(next);
+    } else {
+      _controller.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = AppStrings.of(context);
+    final style = Theme.of(context).textTheme.bodyMedium!;
+    final height = math.max(
+      Sizes.p48,
+      MediaQuery.textScalerOf(context).scale(style.fontSize!) *
+              (style.height ?? 1.5) +
+          Sizes.p24,
+    );
+    return SizedBox(
+      height: height,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: widget.tiles.length == 1
+                ? widget.tiles.single
+                : PageView.builder(
+                    key: const Key('weather-metrics'),
+                    controller: _controller,
+                    scrollDirection: Axis.vertical,
+                    allowImplicitScrolling: true,
+                    itemCount: widget.tiles.length,
+                    onPageChanged: (page) => setState(() => _page = page),
+                    itemBuilder: (context, index) => widget.tiles[index],
+                  ),
+          ),
+          if (widget.tiles.length > 1)
+            IconButton(
+              tooltip:
+                  '${s.weatherNextMetric} '
+                  '(${_page + 1}/${widget.tiles.length})',
+              onPressed: _nextMetric,
+              icon: const Icon(Icons.swap_vert, size: Sizes.p20),
+            )
+          else
+            gapW12,
+        ],
+      ),
+    );
+  }
+}
+
+class _WeatherMetricRow extends StatelessWidget {
+  const _WeatherMetricRow({
+    required this.label,
+    required this.value,
+    this.trailing,
+    this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: theme.textTheme.bodyMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          gapW8,
+          Flexible(
+            child: Text(
+              value,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          if (trailing != null) ...[gapW4, trailing!],
+        ],
+      ),
+    );
   }
 }
