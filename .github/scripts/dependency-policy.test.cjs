@@ -36,16 +36,20 @@ const update = overrides => ({
   ...overrides,
 });
 
-test('accepts a hosted Dart patch, including a manifest constraint bump', () => {
+test('accepts hosted Dart patch and minor updates, including constraint bumps', () => {
   assert.deepEqual(evaluateUpdate(update()), {eligible: true, updated: ['http']});
   assert.equal(evaluateUpdate(update({
     afterManifest: manifest.replace('^1.6.0', '^1.6.1'),
   })).eligible, true);
+  assert.equal(evaluateUpdate(update({
+    afterManifest: manifest.replace('^1.6.0', '^1.7.0'),
+    afterLock: lock('1.7.0'),
+  })).eligible, true);
 });
 
 const rejected = {
-  minor: {afterLock: lock('1.7.0')},
   major: {afterLock: lock('2.0.0')},
+  zeroMajorMinor: {beforeLock: lock('0.10.0'), afterLock: lock('0.11.0')},
   downgrade: {afterLock: lock('1.5.9')},
   unchanged: {afterLock: lock()},
   prerelease: {afterLock: lock('1.6.1-dev.1')},
@@ -80,9 +84,9 @@ test('the real repository lockfile is understood and the allowlist matches Depen
   const realManifest = fs.readFileSync('pubspec.yaml', 'utf8');
   const result = evaluateUpdate(update({beforeLock: realLock, afterLock: realLock,
     beforeManifest: realManifest, afterManifest: realManifest}));
-  assert.equal(result.reason, 'No eligible patch update');
+  assert.equal(result.reason, 'No eligible safe update');
   const config = fs.readFileSync('.github/dependabot.yml', 'utf8');
-  const group = config.split('dart-patches:')[1].split('update-types:')[0];
+  const group = config.split('dart-safe-updates:')[1].split('update-types:')[0];
   const configured = [...group.matchAll(/^          - (\w+)$/gm)].map(match => match[1]);
   assert.deepEqual(new Set(configured), dartPackages);
   const protection = JSON.parse(fs.readFileSync('.github/main-protection.json', 'utf8'));

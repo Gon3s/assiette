@@ -9,7 +9,7 @@ updates:
       timezone: Europe/Paris
     open-pull-requests-limit: 5
     groups:
-      dart-patches:
+      dart-safe-updates:
         patterns:
           - archive
           - collection
@@ -21,7 +21,7 @@ updates:
           - path
           - timezone
           - uuid
-        update-types: [patch]
+        update-types: [minor, patch]
 
   # Native plugins and every Gradle/Actions update require manual review.
   - package-ecosystem: gradle

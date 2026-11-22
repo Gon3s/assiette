@@ -1,18 +1,22 @@
 'use strict';
 
-// Keep this list aligned with the dart-patches group in dependabot.yml.
+// Keep this list aligned with the dart-safe-updates group in dependabot.yml.
 const dartPackages = new Set([
   'archive', 'collection', 'freezed_annotation', 'http', 'intl',
   'json_annotation', 'mocktail', 'path', 'timezone', 'uuid',
 ]);
 const requiredChecks = ['Flutter quality gate', 'Dependency automation policy'];
 
-function isPatch(before, after) {
+function isSafeUpdate(before, after) {
   const version = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
   const a = version.exec(before);
   const b = version.exec(after);
-  return Boolean(a && b && a[1] === b[1] && a[2] === b[2] &&
-    Number(b[3]) > Number(a[3]));
+  if (!a || !b || a[1] !== b[1]) return false;
+  const major = Number(a[1]);
+  const oldMinor = Number(a[2]);
+  const newMinor = Number(b[2]);
+  if (newMinor === oldMinor) return Number(b[3]) > Number(a[3]);
+  return major > 0 && newMinor > oldMinor;
 }
 
 function manifestChanges(before, after) {
@@ -29,7 +33,7 @@ function manifestChanges(before, after) {
     if (!['dependencies:', 'dev_dependencies:'].includes(section?.trim()) ||
         !oldLine || !newLine || oldLine[1] !== newLine[1] ||
         !dartPackages.has(oldLine[1]) || oldLine[2] !== newLine[2] ||
-        !isPatch(oldLine[3], newLine[3])) {
+        !isSafeUpdate(oldLine[3], newLine[3])) {
       throw new Error('Manifest change requires manual review');
     }
   }
@@ -77,7 +81,7 @@ function evaluateUpdate({files, beforeManifest, afterManifest, beforeLock, after
       const normalize = block => block
         .replace(/^    version: "[^"]+"\r?$/m, '')
         .replace(/^      sha256: .*\r?$/m, '');
-      if (!dartPackages.has(name) || !isPatch(oldVersion, newVersion) ||
+      if (!dartPackages.has(name) || !isSafeUpdate(oldVersion, newVersion) ||
           !/^    source: hosted\r?$/m.test(oldBlock) ||
           !/^      url: "https:\/\/pub.dev"\r?$/m.test(oldBlock) ||
           normalize(oldBlock) !== normalize(newBlock)) {
@@ -85,7 +89,7 @@ function evaluateUpdate({files, beforeManifest, afterManifest, beforeLock, after
       }
       updated.push(name);
     }
-    if (!updated.length) throw new Error('No eligible patch update');
+    if (!updated.length) throw new Error('No eligible safe update');
     return {eligible: true, updated};
   } catch (error) {
     return {eligible: false, reason: error.message};
