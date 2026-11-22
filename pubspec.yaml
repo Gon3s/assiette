@@ -36,7 +36,7 @@ dependencies:
   # Auth Google Drive (US-26, sauvegarde cloud)
   google_sign_in: ^7.2.0
   # API Google Drive (US-26, sauvegarde cloud)
-  googleapis: ^15.0.0
+  googleapis: ">=15.0.0 <20.0.0"
   # Appel API Open-Meteo
   http: ^1.6.0
   # Formatage dates (version épinglée par flutter_localizations)
