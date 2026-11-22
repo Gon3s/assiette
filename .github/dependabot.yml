@@ -8,6 +8,10 @@ updates:
       time: '07:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 5
+    ignore:
+      # archive 4.7.1 accepts mismatched ZIP local/central entry names.
+      - dependency-name: archive
+        versions: ['4.7.1']
     groups:
       dart-safe-updates:
         patterns:
